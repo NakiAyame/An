@@ -1,19 +1,19 @@
 import * as React from "react";
 //MUI
-import { 
-    Avatar, 
-    Button, 
-    CssBaseline, 
-    TextField, 
-    FormControlLabel, 
-    Checkbox, 
-    Link, 
-    Paper, 
-    Box, 
-    Grid,
-    Typography,
-    createTheme,
-    ThemeProvider
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Paper,
+  Box,
+  Grid,
+  Typography,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 //MUI Icon
 import PetsIcon from "@mui/icons-material/Pets";
@@ -176,7 +176,7 @@ const Register = () => {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/login" variant="body2">
+                  <Link href="/sign-in" variant="body2">
                     {"Already have an account? login Now"}
                   </Link>
                 </Grid>
