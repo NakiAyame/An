@@ -4,6 +4,7 @@ import Login from "./layouts/common/login/Login";
 import Register from "./layouts/common/register/Register";
 import Dashboard from "./layouts/dashboard/Dashboard";
 import { ToastContainer } from "react-toastify";
+import BasicTable from "./components/basic table/BasicTable";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -12,10 +13,11 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Dashboard />}>
+            <Route path="user-list" element={<BasicTable />} />
+          </Route>
           <Route path="/sign-up" element={<Register />} />
           <Route path="/sign-in" element={<Login />} />
-
         </Routes>
       </BrowserRouter>
 
@@ -36,5 +38,3 @@ function App() {
 }
 
 export default App;
-
-
