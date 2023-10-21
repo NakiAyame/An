@@ -21,12 +21,13 @@ import BasicTable from "../../components/basic table/BasicTable";
 
 //React
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { Link } from "@mui/material";
+import DrawerDashborad from "./DrawerDashborad";
 
 const drawerWidth = 240;
 
@@ -37,45 +38,6 @@ function ResponsiveDrawer(props) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  const links = [
-    { text: "Dashboard", path: "/" },
-    { text: "UserList", path: "/user-list" },
-    { text: "Send email", path: "/send-email" },
-    { text: "Drafts", path: "/drafts" },
-  ];
-
-  const drawer = (
-    <div>
-      <Toolbar />
-      <Divider />
-      <List>
-        {links.map((link, index) => (
-          <ListItem key={link.text} disablePadding>
-            <ListItemButton component={Link} to={link.path}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={link.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
@@ -127,7 +89,7 @@ function ResponsiveDrawer(props) {
             },
           }}
         >
-          {drawer}
+          <DrawerDashborad />
         </Drawer>
         <Drawer
           variant="permanent"
@@ -140,7 +102,7 @@ function ResponsiveDrawer(props) {
           }}
           open
         >
-          {drawer}
+          <DrawerDashborad />
         </Drawer>
       </Box>
       <Box
@@ -152,7 +114,8 @@ function ResponsiveDrawer(props) {
         }}
       >
         <Toolbar />
-        <BasicTable />
+        {/* router here */}
+        <Outlet />
       </Box>
     </Box>
   );
