@@ -5,6 +5,7 @@ import Register from "./layouts/common/register/Register";
 import Dashboard from "./layouts/dashboard/Dashboard";
 import { ToastContainer } from "react-toastify";
 import BasicTable from "./components/basic table/BasicTable";
+import ServiceTable from "./layouts/dashboard/service/ServiceTables";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />}>
             <Route path="user-list" element={<BasicTable />} />
+            <Route path="service-list" element={<ServiceTable />} />
           </Route>
           <Route path="/sign-up" element={<Register />} />
           <Route path="/sign-in" element={<Login />} />
