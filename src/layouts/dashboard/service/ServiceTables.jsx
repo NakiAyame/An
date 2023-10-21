@@ -19,8 +19,19 @@ import { Button, ButtonGroup } from "@mui/material";
 export default function ServiceTable() {
   const [data, setData] = useState([]);
 
+  const styles = {
+    trueCell: {
+      color: "green",
+      fontWeight: 600,
+    },
+    falseCell: {
+      color: "red",
+      fontWeight: 600,
+    },
+  };
+
   const booleanToString = (value) => {
-    return value ? "Yes" : "No";
+    return value ? "Hoạt động" : "Ẩn";
   };
 
   const numberToVND = (number) => {
@@ -79,7 +90,10 @@ export default function ServiceTable() {
                   <TableCell align="right">
                     {numberToVND(value.price)}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell
+                    align="right"
+                    sx={value.status ? styles.trueCell : styles.falseCell}
+                  >
                     {booleanToString(value.status)}
                   </TableCell>
                   <TableCell align="right">
