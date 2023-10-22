@@ -6,6 +6,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Button, ButtonGroup } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 //React
 import { useState } from "react";
@@ -14,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-import { Button, ButtonGroup } from "@mui/material";
+import ModalAddSerivce from "./ModalAddService";
 
 export default function ServiceTable() {
   const [data, setData] = useState([]);
@@ -59,58 +64,78 @@ export default function ServiceTable() {
     loadAllUser();
   }, []);
 
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell align="right">Tên dịch vụ</TableCell>
-            <TableCell align="right">Loại dịch vụ</TableCell>
-            <TableCell align="right">Thông tin</TableCell>
-            <TableCell align="right">Giá dịch vụ</TableCell>
-            <TableCell align="right">Trạng thái</TableCell>
-            <TableCell align="right"></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data &&
-            data.map((value, index) => {
-              return (
-                <TableRow
-                  key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {index}
-                  </TableCell>
-                  <TableCell align="right">{value.serviceName}</TableCell>
-                  <TableCell align="right">{value.title}</TableCell>
-                  <TableCell align="right">{value.description}</TableCell>
-                  <TableCell align="right">
-                    {numberToVND(value.price)}
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    sx={value.status ? styles.trueCell : styles.falseCell}
+    <>
+      <Grid container justifyContent="space-between" alignItems="center" mb={3}>
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={handleOpenModal}>
+            Thêm mới
+          </Button>
+        </Grid>
+      </Grid>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell align="right">Tên dịch vụ</TableCell>
+              <TableCell align="right">Loại dịch vụ</TableCell>
+              <TableCell align="right">Thông tin</TableCell>
+              <TableCell align="right">Giá dịch vụ</TableCell>
+              <TableCell align="right">Trạng thái</TableCell>
+              <TableCell align="right"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data &&
+              data.map((value, index) => {
+                return (
+                  <TableRow
+                    key={index}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    {booleanToString(value.status)}
-                  </TableCell>
-                  <TableCell align="right">
-                    <ButtonGroup variant="contained" fullWidth>
-                      <Button variant="contained" color="success">
-                        Sửa
-                      </Button>
-                      <Button variant="contained" color="error">
-                        Xoá
-                      </Button>
-                    </ButtonGroup>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                    <TableCell component="th" scope="row">
+                      {index}
+                    </TableCell>
+                    <TableCell align="right">{value.serviceName}</TableCell>
+                    <TableCell align="right">{value.title}</TableCell>
+                    <TableCell align="right">{value.description}</TableCell>
+                    <TableCell align="right">
+                      {numberToVND(value.price)}
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={value.status ? styles.trueCell : styles.falseCell}
+                    >
+                      {booleanToString(value.status)}
+                    </TableCell>
+                    <TableCell align="right">
+                      <ButtonGroup variant="contained" fullWidth>
+                        <Button variant="contained" color="success">
+                          Sửa
+                        </Button>
+                        <Button variant="contained" color="error">
+                          Xoá
+                        </Button>
+                      </ButtonGroup>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <ModalAddSerivce open={openModal} onClose={handleCloseModal} />
+    </>
   );
 }
