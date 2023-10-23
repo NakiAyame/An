@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import { Button, ButtonGroup } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 
 //React
@@ -23,21 +23,6 @@ import ModalAddSerivce from "./ModalAddService";
 
 export default function ServiceTable() {
   const [data, setData] = useState([]);
-
-  const styles = {
-    trueCell: {
-      color: "green",
-      fontWeight: 600,
-    },
-    falseCell: {
-      color: "red",
-      fontWeight: 600,
-    },
-  };
-
-  const booleanToString = (value) => {
-    return value ? "Hoạt động" : "Ẩn";
-  };
 
   const numberToVND = (number) => {
     return number.toLocaleString("vi-VN", {
@@ -74,6 +59,10 @@ export default function ServiceTable() {
     setOpenModal(false);
   };
 
+  const handUpdateTable = (service) => {
+    setData([service, ...data]);
+  };
+
   return (
     <>
       <Grid container justifyContent="space-between" alignItems="center" mb={3}>
@@ -99,6 +88,7 @@ export default function ServiceTable() {
           <TableBody>
             {data &&
               data.map((value, index) => {
+                const statusColor = value.status ? "primary" : "error";
                 return (
                   <TableRow
                     key={index}
@@ -113,11 +103,13 @@ export default function ServiceTable() {
                     <TableCell align="right">
                       {numberToVND(value.price)}
                     </TableCell>
-                    <TableCell
-                      align="right"
-                      sx={value.status ? styles.trueCell : styles.falseCell}
-                    >
-                      {booleanToString(value.status)}
+                    <TableCell align="right">
+                      <Chip
+                        size="small"
+                        variant="outlined"
+                        label={value.status ? "Hoạt động" : "Ẩn"}
+                        color={statusColor}
+                      />
                     </TableCell>
                     <TableCell align="right">
                       <ButtonGroup variant="contained" fullWidth>
@@ -135,7 +127,11 @@ export default function ServiceTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      <ModalAddSerivce open={openModal} onClose={handleCloseModal} />
+      <ModalAddSerivce
+        open={openModal}
+        onClose={handleCloseModal}
+        handUpdateTable={handUpdateTable}
+      />
     </>
   );
 }
