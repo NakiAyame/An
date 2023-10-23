@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 //   }));
 
 const ModalAddSerivce = (props) => {
-  const { open, onClose } = props;
+  const { open, onClose, handUpdateTable } = props;
 
   const [serviceName, setServiceName] = useState("");
   const [title, setTitle] = useState("");
@@ -41,10 +41,16 @@ const ModalAddSerivce = (props) => {
         toast.error(response.error);
       } else {
         console.log("Thành công!!", response);
-        toast.success("Login successful");
+        toast.success("Thêm mới dịch vụ thành công!");
         setServiceName("");
         setTitle("");
         setDescription("");
+        handUpdateTable({
+          serviceName: serviceName,
+          title: title,
+          description: description,
+          price: price,
+        });
         setPrice(0);
         onClose();
       }
@@ -73,22 +79,25 @@ const ModalAddSerivce = (props) => {
         </Typography>
         <form>
           <TextField
-            required
+            // required
             fullWidth
             label="Tên dịch vụ"
+            margin="normal"
             value={serviceName}
             onChange={(e) => setServiceName(e.target.value)}
           />
           <TextField
-            required
+            // required
             fullWidth
             label="Loại dịch vụ"
+            margin="normal"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
           <TextField
             fullWidth
             label="Thông tin"
+            margin="normal"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -96,11 +105,14 @@ const ModalAddSerivce = (props) => {
             required
             fullWidth
             label="Giá dịch vụ"
+            type="number"
+            margin="normal"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
           <Button
             variant="contained"
+            margin="normal"
             color="primary"
             onClick={handleCreateService}
           >
