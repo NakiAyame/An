@@ -43,7 +43,7 @@ const DrawerDashborad = () => {
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} /> 
             </ListItemButton>
           </ListItem>
         ))}
