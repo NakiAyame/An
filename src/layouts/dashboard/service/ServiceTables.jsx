@@ -20,6 +20,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import ModalAddSerivce from "./ModalAddService";
+import ModalEditSerivce from "./ModalEditService";
+
+const BASE_URL = "http://localhost:3500"; // địa chỉ của server API
 
 export default function ServiceTable() {
   const [data, setData] = useState([]);
@@ -34,7 +37,7 @@ export default function ServiceTable() {
   useEffect(() => {
     async function loadAllUser() {
       try {
-        const loadData = await axios.get("http://localhost:3500/service");
+        const loadData = await axios.get(`${BASE_URL}/service`);
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
@@ -50,6 +53,8 @@ export default function ServiceTable() {
   }, []);
 
   const [openModal, setOpenModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [dataEditService, setDataEditService] = useState({});
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -57,10 +62,57 @@ export default function ServiceTable() {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setOpenEditModal(false);
   };
 
   const handUpdateTable = (service) => {
     setData([service, ...data]);
+  };
+
+  const handleEditService = (service) => {
+    console.log("Check data", service);
+    setDataEditService(service);
+    setOpenEditModal(true);
+  };
+
+  const handleUpdateServiceStatus = async (serviceId) => {
+    console.log(serviceId);
+    try {
+      // Kiểm tra xem đối tượng 'value' có tồn tại không
+      const serviceToUpdate = data.find((service) => service._id === serviceId);
+      if (!serviceToUpdate) {
+        console.log("Service not found");
+        return;
+      }
+
+      // Cập nhật trạng thái mới
+      const newStatus = !serviceToUpdate.status;
+      const updatedService = { ...serviceToUpdate, status: newStatus };
+
+      // Cập nhật dữ liệu
+      const newData = [...data];
+      const serviceIndex = newData.findIndex(
+        (service) => service._id === serviceId
+      );
+      newData[serviceIndex] = updatedService;
+      setData(newData);
+
+      // Gọi API để cập nhật trạng thái của dịch vụ
+      await axios.patch(`http://localhost:3500/service/${serviceId}`, {
+        status: newStatus,
+      });
+
+      // Cập nhật trạng thái mới
+      const response = await axios.get(
+        `http://localhost:3500/service/${serviceId}`
+      );
+      const updatedData = newData.map((service) =>
+        service._id === response.data._id ? response.data : service
+      );
+      setData(updatedData);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -98,7 +150,7 @@ export default function ServiceTable() {
                       {index}
                     </TableCell>
                     <TableCell align="right">{value.serviceName}</TableCell>
-                    <TableCell align="right">{value.title}</TableCell>
+                    <TableCell align="right">{value.categoryId}</TableCell>
                     <TableCell align="right">{value.description}</TableCell>
                     <TableCell align="right">
                       {numberToVND(value.price)}
@@ -109,11 +161,16 @@ export default function ServiceTable() {
                         variant="outlined"
                         label={value.status ? "Hoạt động" : "Ẩn"}
                         color={statusColor}
+                        onClick={() => handleUpdateServiceStatus(value._id)}
                       />
                     </TableCell>
                     <TableCell align="right">
                       <ButtonGroup variant="contained" fullWidth>
-                        <Button variant="contained" color="success">
+                        <Button
+                          variant="contained"
+                          color="success"
+                          onClick={() => handleEditService(value)}
+                        >
                           Sửa
                         </Button>
                         <Button variant="contained" color="error">
@@ -130,6 +187,13 @@ export default function ServiceTable() {
       <ModalAddSerivce
         open={openModal}
         onClose={handleCloseModal}
+        handUpdateTable={handUpdateTable}
+      />
+
+      <ModalEditSerivce
+        open={openEditModal}
+        onClose={handleCloseModal}
+        dataEditService={dataEditService}
         handUpdateTable={handUpdateTable}
       />
     </>
