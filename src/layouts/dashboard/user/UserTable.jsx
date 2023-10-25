@@ -22,13 +22,13 @@ export default function BasicTable() {
     useEffect(() => {
         async function loadAllUser() {
             try {
-                const loadData = await axios.get("http://localhost:3500/user");
+                const loadData = await axios.get("http://localhost:3500/user?page=1");
                 if (loadData.error) {
                     toast.error(loadData.error);
                 } else {
-                    setData(loadData.data);
+                    setData(loadData.data.docs);
                     toast.success("Login successful");
-                    console.log(loadData.data)
+                    console.log(loadData.data.docs)
                 }
             } catch (err) {
                 console.log(err);
