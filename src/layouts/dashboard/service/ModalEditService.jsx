@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -14,7 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
 const ModalEditSerivce = (props) => {
-  const { open, onClose, handUpdateTable, dataEditService } = props;
+  const { open, onClose, handUpdateEditTable, dataEditService } = props;
 
   const [serviceName, setServiceName] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -32,18 +30,24 @@ const ModalEditSerivce = (props) => {
 
   const handleEditService = async (serviceID) => {
     try {
-      const res = await axios.patch(
-        `http://localhost:3500/service/${serviceID}`,
-        {
+      const res = await axios.patch(`http://localhost:3500/service`, {
+        id: serviceID,
+        serviceName: serviceName,
+        categoryId: categoryId,
+        description: description,
+        price: price,
+      });
+      if (res.data.error) {
+        toast.error(res.data.error);
+      } else {
+        toast.success("Sửa dịch vụ thành công");
+        handUpdateEditTable({
+          id: serviceID,
           serviceName: serviceName,
           categoryId: categoryId,
           description: description,
           price: price,
-        }
-      );
-      if (res.status === 200) {
-        toast.success("Sửa dịch vụ thành công");
-        handUpdateTable();
+        });
         onClose();
       }
     } catch (err) {
@@ -52,7 +56,7 @@ const ModalEditSerivce = (props) => {
   };
 
   return (
-    <Modal
+    <Dialog
       open={open}
       onClose={onClose}
       sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -132,7 +136,7 @@ const ModalEditSerivce = (props) => {
           </Button>
         </DialogActions>
       </Box>
-    </Modal>
+    </Dialog>
   );
 };
 

@@ -41,8 +41,8 @@ export default function ServiceTable() {
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
-          setData(loadData.data);
-          toast.success("Login successful");
+          setData(loadData.data.docs);
+          toast.success("Add dữ liệu thành công");
           console.log(loadData.data);
         }
       } catch (err) {
@@ -67,6 +67,17 @@ export default function ServiceTable() {
 
   const handUpdateTable = (service) => {
     setData([service, ...data]);
+  };
+
+  // Update table sau khi sửa xong
+  const handUpdateEditTable = (service) => {
+    const newData = [...data];
+    const serviceIndex = data.findIndex((value) => value._id === service.id);
+    newData[serviceIndex] = service;
+    setData(newData);
+    // check data
+    console.log(data, newData);
+    console.log("check id", serviceIndex);
   };
 
   const handleEditService = (service) => {
@@ -107,7 +118,7 @@ export default function ServiceTable() {
         `http://localhost:3500/service/${serviceId}`
       );
       const updatedData = newData.map((service) =>
-        service._id === response.data._id ? response.data : service
+        service.id === response.data.id ? response.data : service
       );
       setData(updatedData);
     } catch (err) {
@@ -128,7 +139,7 @@ export default function ServiceTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell>STT</TableCell>
               <TableCell align="right">Tên dịch vụ</TableCell>
               <TableCell align="right">Loại dịch vụ</TableCell>
               <TableCell align="right">Thông tin</TableCell>
@@ -138,7 +149,7 @@ export default function ServiceTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data &&
+            {Array.isArray(data) &&
               data.map((value, index) => {
                 const statusColor = value.status ? "primary" : "error";
                 return (
@@ -194,7 +205,7 @@ export default function ServiceTable() {
         open={openEditModal}
         onClose={handleCloseModal}
         dataEditService={dataEditService}
-        handUpdateTable={handUpdateTable}
+        handUpdateEditTable={handUpdateEditTable}
       />
     </>
   );

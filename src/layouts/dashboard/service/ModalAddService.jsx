@@ -6,36 +6,37 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { toast } from "react-toastify";
-
-// const useStyles = makeStyles((theme) => ({
-//     modal: {
-//       display: 'flex',
-//       alignItems: 'center',
-//       justifyContent: 'center',
-//     },
-//     paper: {
-//       backgroundColor: theme.palette.background.paper,
-//       boxShadow: theme.shadows[5],
-//       padding: theme.spacing(2, 4, 3),
-//       borderRadius: '12px',
-//     },
-//   }));
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 const ModalAddSerivce = (props) => {
   const { open, onClose, handUpdateTable } = props;
 
   const [serviceName, setServiceName] = useState("");
-  const [title, setTitle] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
+  const [status, setStatus] = useState(true);
+
+  const handleStatusChange = (event) => {
+    setStatus(event.target.value);
+  };
 
   const handleCreateService = async () => {
     try {
       const response = await axios.post("http://localhost:3500/service", {
         serviceName,
-        title,
+        categoryId,
         description,
         price,
+        status,
       });
       if (response.error) {
         toast.error(response.error);
@@ -43,25 +44,27 @@ const ModalAddSerivce = (props) => {
         console.log("Thành công!!", response);
         toast.success("Thêm mới dịch vụ thành công!");
         setServiceName("");
-        setTitle("");
+        setCategoryId("");
         setDescription("");
+        setPrice();
         handUpdateTable({
           serviceName: serviceName,
-          title: title,
+          categoryId: categoryId,
           description: description,
           price: price,
+          status: status,
         });
-        setPrice(0);
         onClose();
       }
     } catch (error) {
       console.error(error);
       console.log("Error creating service.");
+      toast.error(error.message);
     }
   };
 
   return (
-    <Modal
+    <Dialog
       open={open}
       onClose={onClose}
       sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -74,42 +77,76 @@ const ModalAddSerivce = (props) => {
           boxShadow: 5,
         }}
       >
-        <Typography variant="h6" component="h2" id="modal-title" mb={2}>
-          Thêm mới dịch vụ
-        </Typography>
-        <form>
-          <TextField
-            // required
-            fullWidth
-            label="Tên dịch vụ"
-            margin="normal"
-            value={serviceName}
-            onChange={(e) => setServiceName(e.target.value)}
-          />
-          <TextField
-            // required
-            fullWidth
-            label="Loại dịch vụ"
-            margin="normal"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            label="Thông tin"
-            margin="normal"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <TextField
-            required
-            fullWidth
-            label="Giá dịch vụ"
-            type="number"
-            margin="normal"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+          Sửa dịch vụ
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent dividers>
+          <form>
+            <TextField
+              // required
+              fullWidth
+              label="Tên dịch vụ"
+              margin="normal"
+              value={serviceName}
+              onChange={(e) => setServiceName(e.target.value)}
+            />
+            <TextField
+              // required
+              fullWidth
+              label="Loại dịch vụ"
+              margin="normal"
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+            />
+            <TextField
+              label="Thông tin dịch vụ"
+              fullWidth
+              placeholder="MultiLine with rows: 2 and rowsMax: 4"
+              multiline
+              rows={4}
+              margin="normal"
+              maxRows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+
+            <TextField
+              required
+              fullWidth
+              label="Giá dịch vụ"
+              type="number"
+              margin="normal"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+            <RadioGroup
+              value={status}
+              onChange={handleStatusChange}
+              row
+              aria-label="status"
+              name="status"
+            >
+              <FormControlLabel
+                value="active"
+                control={<Radio />}
+                label="Hoạt động"
+              />
+              <FormControlLabel value="hidden" control={<Radio />} label="Ẩn" />
+            </RadioGroup>
+          </form>
+        </DialogContent>
+        <DialogActions>
           <Button
             variant="contained"
             margin="normal"
@@ -118,9 +155,9 @@ const ModalAddSerivce = (props) => {
           >
             Tạo dịch vụ
           </Button>
-        </form>
+        </DialogActions>
       </Box>
-    </Modal>
+    </Dialog>
   );
 };
 
