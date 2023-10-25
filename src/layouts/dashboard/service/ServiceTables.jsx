@@ -62,7 +62,7 @@ export default function ServiceTable() {
 
   const handlePageClick = (event) => {
     console.log("event lib: ", event);
-    loadAllUser(+event.selected + 1);
+    loadAllService(+event.selected + 1);
   };
 
   const [openModal, setOpenModal] = useState(false);

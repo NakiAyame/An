@@ -6,7 +6,7 @@ import Dashboard from "./layouts/dashboard/Dashboard";
 import { ToastContainer } from "react-toastify";
 
 import BasicTable from "./layouts/dashboard/user/UserTable";
-import ServiceTable from "./components/Modal/service/ServiceTables";
+import ServiceTable from "./layouts/dashboard/service/ServiceTables";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
