@@ -4,7 +4,8 @@ import Login from "./layouts/common/login/Login";
 import Register from "./layouts/common/register/Register";
 import Dashboard from "./layouts/dashboard/Dashboard";
 import { ToastContainer } from "react-toastify";
-import BasicTable from "./components/basic table/BasicTable";
+
+import BasicTable from "./layouts/dashboard/user/BasicTable";
 import ServiceTable from "./layouts/dashboard/service/ServiceTables";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"

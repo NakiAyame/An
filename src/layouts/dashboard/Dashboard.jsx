@@ -17,7 +17,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
-import BasicTable from "../../components/basic table/BasicTable";
+import BasicTable from "./user/BasicTable"
 
 //React
 import { useState } from "react";
