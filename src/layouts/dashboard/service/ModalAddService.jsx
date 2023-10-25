@@ -27,9 +27,11 @@ const ModalAddSerivce = (props) => {
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
+    console.log(status);
   };
 
   const handleCreateService = async () => {
+    console.log(serviceName, categoryId, description, price, status);
     try {
       const response = await axios.post("http://localhost:3500/service", {
         serviceName,
@@ -78,7 +80,7 @@ const ModalAddSerivce = (props) => {
         }}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Sửa dịch vụ
+          Thêm dịch vụ
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -138,11 +140,11 @@ const ModalAddSerivce = (props) => {
               name="status"
             >
               <FormControlLabel
-                value="active"
+                value={true}
                 control={<Radio />}
                 label="Hoạt động"
               />
-              <FormControlLabel value="hidden" control={<Radio />} label="Ẩn" />
+              <FormControlLabel value={false} control={<Radio />} label="Ẩn" />
             </RadioGroup>
           </form>
         </DialogContent>
