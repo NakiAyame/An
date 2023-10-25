@@ -12,6 +12,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 const ModalAddSerivce = (props) => {
   const { open, onClose, handUpdateTable } = props;
@@ -20,14 +23,20 @@ const ModalAddSerivce = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
+  const [status, setStatus] = useState(true);
+
+  const handleStatusChange = (event) => {
+    setStatus(event.target.value);
+  };
 
   const handleCreateService = async () => {
     try {
       const response = await axios.post("http://localhost:3500/service", {
-        serviceName: serviceName,
-        categoryId: categoryId,
-        description: description,
-        price: price,
+        serviceName,
+        categoryId,
+        description,
+        price,
+        status,
       });
       if (response.error) {
         toast.error(response.error);
@@ -37,13 +46,14 @@ const ModalAddSerivce = (props) => {
         setServiceName("");
         setCategoryId("");
         setDescription("");
+        setPrice();
         handUpdateTable({
           serviceName: serviceName,
           categoryId: categoryId,
           description: description,
           price: price,
+          status: status,
         });
-        setPrice(0);
         onClose();
       }
     } catch (error) {
@@ -120,6 +130,20 @@ const ModalAddSerivce = (props) => {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
+            <RadioGroup
+              value={status}
+              onChange={handleStatusChange}
+              row
+              aria-label="status"
+              name="status"
+            >
+              <FormControlLabel
+                value="active"
+                control={<Radio />}
+                label="Hoạt động"
+              />
+              <FormControlLabel value="hidden" control={<Radio />} label="Ẩn" />
+            </RadioGroup>
           </form>
         </DialogContent>
         <DialogActions>
