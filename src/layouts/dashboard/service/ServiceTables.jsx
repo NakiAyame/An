@@ -22,8 +22,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-import ModalAddSerivce from "./ModalAddService";
-import ModalEditSerivce from "./ModalEditService";
+import ModalAddSerivce from "../../../components/Modal/ModalAddService";
+import ModalEditSerivce from "../../../components/Modal/ModalEditService";
 
 const BASE_URL = "http://localhost:3500"; // địa chỉ của server API
 
@@ -40,10 +40,10 @@ export default function ServiceTable() {
   };
 
   useEffect(() => {
-    loadAllUser(1);
+    loadAllService(1);
   }, []);
 
-  const loadAllUser = async (page) => {
+  const loadAllService = async (page) => {
     try {
       const loadData = await axios.get(`${BASE_URL}/service?page=${page}`);
       if (loadData.error) {
