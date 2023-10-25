@@ -41,8 +41,8 @@ export default function ServiceTable() {
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
-          setData(loadData.data);
-          toast.success("Login successful");
+          setData(loadData.data.docs);
+          toast.success("Add dữ liệu thành công");
           console.log(loadData.data);
         }
       } catch (err) {
@@ -139,7 +139,7 @@ export default function ServiceTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell>STT</TableCell>
               <TableCell align="right">Tên dịch vụ</TableCell>
               <TableCell align="right">Loại dịch vụ</TableCell>
               <TableCell align="right">Thông tin</TableCell>
@@ -149,7 +149,7 @@ export default function ServiceTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data &&
+            {Array.isArray(data) &&
               data.map((value, index) => {
                 const statusColor = value.status ? "primary" : "error";
                 return (
