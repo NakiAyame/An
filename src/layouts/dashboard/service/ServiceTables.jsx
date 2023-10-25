@@ -69,6 +69,17 @@ export default function ServiceTable() {
     setData([service, ...data]);
   };
 
+  // Update table sau khi sửa xong
+  const handUpdateEditTable = (service) => {
+    const newData = [...data];
+    const serviceIndex = data.findIndex((value) => value._id === service.id);
+    newData[serviceIndex] = service;
+    setData(newData);
+    // check data
+    console.log(data, newData);
+    console.log("check id", serviceIndex);
+  };
+
   const handleEditService = (service) => {
     console.log("Check data", service);
     setDataEditService(service);
@@ -107,7 +118,7 @@ export default function ServiceTable() {
         `http://localhost:3500/service/${serviceId}`
       );
       const updatedData = newData.map((service) =>
-        service._id === response.data._id ? response.data : service
+        service.id === response.data.id ? response.data : service
       );
       setData(updatedData);
     } catch (err) {
@@ -194,7 +205,7 @@ export default function ServiceTable() {
         open={openEditModal}
         onClose={handleCloseModal}
         dataEditService={dataEditService}
-        handUpdateTable={handUpdateTable}
+        handUpdateEditTable={handUpdateEditTable}
       />
     </>
   );
