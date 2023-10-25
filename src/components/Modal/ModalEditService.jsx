@@ -40,7 +40,7 @@ const ModalEditSerivce = (props) => {
       if (res.data.error) {
         toast.error(res.data.error);
       } else {
-        toast.success("Sửa dịch vụ thành công");
+        toast.success("Sửa dịch vụ thành công"); 
         handUpdateEditTable({
           id: serviceID,
           serviceName: serviceName,
