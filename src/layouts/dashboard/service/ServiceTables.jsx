@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import ModalAddSerivce from "../../../components/Modal/ModalAddService";
 import ModalEditSerivce from "../../../components/Modal/ModalEditService";
+import ModalComfirmSerivce from "../../../components/Modal/ModalComfirmService";
 
 const BASE_URL = "http://localhost:3500"; // địa chỉ của server API
 
@@ -68,6 +69,8 @@ export default function ServiceTable() {
   const [openModal, setOpenModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataEditService, setDataEditService] = useState({});
+  const [openComfirmModal, setOpenComfirmModal] = useState(false);
+  const [dataDeteleService, setDataDeteleService] = useState({});
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -76,6 +79,7 @@ export default function ServiceTable() {
   const handleCloseModal = () => {
     setOpenModal(false);
     setOpenEditModal(false);
+    setOpenComfirmModal(false);
   };
 
   const handUpdateTable = (service) => {
@@ -97,6 +101,21 @@ export default function ServiceTable() {
     console.log("Check data", service);
     setDataEditService(service);
     setOpenEditModal(true);
+  };
+
+  const handleDeleteService = (service) => {
+    setOpenComfirmModal(true);
+    setDataDeteleService(service);
+    console.log(service);
+  };
+
+  const handUpdateDeleteTable = (service) => {
+    console.log("Check data sevice:", service);
+    const newData = [...data];
+    const serviceIndex = newData.findIndex((value) => value._id === service);
+    newData.splice(serviceIndex, 1);
+    console.log("Check list delete", newData);
+    setData(newData);
   };
 
   const handleUpdateServiceStatus = async (serviceId) => {
@@ -197,7 +216,11 @@ export default function ServiceTable() {
                         >
                           Sửa
                         </Button>
-                        <Button variant="contained" color="error">
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleDeleteService(value)}
+                        >
                           Xoá
                         </Button>
                       </ButtonGroup>
@@ -226,6 +249,13 @@ export default function ServiceTable() {
         onClose={handleCloseModal}
         dataEditService={dataEditService}
         handUpdateEditTable={handUpdateEditTable}
+      />
+
+      <ModalComfirmSerivce
+        open={openComfirmModal}
+        onClose={handleCloseModal}
+        dataDeteleService={dataDeteleService}
+        handUpdateDeleteTable={handUpdateDeleteTable}
       />
     </>
   );
