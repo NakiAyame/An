@@ -6,11 +6,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup, Pagination } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Modal from "@mui/material/Modal";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
+
+import ReactPaginate from "react-paginate";
+import Stack from "@mui/material/Stack";
 
 //React
 import { useState } from "react";
@@ -26,6 +29,8 @@ const BASE_URL = "http://localhost:3500"; // địa chỉ của server API
 
 export default function ServiceTable() {
   const [data, setData] = useState([]);
+  const [totalServices, setTotalServices] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   const numberToVND = (number) => {
     return number.toLocaleString("vi-VN", {
@@ -35,22 +40,30 @@ export default function ServiceTable() {
   };
 
   useEffect(() => {
-    async function loadAllUser() {
-      try {
-        const loadData = await axios.get(`${BASE_URL}/service`);
-        if (loadData.error) {
-          toast.error(loadData.error);
-        } else {
-          setData(loadData.data.docs);
-          toast.success("Add dữ liệu thành công");
-          console.log(loadData.data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    loadAllUser();
+    loadAllUser(1);
   }, []);
+
+  const loadAllUser = async (page) => {
+    try {
+      const loadData = await axios.get(`${BASE_URL}/service?page=${page}`);
+      if (loadData.error) {
+        toast.error(loadData.error);
+      } else {
+        setTotalPages(loadData.data.pages);
+        console.log("Check totalPage", totalPages);
+        setData(loadData.data.docs);
+        setTotalServices(loadData.data.total);
+        console.log(loadData.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handlePageClick = (event) => {
+    console.log("event lib: ", event);
+    loadAllUser(+event.selected + 1);
+  };
 
   const [openModal, setOpenModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -195,6 +208,13 @@ export default function ServiceTable() {
           </TableBody>
         </Table>
       </TableContainer>
+      {/* Paging */}
+      <Pagination
+        count={totalPages}
+        onClick={handlePageClick}
+        color="primary"
+      />
+
       <ModalAddSerivce
         open={openModal}
         onClose={handleCloseModal}
