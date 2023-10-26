@@ -66,6 +66,7 @@ export default function ServiceTable() {
     loadAllService(+event.selected + 1);
   };
 
+  // --------------------- MODAL HANDLE -----------------------------
   const [openModal, setOpenModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataEditService, setDataEditService] = useState({});
