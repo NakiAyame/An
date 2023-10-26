@@ -116,7 +116,7 @@ export default function ModalCreateAndUpdateUser(props) {
           gender: gender,
           address: address,
         });
-        handleClose();
+        // handleClose();
       }
     } catch (err) {
       console.log(err);
@@ -127,7 +127,7 @@ export default function ModalCreateAndUpdateUser(props) {
     <>
       <Modal
         open={open}
-        onClose={handleClose}
+        // onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
