@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import BasicTable from "./layouts/dashboard/user/UserTable";
 import ServiceTable from "./layouts/dashboard/service/ServiceTables";
 import PetTable from "./layouts/dashboard/pet/PetTables";
+import ProductTable from "./layouts/dashboard/product/ProductTables";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -20,6 +21,7 @@ function App() {
             <Route path="user-list" element={<BasicTable />} />
             <Route path="service-list" element={<ServiceTable />} />
             <Route path="pet-list" element={<PetTable />} />
+            <Route path="product-list" element={<ProductTable />} />
           </Route>
           <Route path="/sign-up" element={<Register />} />
           <Route path="/sign-in" element={<Login />} />
