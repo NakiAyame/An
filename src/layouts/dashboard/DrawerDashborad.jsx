@@ -22,13 +22,17 @@ const DrawerDashborad = () => {
     { text: "Danh sách người dùng", path: "/user-list" },
     { text: "Danh sách dịch vụ", path: "/service-list" },
     { text: "Danh sách thú cưng", path: "/pet-list" },
+    { text: "Danh sách sản phẩm", path: "/product-list" },
   ];
 
   const links2 = [
-    { text: "Dashboard", path: "/" },
-    { text: "Danh sách người dùng", path: "/user-list" },
-    { text: "Danh sách Dịch vụ", path: "/service-list" },
-    { text: "Drafts", path: "/drafts" },
+    { text: "Danh sách dịch vụ", path: "/service-list" },
+    { text: "Lịch sử thanh toán dịch vụ", path: "/history-service-list" },
+  ];
+
+  const links3 = [
+    { text: "Danh sách thú cưng", path: "/pet-list" },
+    { text: "Lịch sử thanh toán thú cưng", path: "/history-pet-list" },
   ];
 
   const handleLogout = async () => {
@@ -53,7 +57,7 @@ const DrawerDashborad = () => {
       <Divider />
       <List>
         <ListSubheader component="div" id="nested-list-subheader">
-          List
+          Dashboard
         </ListSubheader>
         {links.map((link, index) => (
           <ListItem key={link.text} disablePadding>
@@ -67,14 +71,35 @@ const DrawerDashborad = () => {
         ))}
       </List>
       <Divider />
+
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        <ListSubheader component="div" id="nested-list-subheader">
+          Dịch vụ
+        </ListSubheader>
+        {links2.map((link, index) => (
+          <ListItem key={link.text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={link.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+
+      <List>
+        <ListSubheader component="div" id="nested-list-subheader">
+          Thú cưng
+        </ListSubheader>
+        {links3.map((link, index) => (
+          <ListItem key={link.text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={link.text} />
             </ListItemButton>
           </ListItem>
         ))}
