@@ -25,6 +25,7 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
+import Chip from "@mui/material/Chip";
 
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
@@ -52,22 +53,15 @@ const style = {
   p: 4,
 };
 
+// -------------------------------API SERVER----------------------
+const BASE_URL = "http://localhost:3500";
+
 export default function PetTable() {
-  const DEFAULT_PAGE = 1;
-
-  const [option, setOption] = useState("");
-
   const [data, setData] = useState([]);
 
-  
-  const [role, setRole] = useState("");
-  const [gender, setGender] = useState(true);
-  const [fullname, setFullName] = useState("");
-  const [password, setPassWord] = useState("");
-  const [confirmPass, setConfirmPass] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+  const [totalServices, setTotalServices] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   // --------------------- MODAL HANDLE -----------------------------
 
@@ -79,104 +73,41 @@ export default function PetTable() {
     setData([value, ...data]);
   };
 
-  // --------------------- HANDLE ROLE -----------------------------
-  const handleRoleChange = (event) => {
-    setRole(event.target.value);
-    console.log(role);
-  };
-
-  // --------------------- HANDLE GENDER -----------------------------
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
-    console.log(gender);
-  };
-
   // --------------------- HANDLE OPEN MODAL CREATE -----------------------------
-  const handleCreate = (event) => {
-    setOption("create");
-    handleOpen();
-  };
+  const handleCreate = (event) => {};
 
   // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
-  const handleUpdate = (event) => {
-    setOption("update");
-    handleOpen();
-
-    console.log(event);
-  };
+  const handleUpdate = (event) => {};
 
   // --------------------- HANDLE DELETE -----------------------------
-  const handleDelete = async (id) => {
-    console.log(id);
-    try {
-      const data = await axios.delete("http://localhost:3500/user", {
-        id,
-      });
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        console.log(data);
-        toast.success("Delete successfully");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const handleDelete = async (id) => {};
 
-  // --------------------- HANDLE CREATE USER -----------------------------
+  // --------------------- HANDLE CREATE PET -----------------------------
   // useEffect(() => {
-  const handleCreateUser = async (event) => {
-    // e.preventDefault();
-    // const { fullname, email, password } = data;
-    try {
-      const data = await axios.post("http://localhost:3500/register", {
-        fullname,
-        email,
-        password,
-        role,
-        address,
-        phone,
-        gender,
-      });
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        toast.success("Register successful. Welcome!");
-        handleUpdateTable({
-          fullname: fullname,
-          email: email,
-          phone: phone,
-          gender: gender,
-          address: address,
-        });
-        handleClose();
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const handleCreateUser = async (event) => {};
   // })
 
-  // ----------------------------------- API GET ALL USER --------------------------------
+  // ----------------------------------- API GET ALL PET --------------------------------
   useEffect(() => {
-    async function loadAllUser(page) {
-      try {
-        const loadData = await axios.get(
-          `http://localhost:3500/user?page=${page}`
-        );
-        if (loadData.error) {
-          toast.error(loadData.error);
-        } else {
-          setData(loadData.data.docs);
-          toast.success("Login successful");
-          console.log(loadData.data.docs);
-        }
-      } catch (err) {
-        console.log(err);
+    loadAllPet(currentPage);
+  }, [currentPage]);
+
+  const loadAllPet = async (page) => {
+    try {
+      const loadData = await axios.get(`${BASE_URL}/pet?page=${page}`);
+      if (loadData.error) {
+        toast.error(loadData.error);
+      } else {
+        setTotalPages(loadData.data.pages);
+        console.log("Check totalPage", totalPages);
+        setData(loadData.data.docs);
+        setTotalServices(loadData.data.limit);
+        console.log(loadData.data);
       }
+    } catch (err) {
+      console.log(err);
     }
-    loadAllUser(DEFAULT_PAGE);
-  }, []);
+  };
   // ----------------------------------------------------------------
 
   return (
@@ -194,17 +125,18 @@ export default function PetTable() {
           <TableHead>
             <TableRow>
               <TableCell children>ID</TableCell>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Phone</TableCell>
-              <TableCell align="right">Gender</TableCell>
-              <TableCell align="right">Email</TableCell>
-              <TableCell align="right">Address</TableCell>
+              <TableCell align="right">Chủ thú cưng</TableCell>
+              <TableCell align="right">Tên thú cưng</TableCell>
+              <TableCell align="right">Cấp thú cưng</TableCell>
+              <TableCell align="right">Loại thú cưng</TableCell>
+              <TableCell align="right">Trạng thái</TableCell>
               <TableCell align="right">Chức năng</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data &&
               data.map((value, index) => {
+                const statusColor = value.status ? "primary" : "error";
                 return (
                   <TableRow
                     key={index}
@@ -213,13 +145,18 @@ export default function PetTable() {
                     <TableCell component="th" scope="row">
                       {index}
                     </TableCell>
-                    <TableCell align="right">{value.fullname}</TableCell>
-                    <TableCell align="right">{value.phone}</TableCell>
+                    <TableCell align="right">{value.userId}</TableCell>
+                    <TableCell align="right">{value.petName}</TableCell>
+                    <TableCell align="right">{value.rank}</TableCell>
+                    <TableCell align="right">{value.category}</TableCell>
                     <TableCell align="right">
-                      {(value.gender = true ? "Nam" : "Nữ")}
+                      <Chip
+                        size="small"
+                        variant="outlined"
+                        label={value.status ? "Hoạt động" : "Ẩn"}
+                        color={statusColor}
+                      />
                     </TableCell>
-                    <TableCell align="right">{value.email}</TableCell>
-                    <TableCell align="right">{value.address}</TableCell>
                     <TableCell align="right">
                       <ButtonCustomize
                         onClick={(e) => handleUpdate(value._id)}
