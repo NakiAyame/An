@@ -10,6 +10,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 const ModalEditSerivce = (props) => {
   const { open, onClose, handUpdateEditTable, dataEditService } = props;
@@ -17,7 +20,14 @@ const ModalEditSerivce = (props) => {
   const [serviceName, setServiceName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [description, setDescription] = useState("");
+
   const [price, setPrice] = useState(0);
+  const [status, setStatus] = useState(true);
+
+  const handleStatusChange = (event) => {
+    setStatus(event.target.value);
+    console.log(status);
+  };
 
   useEffect(() => {
     if (open) {
@@ -25,6 +35,7 @@ const ModalEditSerivce = (props) => {
       setCategoryId(dataEditService.categoryId);
       setDescription(dataEditService.description);
       setPrice(dataEditService.price);
+      setStatus(dataEditService.status);
     }
   }, [dataEditService]);
 
@@ -36,17 +47,19 @@ const ModalEditSerivce = (props) => {
         categoryId: categoryId,
         description: description,
         price: price,
+        status: status,
       });
       if (res.data.error) {
         toast.error(res.data.error);
       } else {
-        toast.success("Sửa dịch vụ thành công"); 
+        toast.success("Sửa dịch vụ thành công");
         handUpdateEditTable({
           id: serviceID,
           serviceName: serviceName,
           categoryId: categoryId,
           description: description,
           price: price,
+          status: status,
         });
         onClose();
       }
@@ -122,6 +135,20 @@ const ModalEditSerivce = (props) => {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
+            <RadioGroup
+              value={status}
+              onChange={handleStatusChange}
+              row
+              aria-label="status"
+              name="status"
+            >
+              <FormControlLabel
+                value={true}
+                control={<Radio />}
+                label="Hoạt động"
+              />
+              <FormControlLabel value={false} control={<Radio />} label="Ẩn" />
+            </RadioGroup>
           </form>
         </DialogContent>
         <DialogActions>

@@ -25,6 +25,7 @@ import { useEffect } from "react";
 import ModalAddSerivce from "../../../components/Modal/ModalAddService";
 import ModalEditSerivce from "../../../components/Modal/ModalEditService";
 import ModalComfirmSerivce from "../../../components/Modal/ModalComfirmService";
+import ButtonCustomize from "../../../components/Button/Button";
 
 const BASE_URL = "http://localhost:3500"; // địa chỉ của server API
 
@@ -32,6 +33,7 @@ export default function ServiceTable() {
   const [data, setData] = useState([]);
   const [totalServices, setTotalServices] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const numberToVND = (number) => {
     return number.toLocaleString("vi-VN", {
@@ -40,9 +42,10 @@ export default function ServiceTable() {
     });
   };
 
+  // ----------------------------------- API GET ALL SERVICE --------------------------------
   useEffect(() => {
-    loadAllService(1);
-  }, []);
+    loadAllService(currentPage);
+  }, [currentPage]);
 
   const loadAllService = async (page) => {
     try {
@@ -53,7 +56,7 @@ export default function ServiceTable() {
         setTotalPages(loadData.data.pages);
         console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
-        setTotalServices(loadData.data.total);
+        setTotalServices(loadData.data.limit);
         console.log(loadData.data);
       }
     } catch (err) {
@@ -61,9 +64,10 @@ export default function ServiceTable() {
     }
   };
 
-  const handlePageClick = (event) => {
-    console.log("event lib: ", event);
-    loadAllService(+event.selected + 1);
+  // --------------------- Click paging -----------------------------
+  const handlePageClick = (event, value) => {
+    setCurrentPage(value);
+    // loadAllService(+event.selected + 1);
   };
 
   // --------------------- MODAL HANDLE -----------------------------
@@ -73,29 +77,9 @@ export default function ServiceTable() {
   const [openComfirmModal, setOpenComfirmModal] = useState(false);
   const [dataDeteleService, setDataDeteleService] = useState({});
 
+  // --------------------- OPEN MODAL  -----------------------------
   const handleOpenModal = () => {
     setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setOpenEditModal(false);
-    setOpenComfirmModal(false);
-  };
-
-  const handUpdateTable = (service) => {
-    setData([service, ...data]);
-  };
-
-  // Update table sau khi sửa xong
-  const handUpdateEditTable = (service) => {
-    const newData = [...data];
-    const serviceIndex = data.findIndex((value) => value._id === service.id);
-    newData[serviceIndex] = service;
-    setData(newData);
-    // check data
-    console.log(data, newData);
-    console.log("check id", serviceIndex);
   };
 
   const handleEditService = (service) => {
@@ -109,6 +93,26 @@ export default function ServiceTable() {
     setDataDeteleService(service);
     console.log(service);
   };
+  // --------------------- CLOSE MODAL  -----------------------------
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setOpenEditModal(false);
+    setOpenComfirmModal(false);
+  };
+
+  // --------------------- HANLDE SERVICES LIST UPDATE AFTER EDIT SERVICE  -----------------------------
+  const handUpdateTable = (service) => {
+    setData([service, ...data]);
+  };
+  const handUpdateEditTable = (service) => {
+    const newData = [...data];
+    const serviceIndex = data.findIndex((value) => value._id === service.id);
+    newData[serviceIndex] = service;
+    setData(newData);
+    // check data
+    console.log(data, newData);
+    console.log("check id", serviceIndex);
+  };
 
   const handUpdateDeleteTable = (service) => {
     console.log("Check data sevice:", service);
@@ -119,6 +123,7 @@ export default function ServiceTable() {
     setData(newData);
   };
 
+  // ----------------------------------- API UPDATE STATUS SERVICE --------------------------------
   const handleUpdateServiceStatus = async (serviceId) => {
     console.log(serviceId);
     try {
@@ -142,14 +147,12 @@ export default function ServiceTable() {
       setData(newData);
 
       // Gọi API để cập nhật trạng thái của dịch vụ
-      await axios.patch(`http://localhost:3500/service/${serviceId}`, {
+      await axios.patch(`${BASE_URL}/service/${serviceId}`, {
         status: newStatus,
       });
 
       // Cập nhật trạng thái mới
-      const response = await axios.get(
-        `http://localhost:3500/service/${serviceId}`
-      );
+      const response = await axios.get(`${BASE_URL}/service/${serviceId}`);
       const updatedData = newData.map((service) =>
         service.id === response.data.id ? response.data : service
       );
@@ -162,11 +165,13 @@ export default function ServiceTable() {
   return (
     <>
       <Grid container justifyContent="space-between" alignItems="center" mb={3}>
-        <Grid item>
-          <Button variant="contained" color="primary" onClick={handleOpenModal}>
-            Thêm mới
-          </Button>
-        </Grid>
+        <ButtonCustomize
+          onClick={handleOpenModal}
+          variant="contained"
+          // component={RouterLink}
+          nameButton="Thêm mới dịch vụ"
+          width="15%"
+        />
       </Grid>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -182,7 +187,7 @@ export default function ServiceTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(data) &&
+            {data &&
               data.map((value, index) => {
                 const statusColor = value.status ? "primary" : "error";
                 return (
@@ -210,13 +215,13 @@ export default function ServiceTable() {
                     </TableCell>
                     <TableCell align="right">
                       <ButtonGroup variant="contained" fullWidth>
-                        <Button
-                          variant="contained"
-                          color="success"
+                        <ButtonCustomize
                           onClick={() => handleEditService(value)}
-                        >
-                          Sửa
-                        </Button>
+                          variant="contained"
+                          // component={RouterLink}
+                          nameButton="Cập nhật"
+                          fullWidth
+                        />
                         <Button
                           variant="contained"
                           color="error"
@@ -233,11 +238,14 @@ export default function ServiceTable() {
         </Table>
       </TableContainer>
       {/* Paging */}
-      <Pagination
-        count={totalPages}
-        onClick={handlePageClick}
-        color="primary"
-      />
+      <Stack spacing={2}>
+        <Pagination
+          count={totalPages}
+          onChange={handlePageClick}
+          page={currentPage}
+          color="primary"
+        />
+      </Stack>
 
       <ModalAddSerivce
         open={openModal}
