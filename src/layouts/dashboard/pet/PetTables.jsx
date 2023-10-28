@@ -24,7 +24,9 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Pagination,
 } from "@mui/material";
+import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -108,6 +110,13 @@ export default function PetTable() {
       console.log(err);
     }
   };
+
+  // --------------------- Click paging -----------------------------
+  const handlePageClick = (event, value) => {
+    setCurrentPage(value);
+    // loadAllService(+event.selected + 1);
+  };
+
   // ----------------------------------------------------------------
 
   return (
@@ -181,6 +190,15 @@ export default function PetTable() {
           </TableBody>
         </Table>
       </TableContainer>
+      {/* Paging */}
+      <Stack spacing={2}>
+        <Pagination
+          count={totalPages}
+          onChange={handlePageClick}
+          page={currentPage}
+          color="primary"
+        />
+      </Stack>
     </>
   );
 }

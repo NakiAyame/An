@@ -14,15 +14,21 @@ import { useNavigate } from "react-router-dom";
 
 import { Link } from "@mui/material";
 import { toast } from "react-toastify";
+// icon
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PersonIcon from "@mui/icons-material/Person";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
+import PetsIcon from "@mui/icons-material/Pets";
+import SpaIcon from "@mui/icons-material/Spa";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import CategoryIcon from "@mui/icons-material/Category";
 
 const DrawerDashborad = () => {
   const navigate = useNavigate();
   const links = [
     { text: "Dashboard", path: "/" },
     { text: "Danh sách người dùng", path: "/user-list" },
-    { text: "Danh sách dịch vụ", path: "/service-list" },
-    { text: "Danh sách thú cưng", path: "/pet-list" },
-    { text: "Danh sách sản phẩm", path: "/product-list" },
   ];
 
   const links2 = [
@@ -33,6 +39,11 @@ const DrawerDashborad = () => {
   const links3 = [
     { text: "Danh sách thú cưng", path: "/pet-list" },
     { text: "Lịch sử thanh toán thú cưng", path: "/history-pet-list" },
+  ];
+
+  const links4 = [
+    { text: "Danh sách sản phẩm", path: "/product-list" },
+    { text: "Lịch sử thanh toán sản phẩm", path: "/history-product-list" },
   ];
 
   const handleLogout = async () => {
@@ -63,7 +74,7 @@ const DrawerDashborad = () => {
           <ListItem key={link.text} disablePadding>
             <ListItemButton component={Link} to={link.path}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index % 2 === 0 ? <DashboardIcon /> : <PersonIcon />}
               </ListItemIcon>
               <ListItemText primary={link.text} />
             </ListItemButton>
@@ -78,9 +89,13 @@ const DrawerDashborad = () => {
         </ListSubheader>
         {links2.map((link, index) => (
           <ListItem key={link.text} disablePadding>
-            <ListItemButton>
+            <ListItemButton component={Link} to={link.path}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index % 2 === 0 ? (
+                  <MedicalServicesIcon />
+                ) : (
+                  <MedicalInformationIcon />
+                )}
               </ListItemIcon>
               <ListItemText primary={link.text} />
             </ListItemButton>
@@ -95,9 +110,26 @@ const DrawerDashborad = () => {
         </ListSubheader>
         {links3.map((link, index) => (
           <ListItem key={link.text} disablePadding>
-            <ListItemButton>
+            <ListItemButton component={Link} to={link.path}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index % 2 === 0 ? <PetsIcon /> : <SpaIcon />}
+              </ListItemIcon>
+              <ListItemText primary={link.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+
+      <List>
+        <ListSubheader component="div" id="nested-list-subheader">
+          Sản phẩm
+        </ListSubheader>
+        {links4.map((link, index) => (
+          <ListItem key={link.text} disablePadding>
+            <ListItemButton component={Link} to={link.path}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InventoryIcon /> : <CategoryIcon />}
               </ListItemIcon>
               <ListItemText primary={link.text} />
             </ListItemButton>
