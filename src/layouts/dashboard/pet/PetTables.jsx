@@ -42,6 +42,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import ModalAddPet from "../../../components/Modal/ModalAddPet";
+import ModalEditPet from "../../../components/Modal/ModalEditPet";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -69,7 +70,7 @@ export default function PetTable() {
   // --------------------- MODAL HANDLE -----------------------------
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [dataEditService, setDataEditService] = useState({});
+  const [dataEditPet, setDataEditPet] = useState({});
   const [openComfirmModal, setOpenComfirmModal] = useState(false);
   const [dataDeteleService, setDataDeteleService] = useState({});
 
@@ -78,9 +79,9 @@ export default function PetTable() {
     setOpenCreateModal(true);
   };
 
-  const handleEditService = (service) => {
-    console.log("Check data", service);
-    setDataEditService(service);
+  const handleUpdatePet = (pet) => {
+    console.log("Check data", pet);
+    setDataEditPet(pet);
     setOpenEditModal(true);
   };
 
@@ -97,20 +98,19 @@ export default function PetTable() {
   };
 
   // --------------------- HANDLE UPDATE TABLE -----------------------------
-  const handUpdateTable = (service) => {
-    setData([service, ...data]);
+  const handUpdateTable = (pet) => {
+    setData([pet, ...data]);
   };
 
-  // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
-  const handleUpdate = (event) => {};
-
-  // --------------------- HANDLE DELETE -----------------------------
-  const handleDelete = async (id) => {};
-
-  // --------------------- HANDLE CREATE PET -----------------------------
-  // useEffect(() => {
-  const handleCreateUser = async (event) => {};
-  // })
+  const handUpdateEditTable = (pet) => {
+    const newData = [...data];
+    const petIndex = data.findIndex((value) => value._id === pet.id);
+    newData[petIndex] = pet;
+    setData(newData);
+    // check data
+    console.log(data, newData);
+    console.log("check id", petIndex);
+  };
 
   // ----------------------------------- API GET ALL PET --------------------------------
   useEffect(() => {
@@ -191,7 +191,7 @@ export default function PetTable() {
                     </TableCell>
                     <TableCell align="right">
                       <ButtonCustomize
-                        onClick={(e) => handleUpdate(value._id)}
+                        onClick={() => handleUpdatePet(value)}
                         variant="contained"
                         // component={RouterLink}
                         nameButton="Cập nhật"
@@ -222,11 +222,18 @@ export default function PetTable() {
           color="primary"
         />
       </Stack>
-
+      {/* Modal create */}
       <ModalAddPet
         open={openCreateModal}
         onClose={handleCloseModal}
         handUpdateTable={handUpdateTable}
+      />
+      {/* Modal update */}
+      <ModalEditPet
+        open={openEditModal}
+        onClose={handleCloseModal}
+        dataEditPet={dataEditPet}
+        handUpdateEditTable={handUpdateEditTable}
       />
     </>
   );

@@ -42,6 +42,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import ModalAddProduct from "../../../components/Modal/ModalAddProduct";
+import ModalEditProduct from "../../../components/Modal/ModalEditProduct";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -76,7 +77,7 @@ export default function ProductTable() {
   // --------------------- MODAL HANDLE -----------------------------
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [dataEditService, setDataEditService] = useState({});
+  const [dataEditProduct, setDataEditProduct] = useState({});
   const [openComfirmModal, setOpenComfirmModal] = useState(false);
   const [dataDeteleService, setDataDeteleService] = useState({});
 
@@ -85,17 +86,12 @@ export default function ProductTable() {
     setOpenCreateModal(true);
   };
 
-  const handleEditService = (service) => {
-    console.log("Check data", service);
-    setDataEditService(service);
+  const handleUpdateProduct = (product) => {
+    console.log("Check data", product);
+    setDataEditProduct(product);
     setOpenEditModal(true);
   };
 
-  const handleDeleteService = (service) => {
-    setOpenComfirmModal(true);
-    setDataDeteleService(service);
-    console.log(service);
-  };
   // --------------------- CLOSE MODAL  -----------------------------
   const handleCloseModal = () => {
     setOpenCreateModal(false);
@@ -104,8 +100,18 @@ export default function ProductTable() {
   };
 
   // --------------------- HANDLE UPDATE TABLE -----------------------------
-  const handUpdateTable = (service) => {
-    setData([service, ...data]);
+  const handUpdateTable = (product) => {
+    setData([product, ...data]);
+  };
+
+  const handUpdateEditTable = (product) => {
+    const newData = [...data];
+    const productIndex = data.findIndex((value) => value._id === product.id);
+    newData[productIndex] = product;
+    setData(newData);
+    // check data
+    console.log(data, newData);
+    console.log("check id", productIndex);
   };
 
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
@@ -186,7 +192,7 @@ export default function ProductTable() {
                     </TableCell>
                     <TableCell align="left">
                       <ButtonCustomize
-                        // onClick={(e) => handleUpdateMo(value._id)}
+                        onClick={() => handleUpdateProduct(value)}
                         variant="contained"
                         // component={RouterLink}
                         nameButton="Cập nhật"
@@ -222,6 +228,13 @@ export default function ProductTable() {
         open={openCreateModal}
         onClose={handleCloseModal}
         handUpdateTable={handUpdateTable}
+      />
+      {/* Modal update */}
+      <ModalEditProduct
+        open={openEditModal}
+        onClose={handleCloseModal}
+        dataEditProduct={dataEditProduct}
+        handUpdateEditTable={handUpdateEditTable}
       />
     </>
   );
