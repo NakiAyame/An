@@ -16,13 +16,13 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-const ModalAddSerivce = (props) => {
+const ModalAddPet = (props) => {
   const { open, onClose, handUpdateTable } = props;
 
-  const [serviceName, setServiceName] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
+  const [userId, setUserId] = useState("");
+  const [petName, setPetName] = useState("");
+  const [category, setCategory] = useState("");
+  const [rank, setRank] = useState(0);
   const [status, setStatus] = useState(true);
 
   const handleStatusChange = (event) => {
@@ -30,31 +30,32 @@ const ModalAddSerivce = (props) => {
     console.log(status);
   };
 
-  // --------------------- HANDLE CREATE SERVICE -----------------------------
+  // --------------------- HANDLE CREATE PET -----------------------------
   const handleCreateService = async () => {
-    console.log(serviceName, categoryId, description, price, status);
+    console.log(userId, petName, category, rank, status);
     try {
-      const response = await axios.post("http://localhost:3500/service", {
-        serviceName,
-        categoryId,
-        description,
-        price,
+      const response = await axios.post("http://localhost:3500/pet", {
+        userId,
+        petName,
+        category,
+        rank,
         status,
       });
       if (response.error) {
         toast.error(response.error);
       } else {
         console.log("Thành công!!", response);
-        toast.success("Thêm mới dịch vụ thành công!");
-        setServiceName("");
-        setCategoryId("");
-        setDescription("");
-        setPrice();
+        toast.success("Thêm mới thú cưng thành công!");
+        setUserId("");
+        setPetName("");
+        setCategory("");
+        setRank();
+        setStatus(true);
         handUpdateTable({
-          serviceName: serviceName,
-          categoryId: categoryId,
-          description: description,
-          price: price,
+          userId: userId,
+          petName: petName,
+          category: category,
+          rank: rank,
           status: status,
         });
         onClose();
@@ -81,7 +82,7 @@ const ModalAddSerivce = (props) => {
         }}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Thêm dịch vụ
+          Thêm thú cưng mới
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -99,39 +100,40 @@ const ModalAddSerivce = (props) => {
             <TextField
               // required
               fullWidth
-              label="Tên dịch vụ"
+              label="Id chủ thú cưng"
               margin="normal"
-              value={serviceName}
-              onChange={(e) => setServiceName(e.target.value)}
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
             />
             <TextField
               // required
               fullWidth
-              label="Loại dịch vụ"
+              label="Tên thú cưng"
               margin="normal"
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
+              value={petName}
+              onChange={(e) => setPetName(e.target.value)}
             />
             <TextField
-              label="Thông tin dịch vụ"
+              // required
               fullWidth
-              placeholder="MultiLine with rows: 2 and rowsMax: 4"
-              multiline
-              rows={4}
+              label="Loại thú cưng"
               margin="normal"
-              maxRows={4}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
             />
 
             <TextField
               required
               fullWidth
-              label="Giá dịch vụ"
+              label="Cấp thú cưng ban đầu"
               type="number"
               margin="normal"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              value={rank}
+              onChange={(e) => setRank(e.target.value)}
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="filled"
             />
             <RadioGroup
               value={status}
@@ -156,7 +158,7 @@ const ModalAddSerivce = (props) => {
             color="primary"
             onClick={handleCreateService}
           >
-            Tạo dịch vụ
+            Thêm thú cưng
           </Button>
         </DialogActions>
       </Box>
@@ -164,4 +166,4 @@ const ModalAddSerivce = (props) => {
   );
 };
 
-export default ModalAddSerivce;
+export default ModalAddPet;

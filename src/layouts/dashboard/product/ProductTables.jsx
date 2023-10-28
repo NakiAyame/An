@@ -41,6 +41,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import ModalAddProduct from "../../../components/Modal/ModalAddProduct";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -73,28 +74,39 @@ export default function ProductTable() {
   };
 
   // --------------------- MODAL HANDLE -----------------------------
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [dataEditService, setDataEditService] = useState({});
+  const [openComfirmModal, setOpenComfirmModal] = useState(false);
+  const [dataDeteleService, setDataDeteleService] = useState({});
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleUpdateTable = (value) => {
-    setData([value, ...data]);
+  // --------------------- OPEN MODAL  -----------------------------
+  const handleCreateModal = () => {
+    setOpenCreateModal(true);
   };
 
-  // --------------------- HANDLE OPEN MODAL CREATE -----------------------------
-  const handleCreate = (event) => {};
+  const handleEditService = (service) => {
+    console.log("Check data", service);
+    setDataEditService(service);
+    setOpenEditModal(true);
+  };
 
-  // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
-  const handleUpdate = (event) => {};
+  const handleDeleteService = (service) => {
+    setOpenComfirmModal(true);
+    setDataDeteleService(service);
+    console.log(service);
+  };
+  // --------------------- CLOSE MODAL  -----------------------------
+  const handleCloseModal = () => {
+    setOpenCreateModal(false);
+    setOpenEditModal(false);
+    setOpenComfirmModal(false);
+  };
 
-  // --------------------- HANDLE DELETE -----------------------------
-  const handleDelete = async (id) => {};
-
-  // --------------------- HANDLE CREATE PET -----------------------------
-  // useEffect(() => {
-  const handleCreateUser = async (event) => {};
-  // })
+  // --------------------- HANDLE UPDATE TABLE -----------------------------
+  const handUpdateTable = (service) => {
+    setData([service, ...data]);
+  };
 
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
   useEffect(() => {
@@ -128,7 +140,7 @@ export default function ProductTable() {
   return (
     <>
       <ButtonCustomize
-        onClick={handleCreate}
+        onClick={handleCreateModal}
         variant="contained"
         // component={RouterLink}
         nameButton="Thêm mới"
@@ -174,7 +186,7 @@ export default function ProductTable() {
                     </TableCell>
                     <TableCell align="left">
                       <ButtonCustomize
-                        onClick={(e) => handleUpdate(value._id)}
+                        // onClick={(e) => handleUpdateMo(value._id)}
                         variant="contained"
                         // component={RouterLink}
                         nameButton="Cập nhật"
@@ -205,6 +217,12 @@ export default function ProductTable() {
           color="primary"
         />
       </Stack>
+      {/* Modal create */}
+      <ModalAddProduct
+        open={openCreateModal}
+        onClose={handleCloseModal}
+        handUpdateTable={handUpdateTable}
+      />
     </>
   );
 }

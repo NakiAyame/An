@@ -41,6 +41,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import ModalAddPet from "../../../components/Modal/ModalAddPet";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -61,22 +62,44 @@ const BASE_URL = "http://localhost:3500";
 export default function PetTable() {
   const [data, setData] = useState([]);
 
-  const [totalServices, setTotalServices] = useState(0);
+  const [totalPets, setTotalPets] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
 
   // --------------------- MODAL HANDLE -----------------------------
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [dataEditService, setDataEditService] = useState({});
+  const [openComfirmModal, setOpenComfirmModal] = useState(false);
+  const [dataDeteleService, setDataDeteleService] = useState({});
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleUpdateTable = (value) => {
-    setData([value, ...data]);
+  // --------------------- OPEN MODAL  -----------------------------
+  const handleCreateModal = () => {
+    setOpenCreateModal(true);
   };
 
-  // --------------------- HANDLE OPEN MODAL CREATE -----------------------------
-  const handleCreate = (event) => {};
+  const handleEditService = (service) => {
+    console.log("Check data", service);
+    setDataEditService(service);
+    setOpenEditModal(true);
+  };
+
+  const handleDeleteService = (service) => {
+    setOpenComfirmModal(true);
+    setDataDeteleService(service);
+    console.log(service);
+  };
+  // --------------------- CLOSE MODAL  -----------------------------
+  const handleCloseModal = () => {
+    setOpenCreateModal(false);
+    setOpenEditModal(false);
+    setOpenComfirmModal(false);
+  };
+
+  // --------------------- HANDLE UPDATE TABLE -----------------------------
+  const handUpdateTable = (service) => {
+    setData([service, ...data]);
+  };
 
   // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
   const handleUpdate = (event) => {};
@@ -103,7 +126,7 @@ export default function PetTable() {
         setTotalPages(loadData.data.pages);
         console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
-        setTotalServices(loadData.data.limit);
+        setTotalPets(loadData.data.limit);
         console.log(loadData.data);
       }
     } catch (err) {
@@ -122,7 +145,7 @@ export default function PetTable() {
   return (
     <>
       <ButtonCustomize
-        onClick={handleCreate}
+        onClick={handleCreateModal}
         variant="contained"
         // component={RouterLink}
         nameButton="Thêm mới"
@@ -199,6 +222,12 @@ export default function PetTable() {
           color="primary"
         />
       </Stack>
+
+      <ModalAddPet
+        open={openCreateModal}
+        onClose={handleCloseModal}
+        handUpdateTable={handUpdateTable}
+      />
     </>
   );
 }
