@@ -144,7 +144,7 @@ const ModalAddProduct = (props) => {
             color="primary"
             onClick={handleCreateService}
           >
-            Thêm thú cưng
+            Thêm
           </Button>
         </DialogActions>
       </Box>
