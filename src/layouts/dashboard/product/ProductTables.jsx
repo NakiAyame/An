@@ -24,7 +24,9 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Pagination,
 } from "@mui/material";
+import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -115,6 +117,12 @@ export default function ProductTable() {
       console.log(err);
     }
   };
+
+  // --------------------- Click paging -----------------------------
+  const handlePageClick = (event, value) => {
+    setCurrentPage(value);
+    // loadAllService(+event.selected + 1);
+  };
   // ----------------------------------------------------------------
 
   return (
@@ -132,11 +140,11 @@ export default function ProductTable() {
           <TableHead>
             <TableRow>
               <TableCell children>ID</TableCell>
-              <TableCell align="right">Tên sản phẩm</TableCell>
-              <TableCell align="right">Số lượng</TableCell>
-              <TableCell align="right">Giá tiền</TableCell>
-              <TableCell align="right">Trạng thái</TableCell>
-              <TableCell align="right">Chức năng</TableCell>
+              <TableCell align="center">Tên sản phẩm</TableCell>
+              <TableCell align="center">Số lượng</TableCell>
+              <TableCell align="center">Giá tiền</TableCell>
+              <TableCell align="center">Trạng thái</TableCell>
+              <TableCell align="center">Chức năng</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -151,12 +159,12 @@ export default function ProductTable() {
                     <TableCell component="th" scope="row">
                       {index}
                     </TableCell>
-                    <TableCell align="right">{value.productName}</TableCell>
-                    <TableCell align="right">{value.quantity}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">{value.productName}</TableCell>
+                    <TableCell align="left">{value.quantity}</TableCell>
+                    <TableCell align="left">
                       {numberToVND(value.price)}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">
                       {/* <Chip
                         size="small"
                         variant="outlined"
@@ -164,7 +172,7 @@ export default function ProductTable() {
                         color={statusColor}
                       /> */}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">
                       <ButtonCustomize
                         onClick={(e) => handleUpdate(value._id)}
                         variant="contained"
@@ -188,6 +196,15 @@ export default function ProductTable() {
           </TableBody>
         </Table>
       </TableContainer>
+      {/* Paging */}
+      <Stack spacing={2}>
+        <Pagination
+          count={totalPages}
+          onChange={handlePageClick}
+          page={currentPage}
+          color="primary"
+        />
+      </Stack>
     </>
   );
 }

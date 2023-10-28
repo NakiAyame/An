@@ -17,7 +17,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
-import BasicTable from "./user/UserTable"
+import BasicTable from "./user/UserTable";
 
 //React
 import { useState } from "react";
@@ -28,6 +28,7 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { Link } from "@mui/material";
 import DrawerDashborad from "./DrawerDashborad";
+import AccountMenu from "../../components/AccountMeun/AccountMeun";
 
 const drawerWidth = 240;
 
@@ -52,7 +53,7 @@ function ResponsiveDrawer(props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ justifyContent: "space-between" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -63,8 +64,9 @@ function ResponsiveDrawer(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+            Dashboard
           </Typography>
+          <AccountMenu />
         </Toolbar>
       </AppBar>
       <Box
