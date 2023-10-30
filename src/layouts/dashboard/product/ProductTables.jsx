@@ -43,6 +43,7 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import ModalAddProduct from "../../../components/Modal/ModalAddProduct";
 import ModalEditProduct from "../../../components/Modal/ModalEditProduct";
+import ModalComfirmProduct from "../../../components/Modal/ModalComfirmProduct";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -63,7 +64,7 @@ const BASE_URL = "http://localhost:3500";
 export default function ProductTable() {
   const [data, setData] = useState([]);
 
-  const [totalServices, setTotalServices] = useState(0);
+  const [totalProducts, setTotalProducts] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -79,7 +80,7 @@ export default function ProductTable() {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataEditProduct, setDataEditProduct] = useState({});
   const [openComfirmModal, setOpenComfirmModal] = useState(false);
-  const [dataDeteleService, setDataDeteleService] = useState({});
+  const [dataDeteleProduct, setDataDeteleProduct] = useState({});
 
   // --------------------- OPEN MODAL  -----------------------------
   const handleCreateModal = () => {
@@ -90,6 +91,12 @@ export default function ProductTable() {
     console.log("Check data", product);
     setDataEditProduct(product);
     setOpenEditModal(true);
+  };
+
+  const handleDeleteProduct = (product) => {
+    setOpenComfirmModal(true);
+    setDataDeteleProduct(product);
+    console.log(product);
   };
 
   // --------------------- CLOSE MODAL  -----------------------------
@@ -114,6 +121,16 @@ export default function ProductTable() {
     console.log("check id", productIndex);
   };
 
+  // --------------------- HANLDE PRODUCTS LIST UPDATE AFTER DELETE PRODUCT  -----------------------------
+  const handUpdateDeleteTable = (product) => {
+    console.log("Check data sevice:", product);
+    const newData = [...data];
+    const productIndex = newData.findIndex((value) => value._id === product);
+    newData.splice(productIndex, 1);
+    console.log("Check list delete", newData);
+    setData(newData);
+  };
+
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
   useEffect(() => {
     loadAllPet(currentPage);
@@ -128,7 +145,7 @@ export default function ProductTable() {
         setTotalPages(loadData.data.pages);
         console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
-        setTotalServices(loadData.data.limit);
+        setTotalProducts(loadData.data.limit);
         console.log(loadData.data);
       }
     } catch (err) {
@@ -139,7 +156,6 @@ export default function ProductTable() {
   // --------------------- Click paging -----------------------------
   const handlePageClick = (event, value) => {
     setCurrentPage(value);
-    // loadAllService(+event.selected + 1);
   };
   // ----------------------------------------------------------------
 
@@ -199,15 +215,15 @@ export default function ProductTable() {
                         fullWidth
                       />
                     </TableCell>
-                    {/* <TableCell align="right">
-                                        <ButtonCustomize
-                                            onClick={(e) => handleDelete(value._id)}
-                                            variant="contained"
-                                            // component={RouterLink}
-                                            nameButton="Xoá"
-                                            fullWidth
-                                        />
-                                    </TableCell> */}
+                    <TableCell align="right">
+                      <ButtonCustomize
+                        onClick={() => handleDeleteProduct(value)}
+                        variant="contained"
+                        // component={RouterLink}
+                        nameButton="Xoá"
+                        fullWidth
+                      />
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -235,6 +251,13 @@ export default function ProductTable() {
         onClose={handleCloseModal}
         dataEditProduct={dataEditProduct}
         handUpdateEditTable={handUpdateEditTable}
+      />
+      {/* Modal delete */}
+      <ModalComfirmProduct
+        open={openComfirmModal}
+        onClose={handleCloseModal}
+        dataDeteleProduct={dataDeteleProduct}
+        handUpdateDeleteTable={handUpdateDeleteTable}
       />
     </>
   );

@@ -71,8 +71,6 @@ export default function PetTable() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataEditPet, setDataEditPet] = useState({});
-  const [openComfirmModal, setOpenComfirmModal] = useState(false);
-  const [dataDeteleService, setDataDeteleService] = useState({});
 
   // --------------------- OPEN MODAL  -----------------------------
   const handleCreateModal = () => {
@@ -85,16 +83,10 @@ export default function PetTable() {
     setOpenEditModal(true);
   };
 
-  const handleDeleteService = (service) => {
-    setOpenComfirmModal(true);
-    setDataDeteleService(service);
-    console.log(service);
-  };
   // --------------------- CLOSE MODAL  -----------------------------
   const handleCloseModal = () => {
     setOpenCreateModal(false);
     setOpenEditModal(false);
-    setOpenComfirmModal(false);
   };
 
   // --------------------- HANDLE UPDATE TABLE -----------------------------
@@ -137,7 +129,6 @@ export default function PetTable() {
   // --------------------- Click paging -----------------------------
   const handlePageClick = (event, value) => {
     setCurrentPage(value);
-    // loadAllService(+event.selected + 1);
   };
 
   // ----------------------------------------------------------------
@@ -198,15 +189,6 @@ export default function PetTable() {
                         fullWidth
                       />
                     </TableCell>
-                    {/* <TableCell align="right">
-                                        <ButtonCustomize
-                                            onClick={(e) => handleDelete(value._id)}
-                                            variant="contained"
-                                            // component={RouterLink}
-                                            nameButton="Xoá"
-                                            fullWidth
-                                        />
-                                    </TableCell> */}
                   </TableRow>
                 );
               })}
