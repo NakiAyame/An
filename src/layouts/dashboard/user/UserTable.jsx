@@ -24,6 +24,7 @@ import {
     RadioGroup,
     FormControlLabel,
     Radio,
+    ButtonGroup
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -57,6 +58,7 @@ export default function BasicTable() {
     const DEFAULT_LIMIT = 5;
 
     const [option, setOption] = useState("");
+    var count = 0;
 
     const [data, setData] = useState([]);
     const [role, setRole] = useState("");
@@ -67,6 +69,7 @@ export default function BasicTable() {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [address, setAddress] = useState("");
+    const [id, setId] = useState("");
 
     // --------------------- MODAL HANDLE -----------------------------
 
@@ -97,7 +100,7 @@ export default function BasicTable() {
     };
 
     // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
-    const handleUpdate = async (id) => {
+    const handleLoadUserbId = async (id, password) => {
         try {
             console.log(id);
             const data = await axios.get(`http://localhost:3500/user/${id}`);
@@ -105,10 +108,12 @@ export default function BasicTable() {
                 toast.error(data.error);
             } else {
                 console.log(data.data);
+                setId(data.data._id)
                 setFullName(data.data.fullname)
                 setEmail(data.data.email)
                 setPhone(data.data.phone)
                 setAddress(data.data.address)
+                setPassWord(password)
             }
         } catch (err) {
             console.log(err);
@@ -119,6 +124,40 @@ export default function BasicTable() {
 
         // console.log(event);
     };
+
+    // --------------------- HANDLE UPDATE -----------------------------
+
+    const handleUpdate = async () => {
+        try {
+            const data = await axios.patch(`http://localhost:3500/user`,{
+                fullname: fullname, 
+                password: password,
+                email: email, 
+                address: address, 
+                phone: phone, 
+                gender: gender, 
+                role: role
+            });
+            if (data.error) {
+                toast.error(data.error);
+            } else {
+                console.log(data);
+                toast.success("Update successfully");
+                // handleUpdateTable({
+                //     id: id,
+                //     fullname: fullname,
+                //     email: email,
+                //     phone: phone,
+                //     gender: gender,
+                //     address: address,
+                // });
+                count++;
+                handleClose()
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     // --------------------- HANDLE DELETE -----------------------------
     const handleDelete = async (id) => {
@@ -189,7 +228,7 @@ export default function BasicTable() {
             }
         }
         loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
-    }, []);
+    }, [count]);
     // ----------------------------------------------------------------
 
     return (
@@ -234,23 +273,23 @@ export default function BasicTable() {
                                         <TableCell align="right">{value.email}</TableCell>
                                         <TableCell align="right">{value.address}</TableCell>
                                         <TableCell align="right">
-                                            <ButtonCustomize
-                                                onClick={(e) => handleUpdate(value._id)}
-                                                variant="contained"
-                                                // component={RouterLink}
-                                                nameButton="Cập nhật"
-                                                fullWidth
-                                            />
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <ButtonCustomize
-                                                onClick={(e) => handleDelete(value._id)}
-                                                backgroundColor="red"
-                                                variant="contained"
-                                                // component={RouterLink}
-                                                nameButton="Xoá"
-                                                fullWidth
-                                            />
+                                            <ButtonGroup variant="contained" fullWidth>
+                                                <ButtonCustomize
+                                                    onClick={(e) => handleLoadUserbId(value._id, value.password)}
+                                                    variant="contained"
+                                                    // component={RouterLink}
+                                                    nameButton="Cập nhật"
+                                                    fullWidth
+                                                />
+                                                <ButtonCustomize
+                                                    onClick={(e) => handleDelete(value._id)}
+                                                    backgroundColor="red"
+                                                    variant="contained"
+                                                    // component={RouterLink}
+                                                    nameButton="Xoá"
+                                                    fullWidth
+                                                />
+                                            </ButtonGroup>
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -405,7 +444,7 @@ export default function BasicTable() {
                                 variant="contained"
                                 margin="normal"
                                 color="primary"
-                                onClick={handleCreateUser}
+                                onClick={handleUpdate}
                             >
                                 Cập nhật thông tin
                             </Button>
