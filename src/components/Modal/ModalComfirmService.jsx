@@ -17,9 +17,9 @@ const ModalComfirmSerivce = (props) => {
 
   const handleDeleteService = async (serviceID) => {
     try {
-      const res = await axios.delete(`http://localhost:3500/service`, {
-        id: serviceID,
-      });
+      const res = await axios.delete(
+        `http://localhost:3500/service/${serviceID}`
+      );
       console.log("Check API delete", res);
       if (res.data.error) {
         toast.error(res.data.error);

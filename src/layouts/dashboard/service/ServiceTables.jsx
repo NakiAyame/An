@@ -26,6 +26,7 @@ import ModalAddSerivce from "../../../components/Modal/ModalAddService";
 import ModalEditSerivce from "../../../components/Modal/ModalEditService";
 import ModalComfirmSerivce from "../../../components/Modal/ModalComfirmService";
 import ButtonCustomize from "../../../components/Button/Button";
+import ModalDetailForm from "../../../components/Modal/ModalDetaiFrom";
 
 const BASE_URL = "http://localhost:3500"; // địa chỉ của server API
 
@@ -76,6 +77,7 @@ export default function ServiceTable() {
   const [dataEditService, setDataEditService] = useState({});
   const [openComfirmModal, setOpenComfirmModal] = useState(false);
   const [dataDeteleService, setDataDeteleService] = useState({});
+  const [openDetailModal, setOpenDetailModal] = useState(false);
 
   // --------------------- OPEN MODAL  -----------------------------
   const handleOpenModal = () => {
@@ -93,11 +95,16 @@ export default function ServiceTable() {
     setDataDeteleService(service);
     console.log(service);
   };
+
+  const handleDetailService = () => {
+    setOpenDetailModal(true);
+  };
   // --------------------- CLOSE MODAL  -----------------------------
   const handleCloseModal = () => {
     setOpenModal(false);
     setOpenEditModal(false);
     setOpenComfirmModal(false);
+    setOpenDetailModal(false);
   };
 
   // --------------------- HANLDE SERVICES LIST UPDATE AFTER EDIT SERVICE  -----------------------------
@@ -171,6 +178,13 @@ export default function ServiceTable() {
           variant="contained"
           // component={RouterLink}
           nameButton="Thêm mới dịch vụ"
+          width="15%"
+        />
+        <ButtonCustomize
+          variant="contained"
+          color="primary"
+          onClick={handleDetailService}
+          nameButton="Detail"
           width="15%"
         />
       </Grid>
@@ -267,6 +281,8 @@ export default function ServiceTable() {
         dataDeteleService={dataDeteleService}
         handUpdateDeleteTable={handUpdateDeleteTable}
       />
+
+      <ModalDetailForm open={openDetailModal} onClose={handleCloseModal} />
     </>
   );
 }
