@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -16,13 +16,13 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-const ModalAddSerivce = (props) => {
-  const { open, onClose, handUpdateTable } = props;
+const ModalEditPet = (props) => {
+  const { open, onClose, dataEditPet, handUpdateEditTable } = props;
 
-  const [serviceName, setServiceName] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
+  const [userId, setUserId] = useState("");
+  const [petName, setPetName] = useState("");
+  const [category, setCategory] = useState("");
+  const [rank, setRank] = useState(0);
   const [status, setStatus] = useState(true);
 
   const handleStatusChange = (event) => {
@@ -30,39 +30,43 @@ const ModalAddSerivce = (props) => {
     console.log(status);
   };
 
-  // --------------------- HANDLE CREATE SERVICE -----------------------------
-  const handleCreateService = async () => {
-    console.log(serviceName, categoryId, description, price, status);
+  useEffect(() => {
+    if (open) {
+      setUserId(dataEditPet.userId);
+      setPetName(dataEditPet.petName);
+      setCategory(dataEditPet.category);
+      setRank(dataEditPet.rank);
+      setStatus(dataEditPet.status);
+    }
+  }, [dataEditPet]);
+
+  // --------------------- HANDLE UPDATE PET -----------------------------
+  const handleEditPet = async (petID) => {
     try {
-      const response = await axios.post("http://localhost:3500/service", {
-        serviceName,
-        categoryId,
-        description,
-        price,
-        status,
+      const res = await axios.patch(`http://localhost:3500/pet`, {
+        id: petID,
+        userId: userId,
+        petName: petName,
+        category: category,
+        rank: rank,
+        status: status,
       });
-      if (response.error) {
-        toast.error(response.error);
+      if (res.data.error) {
+        toast.error(res.data.error);
       } else {
-        console.log("Thành công!!", response);
-        toast.success("Thêm mới dịch vụ thành công!");
-        setServiceName("");
-        setCategoryId("");
-        setDescription("");
-        setPrice();
-        handUpdateTable({
-          serviceName: serviceName,
-          categoryId: categoryId,
-          description: description,
-          price: price,
+        toast.success("Sửa thông tin thú cưng thành công");
+        handUpdateEditTable({
+          id: petID,
+          userId: userId,
+          petName: petName,
+          category: category,
+          rank: rank,
           status: status,
         });
         onClose();
       }
-    } catch (error) {
-      console.error(error);
-      console.log("Error creating service.");
-      toast.error(error.message);
+    } catch (err) {
+      toast.error(err.message); // xuất thông báo lỗi ra màn hình
     }
   };
 
@@ -81,7 +85,7 @@ const ModalAddSerivce = (props) => {
         }}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Thêm dịch vụ
+          Sửa thông tin thú cưng
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -99,39 +103,40 @@ const ModalAddSerivce = (props) => {
             <TextField
               // required
               fullWidth
-              label="Tên dịch vụ"
+              label="Id chủ thú cưng"
               margin="normal"
-              value={serviceName}
-              onChange={(e) => setServiceName(e.target.value)}
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
             />
             <TextField
               // required
               fullWidth
-              label="Loại dịch vụ"
+              label="Tên thú cưng"
               margin="normal"
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
+              value={petName}
+              onChange={(e) => setPetName(e.target.value)}
             />
             <TextField
-              label="Thông tin dịch vụ"
+              // required
               fullWidth
-              placeholder="MultiLine with rows: 2 and rowsMax: 4"
-              multiline
-              rows={4}
+              label="Loại thú cưng"
               margin="normal"
-              maxRows={4}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
             />
 
             <TextField
               required
               fullWidth
-              label="Giá dịch vụ"
+              label="Cấp thú cưng ban đầu"
               type="number"
               margin="normal"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              value={rank}
+              onChange={(e) => setRank(e.target.value)}
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="filled"
             />
             <RadioGroup
               value={status}
@@ -154,9 +159,9 @@ const ModalAddSerivce = (props) => {
             variant="contained"
             margin="normal"
             color="primary"
-            onClick={handleCreateService}
+            onClick={() => handleEditPet(dataEditPet._id)}
           >
-            Tạo dịch vụ
+            Sửa
           </Button>
         </DialogActions>
       </Box>
@@ -164,4 +169,4 @@ const ModalAddSerivce = (props) => {
   );
 };
 
-export default ModalAddSerivce;
+export default ModalEditPet;

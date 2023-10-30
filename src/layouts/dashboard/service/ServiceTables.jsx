@@ -114,6 +114,7 @@ export default function ServiceTable() {
     console.log("check id", serviceIndex);
   };
 
+  // --------------------- HANLDE SERVICES LIST UPDATE AFTER DELETE SERVICE  -----------------------------
   const handUpdateDeleteTable = (service) => {
     console.log("Check data sevice:", service);
     const newData = [...data];

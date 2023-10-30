@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -16,53 +16,50 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-const ModalAddSerivce = (props) => {
-  const { open, onClose, handUpdateTable } = props;
+const ModalEditProduct = (props) => {
+  const { open, onClose, handUpdateEditTable, dataEditProduct } = props;
 
-  const [serviceName, setServiceName] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [description, setDescription] = useState("");
+  const [productName, setProductName] = useState("");
+  const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
-  const [status, setStatus] = useState(true);
+  //   const [status, setStatus] = useState(true);
 
-  const handleStatusChange = (event) => {
-    setStatus(event.target.value);
-    console.log(status);
-  };
+  //   const handleStatusChange = (event) => {
+  //     setStatus(event.target.value);
+  //     console.log(status);
+  //   };
 
-  // --------------------- HANDLE CREATE SERVICE -----------------------------
-  const handleCreateService = async () => {
-    console.log(serviceName, categoryId, description, price, status);
+  useEffect(() => {
+    if (open) {
+      setProductName(dataEditProduct.productName);
+      setQuantity(dataEditProduct.quantity);
+      setPrice(dataEditProduct.price);
+    }
+  }, [dataEditProduct]);
+
+  // --------------------- HANDLE UPDATE PRODUCT -----------------------------
+  const handleEditProduct = async (productID) => {
     try {
-      const response = await axios.post("http://localhost:3500/service", {
-        serviceName,
-        categoryId,
-        description,
-        price,
-        status,
+      const res = await axios.patch(`http://localhost:3500/product`, {
+        id: productID,
+        productName: productName,
+        quantity: quantity,
+        price: price,
       });
-      if (response.error) {
-        toast.error(response.error);
+      if (res.data.error) {
+        toast.error(res.data.error);
       } else {
-        console.log("Thành công!!", response);
-        toast.success("Thêm mới dịch vụ thành công!");
-        setServiceName("");
-        setCategoryId("");
-        setDescription("");
-        setPrice();
-        handUpdateTable({
-          serviceName: serviceName,
-          categoryId: categoryId,
-          description: description,
+        toast.success("Sửa thông tin sản phẩm thành công");
+        handUpdateEditTable({
+          id: productID,
+          productName: productName,
+          quantity: quantity,
           price: price,
-          status: status,
         });
         onClose();
       }
-    } catch (error) {
-      console.error(error);
-      console.log("Error creating service.");
-      toast.error(error.message);
+    } catch (err) {
+      toast.error(err.message); // xuất thông báo lỗi ra màn hình
     }
   };
 
@@ -81,7 +78,7 @@ const ModalAddSerivce = (props) => {
         }}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Thêm dịch vụ
+          Sửa thông tin sản phẩm
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -99,41 +96,33 @@ const ModalAddSerivce = (props) => {
             <TextField
               // required
               fullWidth
-              label="Tên dịch vụ"
+              label="Tên sản phẩm"
               margin="normal"
-              value={serviceName}
-              onChange={(e) => setServiceName(e.target.value)}
+              value={productName}
+              onChange={(e) => setProductName(e.target.value)}
             />
             <TextField
               // required
               fullWidth
-              label="Loại dịch vụ"
+              label="Số lượng"
               margin="normal"
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-            />
-            <TextField
-              label="Thông tin dịch vụ"
-              fullWidth
-              placeholder="MultiLine with rows: 2 and rowsMax: 4"
-              multiline
-              rows={4}
-              margin="normal"
-              maxRows={4}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
             />
 
             <TextField
               required
               fullWidth
-              label="Giá dịch vụ"
+              label="Giá tiền sản phẩm"
               type="number"
               margin="normal"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
-            <RadioGroup
+
+            {/* Status */}
+            {/* <RadioGroup
               value={status}
               onChange={handleStatusChange}
               row
@@ -146,7 +135,7 @@ const ModalAddSerivce = (props) => {
                 label="Hoạt động"
               />
               <FormControlLabel value={false} control={<Radio />} label="Ẩn" />
-            </RadioGroup>
+            </RadioGroup> */}
           </form>
         </DialogContent>
         <DialogActions>
@@ -154,9 +143,9 @@ const ModalAddSerivce = (props) => {
             variant="contained"
             margin="normal"
             color="primary"
-            onClick={handleCreateService}
+            onClick={() => handleEditProduct(dataEditProduct._id)}
           >
-            Tạo dịch vụ
+            Sửa
           </Button>
         </DialogActions>
       </Box>
@@ -164,4 +153,4 @@ const ModalAddSerivce = (props) => {
   );
 };
 
-export default ModalAddSerivce;
+export default ModalEditProduct;

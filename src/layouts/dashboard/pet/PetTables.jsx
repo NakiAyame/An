@@ -24,7 +24,9 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Pagination,
 } from "@mui/material";
+import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -39,6 +41,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import ModalAddPet from "../../../components/Modal/ModalAddPet";
+import ModalEditPet from "../../../components/Modal/ModalEditPet";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -59,33 +63,54 @@ const BASE_URL = "http://localhost:3500";
 export default function PetTable() {
   const [data, setData] = useState([]);
 
-  const [totalServices, setTotalServices] = useState(0);
+  const [totalPets, setTotalPets] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
 
   // --------------------- MODAL HANDLE -----------------------------
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [dataEditPet, setDataEditPet] = useState({});
+  const [openComfirmModal, setOpenComfirmModal] = useState(false);
+  const [dataDeteleService, setDataDeteleService] = useState({});
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleUpdateTable = (value) => {
-    setData([value, ...data]);
+  // --------------------- OPEN MODAL  -----------------------------
+  const handleCreateModal = () => {
+    setOpenCreateModal(true);
   };
 
-  // --------------------- HANDLE OPEN MODAL CREATE -----------------------------
-  const handleCreate = (event) => {};
+  const handleUpdatePet = (pet) => {
+    console.log("Check data", pet);
+    setDataEditPet(pet);
+    setOpenEditModal(true);
+  };
 
-  // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
-  const handleUpdate = (event) => {};
+  const handleDeleteService = (service) => {
+    setOpenComfirmModal(true);
+    setDataDeteleService(service);
+    console.log(service);
+  };
+  // --------------------- CLOSE MODAL  -----------------------------
+  const handleCloseModal = () => {
+    setOpenCreateModal(false);
+    setOpenEditModal(false);
+    setOpenComfirmModal(false);
+  };
 
-  // --------------------- HANDLE DELETE -----------------------------
-  const handleDelete = async (id) => {};
+  // --------------------- HANDLE UPDATE TABLE -----------------------------
+  const handUpdateTable = (pet) => {
+    setData([pet, ...data]);
+  };
 
-  // --------------------- HANDLE CREATE PET -----------------------------
-  // useEffect(() => {
-  const handleCreateUser = async (event) => {};
-  // })
+  const handUpdateEditTable = (pet) => {
+    const newData = [...data];
+    const petIndex = data.findIndex((value) => value._id === pet.id);
+    newData[petIndex] = pet;
+    setData(newData);
+    // check data
+    console.log(data, newData);
+    console.log("check id", petIndex);
+  };
 
   // ----------------------------------- API GET ALL PET --------------------------------
   useEffect(() => {
@@ -101,19 +126,26 @@ export default function PetTable() {
         setTotalPages(loadData.data.pages);
         console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
-        setTotalServices(loadData.data.limit);
+        setTotalPets(loadData.data.limit);
         console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);
     }
   };
+
+  // --------------------- Click paging -----------------------------
+  const handlePageClick = (event, value) => {
+    setCurrentPage(value);
+    // loadAllService(+event.selected + 1);
+  };
+
   // ----------------------------------------------------------------
 
   return (
     <>
       <ButtonCustomize
-        onClick={handleCreate}
+        onClick={handleCreateModal}
         variant="contained"
         // component={RouterLink}
         nameButton="Thêm mới"
@@ -159,7 +191,7 @@ export default function PetTable() {
                     </TableCell>
                     <TableCell align="right">
                       <ButtonCustomize
-                        onClick={(e) => handleUpdate(value._id)}
+                        onClick={() => handleUpdatePet(value)}
                         variant="contained"
                         // component={RouterLink}
                         nameButton="Cập nhật"
@@ -181,6 +213,28 @@ export default function PetTable() {
           </TableBody>
         </Table>
       </TableContainer>
+      {/* Paging */}
+      <Stack spacing={2}>
+        <Pagination
+          count={totalPages}
+          onChange={handlePageClick}
+          page={currentPage}
+          color="primary"
+        />
+      </Stack>
+      {/* Modal create */}
+      <ModalAddPet
+        open={openCreateModal}
+        onClose={handleCloseModal}
+        handUpdateTable={handUpdateTable}
+      />
+      {/* Modal update */}
+      <ModalEditPet
+        open={openEditModal}
+        onClose={handleCloseModal}
+        dataEditPet={dataEditPet}
+        handUpdateEditTable={handUpdateEditTable}
+      />
     </>
   );
 }
