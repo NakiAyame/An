@@ -118,6 +118,7 @@ export default function PetTable() {
         setTotalPages(loadData.data.pages);
         console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
+        setKeyword(loadData.data.docs);
         setTotalPets(loadData.data.limit);
         console.log(loadData.data);
       }
@@ -131,17 +132,44 @@ export default function PetTable() {
     setCurrentPage(value);
   };
 
-  // ----------------------------------------------------------------
+  // --------------------- Hanlde Search -----------------------------
+  const [keyword, setKeyword] = useState([]);
+
+  const hanldeSearch = (event) => {
+    setKeyword(data.filter((f) => f.userId.includes(event.target.value)));
+    console.log(keyword);
+  };
 
   return (
     <>
-      <ButtonCustomize
-        onClick={handleCreateModal}
-        variant="contained"
-        // component={RouterLink}
-        nameButton="Thêm mới"
-        width="15%"
-      />
+      <Grid
+        spacing={2}
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
+        <Grid item xs={6}>
+          <ButtonCustomize
+            onClick={handleCreateModal}
+            variant="contained"
+            // component={RouterLink}
+            nameButton="Thêm mới"
+            width="15%"
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <TextField
+            // required
+            fullWidth
+            label="Tìm kiếm chủ thú cưng theo ID"
+            margin="normal"
+            size="small"
+            onChange={hanldeSearch}
+          />
+        </Grid>
+      </Grid>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -158,7 +186,7 @@ export default function PetTable() {
           </TableHead>
           <TableBody>
             {data &&
-              data.map((value, index) => {
+              keyword.map((value, index) => {
                 const statusColor = value.status ? "primary" : "error";
                 return (
                   <TableRow

@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button, ButtonGroup, Pagination } from "@mui/material";
+import { Button, ButtonGroup, Pagination, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Modal from "@mui/material/Modal";
 import Chip from "@mui/material/Chip";
@@ -172,21 +172,32 @@ export default function ServiceTable() {
 
   return (
     <>
-      <Grid container justifyContent="space-between" alignItems="center" mb={3}>
-        <ButtonCustomize
-          onClick={handleOpenModal}
-          variant="contained"
-          // component={RouterLink}
-          nameButton="Thêm mới dịch vụ"
-          width="15%"
-        />
-        <ButtonCustomize
-          variant="contained"
-          color="primary"
-          onClick={handleDetailService}
-          nameButton="Detail"
-          width="15%"
-        />
+      <Grid
+        spacing={2}
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
+        <Grid item xs={6}>
+          <ButtonCustomize
+            onClick={handleOpenModal}
+            variant="contained"
+            // component={RouterLink}
+            nameButton="Thêm mới"
+            width="15%"
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <ButtonCustomize
+            variant="contained"
+            color="primary"
+            onClick={handleDetailService}
+            nameButton="Detail"
+            width="15%"
+          />
+        </Grid>
       </Grid>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
