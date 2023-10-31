@@ -12,20 +12,20 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogContentText from "@mui/material/DialogContentText";
 
-const ModalComfirmSerivce = (props) => {
-  const { open, onClose, handUpdateDeleteTable, dataDeteleService } = props;
+const ModalComfirmProduct = (props) => {
+  const { open, onClose, handUpdateDeleteTable, dataDeteleProduct } = props;
 
-  const handleDeleteService = async (serviceID) => {
+  const handleDeleteService = async (productID) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3500/service/${serviceID}`
+        `http://localhost:3500/product/${productID}`
       );
       console.log("Check API delete", res);
       if (res.data.error) {
         toast.error(res.data.error);
       } else {
         toast.success("Xoá dịch vụ thành công");
-        handUpdateDeleteTable(serviceID);
+        handUpdateDeleteTable(productID);
         onClose();
       }
     } catch (err) {
@@ -48,7 +48,7 @@ const ModalComfirmSerivce = (props) => {
         }}
       >
         <DialogTitle id="alert-dialog-title">
-          {"Bạn có chắc muốn xoá dịch vụ này?"}
+          {"Bạn có chắc muốn xoá sản phẩm này?"}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -63,7 +63,7 @@ const ModalComfirmSerivce = (props) => {
         </IconButton>
         <DialogContent dividers>
           <DialogContentText id="alert-dialog-description">
-            Dịch vụ bạn đang muốn xoá tên là: {dataDeteleService.serviceName}
+            Sản phẩm bạn đang muốn xoá tên là: {dataDeteleProduct.productName}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -72,7 +72,7 @@ const ModalComfirmSerivce = (props) => {
             variant="contained"
             margin="normal"
             color="primary"
-            onClick={() => handleDeleteService(dataDeteleService._id)}
+            onClick={() => handleDeleteService(dataDeteleProduct._id)}
           >
             Xoá
           </Button>
@@ -82,4 +82,4 @@ const ModalComfirmSerivce = (props) => {
   );
 };
 
-export default ModalComfirmSerivce;
+export default ModalComfirmProduct;
