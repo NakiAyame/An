@@ -57,6 +57,8 @@ export default function BasicTable() {
     const DEFAULT_PAGE = 1;
     const DEFAULT_LIMIT = 5;
 
+    const OPTION_VIEW_ORDER_BY_ID = 'view'
+
     const [option, setOption] = useState("");
     var count = 0;
 
@@ -70,6 +72,7 @@ export default function BasicTable() {
     const [phone, setPhone] = useState("");
     const [address, setAddress] = useState("");
     const [id, setId] = useState("");
+    const [orderDetail, setOrderDetail] = useState([]);
 
     // --------------------- MODAL HANDLE -----------------------------
 
@@ -100,26 +103,27 @@ export default function BasicTable() {
     };
 
     // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
-    const handleLoadUserbId = async (id, password) => {
+    const handleViewOrderDetail = async (id, option) => {
         try {
             console.log(id);
-            const data = await axios.get(`http://localhost:3500/user/${id}`);
+            const data = await axios.get(`http://localhost:3500/orderDetail/${id}`);
             if (data.error) {
                 toast.error(data.error);
             } else {
                 console.log(data.data);
-                setId(data.data._id)
-                setFullName(data.data.fullname)
-                setEmail(data.data.email)
-                setPhone(data.data.phone)
-                setAddress(data.data.address)
-                setPassWord(password)
+                setOrderDetail(data.data)
+                // setId(data.data._id)
+                // setFullName(data.data.fullname)
+                // setEmail(data.data.email)
+                // setPhone(data.data.phone)
+                // setAddress(data.data.address)
+                // setPassWord(password)
             }
         } catch (err) {
             console.log(err);
         }
 
-        setOption("update");
+        setOption(option);
         handleOpen();
 
         // console.log(event);
@@ -145,7 +149,7 @@ export default function BasicTable() {
                 console.log(data);
                 toast.success("Update successfully");
                 handleClose()
-                loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+                loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT);
             }
         } catch (err) {
             console.log(err);
@@ -156,7 +160,7 @@ export default function BasicTable() {
     const handleDelete = async (id) => {
         try {
             console.log(id);
-            const data = await axios.delete(`http://localhost:3500/user/${id}`);
+            const data = await axios.delete(`http://localhost:3500/order/${id}`);
             if (data.error) {
                 toast.error(data.error);
             } else {
@@ -195,7 +199,7 @@ export default function BasicTable() {
                     address: address,
                 });
                 handleClose();
-                loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+                loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT);
             }
         } catch (err) {
             console.log(err);
@@ -204,10 +208,10 @@ export default function BasicTable() {
     // })
 
     // ----------------------------------- API GET ALL USER --------------------------------
-    async function loadAllUser(page, limit) {
+    async function loadAllOrder(page, limit) {
         try {
             const loadData = await axios.get(
-                `http://localhost:3500/user?page=${page}&limit=${limit}`
+                `http://localhost:3500/order?page=${page}&limit=${limit}`
             );
             if (loadData.error) {
                 toast.error(loadData.error);
@@ -222,8 +226,47 @@ export default function BasicTable() {
     }
 
     useEffect(() => {
-        loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+        loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT);
     }, []);
+
+    // ----------------------------------- HANDLE GET ORDER OF USER --------------------------------
+
+    const [userId, setUserId] = useState('');
+
+    const hanldeSearch = (e) => {
+        setUserId(e.target.value)
+    };
+
+    const handleGetOrderByUserId = async () => {
+        if (!userId == '') {
+            getAllOrderByUserId();
+        } else {
+            loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT);
+        }
+
+    }
+
+    // ----------------------------------- GET ALL ORDER BY USER ID --------------------------------
+
+    const getAllOrderByUserId = async () => {
+        try {
+            const loadData = await axios.get(
+                `http://localhost:3500/order/${userId}`
+            );
+            if (loadData.error) {
+                toast.error(loadData.error);
+            } else {
+                setData(loadData.data);
+                // toast.success("Login successful");
+                console.log(loadData.data);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    // ---------------------------------------------------------------
+
     // ----------------------------------------------------------------
 
     const errorStyle = {
@@ -235,24 +278,42 @@ export default function BasicTable() {
 
     return (
         <>
-            <ButtonCustomize
-                onClick={handleCreate}
-                variant="contained"
-                // component={RouterLink}
-                nameButton="Thêm mới"
-                width="15%"
-            />
+            <Grid
+                spacing={2}
+                container
+                justifyContent="space-between"
+                alignItems="center"
+                mb={3}
+            >
+                <Grid item xs={6}>
+                    <TextField
+                        // required
+                        fullWidth
+                        label="Tìm kiếm chủ thú cưng theo ID"
+                        margin="normal"
+                        size="small"
+                        onChange={hanldeSearch}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <ButtonCustomize
+                        onClick={handleGetOrderByUserId}
+                        variant="contained"
+                        // component={RouterLink}
+                        nameButton="Tìm kiếm"
+                    />
+                </Grid>
+            </Grid>
 
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell children>ID</TableCell>
-                            <TableCell align="right">Name</TableCell>
-                            <TableCell align="right">Phone</TableCell>
-                            <TableCell align="right">Gender</TableCell>
-                            <TableCell align="right">Email</TableCell>
-                            <TableCell align="right">Address</TableCell>
+                            <TableCell align="right">Tên người dùng</TableCell>
+                            <TableCell align="right">Ngày đặt hàng</TableCell>
+                            <TableCell align="right">Tổng giá trị</TableCell>
+                            <TableCell align="right">Trạng thái</TableCell>
                             <TableCell align="right">Chức năng</TableCell>
                         </TableRow>
                     </TableHead>
@@ -265,22 +326,21 @@ export default function BasicTable() {
                                         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                                     >
                                         <TableCell component="th" scope="row">
-                                            {index}
+                                            {index + 1}
                                         </TableCell>
-                                        <TableCell align="right">{value.fullname}</TableCell>
-                                        <TableCell align="right">{value.phone}</TableCell>
+                                        <TableCell align="right">{value.userId}</TableCell>
+                                        <TableCell align="right">{value.createdAt}</TableCell>
+                                        <TableCell align="right">{value.totalPrice}</TableCell>
                                         <TableCell align="right">
-                                            {(value.gender == true ? "Nam" : "Nữ")}
+                                            {value.status}
                                         </TableCell>
-                                        <TableCell align="right">{value.email}</TableCell>
-                                        <TableCell align="right">{value.address}</TableCell>
                                         <TableCell align="right">
                                             <ButtonGroup variant="contained" fullWidth>
                                                 <ButtonCustomize
-                                                    onClick={(e) => handleLoadUserbId(value._id, value.password)}
+                                                    onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
                                                     variant="contained"
                                                     // component={RouterLink}
-                                                    nameButton="Cập nhật"
+                                                    nameButton="xem chi tiết"
                                                     fullWidth
                                                 />
                                                 <ButtonCustomize
@@ -308,7 +368,7 @@ export default function BasicTable() {
             >
                 <Box sx={style}>
                     <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                        {option === "create" ? "Thêm nhân viên" : "Cập nhật thông tin"}
+                        {option === "view" ? "Chi tiết đơn hàng" : "Đang cập nhật ......"}
                     </DialogTitle>
                     <IconButton
                         aria-label="close"
@@ -327,114 +387,58 @@ export default function BasicTable() {
                             rowSpacing={1}
                             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                         >
-                            <Grid item xs={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    label="Họ và tên"
-                                    margin="normal"
-                                    value={fullname}
-                                    onChange={(e) => setFullName(e.target.value)}
-                                />
-                                {fullname === "" ? <span style={errorStyle}>Vui lòng điền Họ và tên</span> : ""}
-                            </Grid>
 
-                            <Grid item xs={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    label="Gmail"
-                                    margin="normal"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                                {email === "" ? <span style={errorStyle}>Vui lòng điền email</span> : ""}
-                            </Grid>
-                            {option === "create" ? (
-                                <>
-                                    <Grid item xs={6}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            label="Mật khẩu"
-                                            margin="normal"
-                                            // value={serviceName}
-                                            onChange={(e) => setPassWord(e.target.value)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            label="Nhập lại mật khẩu"
-                                            margin="normal"
-                                            // value={serviceName}
-                                            onChange={(e) => setConfirmPass(e.target.value)}
-                                        />
-                                    </Grid>
-                                </>
-                            ) : (
-                                ""
-                            )}
+                            <Table sx={{ width: '100%' }} aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell children>STT</TableCell>
+                                        <TableCell align="right">Mã đơn hàng</TableCell>
+                                        <TableCell align="right">Mã sản phẩm</TableCell>
+                                        <TableCell align="right">Số lượng</TableCell>
+                                        <TableCell align="right">Giá</TableCell>
+                                        <TableCell align="right">Chức năng</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {orderDetail &&
+                                        orderDetail.map((value, index) => {
+                                            return (
+                                                <TableRow
+                                                    key={index}
+                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                >
+                                                    <TableCell component="th" scope="row">
+                                                        {index + 1}
+                                                    </TableCell>
+                                                    <TableCell align="right">{value.orderId}</TableCell>
+                                                    <TableCell align="right">{value.productId}</TableCell>
+                                                    <TableCell align="right">{value.quantity}</TableCell>
+                                                    <TableCell align="right">default</TableCell>
+                                                    <TableCell align="right">
+                                                        {/* <ButtonGroup variant="contained" fullWidth>
+                                                            <ButtonCustomize
+                                                                onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
+                                                                variant="contained"
+                                                                // component={RouterLink}
+                                                                nameButton="xem chi tiết"
+                                                                fullWidth
+                                                            />
+                                                            <ButtonCustomize
+                                                                onClick={(e) => handleDelete(value._id)}
+                                                                backgroundColor="red"
+                                                                variant="contained"
+                                                                // component={RouterLink}
+                                                                nameButton="Xoá"
+                                                                fullWidth
+                                                            />
+                                                        </ButtonGroup> */}
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                </TableBody>
+                            </Table>
 
-                            <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Số điện thoại"
-                                    margin="normal"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                />
-                                {/* {phone === "" ? <span style={errorStyle}>Vui lòng điền số điện thoại</span> : ""} */}
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Địa chỉ"
-                                    margin="normal"
-                                    value={address}
-                                    onChange={(e) => setAddress(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Chức vụ</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select-required"
-                                        value={role}
-                                        label="Role"
-                                        onChange={handleRoleChange}
-                                    >
-                                        <MenuItem value="admin">Admin</MenuItem>
-                                        <MenuItem value="customer">Customer</MenuItem>
-                                        {/* <MenuItem value={30}>Thirty</MenuItem> */}
-                                    </Select>
-                                </FormControl>
-                                {role === "" ? <span style={errorStyle}>Vui lòng chọn role</span> : ""}
-                            </Grid>
-                            <Grid paddingLeft="50px" item xs={6}>
-                                <RadioGroup
-                                    value={gender}
-                                    onChange={handleGenderChange}
-                                    row
-                                    aria-label="Giới tính"
-                                    name="gender"
-                                // label="Giới tính"
-                                >
-                                    <FormControlLabel
-                                        value={true}
-                                        control={<Radio />}
-                                        label="Nam"
-                                    />
-                                    <FormControlLabel
-                                        value={false}
-                                        control={<Radio />}
-                                        label="Nữ"
-                                    />
-                                </RadioGroup>
-                                {gender === "" ? <span style={errorStyle}>Vui lòng chọn giới tính</span> : ""}
-                            </Grid>
                         </Grid>
                     </DialogContent>
                     <DialogActions>
