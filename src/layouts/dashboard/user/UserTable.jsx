@@ -128,14 +128,15 @@ export default function BasicTable() {
     // --------------------- HANDLE UPDATE -----------------------------
 
     const handleUpdate = async () => {
+        console.log(gender)
         try {
-            const data = await axios.patch(`http://localhost:3500/user`,{
-                fullname: fullname, 
+            const data = await axios.patch(`http://localhost:3500/user`, {
+                fullname: fullname,
                 password: password,
-                email: email, 
-                address: address, 
-                phone: phone, 
-                gender: gender, 
+                email: email,
+                address: address,
+                phone: phone,
+                gender: gender,
                 role: role
             });
             if (data.error) {
@@ -143,16 +144,8 @@ export default function BasicTable() {
             } else {
                 console.log(data);
                 toast.success("Update successfully");
-                // handleUpdateTable({
-                //     id: id,
-                //     fullname: fullname,
-                //     email: email,
-                //     phone: phone,
-                //     gender: gender,
-                //     address: address,
-                // });
-                count++;
                 handleClose()
+                loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
             }
         } catch (err) {
             console.log(err);
@@ -202,6 +195,7 @@ export default function BasicTable() {
                     address: address,
                 });
                 handleClose();
+                loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
             }
         } catch (err) {
             console.log(err);
@@ -210,26 +204,34 @@ export default function BasicTable() {
     // })
 
     // ----------------------------------- API GET ALL USER --------------------------------
-    useEffect(() => {
-        async function loadAllUser(page, limit) {
-            try {
-                const loadData = await axios.get(
-                    `http://localhost:3500/user?page=${page}&limit=${limit}`
-                );
-                if (loadData.error) {
-                    toast.error(loadData.error);
-                } else {
-                    setData(loadData.data.docs);
-                    toast.success("Login successful");
-                    console.log(loadData.data.docs);
-                }
-            } catch (err) {
-                console.log(err);
+    async function loadAllUser(page, limit) {
+        try {
+            const loadData = await axios.get(
+                `http://localhost:3500/user?page=${page}&limit=${limit}`
+            );
+            if (loadData.error) {
+                toast.error(loadData.error);
+            } else {
+                setData(loadData.data.docs);
+                toast.success("Login successful");
+                console.log(loadData.data.docs);
             }
+        } catch (err) {
+            console.log(err);
         }
+    }
+
+    useEffect(() => {
         loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
-    }, [count]);
+    }, []);
     // ----------------------------------------------------------------
+
+    const errorStyle = {
+        color: "red",
+        // backgroundColor: "DodgerBlue",
+        paddingLeft: "15px",
+        fontSize: "12px"
+    };
 
     return (
         <>
@@ -268,7 +270,7 @@ export default function BasicTable() {
                                         <TableCell align="right">{value.fullname}</TableCell>
                                         <TableCell align="right">{value.phone}</TableCell>
                                         <TableCell align="right">
-                                            {(value.gender = true ? "Nam" : "Nữ")}
+                                            {(value.gender == true ? "Nam" : "Nữ")}
                                         </TableCell>
                                         <TableCell align="right">{value.email}</TableCell>
                                         <TableCell align="right">{value.address}</TableCell>
@@ -334,7 +336,9 @@ export default function BasicTable() {
                                     value={fullname}
                                     onChange={(e) => setFullName(e.target.value)}
                                 />
+                                {fullname === "" ? <span style={errorStyle}>Vui lòng điền Họ và tên</span> : ""}
                             </Grid>
+
                             <Grid item xs={6}>
                                 <TextField
                                     required
@@ -344,6 +348,7 @@ export default function BasicTable() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
+                                {email === "" ? <span style={errorStyle}>Vui lòng điền email</span> : ""}
                             </Grid>
                             {option === "create" ? (
                                 <>
@@ -380,6 +385,7 @@ export default function BasicTable() {
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
                                 />
+                                {/* {phone === "" ? <span style={errorStyle}>Vui lòng điền số điện thoại</span> : ""} */}
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
@@ -395,7 +401,7 @@ export default function BasicTable() {
                                     <InputLabel id="demo-simple-select-label">Chức vụ</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
+                                        id="demo-simple-select-required"
                                         value={role}
                                         label="Role"
                                         onChange={handleRoleChange}
@@ -405,6 +411,7 @@ export default function BasicTable() {
                                         {/* <MenuItem value={30}>Thirty</MenuItem> */}
                                     </Select>
                                 </FormControl>
+                                {role === "" ? <span style={errorStyle}>Vui lòng chọn role</span> : ""}
                             </Grid>
                             <Grid paddingLeft="50px" item xs={6}>
                                 <RadioGroup
@@ -426,6 +433,7 @@ export default function BasicTable() {
                                         label="Nữ"
                                     />
                                 </RadioGroup>
+                                {gender === "" ? <span style={errorStyle}>Vui lòng chọn giới tính</span> : ""}
                             </Grid>
                         </Grid>
                     </DialogContent>
