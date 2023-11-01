@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -17,7 +17,8 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 const PET_NAME_REGEX =
-  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]+$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]+$/;
+// /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]+$/;
 
 const ModalAddPet = (props) => {
   const { open, onClose, handUpdateTable } = props;
@@ -33,43 +34,51 @@ const ModalAddPet = (props) => {
     console.log(status);
   };
 
+  // --------------------- VALIDATION -----------------------------
+  const [valid, setValid] = useState("");
+  useEffect(() => {
+    setValid(PET_NAME_REGEX.test(petName));
+  }, [petName]);
+
+  const handleValidationPetName = (e) => {
+    setPetName(e.target.value);
+  };
+
   // --------------------- HANDLE CREATE PET -----------------------------
   const handleCreateService = async () => {
     console.log(userId, petName, category, rank, status);
-    try {
-      const response = await axios.post("http://localhost:3500/pet", {
-        userId,
-        petName,
-        category,
-        rank,
-        status,
-      });
-      if (response.error) {
-        toast.error(response.error);
-      } else {
-        console.log("Thành công!!", response);
-        toast.success("Thêm mới thú cưng thành công!");
-        setUserId("");
-        setPetName("");
-        setCategory("");
-        setRank();
-        setStatus(true);
-        handUpdateTable({
-          userId: userId,
-          petName: petName,
-          category: category,
-          rank: rank,
-          status: status,
+    if (!valid) {
+      toast.error("Không được nhập số và kí tự đặc biệt");
+    } else {
+      try {
+        const response = await axios.post("http://localhost:3500/pet", {
+          userId,
+          petName,
+          category,
+          rank,
+          status,
         });
-        onClose();
-      }
-    } catch (error) {
-      console.error(error);
-      console.log("Error creating service.");
-      if (!error.status) {
-        toast.error("Không có phản hồi của máy chủ");
-      } else if (error.status === 500) {
-        toast.error("Không được để trống");
+        if (response.error) {
+          toast.error(response.error);
+        } else {
+          console.log("Thành công!!", response);
+          toast.success("Thêm mới thú cưng thành công!");
+          setUserId("");
+          setPetName("");
+          setCategory("");
+          setRank();
+          setStatus(true);
+          handUpdateTable();
+          onClose();
+        }
+      } catch (error) {
+        console.error(error);
+        console.log("Error creating service.");
+        if (!error.status) {
+          toast.error("Lỗi ");
+        } else if (error.status === 500) {
+          toast.error("Không được để trống");
+        }
       }
     }
   };
@@ -111,20 +120,20 @@ const ModalAddPet = (props) => {
               margin="normal"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
+              error={userId === ""}
+              helperText={userId === "" ? "Không được để trống!" : " "}
             />
             <TextField
-              required
+              required={true}
               fullWidth
               label="Tên thú cưng"
               margin="normal"
               value={petName}
-              onChange={(e) => setPetName(e.target.value)}
-              helperText={
-                PET_NAME_REGEX.test(petName) ? "" : "Invalid Pet Name"
-              }
+              onChange={(e) => handleValidationPetName(e)}
+              error={!valid}
             />
             <TextField
-              required
+              required={true}
               fullWidth
               label="Loại thú cưng"
               margin="normal"
@@ -133,7 +142,7 @@ const ModalAddPet = (props) => {
             />
 
             <TextField
-              required
+              required={true}
               fullWidth
               label="Cấp thú cưng ban đầu"
               type="number"

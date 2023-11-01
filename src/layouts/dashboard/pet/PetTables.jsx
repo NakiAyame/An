@@ -81,21 +81,6 @@ export default function PetTable() {
     setOpenEditModal(false);
   };
 
-  // --------------------- HANDLE UPDATE TABLE -----------------------------
-  const handUpdateTable = (pet) => {
-    setData([pet, ...data]);
-  };
-
-  const handUpdateEditTable = (pet) => {
-    const newData = [...data];
-    const petIndex = data.findIndex((value) => value._id === pet.id);
-    newData[petIndex] = pet;
-    setData(newData);
-    // check data
-    console.log(data, newData);
-    console.log("check id", petIndex);
-  };
-
   // ----------------------------------- API GET ALL PET --------------------------------
   useEffect(() => {
     loadAllPet(currentPage);
@@ -162,7 +147,7 @@ export default function PetTable() {
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
-        setData(loadData.data.docs);
+        setData(loadData.data.data);
         setTotalPages(loadData.data.pages);
         // setTotalPets(loadData.data.total);
         setKey(key + 1); // tăng giá trị của key để trigger render lại
@@ -277,14 +262,14 @@ export default function PetTable() {
       <ModalAddPet
         open={openCreateModal}
         onClose={handleCloseModal}
-        handUpdateTable={handUpdateTable}
+        handUpdateTable={loadAllPet}
       />
       {/* Modal update */}
       <ModalEditPet
         open={openEditModal}
         onClose={handleCloseModal}
         dataEditPet={dataEditPet}
-        handUpdateEditTable={handUpdateEditTable}
+        handUpdateEditTable={loadAllPet}
       />
     </>
   );
