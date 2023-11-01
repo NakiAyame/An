@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function DropDownService() {
-  const [category, setCategory] = React.useState("");
+  const [category, setCategory] = React.useState([]);
 
   const handleChange = (event) => {
     setCategory(event.target.value);
@@ -18,12 +18,12 @@ export default function DropDownService() {
   async function loadAllCategoryService() {
     try {
       const loadData = await axios.get(
-        `http://localhost:3500/catename/service`
+        `http://localhost:3500/category/cateName/service`
       );
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
-        setCategory(loadData.data);
+        setCategory(loadData.data.data);
         toast.success("Login successful");
         console.log(loadData.data);
       }

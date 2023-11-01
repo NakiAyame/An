@@ -55,14 +55,7 @@ const ModalEditPet = (props) => {
         toast.error(res.data.error);
       } else {
         toast.success("Sửa thông tin thú cưng thành công");
-        handUpdateEditTable({
-          id: petID,
-          userId: userId,
-          petName: petName,
-          category: category,
-          rank: rank,
-          status: status,
-        });
+        handUpdateEditTable();
         onClose();
       }
     } catch (err) {
