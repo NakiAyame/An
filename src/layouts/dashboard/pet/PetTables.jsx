@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Table,
   TableBody,
@@ -17,17 +17,11 @@ import {
   IconButton,
   TextField,
   Grid,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Pagination,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
+import SearchIcon from "@mui/icons-material/Search";
 
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
@@ -35,12 +29,10 @@ import { styled } from "@mui/material/styles";
 import ButtonCustomize from "../../../components/Button/Button";
 
 //React
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
 import ModalAddPet from "../../../components/Modal/ModalAddPet";
 import ModalEditPet from "../../../components/Modal/ModalEditPet";
 
@@ -118,7 +110,6 @@ export default function PetTable() {
         setTotalPages(loadData.data.pages);
         console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
-        setKeyword(loadData.data.docs);
         setTotalPets(loadData.data.limit);
         console.log(loadData.data);
       }
@@ -128,16 +119,58 @@ export default function PetTable() {
   };
 
   // --------------------- Click paging -----------------------------
-  const handlePageClick = (event, value) => {
-    setCurrentPage(value);
-  };
+  // const handlePageClick = (event, value) => {
+  //   setCurrentPage(value);
+  // };
 
   // --------------------- Hanlde Search -----------------------------
-  const [keyword, setKeyword] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const [key, setKey] = useState(0); // state key để trigger render lại
 
-  const hanldeSearch = (event) => {
-    setKeyword(data.filter((f) => f.userId.includes(event.target.value)));
-    console.log(keyword);
+  const handlePageClick = useCallback(
+    (event, page) => {
+      setCurrentPage(page);
+      if (!keyword) {
+        loadAllPet(page);
+      } else {
+        searchPetById();
+      }
+    },
+    [keyword, setCurrentPage]
+  );
+
+  const handleKeywordChange = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleSearchClick = async () => {
+    if (!keyword) {
+      loadAllPet(currentPage);
+    } else {
+      searchPetById();
+    }
+  };
+
+  useEffect(() => {
+    setKey(key + 1); // tăng giá trị key để trigger component rerender khi state currentPage thay đổi
+  }, [currentPage, keyword]);
+
+  // ----------------------------------- GET ALL PET BY USER ID --------------------------------
+  const searchPetById = async () => {
+    try {
+      const loadData = await axios.get(`${BASE_URL}/pet/${keyword}`);
+      if (loadData.error) {
+        toast.error(loadData.error);
+      } else {
+        setData(loadData.data.docs);
+        setTotalPages(loadData.data.pages);
+        // setTotalPets(loadData.data.total);
+        setKey(key + 1); // tăng giá trị của key để trigger render lại
+        console.log(loadData.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -161,12 +194,19 @@ export default function PetTable() {
 
         <Grid item xs={6}>
           <TextField
-            // required
             fullWidth
             label="Tìm kiếm chủ thú cưng theo ID"
             margin="normal"
             size="small"
-            onChange={hanldeSearch}
+            value={keyword}
+            onChange={handleKeywordChange}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={handleSearchClick}>
+                  <SearchIcon />
+                </IconButton>
+              ),
+            }}
           />
         </Grid>
       </Grid>
@@ -184,9 +224,9 @@ export default function PetTable() {
               <TableCell align="right">Chức năng</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody key={key}>
             {data &&
-              keyword.map((value, index) => {
+              data.map((value, index) => {
                 const statusColor = value.status ? "primary" : "error";
                 return (
                   <TableRow
@@ -194,7 +234,7 @@ export default function PetTable() {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {index}
+                      {index + 1}
                     </TableCell>
                     <TableCell align="right">{value.userId}</TableCell>
                     <TableCell align="right">{value.petName}</TableCell>
@@ -226,6 +266,7 @@ export default function PetTable() {
       {/* Paging */}
       <Stack spacing={2}>
         <Pagination
+          key={key}
           count={totalPages}
           onChange={handlePageClick}
           page={currentPage}

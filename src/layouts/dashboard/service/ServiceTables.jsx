@@ -27,6 +27,7 @@ import ModalEditSerivce from "../../../components/Modal/ModalEditService";
 import ModalComfirmSerivce from "../../../components/Modal/ModalComfirmService";
 import ButtonCustomize from "../../../components/Button/Button";
 import ModalDetailForm from "../../../components/Modal/ModalDetaiFrom";
+import DropDownService from "../../../components/DropDown/DropDownService";
 
 const BASE_URL = "http://localhost:3500"; // địa chỉ của server API
 
@@ -173,13 +174,13 @@ export default function ServiceTable() {
   return (
     <>
       <Grid
-        spacing={2}
+        spacing={3}
         container
         justifyContent="space-between"
         alignItems="center"
         mb={3}
       >
-        <Grid item xs={6}>
+        <Grid item xs={4}>
           <ButtonCustomize
             onClick={handleOpenModal}
             variant="contained"
@@ -189,7 +190,11 @@ export default function ServiceTable() {
           />
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid item xs={4}>
+          <DropDownService />
+        </Grid>
+
+        <Grid item xs={4}>
           <ButtonCustomize
             variant="contained"
             color="primary"
@@ -248,13 +253,14 @@ export default function ServiceTable() {
                           nameButton="Cập nhật"
                           fullWidth
                         />
-                        <Button
-                          variant="contained"
-                          color="error"
+                        <ButtonCustomize
                           onClick={() => handleDeleteService(value)}
-                        >
-                          Xoá
-                        </Button>
+                          backgroundColor="red"
+                          variant="contained"
+                          // component={RouterLink}
+                          nameButton="Xoá"
+                          fullWidth
+                        />
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>

@@ -108,7 +108,7 @@ const Login = () => {
             </Link>
 
             <Typography component="h1" variant="h5">
-              Login
+              Đăng nhập
             </Typography>
             <Box
               component="form"
@@ -151,17 +151,17 @@ const Login = () => {
                 sx={{ mt: 3, mb: 2 }}
                 onClick={loginUser}
               >
-                Login
+                Đăng nhập
               </Button>
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
-                    Forgot password?
+                    Quên mật khẩu?
                   </Link>
                 </Grid>
                 <Grid item>
                   <Link href="/register" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                    {"Bạn chưa có tài khoản? Tạo tài khoản tại đây!"}
                   </Link>
                 </Grid>
               </Grid>

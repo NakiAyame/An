@@ -103,7 +103,7 @@ const Register = () => {
             </Link>
 
             <Typography component="h1" variant="h5">
-              Register
+              Tạo tài khoản
             </Typography>
             <Box
               component="form"
@@ -148,7 +148,7 @@ const Register = () => {
                 value={data.password}
                 onChange={(e) => setData({ ...data, password: e.target.value })}
               />
-              <TextField
+              {/* <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -159,7 +159,7 @@ const Register = () => {
                 autoComplete="current-password"
                 value={data.password}
                 onChange={(e) => setData({ ...data, password: e.target.value })}
-              />
+              /> */}
               <Button
                 type="submit"
                 fullWidth
@@ -167,17 +167,17 @@ const Register = () => {
                 sx={{ mt: 3, mb: 2 }}
                 onClick={registerUser}
               >
-                Sign In
+                Tạo
               </Button>
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
-                    Forgot password?
+                    Quên mật khẩu
                   </Link>
                 </Grid>
                 <Grid item>
                   <Link href="/sign-in" variant="body2">
-                    {"Already have an account? login Now"}
+                    {"Bạn đã có tài khoản? Đăng nhập tại đây!"}
                   </Link>
                 </Grid>
               </Grid>
