@@ -52,11 +52,10 @@ const DrawerDashborad = () => {
       const response = await axios.post("http://localhost:3500/logout");
       // thông báo logout thành công và chuyển hướng về trang đăng nhập
       console.log(response);
-      if (response.data.message === "Cookie cleared") {
-        localStorage.removeItem("token"); // xóa token lưu trữ trong localStorage
-        navigate("/sign-in"); // chuyển hướng về trang đăng nhập
-        toast.success("Đăng nhập thành công!");
-      }
+
+      localStorage.removeItem("token"); // xóa token lưu trữ trong localStorage
+      navigate("/sign-in"); // chuyển hướng về trang đăng nhập
+      toast.success("Đăng xuất thành công!");
     } catch (error) {
       console.error(error);
       toast.error(error);
@@ -139,7 +138,9 @@ const DrawerDashborad = () => {
       </List>
       <Divider />
       <List>
-        <ListItemButton onClick={() => handleLogout()}>Logout</ListItemButton>
+        <ListItemButton onClick={() => handleLogout()}>
+          Đăng xuất
+        </ListItemButton>
       </List>
     </>
   );

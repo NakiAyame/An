@@ -16,6 +16,9 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
+const PET_NAME_REGEX =
+  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]+$/;
+
 const ModalAddPet = (props) => {
   const { open, onClose, handUpdateTable } = props;
 
@@ -63,7 +66,11 @@ const ModalAddPet = (props) => {
     } catch (error) {
       console.error(error);
       console.log("Error creating service.");
-      toast.error(error.message);
+      if (!error.status) {
+        toast.error("Không có phản hồi của máy chủ");
+      } else if (error.status === 500) {
+        toast.error("Không được để trống");
+      }
     }
   };
 
@@ -98,7 +105,7 @@ const ModalAddPet = (props) => {
         <DialogContent dividers>
           <form>
             <TextField
-              // required
+              required
               fullWidth
               label="Id chủ thú cưng"
               margin="normal"
@@ -106,15 +113,18 @@ const ModalAddPet = (props) => {
               onChange={(e) => setUserId(e.target.value)}
             />
             <TextField
-              // required
+              required
               fullWidth
               label="Tên thú cưng"
               margin="normal"
               value={petName}
               onChange={(e) => setPetName(e.target.value)}
+              helperText={
+                PET_NAME_REGEX.test(petName) ? "" : "Invalid Pet Name"
+              }
             />
             <TextField
-              // required
+              required
               fullWidth
               label="Loại thú cưng"
               margin="normal"
