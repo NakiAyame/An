@@ -56,10 +56,10 @@ export default function ServiceTable() {
         toast.error(loadData.error);
       } else {
         setTotalPages(loadData.data.pages);
-        console.log("Check totalPage", totalPages);
+        // console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
         setTotalServices(loadData.data.limit);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);
@@ -147,6 +147,50 @@ export default function ServiceTable() {
     }
   };
 
+  // --------------------- GET ALL CATEGORY SERVICE -----------------------------
+  const [category, setCategory] = useState([]);
+  async function loadAllCategoryService() {
+    try {
+      const loadData = await axios.get(
+        `http://localhost:3500/category/cateName/service`
+      );
+      if (loadData.error) {
+        toast.error(loadData.error);
+      } else {
+        setCategory(loadData.data.data);
+        console.log(loadData.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    loadAllCategoryService();
+  }, []);
+
+  // --------------------- GET ALL SERVICE BY CATEGORY ID SERVICE -----------------------------
+  async function hanldeClickCategory(cateId) {
+    console.log("Check data cate ID", cateId);
+    try {
+      const loadData = await axios.get(`http://localhost:3500/service/find`, {
+        cateId: cateId,
+      });
+      if (loadData.error) {
+        toast.error(loadData.error);
+      } else {
+        console.log("Check loaddata", loadData.data);
+        loadAllService();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    hanldeClickCategory();
+  }, []);
+
   return (
     <>
       <Grid
@@ -167,7 +211,10 @@ export default function ServiceTable() {
         </Grid>
 
         <Grid item xs={6}>
-          <DropDownService handUpdateEditTable={loadAllService} />
+          <DropDownService
+            category={category}
+            handUpdateEditTable={hanldeClickCategory}
+          />
         </Grid>
 
         {/* <Grid item xs={4}>
