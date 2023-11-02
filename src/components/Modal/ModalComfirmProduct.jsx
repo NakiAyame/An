@@ -25,7 +25,7 @@ const ModalComfirmProduct = (props) => {
         toast.error(res.data.error);
       } else {
         toast.success("Xoá dịch vụ thành công");
-        handUpdateDeleteTable(productID);
+        handUpdateDeleteTable();
         onClose();
       }
     } catch (err) {

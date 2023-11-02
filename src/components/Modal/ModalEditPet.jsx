@@ -16,6 +16,9 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
+const PET_NAME_REGEX =
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
+
 const ModalEditPet = (props) => {
   const { open, onClose, dataEditPet, handUpdateEditTable } = props;
 
@@ -30,6 +33,17 @@ const ModalEditPet = (props) => {
     console.log(status);
   };
 
+  // --------------------- VALIDATION -----------------------------
+  const [valid, setValid] = useState("");
+  useEffect(() => {
+    setValid(PET_NAME_REGEX.test(petName));
+  }, [petName]);
+
+  const handleValidationPetName = (e) => {
+    setPetName(e.target.value);
+  };
+
+  // --------------------- HANDLE UPDATE PET -----------------------------
   useEffect(() => {
     if (open) {
       setUserId(dataEditPet.userId);
@@ -40,26 +54,31 @@ const ModalEditPet = (props) => {
     }
   }, [dataEditPet]);
 
-  // --------------------- HANDLE UPDATE PET -----------------------------
   const handleEditPet = async (petID) => {
-    try {
-      const res = await axios.patch(`http://localhost:3500/pet`, {
-        id: petID,
-        userId: userId,
-        petName: petName,
-        category: category,
-        rank: rank,
-        status: status,
-      });
-      if (res.data.error) {
-        toast.error(res.data.error);
-      } else {
-        toast.success("Sửa thông tin thú cưng thành công");
-        handUpdateEditTable();
-        onClose();
+    if (!valid) {
+      toast.error(
+        "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
+      );
+    } else {
+      try {
+        const res = await axios.patch(`http://localhost:3500/pet`, {
+          id: petID,
+          userId: userId,
+          petName: petName,
+          category: category,
+          rank: rank,
+          status: status,
+        });
+        if (res.data.error) {
+          toast.error(res.data.error);
+        } else {
+          toast.success("Sửa thông tin thú cưng thành công");
+          handUpdateEditTable();
+          onClose();
+        }
+      } catch (err) {
+        toast.error(err.message); // xuất thông báo lỗi ra màn hình
       }
-    } catch (err) {
-      toast.error(err.message); // xuất thông báo lỗi ra màn hình
     }
   };
 
@@ -94,23 +113,26 @@ const ModalEditPet = (props) => {
         <DialogContent dividers>
           <form>
             <TextField
-              // required
+              required
               fullWidth
               label="Id chủ thú cưng"
               margin="normal"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
+              error={userId === ""}
+              helperText={userId === "" ? "Không được để trống!" : " "}
             />
             <TextField
-              // required
+              required={true}
               fullWidth
               label="Tên thú cưng"
               margin="normal"
               value={petName}
-              onChange={(e) => setPetName(e.target.value)}
+              onChange={(e) => handleValidationPetName(e)}
+              error={!valid}
             />
             <TextField
-              // required
+              required={true}
               fullWidth
               label="Loại thú cưng"
               margin="normal"
@@ -119,7 +141,7 @@ const ModalEditPet = (props) => {
             />
 
             <TextField
-              required
+              required={true}
               fullWidth
               label="Cấp thú cưng ban đầu"
               type="number"

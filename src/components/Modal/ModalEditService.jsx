@@ -14,6 +14,10 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
+const SERVICE_NAME_REGEX =
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
+const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
+
 const ModalEditSerivce = (props) => {
   const { open, onClose, handUpdateEditTable, dataEditService } = props;
 
@@ -29,6 +33,28 @@ const ModalEditSerivce = (props) => {
     console.log(status);
   };
 
+  // --------------------- VALIDATION -----------------------------
+  const [validServiceName, setValidServiceName] = useState("");
+  const [validPrice, setValidPrice] = useState("");
+  useEffect(() => {
+    setValidServiceName(
+      SERVICE_NAME_REGEX.test(serviceName) && serviceName.trim() !== ""
+    );
+  }, [serviceName]);
+
+  const handleValidationServiceName = (e) => {
+    setServiceName(e.target.value);
+  };
+
+  useEffect(() => {
+    setValidPrice(PRICE_REGEX.test(price));
+  }, [price]);
+
+  const handleValidationPrice = (e) => {
+    setPrice(e.target.value);
+  };
+
+  // --------------------- HANLDE UPDATE SERVICE -----------------------------
   useEffect(() => {
     if (open) {
       setServiceName(dataEditService.serviceName);
@@ -40,20 +66,17 @@ const ModalEditSerivce = (props) => {
   }, [dataEditService]);
 
   const handleEditService = async (serviceID) => {
-    try {
-      const res = await axios.patch(`http://localhost:3500/service`, {
-        id: serviceID,
-        serviceName: serviceName,
-        categoryId: categoryId,
-        description: description,
-        price: price,
-        status: status,
-      });
-      if (res.data.error) {
-        toast.error(res.data.error);
-      } else {
-        toast.success("Sửa dịch vụ thành công");
-        handUpdateEditTable({
+    if (!validServiceName) {
+      toast.error(
+        "Tên dịch vụ không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
+      );
+    } else if (!validPrice) {
+      toast.error(
+        "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
+      );
+    } else {
+      try {
+        const res = await axios.patch(`http://localhost:3500/service`, {
           id: serviceID,
           serviceName: serviceName,
           categoryId: categoryId,
@@ -61,10 +84,16 @@ const ModalEditSerivce = (props) => {
           price: price,
           status: status,
         });
-        onClose();
+        if (res.data.error) {
+          toast.error(res.data.error);
+        } else {
+          toast.success("Sửa dịch vụ thành công");
+          handUpdateEditTable();
+          onClose();
+        }
+      } catch (err) {
+        toast.error(err.message); // xuất thông báo lỗi ra màn hình
       }
-    } catch (err) {
-      toast.error(err.message); // xuất thông báo lỗi ra màn hình
     }
   };
 
@@ -104,7 +133,9 @@ const ModalEditSerivce = (props) => {
               label="Tên dịch vụ"
               margin="normal"
               value={serviceName}
-              onChange={(e) => setServiceName(e.target.value)}
+              onChange={(e) => handleValidationServiceName(e)}
+              error={!validServiceName}
+              helperText={validServiceName ? "" : "Hãy nhập tên dịch vụ"}
             />
             <TextField
               // required
@@ -117,7 +148,7 @@ const ModalEditSerivce = (props) => {
             <TextField
               label="Thông tin dịch vụ"
               fullWidth
-              placeholder="MultiLine with rows: 2 and rowsMax: 4"
+              placeholder="Điền thông tin dịch vụ ở đây"
               multiline
               rows={4}
               margin="normal"
@@ -133,7 +164,9 @@ const ModalEditSerivce = (props) => {
               type="number"
               margin="normal"
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={(e) => handleValidationPrice(e)}
+              error={!validPrice}
+              helperText={validPrice ? "" : "Hãy nhập số tiền dịch vụ"}
             />
             <RadioGroup
               value={status}
