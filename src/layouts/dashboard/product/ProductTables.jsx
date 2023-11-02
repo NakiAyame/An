@@ -7,24 +7,8 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Box,
-  Button,
-  Typography,
-  Modal,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
-  TextField,
-  Grid,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Pagination,
+  ButtonGroup,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
@@ -133,10 +117,10 @@ export default function ProductTable() {
 
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
   useEffect(() => {
-    loadAllPet(currentPage);
+    loadAllProduct(currentPage);
   }, [currentPage]);
 
-  const loadAllPet = async (page) => {
+  const loadAllProduct = async (page) => {
     try {
       const loadData = await axios.get(`${BASE_URL}/product?page=${page}`);
       if (loadData.error) {
@@ -194,11 +178,11 @@ export default function ProductTable() {
                       {index}
                     </TableCell>
                     <TableCell align="left">{value.productName}</TableCell>
-                    <TableCell align="left">{value.quantity}</TableCell>
-                    <TableCell align="left">
+                    <TableCell align="center">{value.quantity}</TableCell>
+                    <TableCell align="center">
                       {numberToVND(value.price)}
                     </TableCell>
-                    <TableCell align="left">
+                    <TableCell align="center">
                       {/* <Chip
                         size="small"
                         variant="outlined"
@@ -206,23 +190,24 @@ export default function ProductTable() {
                         color={statusColor}
                       /> */}
                     </TableCell>
-                    <TableCell align="left">
-                      <ButtonCustomize
-                        onClick={() => handleUpdateProduct(value)}
-                        variant="contained"
-                        // component={RouterLink}
-                        nameButton="Cập nhật"
-                        fullWidth
-                      />
-                    </TableCell>
-                    <TableCell align="right">
-                      <ButtonCustomize
-                        onClick={() => handleDeleteProduct(value)}
-                        variant="contained"
-                        // component={RouterLink}
-                        nameButton="Xoá"
-                        fullWidth
-                      />
+                    <TableCell align="center">
+                      <ButtonGroup variant="contained" fullWidth>
+                        <ButtonCustomize
+                          onClick={() => handleUpdateProduct(value)}
+                          variant="contained"
+                          // component={RouterLink}
+                          nameButton="Cập nhật"
+                          fullWidth
+                        />
+                        <ButtonCustomize
+                          onClick={() => handleDeleteProduct(value)}
+                          variant="contained"
+                          backgroundColor="red"
+                          // component={RouterLink}
+                          nameButton="Xoá"
+                          fullWidth
+                        />
+                      </ButtonGroup>
                     </TableCell>
                   </TableRow>
                 );
@@ -243,21 +228,21 @@ export default function ProductTable() {
       <ModalAddProduct
         open={openCreateModal}
         onClose={handleCloseModal}
-        handUpdateTable={handUpdateTable}
+        handUpdateTable={loadAllProduct}
       />
       {/* Modal update */}
       <ModalEditProduct
         open={openEditModal}
         onClose={handleCloseModal}
         dataEditProduct={dataEditProduct}
-        handUpdateEditTable={handUpdateEditTable}
+        handUpdateEditTable={loadAllProduct}
       />
       {/* Modal delete */}
       <ModalComfirmProduct
         open={openComfirmModal}
         onClose={handleCloseModal}
         dataDeteleProduct={dataDeteleProduct}
-        handUpdateDeleteTable={handUpdateDeleteTable}
+        handUpdateDeleteTable={loadAllProduct}
       />
     </>
   );

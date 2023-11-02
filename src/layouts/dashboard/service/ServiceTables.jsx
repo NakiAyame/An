@@ -108,30 +108,6 @@ export default function ServiceTable() {
     setOpenDetailModal(false);
   };
 
-  // --------------------- HANLDE SERVICES LIST UPDATE AFTER EDIT SERVICE  -----------------------------
-  const handUpdateTable = (service) => {
-    setData([service, ...data]);
-  };
-  const handUpdateEditTable = (service) => {
-    const newData = [...data];
-    const serviceIndex = data.findIndex((value) => value._id === service.id);
-    newData[serviceIndex] = service;
-    setData(newData);
-    // check data
-    console.log(data, newData);
-    console.log("check id", serviceIndex);
-  };
-
-  // --------------------- HANLDE SERVICES LIST UPDATE AFTER DELETE SERVICE  -----------------------------
-  const handUpdateDeleteTable = (service) => {
-    console.log("Check data sevice:", service);
-    const newData = [...data];
-    const serviceIndex = newData.findIndex((value) => value._id === service);
-    newData.splice(serviceIndex, 1);
-    console.log("Check list delete", newData);
-    setData(newData);
-  };
-
   // ----------------------------------- API UPDATE STATUS SERVICE --------------------------------
   const handleUpdateServiceStatus = async (serviceId) => {
     console.log(serviceId);
@@ -174,13 +150,13 @@ export default function ServiceTable() {
   return (
     <>
       <Grid
-        spacing={3}
+        spacing={2}
         container
         justifyContent="space-between"
         alignItems="center"
         mb={3}
       >
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <ButtonCustomize
             onClick={handleOpenModal}
             variant="contained"
@@ -190,11 +166,11 @@ export default function ServiceTable() {
           />
         </Grid>
 
-        <Grid item xs={4}>
-          <DropDownService />
+        <Grid item xs={6}>
+          <DropDownService handUpdateEditTable={loadAllService} />
         </Grid>
 
-        <Grid item xs={4}>
+        {/* <Grid item xs={4}>
           <ButtonCustomize
             variant="contained"
             color="primary"
@@ -202,7 +178,7 @@ export default function ServiceTable() {
             nameButton="Detail"
             width="15%"
           />
-        </Grid>
+        </Grid> */}
       </Grid>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -282,21 +258,21 @@ export default function ServiceTable() {
       <ModalAddSerivce
         open={openModal}
         onClose={handleCloseModal}
-        handUpdateTable={handUpdateTable}
+        handUpdateTable={loadAllService}
       />
 
       <ModalEditSerivce
         open={openEditModal}
         onClose={handleCloseModal}
         dataEditService={dataEditService}
-        handUpdateEditTable={handUpdateEditTable}
+        handUpdateEditTable={loadAllService}
       />
 
       <ModalComfirmSerivce
         open={openComfirmModal}
         onClose={handleCloseModal}
         dataDeteleService={dataDeteleService}
-        handUpdateDeleteTable={handUpdateDeleteTable}
+        handUpdateDeleteTable={loadAllService}
       />
 
       <ModalDetailForm open={openDetailModal} onClose={handleCloseModal} />

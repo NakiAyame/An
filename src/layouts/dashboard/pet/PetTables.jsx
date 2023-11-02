@@ -110,7 +110,6 @@ export default function PetTable() {
 
   // --------------------- Hanlde Search -----------------------------
   const [keyword, setKeyword] = useState("");
-  const [key, setKey] = useState(0); // state key để trigger render lại
 
   const handlePageClick = useCallback(
     (event, page) => {
@@ -136,10 +135,6 @@ export default function PetTable() {
     }
   };
 
-  useEffect(() => {
-    setKey(key + 1); // tăng giá trị key để trigger component rerender khi state currentPage thay đổi
-  }, [currentPage, keyword]);
-
   // ----------------------------------- GET ALL PET BY USER ID --------------------------------
   const searchPetById = async () => {
     try {
@@ -149,8 +144,6 @@ export default function PetTable() {
       } else {
         setData(loadData.data.data);
         setTotalPages(loadData.data.pages);
-        // setTotalPets(loadData.data.total);
-        setKey(key + 1); // tăng giá trị của key để trigger render lại
         console.log(loadData.data);
       }
     } catch (err) {
@@ -201,15 +194,15 @@ export default function PetTable() {
           <TableHead>
             <TableRow>
               <TableCell children>ID</TableCell>
-              <TableCell align="right">Chủ thú cưng</TableCell>
-              <TableCell align="right">Tên thú cưng</TableCell>
-              <TableCell align="right">Cấp thú cưng</TableCell>
-              <TableCell align="right">Loại thú cưng</TableCell>
-              <TableCell align="right">Trạng thái</TableCell>
-              <TableCell align="right">Chức năng</TableCell>
+              <TableCell align="center">Chủ thú cưng</TableCell>
+              <TableCell align="center">Tên thú cưng</TableCell>
+              <TableCell align="center">Cấp thú cưng</TableCell>
+              <TableCell align="center">Loại thú cưng</TableCell>
+              <TableCell align="center">Trạng thái</TableCell>
+              <TableCell align="center">Chức năng</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody key={key}>
+          <TableBody>
             {data &&
               data.map((value, index) => {
                 const statusColor = value.status ? "primary" : "error";
@@ -221,11 +214,11 @@ export default function PetTable() {
                     <TableCell component="th" scope="row">
                       {index + 1}
                     </TableCell>
-                    <TableCell align="right">{value.userId}</TableCell>
-                    <TableCell align="right">{value.petName}</TableCell>
-                    <TableCell align="right">{value.rank}</TableCell>
-                    <TableCell align="right">{value.category}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">{value.userId}</TableCell>
+                    <TableCell align="left">{value.petName}</TableCell>
+                    <TableCell align="center">{value.rank}</TableCell>
+                    <TableCell align="center">{value.category}</TableCell>
+                    <TableCell align="center">
                       <Chip
                         size="small"
                         variant="outlined"
@@ -233,7 +226,7 @@ export default function PetTable() {
                         color={statusColor}
                       />
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
                       <ButtonCustomize
                         onClick={() => handleUpdatePet(value)}
                         variant="contained"
@@ -251,7 +244,6 @@ export default function PetTable() {
       {/* Paging */}
       <Stack spacing={2}>
         <Pagination
-          key={key}
           count={totalPages}
           onChange={handlePageClick}
           page={currentPage}
