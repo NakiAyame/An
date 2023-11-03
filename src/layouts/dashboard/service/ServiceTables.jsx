@@ -173,14 +173,17 @@ export default function ServiceTable() {
   async function hanldeClickCategory(cateId) {
     console.log("Check data cate ID", cateId);
     try {
-      const loadData = await axios.get(`http://localhost:3500/service/find`, {
-        cateId: cateId,
-      });
+      const loadData = await axios.get(
+        `http://localhost:3500/service/find/${cateId}`
+      );
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
         console.log("Check loaddata", loadData.data);
-        loadAllService();
+        setTotalPages(loadData.data.pages);
+        // console.log("Check totalPage", totalPages);
+        setData(loadData.data);
+        setTotalServices(loadData.data.limit);
       }
     } catch (err) {
       console.log(err);
