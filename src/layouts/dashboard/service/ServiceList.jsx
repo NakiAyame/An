@@ -21,6 +21,10 @@ import { useState, useEffect } from "react";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
+import ButtonCustomize from "../../../components/Button/Button";
+
+//@material-ui/core
+import { styled } from "@mui/material/styles";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -41,6 +45,29 @@ export default function ServiceList() {
       currency: "VND",
     });
   };
+
+  const ColorTypography = styled(Typography)(({ theme }) => ({
+    // color: theme.palette.getContrastText("#ffff"),
+    backgroundColor: "#3CB371",
+    "&:hover": {
+      backgroundColor: "#eb6434",
+      color: "black",
+    },
+    display: "center",
+    textTransform: "none",
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+  }));
 
   // ----------------------------------- API GET ALL SERVICE --------------------------------
   useEffect(() => {
@@ -141,11 +168,29 @@ export default function ServiceList() {
                         <Typography gutterBottom variant="h5" component="h2">
                           {value.serviceName}
                         </Typography>
+                        <Typography gutterBottom variant="h6" component="h2">
+                          {numberToVND(value.price)}
+                        </Typography>
                         <Typography>{value.description}</Typography>
                       </CardContent>
                       <CardActions>
-                        <Button size="small">Chi tiết sản phẩm</Button>
-                        <Button size="small">Thêm vào giỏ hàng</Button>
+                        <ButtonCustomize
+                          Button
+                          size="small"
+                          variant="contained"
+                          // component={RouterLink}
+                          nameButton="Chi tiết"
+                          fullWidth
+                        />
+                        <ButtonCustomize
+                          Button
+                          size="small"
+                          variant="contained"
+                          backgroundColor="Pink"
+                          // component={RouterLink}
+                          nameButton="Thêm vào giỏ hàng"
+                          fullWidth
+                        />
                       </CardActions>
                     </Card>
                   </Grid>
