@@ -29,6 +29,7 @@ import { useEffect } from "react";
 import { Link } from "@mui/material";
 import DrawerDashborad from "./DrawerDashborad";
 import AccountMenu from "../../components/AccountMeun/AccountMeun";
+import ServiceList from "./service/ServiceList";
 
 const drawerWidth = 240;
 
@@ -116,6 +117,8 @@ function ResponsiveDrawer(props) {
         }}
       >
         <Toolbar />
+
+        <ServiceList />
         {/* router here */}
         <Outlet />
       </Box>

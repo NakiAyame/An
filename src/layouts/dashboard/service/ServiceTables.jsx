@@ -29,7 +29,7 @@ import ButtonCustomize from "../../../components/Button/Button";
 import ModalDetailForm from "../../../components/Modal/ModalDetaiFrom";
 import DropDownService from "../../../components/DropDown/DropDownService";
 
-const BASE_URL = "http://localhost:3500"; // địa chỉ của server API
+const BASE_URL = "http://localhost:3500";
 
 export default function ServiceTable() {
   const [data, setData] = useState([]);
