@@ -27,24 +27,33 @@ import CategoryIcon from "@mui/icons-material/Category";
 const DrawerDashborad = () => {
   const navigate = useNavigate();
   const links = [
-    { text: "Dashboard", path: "/" },
-    { text: "Danh sách người dùng", path: "/user-list" },
-    { text: "Danh sách đặt hàng", path: "/order-list" },
+    { text: "Dashboard", path: "/dashboard" },
+    { text: "Danh sách người dùng", path: "/dashboard/user-list" },
+    { text: "Danh sách đặt hàng", path: "/dashboard/order-list" },
   ];
 
   const links2 = [
-    { text: "Danh sách dịch vụ", path: "/service-list" },
-    { text: "Lịch sử thanh toán dịch vụ", path: "/history-service-list" },
+    { text: "Danh sách dịch vụ", path: "/dashboard/service-list" },
+    {
+      text: "Lịch sử thanh toán dịch vụ",
+      path: "/dashboard/history-service-list",
+    },
   ];
 
   const links3 = [
-    { text: "Danh sách thú cưng", path: "/pet-list" },
-    { text: "Lịch sử thanh toán thú cưng", path: "/history-pet-list" },
+    { text: "Danh sách thú cưng", path: "/dashboard/pet-list" },
+    {
+      text: "Lịch sử thanh toán thú cưng",
+      path: "/dashboard/history-pet-list",
+    },
   ];
 
   const links4 = [
-    { text: "Danh sách sản phẩm", path: "/product-list" },
-    { text: "Lịch sử thanh toán sản phẩm", path: "/history-product-list" },
+    { text: "Danh sách sản phẩm", path: "/dashboard/product-list" },
+    {
+      text: "Lịch sử thanh toán sản phẩm",
+      path: "/dashboard/history-product-list",
+    },
   ];
 
   const handleLogout = async () => {

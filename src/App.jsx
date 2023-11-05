@@ -20,11 +20,11 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="user-list" element={<BasicTable />} />
-            <Route path="order-list" element={<OrderTable />} />
-            <Route path="service-list" element={<ServiceTable />} />
-            <Route path="pet-list" element={<PetTable />} />
-            <Route path="product-list" element={<ProductTable />} />
+            <Route path="/dashboard/user-list" element={<BasicTable />} />
+            <Route path="/dashboard/order-list" element={<OrderTable />} />
+            <Route path="/dashboard/service-list" element={<ServiceTable />} />
+            <Route path="/dashboard/pet-list" element={<PetTable />} />
+            <Route path="/dashboard/product-list" element={<ProductTable />} />
           </Route>
           <Route path="/sign-up" element={<Register />} />
           <Route path="/sign-in" element={<Login />} />
