@@ -27,7 +27,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 const DrawerDashborad = () => {
   const navigate = useNavigate();
   const links = [
-    { text: "Dashboard", path: "/" },
+    { text: "Dashboard", path: "/dashboard" },
     { text: "Danh sách người dùng", path: "/user-list" },
     { text: "Danh sách đặt hàng", path: "/order-list" },
   ];
