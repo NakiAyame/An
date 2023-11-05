@@ -31,6 +31,12 @@ import DrawerDashborad from "./DrawerDashborad";
 import AccountMenu from "../../components/AccountMeun/AccountMeun";
 import ServiceList from "./service/ServiceList";
 
+import { styled } from "@mui/material/styles";
+
+const CustomAppBar = styled(AppBar)({
+  background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
+});
+
 const drawerWidth = 240;
 
 function ResponsiveDrawer(props) {
@@ -47,7 +53,7 @@ function ResponsiveDrawer(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar
+      <CustomAppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
@@ -64,12 +70,17 @@ function ResponsiveDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ color: "black" }}
+          >
             Dashboard
           </Typography>
           <AccountMenu />
         </Toolbar>
-      </AppBar>
+      </CustomAppBar>
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
