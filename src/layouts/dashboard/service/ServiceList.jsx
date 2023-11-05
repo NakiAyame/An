@@ -103,29 +103,49 @@ export default function ServiceList() {
         <Box
           sx={{
             bgcolor: "background.paper",
-            pt: 8,
             pb: 6,
           }}
         >
-          <Container maxWidth="sm">
+          <Container
+            maxWidth="full"
+            sx={{
+              backgroundImage: `url('https://mcdn.coolmate.me/uploads/November2021/spa-thu-cung-la-gi-24.jpg')`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              height: "500px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Typography
               component="h1"
               variant="h2"
               align="center"
               color="text.primary"
               gutterBottom
+              sx={{
+                textShadow: "2px 2px rgba(0, 0, 0, 0.5)",
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+              }}
             >
-              ServiceList layout
+              Dịch vụ chăm sóc thú cưng
             </Typography>
             <Typography
               variant="h5"
               align="center"
               color="text.secondary"
               paragraph
+              sx={{
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+              }}
             >
-              Something short and leading about the collection below—its
-              contents, the creator, etc. Make it short and sweet, but not too
-              short so folks don&apos;t simply skip over it entirely.
+              Tại PetCare, đội ngũ bác sĩ của chúng tôi được đào tạo để nâng cao
+              năng lực chuyên môn và làm việc tại bệnh viện với cơ sở vật chất
+              hiện đại nhằm duy trì tiêu chuẩn cao trong công tác chăm sóc sức
+              khỏe vật nuôi
             </Typography>
             <Stack
               sx={{ pt: 4 }}
@@ -133,12 +153,26 @@ export default function ServiceList() {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained">Main call to action</Button>
-              <Button variant="outlined">Secondary action</Button>
+              <ButtonCustomize
+                Button
+                size="small"
+                variant="contained"
+                // component={RouterLink}
+                nameButton="Đăng kí dịch vụ"
+                fullWidth
+              />
+              <ButtonCustomize
+                Button
+                size="small"
+                variant="contained"
+                // component={RouterLink}
+                nameButton="Liên hệ dịch vụ chăm sóc"
+                fullWidth
+              />
             </Stack>
           </Container>
         </Box>
-        <Container sx={{ py: 8 }} maxWidth="md">
+        <Container sx={{ py: 8 }} maxWidth="lg">
           {/* End hero unit */}
           <Grid container spacing={4}>
             {data &&
