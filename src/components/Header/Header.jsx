@@ -12,6 +12,13 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import PetsIcon from "@mui/icons-material/Pets";
+
+import { styled } from "@mui/material/styles";
+
+const CustomAppBar = styled(AppBar)({
+  background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
+});
 
 const pages = ["Trang Chủ", "Dịch vụ", "Sản Phẩm", "Blog", "Giới thiệu"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -47,10 +54,15 @@ function Header() {
 
   return (
     <>
-      <AppBar position="static">
+      <CustomAppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <PetsIcon
+              sx={{
+                display: { xs: "none", md: "flex", color: "black" },
+                mr: 1,
+              }}
+            />
             <Typography
               variant="h6"
               noWrap
@@ -58,7 +70,7 @@ function Header() {
               href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
-                display: { xs: "none", md: "flex" },
+                display: { xs: "none", md: "flex", color: "black" },
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
@@ -66,7 +78,7 @@ function Header() {
                 textDecoration: "none",
               }}
             >
-              LOGO
+              PetCare
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -105,7 +117,7 @@ function Header() {
                 ))}
               </Menu>
             </Box>
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            <PetsIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
             <Typography
               variant="h5"
               noWrap
@@ -120,61 +132,68 @@ function Header() {
                 letterSpacing: ".3rem",
                 color: "inherit",
                 textDecoration: "none",
+                color: "black",
               }}
             >
-              LOGO
+              PetCare
             </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", md: "flex", color: "black" },
+              }}
+            >
               {/* ------------TRANG CHỦ--------------- */}
               <Button
                 onClick={handleClick}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "white", display: "block", color: "black" }}
               >
                 Trang chủ
               </Button>
               {/* ------------DỊCH VỤ--------------- */}
               <Button
                 onClick={handleClick}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "white", display: "block", color: "black" }}
               >
-                Dịch vụ
+                <Typography>Dịch vụ</Typography>
+                <Menu
+                  id="service-menu"
+                  anchorEl={serviceItem}
+                  keepMounted
+                  open={Boolean(serviceItem)}
+                  onClose={handleClose}
+                >
+                  {/* ----------- THÊM ITEM DỊCH VỤ Ở ĐÂY ------------ */}
+                  {/* ----------- NHỚ SỬA ĐƯỜNG DẪN TRONG HREF --------------- */}
+                  <MenuItem>
+                    <a
+                      style={{ textDecoration: "none", color: "black" }}
+                      href="/dashboard"
+                    >
+                      Dashboard
+                    </a>
+                  </MenuItem>
+                </Menu>
               </Button>
-              <Menu
-                id="service-menu"
-                anchorEl={serviceItem}
-                keepMounted
-                open={Boolean(serviceItem)}
-                onClose={handleClose}
-              >
-                {/* ----------- THÊM ITEM DỊCH VỤ Ở ĐÂY ------------ */}
-                {/* ----------- NHỚ SỬA ĐƯỜNG DẪN TRONG HREF --------------- */}
-                <MenuItem>
-                  <a
-                    style={{ textDecoration: "none", color: "black" }}
-                    href="/dashboard"
-                  >
-                    Dashboard
-                  </a>
-                </MenuItem>
-              </Menu>
+
               {/* ------------SẢN PHẨM--------------- */}
               <Button
                 onClick={handleClick}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "white", display: "block", color: "black" }}
               >
                 Sản phẩm
               </Button>
               {/* ------------BLOG--------------- */}
               <Button
                 onClick={handleClick}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "white", display: "block", color: "black" }}
               >
                 Blog
               </Button>
               {/* ------------GIỚI THIỆU--------------- */}
               <Button
                 onClick={handleClick}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "white", display: "block", color: "black" }}
               >
                 Giới thiệu
               </Button>
@@ -211,7 +230,7 @@ function Header() {
             </Box>
           </Toolbar>
         </Container>
-      </AppBar>
+      </CustomAppBar>
 
       {/* <Menu
                 id="simple-menu"
