@@ -60,17 +60,8 @@ export default function BasicTable() {
     const OPTION_VIEW_ORDER_BY_ID = 'view'
 
     const [option, setOption] = useState("");
-    var count = 0;
 
     const [data, setData] = useState([]);
-    const [role, setRole] = useState("");
-    const [gender, setGender] = useState(true);
-    const [fullname, setFullName] = useState("");
-    const [password, setPassWord] = useState("");
-    const [confirmPass, setConfirmPass] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [address, setAddress] = useState("");
     const [id, setId] = useState("");
     const [orderDetail, setOrderDetail] = useState([]);
 
@@ -79,28 +70,6 @@ export default function BasicTable() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-    const handleUpdateTable = (value) => {
-        setData([value, ...data]);
-    };
-
-    // --------------------- HANDLE ROLE -----------------------------
-    const handleRoleChange = (event) => {
-        setRole(event.target.value);
-        console.log(role);
-    };
-
-    // --------------------- HANDLE GENDER -----------------------------
-    const handleGenderChange = (event) => {
-        setGender(event.target.value);
-        console.log(gender);
-    };
-
-    // --------------------- HANDLE OPEN MODAL CREATE -----------------------------
-    const handleCreate = (event) => {
-        setOption("create");
-        handleOpen();
-    };
 
     // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
     const handleViewOrderDetail = async (id, option) => {
@@ -112,12 +81,6 @@ export default function BasicTable() {
             } else {
                 console.log(data.data);
                 setOrderDetail(data.data)
-                // setId(data.data._id)
-                // setFullName(data.data.fullname)
-                // setEmail(data.data.email)
-                // setPhone(data.data.phone)
-                // setAddress(data.data.address)
-                // setPassWord(password)
             }
         } catch (err) {
             console.log(err);
@@ -125,36 +88,11 @@ export default function BasicTable() {
 
         setOption(option);
         handleOpen();
-
-        // console.log(event);
     };
 
     // --------------------- HANDLE UPDATE -----------------------------
 
-    const handleUpdate = async () => {
-        console.log(gender)
-        try {
-            const data = await axios.patch(`http://localhost:3500/user`, {
-                fullname: fullname,
-                password: password,
-                email: email,
-                address: address,
-                phone: phone,
-                gender: gender,
-                role: role
-            });
-            if (data.error) {
-                toast.error(data.error);
-            } else {
-                console.log(data);
-                toast.success("Update successfully");
-                handleClose()
-                loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
+
 
     // --------------------- HANDLE DELETE -----------------------------
     const handleDelete = async (id) => {
@@ -171,41 +109,6 @@ export default function BasicTable() {
             console.log(err);
         }
     };
-
-    // --------------------- HANDLE CREATE USER -----------------------------
-    // useEffect(() => {
-    const handleCreateUser = async (event) => {
-        // e.preventDefault();
-        // const { fullname, email, password } = data;
-        try {
-            const data = await axios.post("http://localhost:3500/register", {
-                fullname,
-                email,
-                password,
-                role,
-                address,
-                phone,
-                gender,
-            });
-            if (data.error) {
-                toast.error(data.error);
-            } else {
-                toast.success("Register successful. Welcome!");
-                handleUpdateTable({
-                    fullname: fullname,
-                    email: email,
-                    phone: phone,
-                    gender: gender,
-                    address: address,
-                });
-                handleClose();
-                loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    // })
 
     // ----------------------------------- API GET ALL USER --------------------------------
     async function loadAllOrder(page, limit) {
@@ -414,25 +317,7 @@ export default function BasicTable() {
                                                     <TableCell align="right">{value.productId}</TableCell>
                                                     <TableCell align="right">{value.quantity}</TableCell>
                                                     <TableCell align="right">default</TableCell>
-                                                    <TableCell align="right">
-                                                        {/* <ButtonGroup variant="contained" fullWidth>
-                                                            <ButtonCustomize
-                                                                onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
-                                                                variant="contained"
-                                                                // component={RouterLink}
-                                                                nameButton="xem chi tiết"
-                                                                fullWidth
-                                                            />
-                                                            <ButtonCustomize
-                                                                onClick={(e) => handleDelete(value._id)}
-                                                                backgroundColor="red"
-                                                                variant="contained"
-                                                                // component={RouterLink}
-                                                                nameButton="Xoá"
-                                                                fullWidth
-                                                            />
-                                                        </ButtonGroup> */}
-                                                    </TableCell>
+                                                    <TableCell align="right"></TableCell>
                                                 </TableRow>
                                             );
                                         })}
@@ -442,25 +327,14 @@ export default function BasicTable() {
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        {option === "create" ? (
-                            <Button
-                                variant="contained"
-                                margin="normal"
-                                color="primary"
-                                onClick={handleCreateUser}
-                            >
-                                Thêm nhân viên
-                            </Button>
-                        ) : (
-                            <Button
-                                variant="contained"
-                                margin="normal"
-                                color="primary"
-                                onClick={handleUpdate}
-                            >
-                                Cập nhật thông tin
-                            </Button>
-                        )}
+                        <Button
+                            variant="contained"
+                            margin="normal"
+                            color="primary"
+                            // onClick={handleUpdate}
+                        >
+                            Cập nhật thông tin
+                        </Button>
                     </DialogActions>
                 </Box>
             </Modal>
