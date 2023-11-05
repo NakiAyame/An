@@ -10,8 +10,7 @@ import ServiceTable from "./layouts/dashboard/service/ServiceTables";
 import PetTable from "./layouts/dashboard/pet/PetTables";
 import ProductTable from "./layouts/dashboard/product/ProductTables";
 import OrderTable from "./layouts/dashboard/order/OrderTable";
-import LandingPage from "./layouts/LandingPage/LandingPage"
-
+import LandingPage from "./layouts/LandingPage/LandingPage";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -20,7 +19,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Dashboard />}>
+          <Route path="/dashboard" element={<Dashboard />}>
             <Route path="user-list" element={<BasicTable />} />
             <Route path="order-list" element={<OrderTable />} />
             <Route path="service-list" element={<ServiceTable />} />
@@ -29,7 +28,7 @@ function App() {
           </Route>
           <Route path="/sign-up" element={<Register />} />
           <Route path="/sign-in" element={<Login />} />
-          <Route path="/home" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage />} />
         </Routes>
       </BrowserRouter>
 
