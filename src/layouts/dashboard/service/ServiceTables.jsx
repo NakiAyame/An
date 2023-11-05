@@ -248,7 +248,7 @@ export default function ServiceTable() {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {index}
+                      {(currentPage - 1) * 10 + index + 1}
                     </TableCell>
                     <TableCell align="right">{value.serviceName}</TableCell>
                     <TableCell align="right">{value.categoryId}</TableCell>

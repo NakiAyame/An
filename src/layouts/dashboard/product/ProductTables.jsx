@@ -50,7 +50,7 @@ export default function ProductTable() {
 
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const numberToVND = (number) => {
     return number.toLocaleString("vi-VN", {
@@ -88,21 +88,6 @@ export default function ProductTable() {
     setOpenCreateModal(false);
     setOpenEditModal(false);
     setOpenComfirmModal(false);
-  };
-
-  // --------------------- HANDLE UPDATE TABLE -----------------------------
-  const handUpdateTable = (product) => {
-    setData([product, ...data]);
-  };
-
-  const handUpdateEditTable = (product) => {
-    const newData = [...data];
-    const productIndex = data.findIndex((value) => value._id === product.id);
-    newData[productIndex] = product;
-    setData(newData);
-    // check data
-    console.log(data, newData);
-    console.log("check id", productIndex);
   };
 
   // --------------------- HANLDE PRODUCTS LIST UPDATE AFTER DELETE PRODUCT  -----------------------------
@@ -175,7 +160,7 @@ export default function ProductTable() {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {index}
+                      {(currentPage - 1) * 10 + (index + 1)}
                     </TableCell>
                     <TableCell align="left">{value.productName}</TableCell>
                     <TableCell align="center">{value.quantity}</TableCell>

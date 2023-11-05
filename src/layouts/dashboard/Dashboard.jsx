@@ -128,8 +128,6 @@ function ResponsiveDrawer(props) {
         }}
       >
         <Toolbar />
-
-        <ServiceList />
         {/* router here */}
         <Outlet />
       </Box>
