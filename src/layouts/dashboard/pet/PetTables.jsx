@@ -57,7 +57,7 @@ export default function PetTable() {
 
   const [totalPets, setTotalPets] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // --------------------- MODAL HANDLE -----------------------------
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -213,7 +213,7 @@ export default function PetTable() {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {index + 1}
+                      {(currentPage - 1) * 10 + (index + 1)}
                     </TableCell>
                     <TableCell align="left">{value.userId}</TableCell>
                     <TableCell align="left">{value.petName}</TableCell>
