@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import PetsIcon from "@mui/icons-material/Pets";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import { styled } from "@mui/material/styles";
 
@@ -67,7 +68,7 @@ function Header() {
               variant="h6"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              href="landing-page"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex", color: "black" },
@@ -122,7 +123,7 @@ function Header() {
               variant="h5"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              href="landing-page"
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },
@@ -168,9 +169,9 @@ function Header() {
                   <MenuItem>
                     <a
                       style={{ textDecoration: "none", color: "black" }}
-                      href="/dashboard"
+                      href="service-homepage"
                     >
-                      Dashboard
+                      Tất cả dịch vụ
                     </a>
                   </MenuItem>
                 </Menu>
@@ -231,6 +232,8 @@ function Header() {
           </Toolbar>
         </Container>
       </CustomAppBar>
+      {/* router here */}
+      <Outlet />
 
       {/* <Menu
                 id="simple-menu"
