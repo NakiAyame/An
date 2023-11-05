@@ -10,6 +10,7 @@ import ServiceTable from "./layouts/dashboard/service/ServiceTables";
 import PetTable from "./layouts/dashboard/pet/PetTables";
 import ProductTable from "./layouts/dashboard/product/ProductTables";
 import OrderTable from "./layouts/dashboard/order/OrderTable";
+import LandingPage from "./layouts/LandingPage/LandingPage"
 
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
@@ -28,6 +29,7 @@ function App() {
           </Route>
           <Route path="/sign-up" element={<Register />} />
           <Route path="/sign-in" element={<Login />} />
+          <Route path="/home" element={<LandingPage />} />
         </Routes>
       </BrowserRouter>
 
