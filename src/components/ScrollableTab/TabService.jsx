@@ -7,22 +7,15 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function ScrollableTabService(props) {
-  const { category, handUpdateEditTable } = props;
+  const { category, handUpdateEditTable, handleLoadAllService } = props;
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [value, setValue] = React.useState(
-    category.length > 0 ? category[0]._id : ""
-  );
+  const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    const selectedCategoryObj = category.find((obj) => obj._id === newValue);
-    if (selectedCategoryObj) {
-      setSelectedCategory(selectedCategoryObj._id);
-      handUpdateEditTable(selectedCategoryObj._id);
-    } else {
-      setSelectedCategory("");
-      handUpdateEditTable("");
-    }
+    console.log(newValue);
+    setSelectedCategory(newValue);
+    handUpdateEditTable(newValue);
   };
 
   return (
@@ -34,7 +27,7 @@ export default function ScrollableTabService(props) {
         scrollButtons="auto"
         aria-label="scrollable auto tabs example"
       >
-        <Tab label="Tất cả dịch vụ" />
+        <Tab label="Tất cả dịch vụ" value="all" />
         {category &&
           category.map((value) => {
             return (
