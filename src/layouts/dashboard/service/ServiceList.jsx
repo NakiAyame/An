@@ -21,6 +21,7 @@ import ButtonCustomize from "../../../components/Button/Button";
 
 //@material-ui/core
 import { styled } from "@mui/material/styles";
+import ScrollableTabService from "../../../components/ScrollableTab/TabService";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -42,28 +43,13 @@ export default function ServiceList() {
     });
   };
 
-  const ColorTypography = styled(Typography)(({ theme }) => ({
-    // color: theme.palette.getContrastText("#ffff"),
-    backgroundColor: "#3CB371",
-    "&:hover": {
-      backgroundColor: "#eb6434",
-      color: "black",
-    },
-    display: "center",
-    textTransform: "none",
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-  }));
+  const CustomBox = styled(Box)({
+    background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
+  });
+
+  const CustomContainer = styled(Container)({
+    background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
+  });
 
   // ----------------------------------- API GET ALL SERVICE --------------------------------
   useEffect(() => {
@@ -94,6 +80,57 @@ export default function ServiceList() {
     // loadAllService(+event.selected + 1);
   };
 
+  // --------------------- GET ALL CATEGORY SERVICE -----------------------------
+  const [category, setCategory] = useState([]);
+  async function loadAllCategoryService() {
+    try {
+      const loadData = await axios.get(
+        `http://localhost:3500/category/cateName/service`
+      );
+      if (loadData.error) {
+        toast.error(loadData.error);
+      } else {
+        setCategory(loadData.data.data);
+        console.log(loadData.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    loadAllCategoryService();
+  }, []);
+
+  // --------------------- GET ALL SERVICE BY CATEGORY ID SERVICE -----------------------------
+  async function hanldeClickCategory(cateId) {
+    console.log("Check data cate ID", cateId);
+    if (cateId === null) {
+      loadAllService();
+    } else {
+      try {
+        const loadData = await axios.get(
+          `http://localhost:3500/service/find/${cateId}`
+        );
+        if (loadData.error) {
+          toast.error(loadData.error);
+        } else {
+          console.log("Check loaddata", loadData.data);
+          setTotalPages(loadData.data.pages);
+          // console.log("Check totalPage", totalPages);
+          setData(loadData.data);
+          setTotalServices(loadData.data.limit);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  useEffect(() => {
+    hanldeClickCategory();
+  }, []);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -103,13 +140,12 @@ export default function ServiceList() {
         <Box
           sx={{
             bgcolor: "background.paper",
-            pb: 6,
           }}
         >
           <Container
             maxWidth="full"
             sx={{
-              backgroundImage: `url('https://mcdn.coolmate.me/uploads/November2021/spa-thu-cung-la-gi-24.jpg')`,
+              backgroundImage: `url('https://toplist.vn/images/800px/-795198.jpg')`,
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
               backgroundPosition: "center",
@@ -128,7 +164,7 @@ export default function ServiceList() {
               gutterBottom
               sx={{
                 textShadow: "2px 2px rgba(0, 0, 0, 0.5)",
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                backgroundColor: "rgba(255, 255, 255, 0.4)",
               }}
             >
               Dịch vụ chăm sóc thú cưng
@@ -136,10 +172,10 @@ export default function ServiceList() {
             <Typography
               variant="h5"
               align="center"
-              color="text.secondary"
+              color="text.primary"
               paragraph
               sx={{
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                backgroundColor: "rgba(255, 255, 255, 0.4)",
               }}
             >
               Tại PetCare, đội ngũ bác sĩ của chúng tôi được đào tạo để nâng cao
@@ -172,7 +208,24 @@ export default function ServiceList() {
             </Stack>
           </Container>
         </Box>
-        <Container sx={{ py: 8 }} maxWidth="lg">
+
+        <CustomBox
+          sx={{
+            bgcolor: "background.paper",
+            pt: 1,
+            pb: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ScrollableTabService
+            category={category}
+            handUpdateEditTable={hanldeClickCategory}
+          />
+        </CustomBox>
+        <CustomContainer sx={{ py: 8 }} maxWidth="full">
           {/* End hero unit */}
           <Grid container spacing={4}>
             {data &&
@@ -236,7 +289,7 @@ export default function ServiceList() {
               color="primary"
             />
           </Stack>
-        </Container>
+        </CustomContainer>
       </main>
       {/* End footer */}
     </ThemeProvider>

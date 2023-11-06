@@ -251,7 +251,13 @@ export default function ServiceTable() {
                       {(currentPage - 1) * 10 + index + 1}
                     </TableCell>
                     <TableCell align="right">{value.serviceName}</TableCell>
-                    <TableCell align="right">{value.categoryId}</TableCell>
+                    <TableCell align="right">
+                      {category.map((valueCategory, Cid) => {
+                        if (value.categoryId === valueCategory._id) {
+                          return valueCategory.feature;
+                        }
+                      })}
+                    </TableCell>
                     <TableCell align="right">{value.description}</TableCell>
                     <TableCell align="right">
                       {numberToVND(value.price)}
