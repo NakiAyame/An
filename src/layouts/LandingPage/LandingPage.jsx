@@ -12,6 +12,7 @@ function Home() {
 
   return (
     <>
+      <Header />
       <CarouselComponent images={images} />
       <div>
         <h1>OK</h1>

@@ -16,6 +16,8 @@ import PetsIcon from "@mui/icons-material/Pets";
 import { Outlet, useNavigate } from "react-router-dom";
 
 import { styled } from "@mui/material/styles";
+import Link from "@mui/material/Link";
+import { NavLink } from "react-router-dom";
 
 const CustomAppBar = styled(AppBar)({
   background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
@@ -67,8 +69,8 @@ function Header() {
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="landing-page"
+              component={NavLink}
+              to="/"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex", color: "black" },
@@ -122,8 +124,8 @@ function Header() {
             <Typography
               variant="h5"
               noWrap
-              component="a"
-              href="landing-page"
+              component={NavLink}
+              to="/"
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },
@@ -146,17 +148,45 @@ function Header() {
             >
               {/* ------------TRANG CHỦ--------------- */}
               <Button
-                onClick={handleClick}
+                component={NavLink}
+                to="/"
+                exact
                 sx={{ my: 2, color: "white", display: "block", color: "black" }}
               >
-                Trang chủ
+                <Typography>Trang chủ</Typography>
               </Button>
               {/* ------------DỊCH VỤ--------------- */}
+              <Button
+                component={NavLink}
+                to="service-homepage"
+                exact
+                sx={{ my: 2, color: "white", display: "block", color: "black" }}
+              >
+                <Typography>Dịch vụ</Typography>
+              </Button>
+
+              {/* ------------SẢN PHẨM--------------- */}
+              <Button
+                component={NavLink}
+                to="product-homepage"
+                exact
+                sx={{ my: 2, color: "white", display: "block", color: "black" }}
+              >
+                <Typography>Sản phẩm</Typography>
+              </Button>
+              {/* ------------BLOG--------------- */}
               <Button
                 onClick={handleClick}
                 sx={{ my: 2, color: "white", display: "block", color: "black" }}
               >
-                <Typography>Dịch vụ</Typography>
+                Blog
+              </Button>
+              {/* ------------GIỚI THIỆU--------------- */}
+              <Button
+                onClick={handleClick}
+                sx={{ my: 2, color: "white", display: "block", color: "black" }}
+              >
+                Giới thiệu
                 <Menu
                   id="service-menu"
                   anchorEl={serviceItem}
@@ -175,28 +205,6 @@ function Header() {
                     </a>
                   </MenuItem>
                 </Menu>
-              </Button>
-
-              {/* ------------SẢN PHẨM--------------- */}
-              <Button
-                onClick={handleClick}
-                sx={{ my: 2, color: "white", display: "block", color: "black" }}
-              >
-                Sản phẩm
-              </Button>
-              {/* ------------BLOG--------------- */}
-              <Button
-                onClick={handleClick}
-                sx={{ my: 2, color: "white", display: "block", color: "black" }}
-              >
-                Blog
-              </Button>
-              {/* ------------GIỚI THIỆU--------------- */}
-              <Button
-                onClick={handleClick}
-                sx={{ my: 2, color: "white", display: "block", color: "black" }}
-              >
-                Giới thiệu
               </Button>
             </Box>
 
