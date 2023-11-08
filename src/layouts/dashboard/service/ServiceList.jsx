@@ -223,7 +223,7 @@ export default function ServiceList() {
           <ScrollableTabService
             category={category}
             handUpdateEditTable={hanldeClickCategory}
-            handleLoadAllService = {loadAllService}
+            handleLoadAllService={loadAllService}
           />
         </CustomBox>
         <CustomContainer sx={{ py: 8 }} maxWidth="full">
