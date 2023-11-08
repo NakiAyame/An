@@ -22,6 +22,7 @@ import ButtonCustomize from "../../../components/Button/Button";
 //@material-ui/core
 import { styled } from "@mui/material/styles";
 import ScrollableTabService from "../../../components/ScrollableTab/TabService";
+import ServiceDetailModal from "./ServiceDetailModal";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -130,6 +131,20 @@ export default function ServiceList() {
   useEffect(() => {
     hanldeClickCategory();
   }, []);
+
+  // --------------------- GET DETAIL SERVICE BY ID -----------------------------
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState({});
+  const handleShowDetail = (serviceId) => {
+    console.log("Check data", serviceId);
+    setSelectedService(serviceId);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -264,6 +279,7 @@ export default function ServiceList() {
                           variant="contained"
                           // component={RouterLink}
                           nameButton="Chi tiết"
+                          onClick={() => handleShowDetail(value)}
                           fullWidth
                         />
                         <ButtonCustomize
@@ -293,6 +309,12 @@ export default function ServiceList() {
         </CustomContainer>
       </main>
       {/* End footer */}
+
+      <ServiceDetailModal
+        open={isModalOpen}
+        onClose={handleCloseEditModal}
+        serviceId={selectedService}
+      />
     </ThemeProvider>
   );
 }

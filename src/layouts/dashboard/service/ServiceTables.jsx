@@ -21,8 +21,8 @@ import ModalAddSerivce from "../../../components/Modal/ModalAddService";
 import ModalEditSerivce from "../../../components/Modal/ModalEditService";
 import ModalComfirmSerivce from "../../../components/Modal/ModalComfirmService";
 import ButtonCustomize from "../../../components/Button/Button";
-import ModalDetailForm from "../../../components/Modal/ModalDetaiFrom";
 import DropDownService from "../../../components/DropDown/DropDownService";
+import ServiceDetailModal from "./ServiceDetailModal";
 
 const BASE_URL = "http://localhost:3500";
 
@@ -91,55 +91,12 @@ export default function ServiceTable() {
     setDataDeteleService(service);
     console.log(service);
   };
-
-  const handleDetailService = () => {
-    setOpenDetailModal(true);
-  };
   // --------------------- CLOSE MODAL  -----------------------------
   const handleCloseModal = () => {
     setOpenModal(false);
     setOpenEditModal(false);
     setOpenComfirmModal(false);
     setOpenDetailModal(false);
-  };
-
-  // ----------------------------------- API UPDATE STATUS SERVICE --------------------------------
-  const handleUpdateServiceStatus = async (serviceId) => {
-    console.log(serviceId);
-    try {
-      // Kiểm tra xem đối tượng 'value' có tồn tại không
-      const serviceToUpdate = data.find((service) => service._id === serviceId);
-      if (!serviceToUpdate) {
-        console.log("Service not found");
-        return;
-      }
-
-      // Cập nhật trạng thái mới
-      const newStatus = !serviceToUpdate.status;
-      const updatedService = { ...serviceToUpdate, status: newStatus };
-
-      // Cập nhật dữ liệu
-      const newData = [...data];
-      const serviceIndex = newData.findIndex(
-        (service) => service._id === serviceId
-      );
-      newData[serviceIndex] = updatedService;
-      setData(newData);
-
-      // Gọi API để cập nhật trạng thái của dịch vụ
-      await axios.patch(`${BASE_URL}/service/${serviceId}`, {
-        status: newStatus,
-      });
-
-      // Cập nhật trạng thái mới
-      const response = await axios.get(`${BASE_URL}/service/${serviceId}`);
-      const updatedData = newData.map((service) =>
-        service.id === response.data.id ? response.data : service
-      );
-      setData(updatedData);
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   // --------------------- GET ALL CATEGORY SERVICE -----------------------------
@@ -189,6 +146,20 @@ export default function ServiceTable() {
     hanldeClickCategory();
   }, []);
 
+  // --------------------- GET DETAIL SERVICE BY ID -----------------------------
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState({});
+  const handleShowDetail = (serviceId) => {
+    console.log("Check data", serviceId);
+    setSelectedService(serviceId);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
+  };
+
   return (
     <>
       <Grid
@@ -214,16 +185,6 @@ export default function ServiceTable() {
             handUpdateEditTable={hanldeClickCategory}
           />
         </Grid>
-
-        {/* <Grid item xs={4}>
-          <ButtonCustomize
-            variant="contained"
-            color="primary"
-            onClick={handleDetailService}
-            nameButton="Detail"
-            width="15%"
-          />
-        </Grid> */}
       </Grid>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -268,11 +229,18 @@ export default function ServiceTable() {
                         variant="outlined"
                         label={value.status ? "Hoạt động" : "Ẩn"}
                         color={statusColor}
-                        onClick={() => handleUpdateServiceStatus(value._id)}
+                        // onClick={() => handleUpdateServiceStatus(value._id)}
                       />
                     </TableCell>
                     <TableCell align="right">
                       <ButtonGroup variant="contained" fullWidth>
+                        <ButtonCustomize
+                          onClick={() => handleShowDetail(value)}
+                          variant="contained"
+                          // component={RouterLink}
+                          nameButton="Chi tiết"
+                          fullWidth
+                        />
                         <ButtonCustomize
                           onClick={() => handleEditService(value)}
                           variant="contained"
@@ -326,7 +294,11 @@ export default function ServiceTable() {
         handUpdateDeleteTable={loadAllService}
       />
 
-      <ModalDetailForm open={openDetailModal} onClose={handleCloseModal} />
+      <ServiceDetailModal
+        open={isModalOpen}
+        onClose={handleCloseEditModal}
+        serviceId={selectedService}
+      />
     </>
   );
 }
