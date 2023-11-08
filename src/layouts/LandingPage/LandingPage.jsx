@@ -1,6 +1,8 @@
 import Header from "../../components/Header/Header";
 import CarouselComponent from "../../components/Carousel/Carousel";
 import "./LandingPage.css";
+import Footer from "../../components/Footer/Footer";
+import { Outlet } from "react-router-dom";
 
 function Home() {
   const images = [
@@ -65,6 +67,7 @@ function Home() {
           </p>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
