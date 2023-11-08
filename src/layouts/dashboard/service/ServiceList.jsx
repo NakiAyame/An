@@ -298,14 +298,25 @@ export default function ServiceList() {
               })}
           </Grid>
           {/* Paging */}
-          <Stack spacing={2}>
-            <Pagination
-              count={totalPages}
-              onChange={handlePageClick}
-              page={currentPage}
-              color="primary"
-            />
-          </Stack>
+          <Container
+            maxWidth="full"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              m: 2
+            }}
+          >
+            <Stack spacing={2}>
+              <Pagination
+                count={totalPages}
+                onChange={handlePageClick}
+                page={currentPage}
+                color="primary"
+              />
+            </Stack>
+          </Container>
         </CustomContainer>
       </main>
       {/* End footer */}

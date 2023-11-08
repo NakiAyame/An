@@ -22,6 +22,7 @@ import ButtonCustomize from "../../../components/Button/Button";
 //@material-ui/core
 import { styled } from "@mui/material/styles";
 import ScrollableTabService from "../../../components/ScrollableTab/TabService";
+import ProductDetail from "../../../components/Modal/ModalDetailProduct";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -79,6 +80,20 @@ export default function ProductList() {
     setCurrentPage(value);
   };
   // ----------------------------------------------------------------
+
+  // --------------------- GET DETAIL PRODUCT BY ID -----------------------------
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState({});
+  const handleShowDetail = (productId) => {
+    console.log("Check data", productId);
+    setSelectedProduct(productId);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -192,6 +207,7 @@ export default function ProductList() {
                           size="small"
                           variant="contained"
                           // component={RouterLink}
+                          onClick={() => handleShowDetail(value)}
                           nameButton="Chi tiết"
                           fullWidth
                         />
@@ -211,17 +227,33 @@ export default function ProductList() {
               })}
           </Grid>
           {/* Paging */}
-          <Stack spacing={2}>
-            <Pagination
-              count={totalPages}
-              onChange={handlePageClick}
-              page={currentPage}
-              color="primary"
-            />
-          </Stack>
+          <Container
+            maxWidth="full"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              m: 2,
+            }}
+          >
+            <Stack spacing={2}>
+              <Pagination
+                count={totalPages}
+                onChange={handlePageClick}
+                page={currentPage}
+                color="primary"
+              />
+            </Stack>
+          </Container>
         </CustomContainer>
       </main>
       {/* End footer */}
+      <ProductDetail
+        open={isModalOpen}
+        onClose={handleCloseEditModal}
+        product={selectedProduct}
+      />
     </ThemeProvider>
   );
 }
