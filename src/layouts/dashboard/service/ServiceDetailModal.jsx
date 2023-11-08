@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { useEffect } from "react";
-import ServiceDetail from "../../../components/Modal/ModalDetaiFrom";
+import ServiceDetail from "../../../components/Modal/ModalDetaiService";
 
 const ServiceDetailModal = ({ open, onClose, serviceId }) => {
   const [service, setService] = useState(null);
