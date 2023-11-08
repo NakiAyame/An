@@ -13,6 +13,7 @@ import OrderTable from "./layouts/dashboard/order/OrderTable";
 import LandingPage from "./layouts/LandingPage/LandingPage";
 import ServiceList from "./layouts/dashboard/service/ServiceList";
 import Header from "./components/Header/Header";
+import ProductList from "./layouts/dashboard/product/ProductList";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -30,9 +31,9 @@ function App() {
           </Route>
           <Route path="/sign-up" element={<Register />} />
           <Route path="/sign-in" element={<Login />} />
-          <Route path="/" element={<Header />}>
-            <Route path="landing-page" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage />}>
             <Route path="service-homepage" element={<ServiceList />} />
+            <Route path="product-homepage" element={<ProductList />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -12,10 +12,14 @@ export default function ScrollableTabService(props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-    console.log(newValue);
-    setSelectedCategory(newValue);
-    handUpdateEditTable(newValue);
+    if (newValue === "all") {
+      handleLoadAllService();
+    } else {
+      setValue(newValue);
+      console.log(newValue);
+      setSelectedCategory(newValue);
+      handUpdateEditTable(newValue);
+    }
   };
 
   return (
