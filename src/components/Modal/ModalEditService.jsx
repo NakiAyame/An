@@ -13,13 +13,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 
 const ModalEditSerivce = (props) => {
-  const { open, onClose, handUpdateEditTable, dataEditService } = props;
+  const { open, onClose, handUpdateEditTable, dataEditService, category } =
+    props;
 
   const [serviceName, setServiceName] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -70,7 +75,8 @@ const ModalEditSerivce = (props) => {
       toast.error(
         "Tên dịch vụ không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    } else if (!validPrice) {
+    }
+    if (!validPrice) {
       toast.error(
         "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
       );
@@ -95,6 +101,13 @@ const ModalEditSerivce = (props) => {
         toast.error(err.message); // xuất thông báo lỗi ra màn hình
       }
     }
+  };
+
+  // --------------------- HANDLE CHANGE CATEGORY SERVICE -----------------------------
+  const handleChange = (e) => {
+    const selectedCategory = e.target.value;
+    console.log("Check ID cate add Service", selectedCategory);
+    setCategoryId(selectedCategory);
   };
 
   return (
@@ -134,17 +147,31 @@ const ModalEditSerivce = (props) => {
               margin="normal"
               value={serviceName}
               onChange={(e) => handleValidationServiceName(e)}
-              error={!validServiceName}
-              helperText={validServiceName ? "" : "Hãy nhập tên dịch vụ"}
+              // error={!validServiceName}
             />
-            <TextField
-              // required
-              fullWidth
-              label="Loại dịch vụ"
-              margin="normal"
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="demo-select-small-label">
+                Chọn loại dịch vụ
+              </InputLabel>
+              <Select
+                label="Loại dịch vụ"
+                value={categoryId}
+                onChange={handleChange}
+              >
+                {category &&
+                  category.map((value) => {
+                    return (
+                      <MenuItem
+                        key={value._id}
+                        value={value._id}
+                        // onClick={(e) => hanldeClickCategory(e.target.value)}
+                      >
+                        {value.feature}
+                      </MenuItem>
+                    );
+                  })}
+              </Select>
+            </FormControl>
             <TextField
               label="Thông tin dịch vụ"
               fullWidth
@@ -165,8 +192,8 @@ const ModalEditSerivce = (props) => {
               margin="normal"
               value={price}
               onChange={(e) => handleValidationPrice(e)}
-              error={!validPrice}
-              helperText={validPrice ? "" : "Hãy nhập số tiền dịch vụ"}
+              // error={!validPrice}
+              // helperText={validPrice ? "" : "Hãy nhập số tiền dịch vụ"}
             />
             <RadioGroup
               value={status}
@@ -180,7 +207,11 @@ const ModalEditSerivce = (props) => {
                 control={<Radio />}
                 label="Hoạt động"
               />
-              <FormControlLabel value={false} control={<Radio />} label="Ẩn" />
+              <FormControlLabel
+                value={false}
+                control={<Radio />}
+                label="Không hoạt động"
+              />
             </RadioGroup>
           </form>
         </DialogContent>

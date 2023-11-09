@@ -192,7 +192,12 @@ export default function PetTable() {
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
+          <TableHead
+            sx={{
+              position: "-webkit-sticky",
+              position: "sticky",
+            }}
+          >
             <TableRow>
               <TableCell children>ID</TableCell>
               <TableCell align="center">Chủ thú cưng</TableCell>
