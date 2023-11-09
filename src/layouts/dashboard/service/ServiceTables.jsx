@@ -11,6 +11,8 @@ import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+
 //React
 import { useState } from "react";
 // Axios
@@ -172,10 +174,12 @@ export default function ServiceTable() {
         <Grid item xs={6}>
           <ButtonCustomize
             onClick={handleOpenModal}
-            variant="contained"
+            color="white"
+            // variant="contained"
             // component={RouterLink}
+
             nameButton="Thêm mới"
-            width="15%"
+            // startIcon={<AddCircleOutlineIcon />}
           />
         </Grid>
 
@@ -188,15 +192,20 @@ export default function ServiceTable() {
       </Grid>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
+          <TableHead
+            sx={{
+              position: "-webkit-sticky",
+              position: "sticky",
+            }}
+          >
             <TableRow>
               <TableCell>STT</TableCell>
-              <TableCell align="right">Tên dịch vụ</TableCell>
-              <TableCell align="right">Loại dịch vụ</TableCell>
-              <TableCell align="right">Thông tin</TableCell>
-              <TableCell align="right">Giá dịch vụ</TableCell>
-              <TableCell align="right">Trạng thái</TableCell>
-              <TableCell align="right"></TableCell>
+              <TableCell align="center">Tên dịch vụ</TableCell>
+              <TableCell align="center">Loại dịch vụ</TableCell>
+              <TableCell align="center">Thông tin</TableCell>
+              <TableCell align="center">Số tiền</TableCell>
+              <TableCell align="center">Trạng thái</TableCell>
+              <TableCell align="center">Thao tác</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -211,50 +220,34 @@ export default function ServiceTable() {
                     <TableCell component="th" scope="row">
                       {(currentPage - 1) * 10 + index + 1}
                     </TableCell>
-                    <TableCell align="right">{value.serviceName}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">{value.serviceName}</TableCell>
+                    <TableCell align="left">
                       {category.map((valueCategory, Cid) => {
                         if (value.categoryId === valueCategory._id) {
                           return valueCategory.feature;
                         }
                       })}
                     </TableCell>
-                    <TableCell align="right">{value.description}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">{value.description}</TableCell>
+                    <TableCell align="left">
                       {numberToVND(value.price)}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
                       <Chip
                         size="small"
                         variant="outlined"
-                        label={value.status ? "Hoạt động" : "Ẩn"}
+                        label={value.status ? "Hoạt động" : "Không hoạt động"}
                         color={statusColor}
                         // onClick={() => handleUpdateServiceStatus(value._id)}
                       />
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
                       <ButtonGroup variant="contained" fullWidth>
-                        <ButtonCustomize
-                          onClick={() => handleShowDetail(value)}
-                          variant="contained"
-                          // component={RouterLink}
-                          nameButton="Chi tiết"
-                          fullWidth
-                        />
                         <ButtonCustomize
                           onClick={() => handleEditService(value)}
                           variant="contained"
                           // component={RouterLink}
                           nameButton="Cập nhật"
-                          fullWidth
-                        />
-                        <ButtonCustomize
-                          onClick={() => handleDeleteService(value)}
-                          backgroundColor="red"
-                          variant="contained"
-                          // component={RouterLink}
-                          nameButton="Xoá"
-                          fullWidth
                         />
                       </ButtonGroup>
                     </TableCell>
@@ -278,6 +271,7 @@ export default function ServiceTable() {
         open={openModal}
         onClose={handleCloseModal}
         handUpdateTable={loadAllService}
+        category={category}
       />
 
       <ModalEditSerivce
@@ -285,6 +279,7 @@ export default function ServiceTable() {
         onClose={handleCloseModal}
         dataEditService={dataEditService}
         handUpdateEditTable={loadAllService}
+        category={category}
       />
 
       <ModalComfirmSerivce

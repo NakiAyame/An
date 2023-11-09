@@ -38,9 +38,6 @@ export default function DropDownService(props) {
               </MenuItem>
             );
           })}
-        {/* <MenuItem value="">
-          <em>None</em>
-        </MenuItem> */}
       </Select>
     </FormControl>
   );
