@@ -96,7 +96,7 @@ export default function PetTable() {
         console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
         setTotalPets(loadData.data.limit);
-        console.log(loadData.data);
+        console.log(loadData.data.docs);
       }
     } catch (err) {
       console.log(err);
@@ -154,49 +154,53 @@ export default function PetTable() {
 
   return (
     <>
-      <Grid
-        spacing={2}
-        container
-        justifyContent="space-between"
-        alignItems="center"
-        mb={3}
-      >
-        <Grid item xs={6}>
-          <ButtonCustomize
-            onClick={handleCreateModal}
-            variant="contained"
-            // component={RouterLink}
-            nameButton="Thêm mới"
-            width="15%"
-          />
-        </Grid>
+      <Box sx={{ position: "" }}>
+        <Grid
+          spacing={2}
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          mb={3}
+        >
+          <Grid item>
+            <ButtonCustomize
+              onClick={handleCreateModal}
+              color="white"
+              // component={RouterLink}
+              nameButton="Thêm mới"
+              width="15%"
+              // sx={{ position: "fixed" }}
+            />
+          </Grid>
 
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            label="Tìm kiếm chủ thú cưng theo ID"
-            margin="normal"
-            size="small"
-            value={keyword}
-            onChange={handleKeywordChange}
-            InputProps={{
-              endAdornment: (
-                <IconButton onClick={handleSearchClick}>
-                  <SearchIcon />
-                </IconButton>
-              ),
-            }}
-          />
+          <Grid item>
+            <TextField
+              fullWidth
+              label="Tìm kiếm chủ thú cưng theo ID"
+              margin="normal"
+              size="small"
+              value={keyword}
+              onChange={handleKeywordChange}
+              // sx={{ position: "fixed" }}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleSearchClick}>
+                    <SearchIcon />
+                  </IconButton>
+                ),
+              }}
+            />
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead
-            sx={{
-              position: "-webkit-sticky",
-              position: "sticky",
-            }}
+          // sx={{
+          //   position: "-webkit-sticky",
+          //   position: "sticky",
+          // }}
           >
             <TableRow>
               <TableCell children>ID</TableCell>
@@ -220,7 +224,9 @@ export default function PetTable() {
                     <TableCell component="th" scope="row">
                       {(currentPage - 1) * 10 + (index + 1)}
                     </TableCell>
-                    <TableCell align="left">{value.userId}</TableCell>
+                    <TableCell align="left">
+                      {value.userId !== null ? value.userId.fullname : ""}
+                    </TableCell>
                     <TableCell align="left">{value.petName}</TableCell>
                     <TableCell align="center">{value.rank}</TableCell>
                     <TableCell align="center">{value.category}</TableCell>
@@ -248,7 +254,7 @@ export default function PetTable() {
         </Table>
       </TableContainer>
       {/* Paging */}
-      <Stack spacing={2}>
+      <Stack spacing={2} mt={2} sx={{ float: "right" }}>
         <Pagination
           count={totalPages}
           onChange={handlePageClick}

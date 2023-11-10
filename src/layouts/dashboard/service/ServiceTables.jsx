@@ -171,22 +171,19 @@ export default function ServiceTable() {
         alignItems="center"
         mb={3}
       >
-        <Grid item xs={6}>
-          <ButtonCustomize
-            onClick={handleOpenModal}
-            color="white"
-            // variant="contained"
-            // component={RouterLink}
-
-            nameButton="Thêm mới"
-            // startIcon={<AddCircleOutlineIcon />}
-          />
-        </Grid>
-
-        <Grid item xs={6}>
+        <Grid item xs={2}>
           <DropDownService
             category={category}
             handUpdateEditTable={hanldeClickCategory}
+          />
+        </Grid>
+
+        <Grid item>
+          <ButtonCustomize
+            onClick={handleOpenModal}
+            color="white"
+            nameButton="Thêm mới"
+            // startIcon={<AddCircleOutlineIcon />}
           />
         </Grid>
       </Grid>
@@ -258,7 +255,7 @@ export default function ServiceTable() {
         </Table>
       </TableContainer>
       {/* Paging */}
-      <Stack spacing={2}>
+      <Stack spacing={2} mt={2} sx={{ float: "right" }}>
         <Pagination
           count={totalPages}
           onChange={handlePageClick}

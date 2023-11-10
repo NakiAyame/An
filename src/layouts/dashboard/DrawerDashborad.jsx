@@ -58,9 +58,9 @@ const DrawerDashborad = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post("http://localhost:3500/logout");
+      // const response = await axios.post("http://localhost:3500/logout");
       // thông báo logout thành công và chuyển hướng về trang đăng nhập
-      console.log(response);
+      // console.log(response);
 
       localStorage.removeItem("token"); // xóa token lưu trữ trong localStorage
       navigate("/sign-in"); // chuyển hướng về trang đăng nhập
