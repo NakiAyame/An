@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
+import { styled } from "@mui/material/styles";
 
 const defaultTheme = createTheme();
 const Login = () => {
@@ -31,6 +32,10 @@ const Login = () => {
   const [data, setData] = useState({
     email: "",
     password: "",
+  });
+
+  const CustomGrid = styled(Grid)({
+    background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
   });
 
   React.useEffect(() => {
@@ -121,7 +126,7 @@ const Login = () => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Địa chỉ email"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -133,7 +138,7 @@ const Login = () => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Mật khẩu"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -160,7 +165,7 @@ const Login = () => {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/register" variant="body2">
+                  <Link href="/sign-up" variant="body2">
                     {"Bạn chưa có tài khoản? Tạo tài khoản tại đây!"}
                   </Link>
                 </Grid>

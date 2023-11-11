@@ -93,9 +93,14 @@ const ModalEditProduct = (props) => {
       toast.error(
         "Tên sản phẩm không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    } else if (!validQuantity) {
+    }
+    if (categoryId === "") {
+      toast.error("không được để trống loại sản phẩm");
+    }
+    if (!validQuantity) {
       toast.error("Số lượng không được để trống");
-    } else if (!validPrice) {
+    }
+    if (!validPrice) {
       toast.error("Giá tiền phải có ít nhất 4 chữ số và phải lớn hơn 0");
     } else {
       try {

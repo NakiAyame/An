@@ -23,6 +23,7 @@ import ButtonCustomize from "../../../components/Button/Button";
 import { styled } from "@mui/material/styles";
 import ScrollableTabService from "../../../components/ScrollableTab/TabService";
 import ServiceDetailModal from "./ServiceDetailModal";
+import TypographyCus from "../../../components/Typography/DescriptionCus";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -270,7 +271,7 @@ export default function ServiceList() {
                         <Typography gutterBottom variant="h6" component="h2">
                           {numberToVND(value.price)}
                         </Typography>
-                        <Typography>{value.description}</Typography>
+                        <TypographyCus value={value} />
                       </CardContent>
                       <CardActions>
                         <ButtonCustomize
@@ -305,7 +306,7 @@ export default function ServiceList() {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              m: 2
+              m: 2,
             }}
           >
             <Stack spacing={2}>
