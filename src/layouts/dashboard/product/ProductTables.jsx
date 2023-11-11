@@ -107,7 +107,9 @@ export default function ProductTable() {
 
   const loadAllProduct = async (page) => {
     try {
-      const loadData = await axios.get(`${BASE_URL}/product?page=${page}`);
+      const loadData = await axios.get(
+        `${BASE_URL}/product?page=${page}&limit=5`
+      );
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
@@ -201,7 +203,7 @@ export default function ProductTable() {
         </Table>
       </TableContainer>
       {/* Paging */}
-      <Stack spacing={2}>
+      <Stack spacing={2} mt={2} sx={{ float: "right" }}>
         <Pagination
           count={totalPages}
           onChange={handlePageClick}
