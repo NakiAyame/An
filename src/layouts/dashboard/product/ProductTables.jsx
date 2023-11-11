@@ -9,6 +9,7 @@ import {
   Paper,
   Pagination,
   ButtonGroup,
+  Grid,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
@@ -107,9 +108,7 @@ export default function ProductTable() {
 
   const loadAllProduct = async (page) => {
     try {
-      const loadData = await axios.get(
-        `${BASE_URL}/product?page=${page}&limit=5`
-      );
+      const loadData = await axios.get(`${BASE_URL}/product?page=${page}`);
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
@@ -130,78 +129,101 @@ export default function ProductTable() {
   };
   // ----------------------------------------------------------------
 
+  // --------------------- GET ALL CATEGORY PRODUCT -----------------------------
+  const [category, setCategory] = useState([]);
+  async function loadAllCategoryProduct() {
+    try {
+      const loadDataCategoryProduct = await axios.get(
+        `http://localhost:3500/category/cateName/product`
+      );
+      if (loadDataCategoryProduct.error) {
+        toast.error(loadDataCategoryProduct.error);
+      } else {
+        setCategory(loadDataCategoryProduct.data.data);
+        console.log(loadDataCategoryProduct.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    loadAllCategoryProduct();
+  }, []);
+
   return (
     <>
-      <ButtonCustomize
-        onClick={handleCreateModal}
-        variant="contained"
-        // component={RouterLink}
-        nameButton="Thêm mới"
-        width="15%"
-      />
+      <Grid
+        spacing={2}
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
+        <Grid item></Grid>
+        <Grid item>
+          <ButtonCustomize
+            onClick={handleCreateModal}
+            color="white"
+            // component={RouterLink}
+            nameButton="Thêm mới"
+          />
+        </Grid>
+      </Grid>
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell children>ID</TableCell>
-              <TableCell align="center">Tên sản phẩm</TableCell>
-              <TableCell align="center">Số lượng</TableCell>
-              <TableCell align="center">Giá tiền</TableCell>
-              <TableCell align="center">Trạng thái</TableCell>
-              <TableCell align="center">Chức năng</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data &&
-              data.map((value, index) => {
-                const statusColor = value.status ? "primary" : "error";
-                return (
-                  <TableRow
-                    key={index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {(currentPage - 1) * 10 + (index + 1)}
-                    </TableCell>
-                    <TableCell align="left">{value.productName}</TableCell>
-                    <TableCell align="center">{value.quantity}</TableCell>
-                    <TableCell align="center">
-                      {numberToVND(value.price)}
-                    </TableCell>
-                    <TableCell align="center">
-                      {/* <Chip
-                        size="small"
-                        variant="outlined"
-                        label={value.status ? "Hoạt động" : "Ẩn"}
-                        color={statusColor}
-                      /> */}
-                    </TableCell>
-                    <TableCell align="center">
-                      <ButtonGroup variant="contained" fullWidth>
-                        <ButtonCustomize
-                          onClick={() => handleUpdateProduct(value)}
-                          variant="contained"
-                          // component={RouterLink}
-                          nameButton="Cập nhật"
-                          fullWidth
-                        />
-                        <ButtonCustomize
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <TableCell children>STT</TableCell>
+                <TableCell align="center">Tên sản phẩm</TableCell>
+                <TableCell align="center">Số lượng</TableCell>
+                <TableCell align="center">Giá tiền</TableCell>
+                <TableCell align="center">Thông tin sản phẩm</TableCell>
+                <TableCell align="center">Chức năng</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data &&
+                data.map((value, index) => {
+                  const statusColor = value.status ? "primary" : "error";
+                  return (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {(currentPage - 1) * 10 + (index + 1)}
+                      </TableCell>
+                      <TableCell align="left">{value.productName}</TableCell>
+                      <TableCell align="center">{value.quantity}</TableCell>
+                      <TableCell align="center">
+                        {numberToVND(value.price)}
+                      </TableCell>
+                      <TableCell align="left">{value.description}</TableCell>
+                      <TableCell align="center">
+                        <ButtonGroup variant="contained">
+                          <ButtonCustomize
+                            onClick={() => handleUpdateProduct(value)}
+                            // component={RouterLink}
+                            nameButton="Cập nhật"
+                          />
+                          {/* <ButtonCustomize
                           onClick={() => handleDeleteProduct(value)}
-                          variant="contained"
                           backgroundColor="red"
                           // component={RouterLink}
                           nameButton="Xoá"
-                          fullWidth
-                        />
-                      </ButtonGroup>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                        /> */}
+                        </ButtonGroup>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
       {/* Paging */}
       <Stack spacing={2} mt={2} sx={{ float: "right" }}>
         <Pagination
@@ -216,6 +238,7 @@ export default function ProductTable() {
         open={openCreateModal}
         onClose={handleCloseModal}
         handUpdateTable={loadAllProduct}
+        category={category}
       />
       {/* Modal update */}
       <ModalEditProduct
@@ -223,6 +246,7 @@ export default function ProductTable() {
         onClose={handleCloseModal}
         dataEditProduct={dataEditProduct}
         handUpdateEditTable={loadAllProduct}
+        category={category}
       />
       {/* Modal delete */}
       <ModalComfirmProduct

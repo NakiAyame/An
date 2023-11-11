@@ -89,7 +89,7 @@ export default function PetTable() {
 
   const loadAllPet = async (page) => {
     try {
-      const loadData = await axios.get(`${BASE_URL}/pet?page=${page}&limit=5`);
+      const loadData = await axios.get(`${BASE_URL}/pet?page=${page}`);
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
@@ -196,68 +196,69 @@ export default function PetTable() {
           </Grid>
         </Grid>
       </Box>
-
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead
-          // sx={{
-          //   position: "-webkit-sticky",
-          //   position: "sticky",
-          // }}
-          >
-            <TableRow>
-              <TableCell children>ID</TableCell>
-              <TableCell align="center">Chủ thú cưng</TableCell>
-              <TableCell align="center">Tên thú cưng</TableCell>
-              <TableCell align="center">Cấp thú cưng</TableCell>
-              <TableCell align="center">Loại thú cưng</TableCell>
-              <TableCell align="center">Trạng thái</TableCell>
-              <TableCell align="center">Chức năng</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data &&
-              data.map((value, index) => {
-                const statusColor = value.status ? "primary" : "error";
-                return (
-                  <TableRow
-                    key={index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {(currentPage - 1) * 10 + (index + 1)}
-                    </TableCell>
-                    <TableCell align="left">
-                      {value.userId !== null ? value.userId.fullname : ""}
-                    </TableCell>
-                    <TableCell align="left">{value.petName}</TableCell>
-                    <TableCell align="center">{value.rank}</TableCell>
-                    <TableCell align="center">{value.category}</TableCell>
-                    <TableCell align="center">
-                      <Chip
-                        size="small"
-                        variant="outlined"
-                        label={value.status ? "Hoạt động" : "Ẩn"}
-                        color={statusColor}
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <ButtonGroup>
-                        <ButtonCustomize
-                          onClick={() => handleUpdatePet(value)}
-                          variant="contained"
-                          // component={RouterLink}
-                          nameButton="Cập nhật"
-                          fullWidth
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead
+            // sx={{
+            //   position: "-webkit-sticky",
+            //   position: "sticky",
+            // }}
+            >
+              <TableRow>
+                <TableCell children>ID</TableCell>
+                <TableCell align="center">Chủ thú cưng</TableCell>
+                <TableCell align="center">Tên thú cưng</TableCell>
+                <TableCell align="center">Cấp thú cưng</TableCell>
+                <TableCell align="center">Loại thú cưng</TableCell>
+                <TableCell align="center">Trạng thái</TableCell>
+                <TableCell align="center">Chức năng</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data &&
+                data.map((value, index) => {
+                  const statusColor = value.status ? "primary" : "error";
+                  return (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {(currentPage - 1) * 10 + (index + 1)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {value.userId !== null ? value.userId.fullname : ""}
+                      </TableCell>
+                      <TableCell align="left">{value.petName}</TableCell>
+                      <TableCell align="center">{value.rank}</TableCell>
+                      <TableCell align="center">{value.category}</TableCell>
+                      <TableCell align="center">
+                        <Chip
+                          size="small"
+                          variant="outlined"
+                          label={value.status ? "Hoạt động" : "Ẩn"}
+                          color={statusColor}
                         />
-                      </ButtonGroup>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                      </TableCell>
+                      <TableCell align="center">
+                        <ButtonGroup>
+                          <ButtonCustomize
+                            onClick={() => handleUpdatePet(value)}
+                            variant="contained"
+                            // component={RouterLink}
+                            nameButton="Cập nhật"
+                            fullWidth
+                          />
+                        </ButtonGroup>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
       {/* Paging */}
       <Stack spacing={2} mt={2} sx={{ float: "right" }}>
         <Pagination
