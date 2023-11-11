@@ -25,6 +25,7 @@ import ModalComfirmSerivce from "../../../components/Modal/ModalComfirmService";
 import ButtonCustomize from "../../../components/Button/Button";
 import DropDownService from "../../../components/DropDown/DropDownService";
 import ServiceDetailModal from "./ServiceDetailModal";
+import TypographyCus from "../../../components/Typography/DescriptionCus";
 
 const BASE_URL = "http://localhost:3500";
 
@@ -128,7 +129,7 @@ export default function ServiceTable() {
     console.log("Check data cate ID", cateId);
     try {
       const loadData = await axios.get(
-        `http://localhost:3500/service/find/${cateId}`
+        `http://localhost:3500/service?page=1&categoryId=${cateId}`
       );
       if (loadData.error) {
         toast.error(loadData.error);
@@ -136,7 +137,7 @@ export default function ServiceTable() {
         console.log("Check loaddata", loadData.data);
         setTotalPages(loadData.data.pages);
         // console.log("Check totalPage", totalPages);
-        setData(loadData.data);
+        setData(loadData.data.docs);
         setTotalServices(loadData.data.limit);
       }
     } catch (err) {
@@ -221,7 +222,9 @@ export default function ServiceTable() {
                           }
                         })}
                       </TableCell>
-                      <TableCell align="left">{value.description}</TableCell>
+                      <TableCell align="left">
+                        <TypographyCus value={value} />
+                      </TableCell>
                       <TableCell align="left">
                         {numberToVND(value.price)}
                       </TableCell>
