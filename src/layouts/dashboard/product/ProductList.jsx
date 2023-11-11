@@ -23,6 +23,7 @@ import ButtonCustomize from "../../../components/Button/Button";
 import { styled } from "@mui/material/styles";
 import ScrollableTabService from "../../../components/ScrollableTab/TabService";
 import ProductDetail from "../../../components/Modal/ModalDetailProduct";
+import Footer from "../../../components/Footer/Footer";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -50,7 +51,7 @@ export default function ProductList() {
   });
 
   const CustomContainer = styled(Container)({
-    background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
+    background: "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
   });
 
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
@@ -226,6 +227,7 @@ export default function ProductList() {
                 );
               })}
           </Grid>
+
           {/* Paging */}
           <Container
             maxWidth="full"
@@ -248,12 +250,13 @@ export default function ProductList() {
           </Container>
         </CustomContainer>
       </main>
-      {/* End footer */}
       <ProductDetail
         open={isModalOpen}
         onClose={handleCloseEditModal}
         product={selectedProduct}
       />
+      {/* End footer */}
+      <Footer />
     </ThemeProvider>
   );
 }

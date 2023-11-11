@@ -129,8 +129,8 @@ export default function PetTable() {
   };
 
   const handleSearchClick = async () => {
-    if (!keyword) {
-      toast.error("Không tìm thấy kết quả");
+    if (keyword === "") {
+      toast.warning("Hãy nhập kết quả bạn cần tìm");
       loadAllPet(currentPage);
     } else {
       searchPetById();

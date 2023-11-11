@@ -6,7 +6,7 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 
 const FooterContainer = styled("footer")(({ theme }) => ({
-  background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
+  background: "linear-gradient(to right, #86CBE8, #DFDC9F, #E0A9E9, #CBC0EC)",
   color: "#000",
   padding: theme.spacing(6, 0),
 }));
