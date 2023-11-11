@@ -15,6 +15,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
@@ -22,11 +26,13 @@ const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
 
 const ModalAddProduct = (props) => {
-  const { open, onClose, handUpdateTable } = props;
+  const { open, onClose, handUpdateTable, category } = props;
 
   const [productName, setProductName] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   //   const [status, setStatus] = useState(true);
 
   //   const handleStatusChange = (event) => {
@@ -66,14 +72,23 @@ const ModalAddProduct = (props) => {
 
   // --------------------- HANDLE CREATE PET -----------------------------
   const handleCreateService = async () => {
-    console.log(productName, quantity, price);
+    console.log(
+      "Check data truyền vào sản phẩm",
+      productName,
+      categoryId,
+      quantity,
+      price,
+      description
+    );
     if (!validProductName) {
       toast.error(
         "Tên sản phẩm không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    } else if (!validQuantity) {
+    }
+    if (!validQuantity) {
       toast.error("Số lượng không được để trống");
-    } else if (!validPrice) {
+    }
+    if (!validPrice) {
       toast.error(
         "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
       );
@@ -81,8 +96,10 @@ const ModalAddProduct = (props) => {
       try {
         const response = await axios.post("http://localhost:3500/product", {
           productName,
+          categoryId,
           quantity,
           price,
+          description,
         });
         if (response.error) {
           toast.error(response.error);
@@ -90,8 +107,10 @@ const ModalAddProduct = (props) => {
           console.log("Thành công!!", response);
           toast.success("Thêm mới thú cưng thành công!");
           setProductName("");
+          setCategoryId("");
           setQuantity();
           setPrice();
+          setDescription("");
           // setStatus(true);
           handUpdateTable();
           onClose();
@@ -102,6 +121,13 @@ const ModalAddProduct = (props) => {
         toast.error(error.message);
       }
     }
+  };
+
+  // --------------------- HANDLE CHANGE CATEGORY SERVICE -----------------------------
+  const handleChange = (e) => {
+    const selectedCategory = e.target.value;
+    console.log("Check ID cate add Product", selectedCategory);
+    setCategoryId(selectedCategory);
   };
 
   return (
@@ -144,6 +170,31 @@ const ModalAddProduct = (props) => {
               error={!validProductName}
               helperText={validProductName ? "" : "Hãy nhập tên sản phẩm"}
             />
+
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="demo-select-small-label">
+                Chọn loại dịch vụ
+              </InputLabel>
+              <Select
+                label="Loại dịch vụ"
+                value={categoryId}
+                onChange={handleChange}
+              >
+                {category &&
+                  category.map((value) => {
+                    return (
+                      <MenuItem
+                        key={value._id}
+                        value={value._id}
+                        // onClick={(e) => hanldeClickCategory(e.target.value)}
+                      >
+                        {value.feature}
+                      </MenuItem>
+                    );
+                  })}
+              </Select>
+            </FormControl>
+
             <TextField
               // required
               fullWidth
@@ -152,8 +203,6 @@ const ModalAddProduct = (props) => {
               type="number"
               value={quantity}
               onChange={(e) => handleValidationQuantity(e)}
-              error={!validQuantity}
-              helperText={validQuantity ? "" : "Hãy nhập số lượng sản phẩm"}
             />
 
             <TextField
@@ -164,8 +213,18 @@ const ModalAddProduct = (props) => {
               margin="normal"
               value={price}
               onChange={(e) => handleValidationPrice(e)}
-              error={!validPrice}
-              helperText={validPrice ? "" : "Hãy nhập giá tiền sản phẩm"}
+            />
+
+            <TextField
+              label="Thông tin dịch vụ"
+              fullWidth
+              placeholder="Điền thông tin dịch vụ ở đây"
+              multiline
+              rows={4}
+              margin="normal"
+              maxRows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
 
             {/* Status */}

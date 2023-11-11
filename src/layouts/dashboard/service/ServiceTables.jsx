@@ -48,9 +48,7 @@ export default function ServiceTable() {
 
   const loadAllService = async (page) => {
     try {
-      const loadData = await axios.get(
-        `${BASE_URL}/service?page=${page}&limit=5`
-      );
+      const loadData = await axios.get(`${BASE_URL}/service?page=${page}`);
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
@@ -189,73 +187,70 @@ export default function ServiceTable() {
           />
         </Grid>
       </Grid>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead
-            sx={{
-              position: "-webkit-sticky",
-              position: "sticky",
-            }}
-          >
-            <TableRow>
-              <TableCell>STT</TableCell>
-              <TableCell align="center">Tên dịch vụ</TableCell>
-              <TableCell align="center">Loại dịch vụ</TableCell>
-              <TableCell align="center">Thông tin</TableCell>
-              <TableCell align="center">Số tiền</TableCell>
-              <TableCell align="center">Trạng thái</TableCell>
-              <TableCell align="center">Thao tác</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data &&
-              data.map((value, index) => {
-                const statusColor = value.status ? "primary" : "error";
-                return (
-                  <TableRow
-                    key={index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {(currentPage - 1) * 10 + index + 1}
-                    </TableCell>
-                    <TableCell align="left">{value.serviceName}</TableCell>
-                    <TableCell align="left">
-                      {category.map((valueCategory, Cid) => {
-                        if (value.categoryId === valueCategory._id) {
-                          return valueCategory.feature;
-                        }
-                      })}
-                    </TableCell>
-                    <TableCell align="left">{value.description}</TableCell>
-                    <TableCell align="left">
-                      {numberToVND(value.price)}
-                    </TableCell>
-                    <TableCell align="center">
-                      <Chip
-                        size="small"
-                        variant="outlined"
-                        label={value.status ? "Hoạt động" : "Không hoạt động"}
-                        color={statusColor}
-                        // onClick={() => handleUpdateServiceStatus(value._id)}
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <ButtonGroup>
-                        <ButtonCustomize
-                          onClick={() => handleEditService(value)}
-                          color="white"
-                          // component={RouterLink}
-                          nameButton="Cập nhật"
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <TableCell>STT</TableCell>
+                <TableCell align="center">Tên dịch vụ</TableCell>
+                <TableCell align="center">Loại dịch vụ</TableCell>
+                <TableCell align="center">Thông tin</TableCell>
+                <TableCell align="center">Số tiền</TableCell>
+                <TableCell align="center">Trạng thái</TableCell>
+                <TableCell align="center">Thao tác</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data &&
+                data.map((value, index) => {
+                  const statusColor = value.status ? "primary" : "error";
+                  return (
+                    <TableRow
+                      key={index}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {(currentPage - 1) * 10 + index + 1}
+                      </TableCell>
+                      <TableCell align="left">{value.serviceName}</TableCell>
+                      <TableCell align="left">
+                        {category.map((valueCategory, Cid) => {
+                          if (value.categoryId === valueCategory._id) {
+                            return valueCategory.feature;
+                          }
+                        })}
+                      </TableCell>
+                      <TableCell align="left">{value.description}</TableCell>
+                      <TableCell align="left">
+                        {numberToVND(value.price)}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Chip
+                          size="small"
+                          variant="outlined"
+                          label={value.status ? "Hoạt động" : "Không hoạt động"}
+                          color={statusColor}
+                          // onClick={() => handleUpdateServiceStatus(value._id)}
                         />
-                      </ButtonGroup>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                      </TableCell>
+                      <TableCell align="center">
+                        <ButtonGroup>
+                          <ButtonCustomize
+                            onClick={() => handleEditService(value)}
+                            color="white"
+                            // component={RouterLink}
+                            nameButton="Cập nhật"
+                          />
+                        </ButtonGroup>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
       {/* Paging */}
       <Stack spacing={2} mt={2} sx={{ float: "right" }}>
         <Pagination
