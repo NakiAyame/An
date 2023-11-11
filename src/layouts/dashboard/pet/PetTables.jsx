@@ -163,20 +163,9 @@ export default function PetTable() {
           mb={3}
         >
           <Grid item>
-            <ButtonCustomize
-              onClick={handleCreateModal}
-              color="white"
-              // component={RouterLink}
-              nameButton="Thêm mới"
-              width="15%"
-              // sx={{ position: "fixed" }}
-            />
-          </Grid>
-
-          <Grid item>
             <TextField
               fullWidth
-              label="Tìm kiếm chủ thú cưng theo ID"
+              label="Tìm kiếm"
               margin="normal"
               size="small"
               value={keyword}
@@ -189,6 +178,16 @@ export default function PetTable() {
                   </IconButton>
                 ),
               }}
+            />
+          </Grid>
+
+          <Grid item>
+            <ButtonCustomize
+              onClick={handleCreateModal}
+              color="white"
+              // component={RouterLink}
+              nameButton="Thêm mới"
+              // sx={{ position: "fixed" }}
             />
           </Grid>
         </Grid>

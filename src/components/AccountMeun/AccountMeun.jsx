@@ -11,6 +11,14 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import PetsIcon from "@mui/icons-material/Pets";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import HomeIcon from "@mui/icons-material/Home";
+
+import { NavLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -21,6 +29,25 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  // --------------------- LOGOUT -----------------------------
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      // const response = await axios.post("http://localhost:3500/logout");
+      // thông báo logout thành công và chuyển hướng về trang đăng nhập
+      // console.log(response);
+
+      localStorage.removeItem("token"); // xóa token lưu trữ trong localStorage
+      navigate("/sign-in"); // chuyển hướng về trang đăng nhập
+      toast.success("Đăng xuất thành công!");
+    } catch (error) {
+      console.error(error);
+      toast.error(error);
+    }
+  };
+
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -72,23 +99,41 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
+        <MenuItem onClick={handleClose} component={NavLink} to="/">
+          <ListItemIcon>
+            <HomeIcon fontSize="small" />
+          </ListItemIcon>
+          Trang chủ
+        </MenuItem>
+        <MenuItem onClick={handleClose} component={NavLink} to="/dashboard">
+          <ListItemIcon>
+            <DashboardIcon fontSize="small" />
+          </ListItemIcon>
+          Bảng điều khiển
+        </MenuItem>
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
-            <PersonAdd fontSize="small" />
+            <AccountBoxIcon fontSize="small" />
           </ListItemIcon>
-          Add another account
+          Thông tin cá nhân
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <PetsIcon fontSize="small" />
+          </ListItemIcon>
+          Thú cưng của tôi
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-          Settings
+          Cài đặt
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          Đăng xuất
         </MenuItem>
       </Menu>
     </React.Fragment>
