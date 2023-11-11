@@ -19,6 +19,8 @@ import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
 import { NavLink } from "react-router-dom";
 import AccountMenu from "../AccountMeun/AccountMeun";
+import LoginIcon from "@mui/icons-material/Login";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const CustomAppBar = styled(AppBar)({
   background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
@@ -210,7 +212,44 @@ function Header() {
               </Button>
             </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexGrow: 0,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <Tooltip title="Giỏ hàng">
+                  <NavLink to="">
+                    <IconButton size="small" sx={{ ml: 2 }}>
+                      <ShoppingCartIcon
+                        sx={{ width: 32, height: 32 }}
+                      ></ShoppingCartIcon>
+                    </IconButton>
+                  </NavLink>
+                </Tooltip>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <Tooltip title="Đăng nhập">
+                  <NavLink to="/sign-in">
+                    <IconButton size="small" sx={{ ml: 2 }}>
+                      <LoginIcon sx={{ width: 32, height: 32 }}></LoginIcon>
+                    </IconButton>
+                  </NavLink>
+                </Tooltip>
+              </Box>
               <AccountMenu />
             </Box>
           </Toolbar>
