@@ -273,6 +273,7 @@ export default function PetTable() {
         open={openCreateModal}
         onClose={handleCloseModal}
         handUpdateTable={loadAllPet}
+        page={currentPage}
       />
       {/* Modal update */}
       <ModalEditPet
@@ -280,6 +281,7 @@ export default function PetTable() {
         onClose={handleCloseModal}
         dataEditPet={dataEditPet}
         handUpdateEditTable={loadAllPet}
+        page={currentPage}
       />
     </>
   );

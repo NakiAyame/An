@@ -266,6 +266,7 @@ export default function ServiceTable() {
         onClose={handleCloseModal}
         handUpdateTable={loadAllService}
         category={category}
+        page={currentPage}
       />
 
       <ModalEditSerivce
@@ -274,6 +275,7 @@ export default function ServiceTable() {
         dataEditService={dataEditService}
         handUpdateEditTable={loadAllService}
         category={category}
+        page={currentPage}
       />
 
       <ModalComfirmSerivce

@@ -239,6 +239,7 @@ export default function ProductTable() {
         onClose={handleCloseModal}
         handUpdateTable={loadAllProduct}
         category={category}
+        page={currentPage}
       />
       {/* Modal update */}
       <ModalEditProduct
@@ -247,6 +248,7 @@ export default function ProductTable() {
         dataEditProduct={dataEditProduct}
         handUpdateEditTable={loadAllProduct}
         category={category}
+        page={currentPage}
       />
       {/* Modal delete */}
       <ModalComfirmProduct

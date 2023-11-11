@@ -21,12 +21,12 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 const SERVICE_NAME_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
+  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
 
 const ModalAddProduct = (props) => {
-  const { open, onClose, handUpdateTable, category } = props;
+  const { open, onClose, handUpdateTable, category, page } = props;
 
   const [productName, setProductName] = useState("");
   const [quantity, setQuantity] = useState(0);
@@ -70,7 +70,7 @@ const ModalAddProduct = (props) => {
     setQuantity(e.target.value);
   };
 
-  // --------------------- HANDLE CREATE PET -----------------------------
+  // --------------------- HANDLE CREATE PRODUCT -----------------------------
   const handleCreateService = async () => {
     console.log(
       "Check data truyền vào sản phẩm",
@@ -82,16 +82,14 @@ const ModalAddProduct = (props) => {
     );
     if (!validProductName) {
       toast.error(
-        "Tên sản phẩm không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
+        "Tên sản phẩm không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
     }
     if (!validQuantity) {
       toast.error("Số lượng không được để trống");
     }
     if (!validPrice) {
-      toast.error(
-        "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
-      );
+      toast.error("Giá tiền phải có ít nhất 4 chữ số và phải lớn hơn 0");
     } else {
       try {
         const response = await axios.post("http://localhost:3500/product", {
@@ -112,7 +110,7 @@ const ModalAddProduct = (props) => {
           setPrice();
           setDescription("");
           // setStatus(true);
-          handUpdateTable();
+          handUpdateTable(page);
           onClose();
         }
       } catch (error) {
@@ -173,10 +171,10 @@ const ModalAddProduct = (props) => {
 
             <FormControl fullWidth margin="normal">
               <InputLabel id="demo-select-small-label">
-                Chọn loại dịch vụ
+                Chọn loại sản phẩm
               </InputLabel>
               <Select
-                label="Loại dịch vụ"
+                label="Loại sản phẩm"
                 value={categoryId}
                 onChange={handleChange}
               >
@@ -216,9 +214,9 @@ const ModalAddProduct = (props) => {
             />
 
             <TextField
-              label="Thông tin dịch vụ"
+              label="Thông tin sản phẩm"
               fullWidth
-              placeholder="Điền thông tin dịch vụ ở đây"
+              placeholder="Điền thông tin sản phẩm ở đây"
               multiline
               rows={4}
               margin="normal"
