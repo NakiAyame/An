@@ -116,7 +116,7 @@ const Register = () => {
                 required
                 fullWidth
                 id="fullname"
-                label="Full Name"
+                label="Họ và tên"
                 name="fullname"
                 autoComplete="fullname"
                 type="text"
@@ -129,7 +129,7 @@ const Register = () => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Địa chỉ email"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -141,7 +141,7 @@ const Register = () => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Mật khẩu"
                 type="password"
                 id="password"
                 autoComplete="current-password"
