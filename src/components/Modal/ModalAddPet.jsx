@@ -21,7 +21,7 @@ const PET_NAME_REGEX =
 // /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]+$/;
 
 const ModalAddPet = (props) => {
-  const { open, onClose, handUpdateTable } = props;
+  const { open, onClose, handUpdateTable, page } = props;
 
   const [userId, setUserId] = useState("");
   const [petName, setPetName] = useState("");
@@ -70,7 +70,7 @@ const ModalAddPet = (props) => {
           setCategory("");
           setRank();
           setStatus(true);
-          handUpdateTable();
+          handUpdateTable(page);
           onClose();
         }
       } catch (error) {

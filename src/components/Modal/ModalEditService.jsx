@@ -23,8 +23,14 @@ const SERVICE_NAME_REGEX =
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 
 const ModalEditSerivce = (props) => {
-  const { open, onClose, handUpdateEditTable, dataEditService, category } =
-    props;
+  const {
+    open,
+    onClose,
+    handUpdateEditTable,
+    dataEditService,
+    category,
+    page,
+  } = props;
 
   const [serviceName, setServiceName] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -94,7 +100,7 @@ const ModalEditSerivce = (props) => {
           toast.error(res.data.error);
         } else {
           toast.success("Sửa dịch vụ thành công");
-          handUpdateEditTable();
+          handUpdateEditTable(page);
           onClose();
         }
       } catch (err) {

@@ -25,7 +25,7 @@ const SERVICE_NAME_REGEX =
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 
 const ModalAddSerivce = (props) => {
-  const { open, onClose, handUpdateTable, category } = props;
+  const { open, onClose, handUpdateTable, category, page } = props;
 
   const [serviceName, setServiceName] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -94,7 +94,7 @@ const ModalAddSerivce = (props) => {
           setCategoryId("");
           setDescription("");
           setPrice();
-          handUpdateTable();
+          handUpdateTable(page);
           onClose();
         }
       } catch (error) {

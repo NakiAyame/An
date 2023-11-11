@@ -20,7 +20,7 @@ const PET_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
 
 const ModalEditPet = (props) => {
-  const { open, onClose, dataEditPet, handUpdateEditTable } = props;
+  const { open, onClose, dataEditPet, handUpdateEditTable, page } = props;
 
   const [userId, setUserId] = useState("");
   const [petName, setPetName] = useState("");
@@ -73,7 +73,7 @@ const ModalEditPet = (props) => {
           toast.error(res.data.error);
         } else {
           toast.success("Sửa thông tin thú cưng thành công");
-          handUpdateEditTable();
+          handUpdateEditTable(page);
           onClose();
         }
       } catch (err) {
