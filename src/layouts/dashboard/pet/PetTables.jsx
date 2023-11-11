@@ -18,6 +18,7 @@ import {
   TextField,
   Grid,
   Pagination,
+  ButtonGroup,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
@@ -88,7 +89,7 @@ export default function PetTable() {
 
   const loadAllPet = async (page) => {
     try {
-      const loadData = await axios.get(`${BASE_URL}/pet?page=${page}`);
+      const loadData = await axios.get(`${BASE_URL}/pet?page=${page}&limit=5`);
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
@@ -139,11 +140,14 @@ export default function PetTable() {
   // ----------------------------------- GET ALL PET BY USER ID --------------------------------
   const searchPetById = async () => {
     try {
-      const loadData = await axios.get(`${BASE_URL}/pet/${keyword}`);
+      const loadData = await axios.get(
+        `${BASE_URL}/pet/username?name=${keyword}&page=1&limit=5`
+      );
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
-        setData(loadData.data.data);
+        setData(loadData.data.docs);
+        setTotalPets(loadData.data.limit);
         setTotalPages(loadData.data.pages);
         console.log(loadData.data);
       }
@@ -238,13 +242,15 @@ export default function PetTable() {
                       />
                     </TableCell>
                     <TableCell align="center">
-                      <ButtonCustomize
-                        onClick={() => handleUpdatePet(value)}
-                        variant="contained"
-                        // component={RouterLink}
-                        nameButton="Cập nhật"
-                        fullWidth
-                      />
+                      <ButtonGroup>
+                        <ButtonCustomize
+                          onClick={() => handleUpdatePet(value)}
+                          variant="contained"
+                          // component={RouterLink}
+                          nameButton="Cập nhật"
+                          fullWidth
+                        />
+                      </ButtonGroup>
                     </TableCell>
                   </TableRow>
                 );

@@ -48,7 +48,9 @@ export default function ServiceTable() {
 
   const loadAllService = async (page) => {
     try {
-      const loadData = await axios.get(`${BASE_URL}/service?page=${page}`);
+      const loadData = await axios.get(
+        `${BASE_URL}/service?page=${page}&limit=5`
+      );
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
@@ -239,10 +241,10 @@ export default function ServiceTable() {
                       />
                     </TableCell>
                     <TableCell align="center">
-                      <ButtonGroup variant="contained" fullWidth>
+                      <ButtonGroup>
                         <ButtonCustomize
                           onClick={() => handleEditService(value)}
-                          variant="contained"
+                          color="white"
                           // component={RouterLink}
                           nameButton="Cập nhật"
                         />
