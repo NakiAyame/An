@@ -134,12 +134,12 @@ export default function ProductTable() {
   async function loadAllCategoryProduct() {
     try {
       const loadDataCategoryProduct = await axios.get(
-        `http://localhost:3500/category/cateName/product`
+        `http://localhost:3500/category?categoryName=product`
       );
       if (loadDataCategoryProduct.error) {
         toast.error(loadDataCategoryProduct.error);
       } else {
-        setCategory(loadDataCategoryProduct.data.data);
+        setCategory(loadDataCategoryProduct.data.docs);
         console.log(loadDataCategoryProduct.data);
       }
     } catch (err) {

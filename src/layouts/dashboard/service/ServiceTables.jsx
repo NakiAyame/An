@@ -107,12 +107,12 @@ export default function ServiceTable() {
   async function loadAllCategoryService() {
     try {
       const loadData = await axios.get(
-        `http://localhost:3500/category/cateName/service`
+        `http://localhost:3500/category?categoryName=service`
       );
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
-        setCategory(loadData.data.data);
+        setCategory(loadData.data.docs);
         console.log(loadData.data);
       }
     } catch (err) {
