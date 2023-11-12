@@ -93,14 +93,9 @@ const ModalEditProduct = (props) => {
       toast.error(
         "Tên sản phẩm không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    }
-    if (categoryId === "") {
-      toast.error("không được để trống loại sản phẩm");
-    }
-    if (!validQuantity) {
+    } else if (!validQuantity) {
       toast.error("Số lượng không được để trống");
-    }
-    if (!validPrice) {
+    } else if (!validPrice) {
       toast.error("Giá tiền phải có ít nhất 4 chữ số và phải lớn hơn 0");
     } else {
       try {
@@ -113,7 +108,7 @@ const ModalEditProduct = (props) => {
           price: price,
         });
         if (res.data.error) {
-          toast.error(res.data.error);
+          toast.error("Lỗi Err", res.data.error);
         } else {
           toast.success("Sửa thông tin sản phẩm thành công");
           handUpdateEditTable(page);

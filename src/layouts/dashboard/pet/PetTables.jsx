@@ -116,6 +116,7 @@ export default function PetTable() {
     (event, page) => {
       setCurrentPage(page);
       if (!keyword) {
+        toast.warning("Không có kết quả");
         loadAllPet(page);
       } else {
         searchPetById();
@@ -137,11 +138,11 @@ export default function PetTable() {
     }
   };
 
-  // ----------------------------------- GET ALL PET BY USER ID --------------------------------
+  // ----------------------------------- GET ALL PET BY USER NAME --------------------------------
   const searchPetById = async () => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/pet/username?name=${keyword}&page=1&limit=5`
+        `${BASE_URL}/pet/username?name=${keyword}&page=1`
       );
       if (loadData.error) {
         toast.error(loadData.error);

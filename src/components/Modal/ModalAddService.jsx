@@ -73,8 +73,9 @@ const ModalAddSerivce = (props) => {
       toast.error(
         "Tên dịch vụ không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    }
-    if (!validPrice) {
+    } else if (categoryId == "") {
+      toast.error("Bạn phải chọn loại dịch vụ mình muốn");
+    } else if (!validPrice) {
       toast.error("Giá tiền phải có ít nhất 4 chữ số và phải lớn hơn 0");
     } else {
       try {
