@@ -24,6 +24,7 @@ import { styled } from "@mui/material/styles";
 import ScrollableTabService from "../../../components/ScrollableTab/TabService";
 import ServiceDetailModal from "./ServiceDetailModal";
 import TypographyCus from "../../../components/Typography/DescriptionCus";
+import Footer from "../../../components/Footer/Footer";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -50,7 +51,8 @@ export default function ServiceList() {
   });
 
   const CustomContainer = styled(Container)({
-    background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
+    background:
+      "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
   });
 
   // ----------------------------------- API GET ALL SERVICE --------------------------------
@@ -112,7 +114,7 @@ export default function ServiceList() {
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/service/find/${cateId}`
+          `http://localhost:3500/service?page=1&categoryId=${cateId}`
         );
         if (loadData.error) {
           toast.error(loadData.error);
@@ -120,7 +122,7 @@ export default function ServiceList() {
           console.log("Check loaddata", loadData.data);
           setTotalPages(loadData.data.pages);
           // console.log("Check totalPage", totalPages);
-          setData(loadData.data);
+          setData(loadData.data.docs);
           setTotalServices(loadData.data.limit);
         }
       } catch (err) {
@@ -320,13 +322,14 @@ export default function ServiceList() {
           </Container>
         </CustomContainer>
       </main>
-      {/* End footer */}
 
       <ServiceDetailModal
         open={isModalOpen}
         onClose={handleCloseEditModal}
         serviceId={selectedService}
       />
+      {/* End footer */}
+      <Footer />
     </ThemeProvider>
   );
 }
