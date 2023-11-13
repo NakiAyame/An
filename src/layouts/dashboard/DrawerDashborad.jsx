@@ -10,7 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import ListSubheader from "@mui/material/ListSubheader";
 import * as React from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 import { Link } from "@mui/material";
 import { toast } from "react-toastify";
@@ -30,6 +30,7 @@ const DrawerDashborad = () => {
     { text: "Dashboard", path: "/dashboard" },
     { text: "Danh sách người dùng", path: "/dashboard/user-list" },
     { text: "Danh sách đặt hàng", path: "/dashboard/order-list" },
+    { text: "Danh sách đặt đặt vụ", path: "/dashboard/booking-list" },
   ];
 
   const links2 = [
@@ -81,7 +82,7 @@ const DrawerDashborad = () => {
         </ListSubheader>
         {links.map((link, index) => (
           <ListItem key={link.text} disablePadding>
-            <ListItemButton component={Link} to={link.path}>
+            <ListItemButton component={NavLink} to={link.path}>
               <ListItemIcon>
                 {index % 2 === 0 ? <DashboardIcon /> : <PersonIcon />}
               </ListItemIcon>
@@ -98,7 +99,7 @@ const DrawerDashborad = () => {
         </ListSubheader>
         {links2.map((link, index) => (
           <ListItem key={link.text} disablePadding>
-            <ListItemButton component={Link} to={link.path}>
+            <ListItemButton component={NavLink} to={link.path}>
               <ListItemIcon>
                 {index % 2 === 0 ? (
                   <MedicalServicesIcon />
@@ -119,7 +120,7 @@ const DrawerDashborad = () => {
         </ListSubheader>
         {links3.map((link, index) => (
           <ListItem key={link.text} disablePadding>
-            <ListItemButton component={Link} to={link.path}>
+            <ListItemButton component={NavLink} to={link.path}>
               <ListItemIcon>
                 {index % 2 === 0 ? <PetsIcon /> : <SpaIcon />}
               </ListItemIcon>
@@ -136,7 +137,7 @@ const DrawerDashborad = () => {
         </ListSubheader>
         {links4.map((link, index) => (
           <ListItem key={link.text} disablePadding>
-            <ListItemButton component={Link} to={link.path}>
+            <ListItemButton component={NavLink} to={link.path}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InventoryIcon /> : <CategoryIcon />}
               </ListItemIcon>
