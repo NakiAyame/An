@@ -37,7 +37,7 @@ const DrawerDashborad = () => {
     { text: "Danh sách dịch vụ", path: "/dashboard/service-list" },
     {
       text: "Lịch sử thanh toán dịch vụ",
-      path: "/dashboard/history-service-list",
+      path: "/dashboard/booking-list",
     },
   ];
 
@@ -53,7 +53,7 @@ const DrawerDashborad = () => {
     { text: "Danh sách sản phẩm", path: "/dashboard/product-list" },
     {
       text: "Lịch sử thanh toán sản phẩm",
-      path: "/dashboard/history-product-list",
+      path: "/dashboard/order-list",
     },
   ];
 

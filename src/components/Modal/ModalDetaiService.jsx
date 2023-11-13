@@ -8,7 +8,7 @@ import { useState } from "react";
 
 const Root = styled(Box)(({ theme }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  padding: theme.spacing(20),
 }));
 
 const Title = styled(Typography)(({ theme }) => ({

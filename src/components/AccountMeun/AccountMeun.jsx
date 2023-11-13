@@ -32,7 +32,7 @@ export default function AccountMenu() {
     setAnchorEl(null);
   };
 
-  const context = useAuth()
+  const context = useAuth();
 
   // --------------------- LOGOUT -----------------------------
   const navigate = useNavigate();
@@ -109,17 +109,31 @@ export default function AccountMenu() {
           </ListItemIcon>
           Trang chủ
         </MenuItem>
-        {
-          context.auth.role === 'admin'
-            ?
-            <MenuItem onClick={handleClose} component={NavLink} to="/dashboard">
-              <ListItemIcon>
-                <DashboardIcon fontSize="small" />
-              </ListItemIcon>
-              Bảng điều khiển
-            </MenuItem>
-            : ''
-        }
+        {context.auth.role === "admin" ? (
+          <MenuItem onClick={handleClose} component={NavLink} to="/dashboard">
+            <ListItemIcon>
+              <DashboardIcon fontSize="small" />
+            </ListItemIcon>
+            Bảng điều khiển
+          </MenuItem>
+        ) : (
+          ""
+        )}
+
+        {context.auth.role !== "" ? (
+          <MenuItem
+            onClick={handleClose}
+            component={NavLink}
+            to="/change-password"
+          >
+            <ListItemIcon>
+              <DashboardIcon fontSize="small" />
+            </ListItemIcon>
+            Đổi mật khẩu
+          </MenuItem>
+        ) : (
+          ""
+        )}
 
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
