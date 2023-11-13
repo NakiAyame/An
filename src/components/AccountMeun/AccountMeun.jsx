@@ -20,6 +20,8 @@ import HomeIcon from "@mui/icons-material/Home";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import useAuth from "../../hooks/useAuth";
+
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -29,6 +31,8 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const context = useAuth()
 
   // --------------------- LOGOUT -----------------------------
   const navigate = useNavigate();
@@ -105,12 +109,18 @@ export default function AccountMenu() {
           </ListItemIcon>
           Trang chủ
         </MenuItem>
-        <MenuItem onClick={handleClose} component={NavLink} to="/dashboard">
-          <ListItemIcon>
-            <DashboardIcon fontSize="small" />
-          </ListItemIcon>
-          Bảng điều khiển
-        </MenuItem>
+        {
+          context.auth.role === 'admin'
+            ?
+            <MenuItem onClick={handleClose} component={NavLink} to="/dashboard">
+              <ListItemIcon>
+                <DashboardIcon fontSize="small" />
+              </ListItemIcon>
+              Bảng điều khiển
+            </MenuItem>
+            : ''
+        }
+
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <AccountBoxIcon fontSize="small" />

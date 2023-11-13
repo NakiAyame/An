@@ -14,20 +14,32 @@ import LandingPage from "./layouts/LandingPage/LandingPage";
 import ServiceList from "./layouts/dashboard/service/ServiceList";
 import Header from "./components/Header/Header";
 import ProductList from "./layouts/dashboard/product/ProductList";
+import BookingTable from "./layouts/dashboard/booking/BookingTable";
+
+import RequireAuth from "./components/RequireAuth";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
+
+const ROLES = {
+  'User': 2001,
+  'CUSTOMER': 'customer',
+  'ADMIN': 'admin'
+}
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="/dashboard/user-list" element={<BasicTable />} />
-            <Route path="/dashboard/order-list" element={<OrderTable />} />
-            <Route path="/dashboard/service-list" element={<ServiceTable />} />
-            <Route path="/dashboard/pet-list" element={<PetTable />} />
-            <Route path="/dashboard/product-list" element={<ProductTable />} />
+          <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="/dashboard/user-list" element={<BasicTable />} />
+              <Route path="/dashboard/order-list" element={<OrderTable />} />
+              <Route path="/dashboard/booking-list" element={<BookingTable />} />
+              <Route path="/dashboard/service-list" element={<ServiceTable />} />
+              <Route path="/dashboard/pet-list" element={<PetTable />} />
+              <Route path="/dashboard/product-list" element={<ProductTable />} />
+            </Route>
           </Route>
           <Route path="/sign-up" element={<Register />} />
           <Route path="/sign-in" element={<Login />} />

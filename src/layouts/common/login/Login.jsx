@@ -19,12 +19,18 @@ import {
 import PetsIcon from "@mui/icons-material/Pets";
 //React
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
+import { useContext } from "react";
+
+import AuthContext from "../../../context/AuthProvider";
+import useAuth from "../../../hooks/useAuth";
+
+import { jwtDecode } from "jwt-decode";
 
 const defaultTheme = createTheme();
 const Login = () => {
@@ -33,6 +39,10 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const context = useAuth();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const CustomGrid = styled(Grid)({
     background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
@@ -48,6 +58,7 @@ const Login = () => {
   const loginUser = async (e) => {
     e.preventDefault();
     const { email, password } = data;
+
     try {
       const { data } = await axios.post("http://localhost:3500/login", {
         email,
@@ -56,10 +67,18 @@ const Login = () => {
       if (data.error) {
         toast.error(data.error);
       } else {
-        setData({});
+        const dataDecode = jwtDecode(data.token)
+
         localStorage.setItem("token", data.token);
+
+        context.setAuth({
+          id: dataDecode.id,
+          email: dataDecode.email,
+          role: dataDecode.role
+        })
+
         toast.success("Login successful");
-        navigate("/");
+        navigate(from, { replace: true });
       }
     } catch (err) {
       console.log(err);
