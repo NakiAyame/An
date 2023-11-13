@@ -13,6 +13,9 @@ import {
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
+import SearchIcon from "@mui/icons-material/Search";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
 
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
@@ -29,6 +32,7 @@ import { useEffect } from "react";
 import ModalAddProduct from "../../../components/Modal/ModalAddProduct";
 import ModalEditProduct from "../../../components/Modal/ModalEditProduct";
 import ModalComfirmProduct from "../../../components/Modal/ModalComfirmProduct";
+import DropDownService from "../../../components/DropDown/DropDownService";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -151,6 +155,70 @@ export default function ProductTable() {
     loadAllCategoryProduct();
   }, []);
 
+  // --------------------- GET ALL PRODUCT BY CATEGORY ID PRODUCT -----------------------------
+  async function hanldeClickCategory(cateId) {
+    console.log("Check data cate ID", cateId);
+    if (cateId == undefined || cateId == "") {
+      loadAllProduct(currentPage);
+    } else {
+      try {
+        const loadData = await axios.get(
+          `http://localhost:3500/product?page=1&categoryId=${cateId}`
+        );
+        if (loadData.error) {
+          toast.error(loadData.error);
+        } else {
+          console.log("Check loaddata", loadData.data);
+          setTotalPages(loadData.data.pages);
+          // console.log("Check totalPage", totalPages);
+          setData(loadData.data.docs);
+          setTotalProducts(loadData.data.limit);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  useEffect(() => {
+    hanldeClickCategory();
+  }, []);
+
+  // --------------------- Hanlde Search -----------------------------
+  const [keyword, setKeyword] = useState("");
+
+  const handleKeywordChange = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleSearchClick = async () => {
+    if (keyword === "") {
+      toast.warning("Hãy nhập kết quả bạn cần tìm");
+      loadAllProduct(currentPage);
+    } else {
+      searchProductByName();
+    }
+  };
+
+  // ----------------------------------- GET ALL PRODUCTS BY PRODUCT NAME --------------------------------
+  const searchProductByName = async () => {
+    try {
+      const loadData = await axios.get(
+        `${BASE_URL}/product?product=${keyword}&page=1`
+      );
+      if (loadData.error) {
+        toast.error(loadData.error);
+      } else {
+        setData(loadData.data.docs);
+        setTotalProducts(loadData.data.limit);
+        setTotalPages(loadData.data.pages);
+        console.log(loadData.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <Grid
@@ -160,7 +228,31 @@ export default function ProductTable() {
         alignItems="center"
         mb={3}
       >
-        <Grid item></Grid>
+        <Grid item>
+          <TextField
+            fullWidth
+            label="Tìm kiếm"
+            margin="normal"
+            size="small"
+            value={keyword}
+            onChange={handleKeywordChange}
+            // sx={{ position: "fixed" }}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={handleSearchClick}>
+                  <SearchIcon />
+                </IconButton>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item>
+          <DropDownService
+            category={category}
+            cateName="Loại sản phẩm"
+            handUpdateEditTable={hanldeClickCategory}
+          />
+        </Grid>
         <Grid item>
           <ButtonCustomize
             onClick={handleCreateModal}

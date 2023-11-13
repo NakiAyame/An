@@ -81,8 +81,7 @@ const ModalEditSerivce = (props) => {
       toast.error(
         "Tên dịch vụ không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    }
-    if (!validPrice) {
+    } else if (!validPrice) {
       toast.error(
         "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
       );

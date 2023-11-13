@@ -45,9 +45,7 @@ const ModalAddProduct = (props) => {
   const [validPrice, setValidPrice] = useState("");
   const [validQuantity, setValidQuantity] = useState("");
   useEffect(() => {
-    setValidProductName(
-      SERVICE_NAME_REGEX.test(productName) && productName.trim() !== ""
-    );
+    setValidProductName(SERVICE_NAME_REGEX.test(productName));
   }, [productName]);
 
   const handleValidationProductName = (e) => {
@@ -84,11 +82,9 @@ const ModalAddProduct = (props) => {
       toast.error(
         "Tên sản phẩm không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    }
-    if (!validQuantity) {
-      toast.error("Số lượng không được để trống");
-    }
-    if (!validPrice) {
+    } else if (!validQuantity) {
+      toast.error("Số lượng không được để trống và phải lớn hơn 0");
+    } else if (!validPrice) {
       toast.error("Giá tiền phải có ít nhất 4 chữ số và phải lớn hơn 0");
     } else {
       try {
@@ -165,8 +161,8 @@ const ModalAddProduct = (props) => {
               margin="normal"
               value={productName}
               onChange={(e) => handleValidationProductName(e)}
-              error={!validProductName}
-              helperText={validProductName ? "" : "Hãy nhập tên sản phẩm"}
+              // error={!validProductName}
+              // helperText={validProductName ? "" : "Hãy nhập tên sản phẩm"}
             />
 
             <FormControl fullWidth margin="normal">

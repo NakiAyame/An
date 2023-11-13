@@ -10,6 +10,9 @@ import { ButtonGroup, Pagination } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
+import SearchIcon from "@mui/icons-material/Search";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
@@ -62,12 +65,6 @@ export default function ServiceTable() {
     } catch (err) {
       console.log(err);
     }
-  };
-
-  // --------------------- Click paging -----------------------------
-  const handlePageClick = (event, value) => {
-    setCurrentPage(value);
-    // loadAllService(+event.selected + 1);
   };
 
   // --------------------- MODAL HANDLE -----------------------------
@@ -127,21 +124,25 @@ export default function ServiceTable() {
   // --------------------- GET ALL SERVICE BY CATEGORY ID SERVICE -----------------------------
   async function hanldeClickCategory(cateId) {
     console.log("Check data cate ID", cateId);
-    try {
-      const loadData = await axios.get(
-        `http://localhost:3500/service?page=1&categoryId=${cateId}`
-      );
-      if (loadData.error) {
-        toast.error(loadData.error);
-      } else {
-        console.log("Check loaddata", loadData.data);
-        setTotalPages(loadData.data.pages);
-        // console.log("Check totalPage", totalPages);
-        setData(loadData.data.docs);
-        setTotalServices(loadData.data.limit);
+    if (cateId == undefined || cateId == "") {
+      loadAllService(currentPage);
+    } else {
+      try {
+        const loadData = await axios.get(
+          `http://localhost:3500/service?page=1&categoryId=${cateId}`
+        );
+        if (loadData.error) {
+          toast.error(loadData.error);
+        } else {
+          console.log("Check loaddata", loadData.data);
+          setTotalPages(loadData.data.pages);
+          // console.log("Check totalPage", totalPages);
+          setData(loadData.data.docs);
+          setTotalServices(loadData.data.limit);
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   }
 
@@ -163,6 +164,52 @@ export default function ServiceTable() {
     setSelectedService(null);
   };
 
+  // --------------------- Hanlde Search -----------------------------
+  const [keyword, setKeyword] = useState("");
+
+  // --------------------- Click paging -----------------------------
+  const handlePageClick = (event, value) => {
+    setCurrentPage(value);
+    if (!keyword) {
+      loadAllService(value);
+    } else {
+      searchServiceByName();
+    }
+    // loadAllService(+event.selected + 1);
+  };
+
+  const handleKeywordChange = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleSearchClick = async () => {
+    if (keyword === "") {
+      toast.warning("Hãy nhập kết quả bạn cần tìm");
+      loadAllService(currentPage);
+    } else {
+      searchServiceByName();
+    }
+  };
+
+  // ----------------------------------- GET ALL SERVICE BY SERVICE NAME --------------------------------
+  const searchServiceByName = async () => {
+    try {
+      const loadData = await axios.get(
+        `${BASE_URL}/service?service=${keyword}&page=1`
+      );
+      if (loadData.error) {
+        toast.error(loadData.error);
+      } else {
+        setData(loadData.data.docs);
+        setTotalServices(loadData.data.limit);
+        setTotalPages(loadData.data.pages);
+        console.log(loadData.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <Grid
@@ -172,9 +219,28 @@ export default function ServiceTable() {
         alignItems="center"
         mb={3}
       >
-        <Grid item xs={2}>
+        <Grid item>
+          <TextField
+            fullWidth
+            label="Tìm kiếm"
+            margin="normal"
+            size="small"
+            value={keyword}
+            onChange={handleKeywordChange}
+            // sx={{ position: "fixed" }}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={handleSearchClick}>
+                  <SearchIcon />
+                </IconButton>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item>
           <DropDownService
             category={category}
+            cateName="Loại dịch vụ"
             handUpdateEditTable={hanldeClickCategory}
           />
         </Grid>
@@ -184,7 +250,7 @@ export default function ServiceTable() {
             onClick={handleOpenModal}
             color="white"
             nameButton="Thêm mới"
-            // startIcon={<AddCircleOutlineIcon />}
+            startIcon={<AddCircleOutlineIcon />}
           />
         </Grid>
       </Grid>

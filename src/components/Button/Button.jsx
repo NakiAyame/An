@@ -77,6 +77,9 @@ export default function ButtonCustomize(props) {
         border: { border },
         borderRadius: borderRadius,
         marginRight: { marginRight },
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       {/* <Avatar src = { iconSrc } alt="photoURL" sx={{ mr: 2 }} /> */}
