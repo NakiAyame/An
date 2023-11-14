@@ -226,7 +226,16 @@ function Header() {
                 }}
               >
                 <Tooltip title="Giỏ hàng">
-                  <NavLink to="">
+                  <NavLink to="cart-service">
+                    <IconButton size="small" sx={{ ml: 2 }}>
+                      <ShoppingCartIcon
+                        sx={{ width: 32, height: 32 }}
+                      ></ShoppingCartIcon>
+                    </IconButton>
+                  </NavLink>
+                </Tooltip>
+                <Tooltip title="Giỏ hàng">
+                  <NavLink to="cart-product">
                     <IconButton size="small" sx={{ ml: 2 }}>
                       <ShoppingCartIcon
                         sx={{ width: 32, height: 32 }}

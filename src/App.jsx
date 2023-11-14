@@ -15,6 +15,8 @@ import ServiceList from "./layouts/dashboard/service/ServiceList";
 import Header from "./components/Header/Header";
 import ProductList from "./layouts/dashboard/product/ProductList";
 import BookingTable from "./layouts/dashboard/booking/BookingTable";
+import CartService from "./layouts/Cart/CartService";
+import CartProduct from "./layouts/Cart/CartProduct";
 
 import RequireAuth from "./components/RequireAuth";
 
@@ -47,6 +49,8 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="service-homepage" element={<ServiceList />} />
             <Route path="product-homepage" element={<ProductList />} />
+            <Route path="cart-service" element={<CartService />} />
+            <Route path="cart-product" element={<CartProduct />} />
           </Route>
         </Routes>
       </BrowserRouter>
