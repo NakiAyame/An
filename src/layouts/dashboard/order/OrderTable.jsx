@@ -85,7 +85,7 @@ export default function BasicTable() {
         } catch (err) {
             console.log(err);
         }
-
+        console.log(88, orderDetail);
         setOption(option);
         handleOpen();
     };
@@ -296,7 +296,7 @@ export default function BasicTable() {
                                     <TableRow>
                                         <TableCell children>STT</TableCell>
                                         <TableCell align="right">Mã đơn hàng</TableCell>
-                                        <TableCell align="right">Mã sản phẩm</TableCell>
+                                        <TableCell align="right">Tên sản phẩm</TableCell>
                                         <TableCell align="right">Số lượng</TableCell>
                                         <TableCell align="right">Giá</TableCell>
                                         <TableCell align="right">Chức năng</TableCell>
@@ -314,7 +314,7 @@ export default function BasicTable() {
                                                         {index + 1}
                                                     </TableCell>
                                                     <TableCell align="right">{value.orderId}</TableCell>
-                                                    <TableCell align="right">{value.productId}</TableCell>
+                                                    <TableCell align="right">{value.productId.productName}</TableCell>
                                                     <TableCell align="right">{value.quantity}</TableCell>
                                                     <TableCell align="right">default</TableCell>
                                                     <TableCell align="right"></TableCell>
