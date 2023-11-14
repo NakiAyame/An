@@ -260,13 +260,15 @@ function Header() {
                   textAlign: "center",
                 }}
               >
-                <Tooltip title="Đăng nhập">
-                  <NavLink to="/sign-in">
-                    <IconButton size="small" sx={{ ml: 2 }}>
-                      <LoginIcon sx={{ width: 32, height: 32 }}></LoginIcon>
-                    </IconButton>
-                  </NavLink>
-                </Tooltip>
+                {!isLoggedIn && (
+                  <Tooltip title="Đăng nhập">
+                    <NavLink to="/sign-in">
+                      <IconButton size="small" sx={{ ml: 2 }}>
+                        <LoginIcon sx={{ width: 32, height: 32 }}></LoginIcon>
+                      </IconButton>
+                    </NavLink>
+                  </Tooltip>
+                )}
               </Box>
               {isLoggedIn && <AccountMenu />}
             </Box>
