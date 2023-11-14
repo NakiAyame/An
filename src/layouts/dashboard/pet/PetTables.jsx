@@ -213,7 +213,7 @@ export default function PetTable() {
                 <TableCell align="center">Cấp thú cưng</TableCell>
                 <TableCell align="center">Loại thú cưng</TableCell>
                 <TableCell align="center">Trạng thái</TableCell>
-                <TableCell align="center">Chức năng</TableCell>
+                {/* <TableCell align="center">Chức năng</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -222,6 +222,8 @@ export default function PetTable() {
                   const statusColor = value.status ? "primary" : "error";
                   return (
                     <TableRow
+                      hover
+                      onClick={() => handleUpdatePet(value)}
                       key={index}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
@@ -242,17 +244,16 @@ export default function PetTable() {
                           color={statusColor}
                         />
                       </TableCell>
-                      <TableCell align="center">
+                      {/* <TableCell align="center">
                         <ButtonGroup>
                           <ButtonCustomize
-                            onClick={() => handleUpdatePet(value)}
                             variant="contained"
                             // component={RouterLink}
                             nameButton="Cập nhật"
                             fullWidth
                           />
                         </ButtonGroup>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   );
                 })}

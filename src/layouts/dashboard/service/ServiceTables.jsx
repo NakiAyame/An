@@ -6,13 +6,23 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { ButtonGroup, Pagination } from "@mui/material";
+import {
+  ButtonGroup,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Select,
+  TableSortLabel,
+} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import SearchIcon from "@mui/icons-material/Search";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
@@ -123,13 +133,13 @@ export default function ServiceTable() {
 
   // --------------------- GET ALL SERVICE BY CATEGORY ID SERVICE -----------------------------
   async function hanldeClickCategory(cateId) {
-    console.log("Check data cate ID", cateId);
-    if (cateId == undefined || cateId == "") {
+    console.log("Check data cate ID", cateId, order);
+    if (cateId == undefined || cateId == "" || order == "") {
       loadAllService(currentPage);
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/service?page=1&categoryId=${cateId}`
+          `http://localhost:3500/service?page=1&categoryId=${cateId}&sortPrice=${order}`
         );
         if (loadData.error) {
           toast.error(loadData.error);
@@ -210,6 +220,13 @@ export default function ServiceTable() {
     }
   };
 
+  // ----------------------------------- GET ALL SERVICE BY SERVICE NAME --------------------------------
+  const [order, setOrder] = useState("");
+  const handleSortPrice = () => {
+    // Toggle giữa 'asc' và 'desc' mỗi khi nhấp vào TableSortLabel
+    setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+
   return (
     <>
       <Grid
@@ -237,6 +254,21 @@ export default function ServiceTable() {
             }}
           />
         </Grid>
+        {/* <Grid item>
+        <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+      <Select
+        label="Loại dịch vụ"
+        value={sortPrice}
+        onChange={handleChangeSort}
+      >
+        <MenuItem value="">Tất cả</MenuItem>
+        <MenuItem value="asc">Tất cả</MenuItem>
+        <MenuItem value="desc">Tất cả</MenuItem>
+        
+      </Select>
+    </FormControl>
+        </Grid> */}
+
         <Grid item>
           <DropDownService
             category={category}
@@ -263,9 +295,16 @@ export default function ServiceTable() {
                 <TableCell align="center">Tên dịch vụ</TableCell>
                 <TableCell align="center">Loại dịch vụ</TableCell>
                 <TableCell align="center">Thông tin</TableCell>
-                <TableCell align="center">Số tiền</TableCell>
+                <TableCell align="center">
+                  <TableSortLabel
+                    active={!!order}
+                    direction={order}
+                    onClick={handleSortPrice}
+                  >
+                    Số tiền
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell align="center">Trạng thái</TableCell>
-                <TableCell align="center">Thao tác</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -274,6 +313,8 @@ export default function ServiceTable() {
                   const statusColor = value.status ? "primary" : "error";
                   return (
                     <TableRow
+                      hover
+                      onClick={() => handleEditService(value)}
                       key={index}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
@@ -302,16 +343,6 @@ export default function ServiceTable() {
                           color={statusColor}
                           // onClick={() => handleUpdateServiceStatus(value._id)}
                         />
-                      </TableCell>
-                      <TableCell align="center">
-                        <ButtonGroup>
-                          <ButtonCustomize
-                            onClick={() => handleEditService(value)}
-                            color="white"
-                            // component={RouterLink}
-                            nameButton="Cập nhật"
-                          />
-                        </ButtonGroup>
                       </TableCell>
                     </TableRow>
                   );

@@ -21,6 +21,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import useAuth from "../../hooks/useAuth";
+import axios from "axios";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -120,7 +121,7 @@ export default function AccountMenu() {
           ""
         )}
 
-        {context.auth.role !== "" ? (
+        {context.auth.role === "admin" || context.auth.role === "customer" ? (
           <MenuItem
             onClick={handleClose}
             component={NavLink}
@@ -135,30 +136,48 @@ export default function AccountMenu() {
           ""
         )}
 
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <AccountBoxIcon fontSize="small" />
-          </ListItemIcon>
-          Thông tin cá nhân
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <PetsIcon fontSize="small" />
-          </ListItemIcon>
-          Thú cưng của tôi
-        </MenuItem>
+        {context.auth.role === "admin" || context.auth.role === "customer" ? (
+          <MenuItem
+            onClick={handleClose}
+            component={NavLink}
+            to="/user-profile"
+          >
+            <ListItemIcon>
+              <AccountBoxIcon fontSize="small" />
+            </ListItemIcon>
+            Thông tin cá nhân
+          </MenuItem>
+        ) : (
+          ""
+        )}
+
+        {context.auth.role === "admin" || context.auth.role === "customer" ? (
+          <MenuItem onClick={handleClose} component={NavLink} to="/pet-user">
+            <ListItemIcon>
+              <PetsIcon fontSize="small" />
+            </ListItemIcon>
+            Thú cưng của tôi
+          </MenuItem>
+        ) : (
+          ""
+        )}
+
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Cài đặt
         </MenuItem>
-        <MenuItem onClick={handleLogout}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Đăng xuất
-        </MenuItem>
+        {context.auth.role === "admin" || context.auth.role === "customer" ? (
+          <MenuItem onClick={handleLogout}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Đăng xuất
+          </MenuItem>
+        ) : (
+          ""
+        )}
       </Menu>
     </React.Fragment>
   );
