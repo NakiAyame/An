@@ -19,14 +19,15 @@ import CartService from "./layouts/Cart/CartService";
 import CartProduct from "./layouts/Cart/CartProduct";
 
 import RequireAuth from "./components/RequireAuth";
+import ChangePassword from "./layouts/User/ChangePassword";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
 const ROLES = {
-  'User': 2001,
-  'CUSTOMER': 'customer',
-  'ADMIN': 'admin'
-}
+  User: 2001,
+  CUSTOMER: "customer",
+  ADMIN: "admin",
+};
 
 function App() {
   return (
@@ -37,10 +38,19 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}>
               <Route path="/dashboard/user-list" element={<BasicTable />} />
               <Route path="/dashboard/order-list" element={<OrderTable />} />
-              <Route path="/dashboard/booking-list" element={<BookingTable />} />
-              <Route path="/dashboard/service-list" element={<ServiceTable />} />
+              <Route
+                path="/dashboard/booking-list"
+                element={<BookingTable />}
+              />
+              <Route
+                path="/dashboard/service-list"
+                element={<ServiceTable />}
+              />
               <Route path="/dashboard/pet-list" element={<PetTable />} />
-              <Route path="/dashboard/product-list" element={<ProductTable />} />
+              <Route
+                path="/dashboard/product-list"
+                element={<ProductTable />}
+              />
             </Route>
           </Route>
           <Route path="/sign-up" element={<Register />} />
@@ -49,8 +59,12 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="service-homepage" element={<ServiceList />} />
             <Route path="product-homepage" element={<ProductList />} />
+<<<<<<< HEAD
             <Route path="cart-service" element={<CartService />} />
             <Route path="cart-product" element={<CartProduct />} />
+=======
+            <Route path="change-password" element={<ChangePassword />} />
+>>>>>>> b385b10503ce61ee77d2dd4c05581321414d47c6
           </Route>
         </Routes>
       </BrowserRouter>

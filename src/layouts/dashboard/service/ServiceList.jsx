@@ -62,7 +62,9 @@ export default function ServiceList() {
 
   const loadAllService = async (page) => {
     try {
-      const loadData = await axios.get(`${BASE_URL}/service?page=${page}`);
+      const loadData = await axios.get(
+        `${BASE_URL}/service?page=${page}&limit=9`
+      );
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
