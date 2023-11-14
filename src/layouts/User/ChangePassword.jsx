@@ -31,7 +31,7 @@ const ChangePassword = () => {
     <Container component="main" maxWidth="xs">
       <div>
         <Typography component="h1" variant="h5">
-          Change Password
+          Đổi mật khẩu
         </Typography>
         <form>
           <Grid container spacing={2}>

@@ -21,7 +21,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 const SERVICE_NAME_REGEX =
-  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
+  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ,\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
 
@@ -164,8 +164,8 @@ const ModalEditProduct = (props) => {
               margin="normal"
               value={productName}
               onChange={(e) => handleValidationProductName(e)}
-              error={!validProductName}
-              helperText={validProductName ? "" : "Hãy nhập tên sản phẩm"}
+              // error={!validProductName}
+              // helperText={validProductName ? "" : "Hãy nhập tên sản phẩm"}
             />
 
             <FormControl fullWidth margin="normal">
@@ -200,8 +200,8 @@ const ModalEditProduct = (props) => {
               type="number"
               value={quantity}
               onChange={(e) => handleValidationQuantity(e)}
-              error={!validQuantity}
-              helperText={validQuantity ? "" : "Hãy nhập số lượng sản phẩm"}
+              // error={!validQuantity}
+              // helperText={validQuantity ? "" : "Hãy nhập số lượng sản phẩm"}
             />
 
             <TextField
@@ -212,8 +212,8 @@ const ModalEditProduct = (props) => {
               margin="normal"
               value={price}
               onChange={(e) => handleValidationPrice(e)}
-              error={!validPrice}
-              helperText={validPrice ? "" : "Hãy nhập giá tiền sản phẩm"}
+              // error={!validPrice}
+              // helperText={validPrice ? "" : "Hãy nhập giá tiền sản phẩm"}
             />
 
             <TextField

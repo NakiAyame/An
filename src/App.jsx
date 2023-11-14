@@ -20,6 +20,7 @@ import CartProduct from "./layouts/Cart/CartProduct";
 
 import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./layouts/User/ChangePassword";
+import UserPRofile from "./layouts/User/UserProfile";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -59,12 +60,10 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="service-homepage" element={<ServiceList />} />
             <Route path="product-homepage" element={<ProductList />} />
-<<<<<<< HEAD
             <Route path="cart-service" element={<CartService />} />
             <Route path="cart-product" element={<CartProduct />} />
-=======
+            <Route path="user-profile" element={<UserPRofile />} />
             <Route path="change-password" element={<ChangePassword />} />
->>>>>>> b385b10503ce61ee77d2dd4c05581321414d47c6
           </Route>
         </Routes>
       </BrowserRouter>
