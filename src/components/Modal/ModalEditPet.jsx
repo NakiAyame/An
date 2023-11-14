@@ -65,7 +65,7 @@ const ModalEditPet = (props) => {
           id: petID,
           userId: userId,
           petName: petName,
-          category: category,
+          categoryId: category,
           rank: rank,
           status: status,
         });
@@ -118,9 +118,9 @@ const ModalEditPet = (props) => {
               label="Id chủ thú cưng"
               margin="normal"
               value={userId}
+              sx={{ display: "none" }}
               onChange={(e) => setUserId(e.target.value)}
-              error={userId === ""}
-              helperText={userId === "" ? "Không được để trống!" : " "}
+              // defaultValue={dataEditPet.userId.fullname}
             />
             <TextField
               required={true}

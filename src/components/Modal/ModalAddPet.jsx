@@ -21,11 +21,11 @@ const PET_NAME_REGEX =
 // /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]+$/;
 
 const ModalAddPet = (props) => {
-  const { open, onClose, handUpdateTable, page } = props;
+  const { open, onClose, handUpdateTable, page, data } = props;
 
   const [userId, setUserId] = useState("");
   const [petName, setPetName] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
   const [status, setStatus] = useState(true);
 
@@ -43,10 +43,15 @@ const ModalAddPet = (props) => {
   const handleValidationPetName = (e) => {
     setPetName(e.target.value);
   };
+  useEffect(() => {
+    if (open) {
+      setUserId(data);
+    }
+  }, [data]);
 
   // --------------------- HANDLE CREATE PET -----------------------------
   const handleCreateService = async () => {
-    console.log(userId, petName, category, rank, status);
+    console.log(userId, petName, categoryId, rank, status);
     if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
@@ -56,7 +61,7 @@ const ModalAddPet = (props) => {
         const response = await axios.post("http://localhost:3500/pet", {
           userId,
           petName,
-          category,
+          categoryId,
           rank,
           status,
         });
@@ -67,10 +72,10 @@ const ModalAddPet = (props) => {
           toast.success("Thêm mới thú cưng thành công!");
           setUserId("");
           setPetName("");
-          setCategory("");
+          setCategoryId("");
           setRank();
           setStatus(true);
-          handUpdateTable(page);
+          handUpdateTable();
           onClose();
         }
       } catch (error) {
@@ -122,8 +127,7 @@ const ModalAddPet = (props) => {
               margin="normal"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              error={userId === ""}
-              helperText={userId === "" ? "Không được để trống!" : " "}
+              sx={{ display: "none" }}
             />
             <TextField
               required={true}
@@ -139,8 +143,8 @@ const ModalAddPet = (props) => {
               fullWidth
               label="Loại thú cưng"
               margin="normal"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
             />
 
             <TextField
