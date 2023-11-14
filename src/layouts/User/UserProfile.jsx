@@ -29,8 +29,6 @@ const CustomContainer = styled(Container)({
 });
 
 export default function UserPRofile() {
-  //   const [activeStep, setActiveStep] = React.useState(0);
-  const [data, setData] = useState([]);
   const [fullname, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
