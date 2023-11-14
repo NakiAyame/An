@@ -74,7 +74,8 @@ const Login = () => {
         context.setAuth({
           id: dataDecode.id,
           email: dataDecode.email,
-          role: dataDecode.role
+          role: dataDecode.role,
+          token: data.token
         })
 
         toast.success("Login successful");
