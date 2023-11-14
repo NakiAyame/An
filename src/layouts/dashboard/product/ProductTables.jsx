@@ -273,7 +273,7 @@ export default function ProductTable() {
                 <TableCell align="center">Số lượng</TableCell>
                 <TableCell align="center">Giá tiền</TableCell>
                 <TableCell align="center">Thông tin sản phẩm</TableCell>
-                <TableCell align="center">Chức năng</TableCell>
+                {/* <TableCell align="center">Chức năng</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -282,6 +282,8 @@ export default function ProductTable() {
                   const statusColor = value.status ? "primary" : "error";
                   return (
                     <TableRow
+                      hover
+                      onClick={() => handleUpdateProduct(value)}
                       key={index}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
@@ -294,21 +296,20 @@ export default function ProductTable() {
                         {numberToVND(value.price)}
                       </TableCell>
                       <TableCell align="left">{value.description}</TableCell>
-                      <TableCell align="center">
+                      {/* <TableCell align="center">
                         <ButtonGroup variant="contained">
                           <ButtonCustomize
-                            onClick={() => handleUpdateProduct(value)}
                             // component={RouterLink}
                             nameButton="Cập nhật"
                           />
-                          {/* <ButtonCustomize
+                          <ButtonCustomize
                           onClick={() => handleDeleteProduct(value)}
                           backgroundColor="red"
                           // component={RouterLink}
                           nameButton="Xoá"
-                        /> */}
+                        />
                         </ButtonGroup>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   );
                 })}

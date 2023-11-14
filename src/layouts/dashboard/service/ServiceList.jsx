@@ -268,7 +268,11 @@ export default function ServiceList() {
                         }}
                         image="https://source.unsplash.com/random?wallpapers"
                       />
-                      <CardContent sx={{ flexGrow: 1 }}>
+                      <CardContent
+                        hover
+                        onClick={() => handleShowDetail(value)}
+                        sx={{ flexGrow: 1 }}
+                      >
                         <Typography gutterBottom variant="h5" component="h2">
                           {value.serviceName}
                         </Typography>
@@ -278,15 +282,6 @@ export default function ServiceList() {
                         <TypographyCus value={value} />
                       </CardContent>
                       <CardActions>
-                        <ButtonCustomize
-                          Button
-                          size="small"
-                          variant="contained"
-                          // component={RouterLink}
-                          nameButton="Chi tiết"
-                          onClick={() => handleShowDetail(value)}
-                          fullWidth
-                        />
                         <ButtonCustomize
                           Button
                           size="small"

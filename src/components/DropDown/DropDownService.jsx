@@ -12,7 +12,7 @@ export default function DropDownService(props) {
   const { category, handUpdateEditTable, cateName } = props;
   const [selectedCategory, setSelectedCategory] = useState("");
 
-  const handleChange = (event) => {
+  const handleChangeCate = (event) => {
     const categoryId = event.target.value;
     console.log(categoryId);
     setSelectedCategory(categoryId);
@@ -25,7 +25,7 @@ export default function DropDownService(props) {
       <Select
         label="Loại dịch vụ"
         value={selectedCategory}
-        onChange={handleChange}
+        onChange={handleChangeCate}
       >
         <MenuItem value="">Tất cả</MenuItem>
         {category &&
