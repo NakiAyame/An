@@ -21,6 +21,7 @@ import CartProduct from "./layouts/Cart/CartProduct";
 import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./layouts/User/ChangePassword";
 import UserPRofile from "./layouts/User/UserProfile";
+import PetUser from "./layouts/User/PetUser";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -64,6 +65,7 @@ function App() {
             <Route path="cart-product" element={<CartProduct />} />
             <Route path="user-profile" element={<UserPRofile />} />
             <Route path="change-password" element={<ChangePassword />} />
+            <Route path="pet-user" element={<PetUser />} />
           </Route>
         </Routes>
       </BrowserRouter>
