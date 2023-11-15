@@ -85,7 +85,7 @@ const ProductDetail = ({ open, onClose, product }) => {
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Chi tiết dịch vụ
+            Chi tiết sản phẩm
           </Typography>
           <IconButton
             aria-label="close"

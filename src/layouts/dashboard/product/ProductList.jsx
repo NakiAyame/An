@@ -119,7 +119,7 @@ export default function ProductList() {
     }
     else if(window.confirm('Bạn có muốn thêm sản phẩm này không ?') == true){
       try {
-        const loadData = await axios.post(
+        const addProductToCart = await axios.post(
           `${BASE_URL}/cartProduct/add-to-cart`,
           {
             productId: id

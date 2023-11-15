@@ -26,6 +26,7 @@ import { Pagination } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const ChoosePet = ({ open, onClose, service }) => {
+  console.log(service)
   const [data, setData] = useState([]);
 
   const [totalPets, setTotalPets] = useState(0);
@@ -33,7 +34,6 @@ const ChoosePet = ({ open, onClose, service }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const context = useAuth();
-  console.log(context);
 
   // ----------------------------------- API GET ALL PET BY USER ID--------------------------------
   useEffect(() => {
@@ -107,6 +107,31 @@ const ChoosePet = ({ open, onClose, service }) => {
   useEffect(() => {
     loadAllCategoryPet();
   }, []);
+
+  // --------------------------------ADD SERVICE TO CART------------------------------
+  const handleAddToCart = async (id) => {
+    if (window.confirm('Bạn có muốn cho thú cưng sử dụng dịch vụ này không ?') == true) {
+      try {
+        const addServiceToCart = await axios.post(
+          `http://localhost:3500/cartService/add-to-cart`,
+          {
+            serviceId: service._id,
+            petId: id
+          },
+          {
+            headers: { 'Authorization': context.auth.token },
+            withCredentials: true
+          }
+        )
+          .then((data) => {
+            alert('Thêm sản phẩm vào giỏ hàng thành công')
+          })
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
   return (
     <Dialog
       fullWidth
@@ -167,7 +192,7 @@ const ChoosePet = ({ open, onClose, service }) => {
                     </CardContent>
                   </CardActionArea>
                   <CardActions>
-                    <Button size="small" color="primary">
+                    <Button size="small" color="primary" onClick={() => handleAddToCart(value._id)}>
                       Chọn
                     </Button>
                   </CardActions>

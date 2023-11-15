@@ -27,6 +27,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Description } from "@mui/icons-material";
 import TypographyCus from "../Typography/DescriptionCus";
 import ChoosePet from "./ModalChoosePet";
+import useAuth from "../../hooks/useAuth";
 
 const Image = styled("img")({
   maxWidth: "100%",
@@ -35,6 +36,7 @@ const Image = styled("img")({
 
 const ServiceDetail = ({ open, onClose, service }) => {
   const [quantitySell, setQuantitySell] = useState(1);
+  const context = useAuth();
 
   const handleIncreaseClick = () => {
     setQuantitySell((quantitySell) => quantitySell + 1);
@@ -53,9 +55,13 @@ const ServiceDetail = ({ open, onClose, service }) => {
     setSelectedService(null);
   };
   const handleAddToCartClick = () => {
-    console.log("Check data", service);
-    setSelectedService(service);
-    setIsModalOpen(true);
+    if (context.auth.token === undefined) {
+      alert('Bạn chưa đăng nhập, vui lòng đăng nhập !')
+    } else {
+      console.log("Check data", service);
+      setSelectedService(service);
+      setIsModalOpen(true);
+    }
   };
 
   const [expanded, setExpanded] = useState(false);
