@@ -64,7 +64,7 @@ const ModalAddPet = (props) => {
     } else {
       try {
         const response = await axios.post("http://localhost:3500/pet", {
-          userId,
+          userId: data,
           petName,
           categoryId,
           rank,
