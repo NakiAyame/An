@@ -22,10 +22,10 @@ import ButtonCustomize from "../../../components/Button/Button";
 //@material-ui/core
 import { styled } from "@mui/material/styles";
 import ScrollableTabService from "../../../components/ScrollableTab/TabService";
-import ServiceDetailModal from "./ServiceDetailModal";
 import TypographyCus from "../../../components/Typography/DescriptionCus";
 import Footer from "../../../components/Footer/Footer";
 import MainPost from "../../../components/MainPost.jsx/MainPost";
+import ServiceDetail from "../../../components/Modal/ModalDetaiService";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -219,7 +219,7 @@ export default function ServiceList() {
                         </Typography>
                         <TypographyCus value={value} />
                       </CardContent>
-                      <CardActions>
+                      {/* <CardActions>
                         <ButtonCustomize
                           Button
                           size="small"
@@ -229,7 +229,7 @@ export default function ServiceList() {
                           nameButton="Thêm vào giỏ hàng"
                           fullWidth
                         />
-                      </CardActions>
+                      </CardActions> */}
                     </Card>
                   </Grid>
                 );
@@ -258,10 +258,10 @@ export default function ServiceList() {
         </CustomContainer>
       </main>
 
-      <ServiceDetailModal
+      <ServiceDetail
         open={isModalOpen}
         onClose={handleCloseEditModal}
-        serviceId={selectedService}
+        service={selectedService}
       />
       {/* End footer */}
       <Footer />

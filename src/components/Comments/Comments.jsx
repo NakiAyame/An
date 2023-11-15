@@ -10,7 +10,7 @@ const imgLink =
   "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260";
 
 export default function Comments({ value }) {
-  let id = value._id;
+  let id = value;
   const [data, setData] = useState([]);
 
   const [totalProducts, setTotalProducts] = useState(0);
@@ -42,24 +42,26 @@ export default function Comments({ value }) {
 
   return (
     <>
-      <Paper sx={{ padding: "40px 20px" }}>
-        {data &&
-          data.map((fb) => {
-            <Grid container wrap="nowrap" spacing={2}>
-              <Grid item>
-                <Avatar alt="Remy Sharp" />
+      {data &&
+        data.map((fb, index) => {
+          return (
+            <Paper sx={{ padding: "40px 20px" }}>
+              <Grid container wrap="nowrap" spacing={2}>
+                <Grid item>
+                  <Avatar alt="Remy Sharp" />
+                </Grid>
+                <Grid justifyContent="left" item xs zeroMinWidth>
+                  <Typography sx={{ margin: 0, textAlign: "left" }}>
+                    {fb.userId !== null ? fb.userId : ""}
+                  </Typography>
+                  <p sx={{ textAlign: "left" }}>{fb.comment}</p>
+                  <p sx={{ textAlign: "left", color: "gray" }}>{fb.star}</p>
+                </Grid>
               </Grid>
-              <Grid justifyContent="left" item xs zeroMinWidth>
-                <Typography sx={{ margin: 0, textAlign: "left" }}>
-                  {fb.userId !== null ? fb.userId : ""}
-                </Typography>
-                <p sx={{ textAlign: "left" }}>{fb.comment}</p>
-                <p sx={{ textAlign: "left", color: "gray" }}>{fb.star}</p>
-              </Grid>
-            </Grid>;
-          })}
-        <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
-      </Paper>
+              <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
+            </Paper>
+          );
+        })}
     </>
   );
 }

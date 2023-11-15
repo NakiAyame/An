@@ -19,9 +19,9 @@ import CartService from "./layouts/Cart/CartService";
 import CartProduct from "./layouts/Cart/CartProduct";
 
 import RequireAuth from "./components/RequireAuth";
-import ChangePassword from "./layouts/user/ChangePassword";
-import UserPRofile from "./layouts/user/UserProfile";
-import PetUser from "./layouts/user/PetUser";
+import ChangePassword from "./layouts/User/ChangePassword";
+import UserPRofile from "./layouts/User/UserProfile";
+import PetUser from "./layouts/User/PetUser";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 

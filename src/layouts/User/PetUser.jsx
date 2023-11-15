@@ -79,6 +79,28 @@ export default function PetUser() {
     setOpenEditModal(false);
   };
 
+  // --------------------- GET ALL CATEGORY PET -----------------------------
+  const [category, setCategory] = useState([]);
+  async function loadAllCategoryPet() {
+    try {
+      const loadDataCategoryPet = await axios.get(
+        `http://localhost:3500/category?categoryName=animal`
+      );
+      if (loadDataCategoryPet.error) {
+        toast.error(loadDataCategoryPet.error);
+      } else {
+        setCategory(loadDataCategoryPet.data.docs);
+        console.log(loadDataCategoryPet.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    loadAllCategoryPet();
+  }, []);
+
   return (
     <React.Fragment>
       <Container
@@ -264,6 +286,7 @@ export default function PetUser() {
         handUpdateTable={loadAllPetByUserId}
         page={currentPage}
         data={context.auth.id}
+        category={category}
       />
       {/* Modal update */}
       <ModalEditPet
@@ -272,6 +295,7 @@ export default function PetUser() {
         dataEditPet={dataEditPet}
         handUpdateEditTable={loadAllPetByUserId}
         page={currentPage}
+        category={category}
       />
     </React.Fragment>
   );
