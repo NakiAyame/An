@@ -30,13 +30,13 @@ export default function PetUser() {
 
   // ----------------------------------- API GET ALL PET BY USER ID--------------------------------
   useEffect(() => {
-    loadAllPetByUserId();
+    loadAllPetByUserId(currentPage);
   }, [context.auth.id]);
 
-  const loadAllPetByUserId = async () => {
+  const loadAllPetByUserId = async (page) => {
     try {
       const loadDataPet = await axios.get(
-        `http://localhost:3500/pet/userid?id=${context.auth.id}&limit=3`
+        `http://localhost:3500/pet/userid?id=${context.auth.id}&limit=3&page=${page}`
       );
       if (loadDataPet.error) {
         toast.error(loadDataPet.error);

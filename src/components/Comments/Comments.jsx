@@ -45,14 +45,14 @@ export default function Comments({ value }) {
       {data &&
         data.map((fb, index) => {
           return (
-            <Paper sx={{ padding: "40px 20px" }}>
+            <Paper sx={{ padding: "40px 20px", mb: 1 }}>
               <Grid container wrap="nowrap" spacing={2}>
                 <Grid item>
                   <Avatar alt="Remy Sharp" />
                 </Grid>
                 <Grid justifyContent="left" item xs zeroMinWidth>
                   <Typography sx={{ margin: 0, textAlign: "left" }}>
-                    {fb.userId !== null ? fb.userId : ""}
+                    {fb.userId !== null ? fb.userId.fullname : ""}
                   </Typography>
                   <p sx={{ textAlign: "left" }}>{fb.comment}</p>
                   <p sx={{ textAlign: "left", color: "gray" }}>{fb.star}</p>
