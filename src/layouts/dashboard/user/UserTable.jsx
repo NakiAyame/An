@@ -57,19 +57,21 @@ export default function BasicTable() {
     const DEFAULT_PAGE = 1;
     const DEFAULT_LIMIT = 5;
 
+    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
     const [option, setOption] = useState("");
     var count = 0;
 
     const [data, setData] = useState([]);
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState(" ");
     const [gender, setGender] = useState(true);
-    const [fullname, setFullName] = useState("");
-    const [password, setPassWord] = useState("");
-    const [confirmPass, setConfirmPass] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [address, setAddress] = useState("");
-    const [id, setId] = useState("");
+    const [fullname, setFullName] = useState(" ");
+    const [password, setPassWord] = useState(" ");
+    const [confirmPass, setConfirmPass] = useState(" ");
+    const [email, setEmail] = useState(" ");
+    const [phone, setPhone] = useState(" ");
+    const [address, setAddress] = useState(" ");
+    const [id, setId] = useState(" ");
 
     // --------------------- MODAL HANDLE -----------------------------
 
@@ -154,51 +156,68 @@ export default function BasicTable() {
 
     // --------------------- HANDLE DELETE -----------------------------
     const handleDelete = async (id) => {
-        try {
-            console.log(id);
-            const data = await axios.delete(`http://localhost:3500/user/${id}`);
-            if (data.error) {
-                toast.error(data.error);
-            } else {
-                console.log(data);
-                toast.success("Delete successfully");
+        if (window.confirm('Bạn có muốn xoá không ?') == true) {
+            try {
+                console.log(id);
+                const data = await axios.delete(`http://localhost:3500/user/${id}`);
+                if (data.error) {
+                    toast.error(data.error);
+                } else {
+                    console.log(data);
+                    toast.success("Delete successfully");
+                    loadAllUser()
+                }
+            } catch (err) {
+                console.log(err);
             }
-        } catch (err) {
-            console.log(err);
         }
     };
 
     // --------------------- HANDLE CREATE USER -----------------------------
     // useEffect(() => {
     const handleCreateUser = async (event) => {
-        // e.preventDefault();
-        // const { fullname, email, password } = data;
-        try {
-            const data = await axios.post("http://localhost:3500/register", {
-                fullname,
-                email,
-                password,
-                role,
-                address,
-                phone,
-                gender,
-            });
-            if (data.error) {
-                toast.error(data.error);
-            } else {
-                toast.success("Register successful. Welcome!");
-                handleUpdateTable({
-                    fullname: fullname,
-                    email: email,
-                    phone: phone,
-                    gender: gender,
-                    address: address,
+        if (fullname.trim() === "") {
+            alert("Vui lòng điền tên người dùng")
+        } else if (email.trim() === "") {
+            alert("Vui lòng điền Email người dùng")
+        } else if (!email.match(validRegex)) {
+            alert("Email không chính xác")
+        } else if (password.trim() === "") {
+            alert("Vui lòng điền Mật khẩu người dùng")
+        } else if (confirmPass.trim() === "") {
+            alert("Vui lòng nhập lại mật khẩu người dùng")
+        } else if (confirmPass.trim() !== password.trim()) {
+            alert("Mật khẩu thứ 2 không đúng")
+        }
+        else {
+            try {
+                const data = await axios.post("http://localhost:3500/register", {
+                    fullname,
+                    email,
+                    password,
+                    role,
+                    address,
+                    phone,
+                    gender,
                 });
-                handleClose();
-                loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+                if (data.error) {
+                    toast.error(data.error);
+                } else {
+                    toast.success("Register successful. Welcome!");
+                    handleUpdateTable({
+                        fullname: fullname,
+                        email: email,
+                        phone: phone,
+                        gender: gender,
+                        address: address,
+                    });
+                    console.log(data)
+                    // handleClose();
+                    loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+                }
+            } catch (err) {
+                console.log(err);
             }
-        } catch (err) {
-            console.log(err);
         }
     };
     // })
@@ -207,13 +226,12 @@ export default function BasicTable() {
     async function loadAllUser(page, limit) {
         try {
             const loadData = await axios.get(
-                `http://localhost:3500/user?page=${page}&limit=${limit}`
+                `http://localhost:3500/user`
             );
             if (loadData.error) {
                 toast.error(loadData.error);
             } else {
                 setData(loadData.data.docs);
-                toast.success("Login successful");
                 console.log(loadData.data.docs);
             }
         } catch (err) {
@@ -243,63 +261,64 @@ export default function BasicTable() {
                 width="15%"
             />
 
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell children>ID</TableCell>
-                            <TableCell align="right">Name</TableCell>
-                            <TableCell align="right">Phone</TableCell>
-                            <TableCell align="right">Gender</TableCell>
-                            <TableCell align="right">Email</TableCell>
-                            <TableCell align="right">Address</TableCell>
-                            <TableCell align="right">Chức năng</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data &&
-                            data.map((value, index) => {
-                                return (
-                                    <TableRow
-                                        key={index}
-                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                    >
-                                        <TableCell component="th" scope="row">
-                                            {index}
-                                        </TableCell>
-                                        <TableCell align="right">{value.fullname}</TableCell>
-                                        <TableCell align="right">{value.phone}</TableCell>
-                                        <TableCell align="right">
-                                            {(value.gender == true ? "Nam" : "Nữ")}
-                                        </TableCell>
-                                        <TableCell align="right">{value.email}</TableCell>
-                                        <TableCell align="right">{value.address}</TableCell>
-                                        <TableCell align="right">
-                                            <ButtonGroup variant="contained" fullWidth>
-                                                <ButtonCustomize
-                                                    onClick={(e) => handleLoadUserbId(value._id, value.password)}
-                                                    variant="contained"
-                                                    // component={RouterLink}
-                                                    nameButton="Cập nhật"
-                                                    fullWidth
-                                                />
-                                                <ButtonCustomize
-                                                    onClick={(e) => handleDelete(value._id)}
-                                                    backgroundColor="red"
-                                                    variant="contained"
-                                                    // component={RouterLink}
-                                                    nameButton="Xoá"
-                                                    fullWidth
-                                                />
-                                            </ButtonGroup>
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
+            <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                <TableContainer sx={{ maxHeight: 440 }}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell children>ID</TableCell>
+                                <TableCell align="right">Name</TableCell>
+                                <TableCell align="right">Phone</TableCell>
+                                <TableCell align="right">Gender</TableCell>
+                                <TableCell align="right">Email</TableCell>
+                                <TableCell align="right">Address</TableCell>
+                                <TableCell align="right">Chức năng</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data &&
+                                data.map((value, index) => {
+                                    return (
+                                        <TableRow
+                                            key={index}
+                                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                        >
+                                            <TableCell component="th" scope="row">
+                                                {index}
+                                            </TableCell>
+                                            <TableCell align="right">{value.fullname}</TableCell>
+                                            <TableCell align="right">{value.phone}</TableCell>
+                                            <TableCell align="right">
+                                                {(value.gender == true ? "Nam" : "Nữ")}
+                                            </TableCell>
+                                            <TableCell align="right">{value.email}</TableCell>
+                                            <TableCell align="right">{value.address}</TableCell>
+                                            <TableCell align="right">
+                                                <ButtonGroup variant="contained" fullWidth>
+                                                    <ButtonCustomize
+                                                        onClick={(e) => handleLoadUserbId(value._id, value.password)}
+                                                        variant="contained"
+                                                        // component={RouterLink}
+                                                        nameButton="Cập nhật"
+                                                        fullWidth
+                                                    />
+                                                    <ButtonCustomize
+                                                        onClick={(e) => handleDelete(value._id)}
+                                                        backgroundColor="red"
+                                                        variant="contained"
+                                                        // component={RouterLink}
+                                                        nameButton="Xoá"
+                                                        fullWidth
+                                                    />
+                                                </ButtonGroup>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
             <Modal
                 open={open}
                 onClose={handleClose}
