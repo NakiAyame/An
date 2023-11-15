@@ -21,6 +21,8 @@ import { NavLink } from "react-router-dom";
 import AccountMenu from "../AccountMeun/AccountMeun";
 import LoginIcon from "@mui/icons-material/Login";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const CustomAppBar = styled(AppBar)({
   background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
@@ -58,6 +60,13 @@ function Header() {
   const handleClose = () => {
     setServiceItem(null);
   };
+
+  const [isLoggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setLoggedIn(!!token);
+  }, []);
 
   return (
     <>
@@ -251,15 +260,17 @@ function Header() {
                   textAlign: "center",
                 }}
               >
-                <Tooltip title="Đăng nhập">
-                  <NavLink to="/sign-in">
-                    <IconButton size="small" sx={{ ml: 2 }}>
-                      <LoginIcon sx={{ width: 32, height: 32 }}></LoginIcon>
-                    </IconButton>
-                  </NavLink>
-                </Tooltip>
+                {!isLoggedIn && (
+                  <Tooltip title="Đăng nhập">
+                    <NavLink to="/sign-in">
+                      <IconButton size="small" sx={{ ml: 2 }}>
+                        <LoginIcon sx={{ width: 32, height: 32 }}></LoginIcon>
+                      </IconButton>
+                    </NavLink>
+                  </Tooltip>
+                )}
               </Box>
-              <AccountMenu />
+              {isLoggedIn && <AccountMenu />}
             </Box>
           </Toolbar>
         </Container>

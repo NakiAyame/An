@@ -24,6 +24,7 @@ import { styled } from "@mui/material/styles";
 import ScrollableTabService from "../../../components/ScrollableTab/TabService";
 import ProductDetail from "../../../components/Modal/ModalDetailProduct";
 import Footer from "../../../components/Footer/Footer";
+import MainPost from "../../../components/MainPost.jsx/MainPost";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -31,6 +32,14 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const defaultTheme = createTheme();
 
 const BASE_URL = "http://localhost:3500";
+
+const mainPost = {
+  title: "Sản phẩm dành cho thú cưng",
+  description: "Cung cấp đầy đủ các loại sản phẩm hàng ngày dành cho thú cưng",
+  image:
+    "https://vuaphukienthucung.com/public/media/images/thiet-ke-hinh-anh-phu-kien-thu-cung-01.jpg",
+  imageText: "Ảnh sản phẩm",
+};
 
 export default function ProductList() {
   const [data, setData] = useState([]);
@@ -51,7 +60,8 @@ export default function ProductList() {
   });
 
   const CustomContainer = styled(Container)({
-    background: "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
+    background:
+      "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
   });
 
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
@@ -61,7 +71,9 @@ export default function ProductList() {
 
   const loadAllProduct = async (page) => {
     try {
-      const loadData = await axios.get(`${BASE_URL}/product?page=${page}`);
+      const loadData = await axios.get(
+        `${BASE_URL}/product?page=${page}&limit=9`
+      );
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
@@ -101,75 +113,7 @@ export default function ProductList() {
       <CssBaseline />
 
       <main>
-        {/* Hero unit */}
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-          }}
-        >
-          <Container
-            maxWidth="full"
-            sx={{
-              backgroundImage: `url('https://vuaphukienthucung.com/public/media/images/thiet-ke-hinh-anh-phu-kien-thu-cung-01.jpg')`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              height: "500px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
-              sx={{
-                textShadow: "2px 2px rgba(0, 0, 0, 0.5)",
-                backgroundColor: "rgba(255, 255, 255, 0.4)",
-              }}
-            >
-              Sản phẩm dành cho thú cưng
-            </Typography>
-            <Typography
-              variant="h5"
-              align="center"
-              color="text.primary"
-              paragraph
-              sx={{
-                backgroundColor: "rgba(255, 255, 255, 0.4)",
-              }}
-            >
-              Cung cấp đầy đủ các loại sản phẩm hàng ngày dành cho thú cưng
-            </Typography>
-            {/* <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-              <ButtonCustomize
-                Button
-                size="small"
-                variant="contained"
-                // component={RouterLink}
-                nameButton="Đăng kí dịch vụ"
-                fullWidth
-              />
-              <ButtonCustomize
-                Button
-                size="small"
-                variant="contained"
-                // component={RouterLink}
-                nameButton="Liên hệ dịch vụ chăm sóc"
-                fullWidth
-              />
-            </Stack> */}
-          </Container>
-        </Box>
+        <MainPost post={mainPost} />
 
         <CustomContainer sx={{ py: 8 }} maxWidth="full">
           {/* End hero unit */}

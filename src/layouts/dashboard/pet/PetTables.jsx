@@ -150,7 +150,7 @@ export default function PetTable() {
         setData(loadData.data.docs);
         setTotalPets(loadData.data.limit);
         setTotalPages(loadData.data.pages);
-        console.log(loadData.data);
+        console.log( loadData.data);
       }
     } catch (err) {
       console.log(err);

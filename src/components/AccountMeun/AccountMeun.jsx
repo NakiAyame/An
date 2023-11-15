@@ -120,47 +120,28 @@ export default function AccountMenu() {
         ) : (
           ""
         )}
-
-        {context.auth.role === "admin" || context.auth.role === "customer" ? (
-          <MenuItem
-            onClick={handleClose}
-            component={NavLink}
-            to="/change-password"
-          >
-            <ListItemIcon>
-              <DashboardIcon fontSize="small" />
-            </ListItemIcon>
-            Đổi mật khẩu
-          </MenuItem>
-        ) : (
-          ""
-        )}
-
-        {context.auth.role === "admin" || context.auth.role === "customer" ? (
-          <MenuItem
-            onClick={handleClose}
-            component={NavLink}
-            to="/user-profile"
-          >
-            <ListItemIcon>
-              <AccountBoxIcon fontSize="small" />
-            </ListItemIcon>
-            Thông tin cá nhân
-          </MenuItem>
-        ) : (
-          ""
-        )}
-
-        {context.auth.role === "admin" || context.auth.role === "customer" ? (
-          <MenuItem onClick={handleClose} component={NavLink} to="/pet-user">
-            <ListItemIcon>
-              <PetsIcon fontSize="small" />
-            </ListItemIcon>
-            Thú cưng của tôi
-          </MenuItem>
-        ) : (
-          ""
-        )}
+        <MenuItem
+          onClick={handleClose}
+          component={NavLink}
+          to="/change-password"
+        >
+          <ListItemIcon>
+            <DashboardIcon fontSize="small" />
+          </ListItemIcon>
+          Đổi mật khẩu
+        </MenuItem>
+        <MenuItem onClick={handleClose} component={NavLink} to="/user-profile">
+          <ListItemIcon>
+            <AccountBoxIcon fontSize="small" />
+          </ListItemIcon>
+          Thông tin cá nhân
+        </MenuItem>
+        <MenuItem onClick={handleClose} component={NavLink} to="/pet-user">
+          <ListItemIcon>
+            <PetsIcon fontSize="small" />
+          </ListItemIcon>
+          Thú cưng của tôi
+        </MenuItem>
 
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
@@ -168,16 +149,12 @@ export default function AccountMenu() {
           </ListItemIcon>
           Cài đặt
         </MenuItem>
-        {context.auth.role === "admin" || context.auth.role === "customer" ? (
-          <MenuItem onClick={handleLogout}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Đăng xuất
-          </MenuItem>
-        ) : (
-          ""
-        )}
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Đăng xuất
+        </MenuItem>
       </Menu>
     </React.Fragment>
   );
