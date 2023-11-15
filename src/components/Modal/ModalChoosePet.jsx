@@ -146,7 +146,7 @@ const ChoosePet = ({ open, onClose, service }) => {
           {data &&
             data.map((value, index) => {
               return (
-                <Card sx={{ maxWidth: 700 }}>
+                <Card sx={{ maxWidth: 700, ml: 2 }}>
                   <CardActionArea>
                     <CardMedia
                       component="img"

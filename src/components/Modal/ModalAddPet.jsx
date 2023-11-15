@@ -137,7 +137,7 @@ const ModalAddPet = (props) => {
               fullWidth
               label="Id chủ thú cưng"
               margin="normal"
-              value={userId}
+              value={data}
               onChange={(e) => setUserId(e.target.value)}
               sx={{ display: "none" }}
             />
