@@ -25,6 +25,7 @@ import ScrollableTabService from "../../../components/ScrollableTab/TabService";
 import ProductDetail from "../../../components/Modal/ModalDetailProduct";
 import Footer from "../../../components/Footer/Footer";
 import MainPost from "../../../components/MainPost.jsx/MainPost";
+import useAuth from "../../../hooks/useAuth";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -47,6 +48,10 @@ export default function ProductList() {
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [loged, setLoged] = useState(false)
+
+  const context = useAuth();
 
   const numberToVND = (number) => {
     return number.toLocaleString("vi-VN", {
@@ -81,7 +86,7 @@ export default function ProductList() {
         console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
         setTotalProducts(loadData.data.limit);
-        console.log(loadData.data);
+        console.log(loadData.data.docs);
       }
     } catch (err) {
       console.log(err);
@@ -107,6 +112,31 @@ export default function ProductList() {
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
+
+  const handleAddToCart = async (id) =>{
+    if(context.auth.token === undefined){
+      alert('Bạn chưa đăng nhập, vui lòng đăng nhập !');
+    }
+    else if(window.confirm('Bạn có muốn thêm sản phẩm này không ?') == true){
+      try {
+        const loadData = await axios.post(
+          `${BASE_URL}/cartProduct/add-to-cart`,
+          {
+            productId: id
+          },
+          {
+            headers: { 'Authorization': context.auth.token },
+            withCredentials: true
+          }
+        )
+        .then((data) => {
+          alert('Thêm sản phẩm vào giỏ hàng thành công')
+        })
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -163,6 +193,7 @@ export default function ProductList() {
                           backgroundColor="Pink"
                           // component={RouterLink}
                           nameButton="Thêm vào giỏ hàng"
+                          onClick={() => handleAddToCart(value._id)}
                           fullWidth
                         />
                       </CardActions>
