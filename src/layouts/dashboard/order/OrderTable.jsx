@@ -64,6 +64,8 @@ export default function BasicTable() {
     const [data, setData] = useState([]);
     const [id, setId] = useState("");
     const [orderDetail, setOrderDetail] = useState([]);
+    const [status1, setStatus] = useState('');
+
 
     // --------------------- MODAL HANDLE -----------------------------
 
@@ -120,7 +122,6 @@ export default function BasicTable() {
                 toast.error(loadData.error);
             } else {
                 setData(loadData.data.docs);
-                toast.success("Login successful");
                 console.log(loadData.data.docs);
             }
         } catch (err) {
@@ -179,6 +180,29 @@ export default function BasicTable() {
         fontSize: "12px"
     };
 
+    const statusList = [
+        'Chờ xác nhận', 'Đang giao hàng', 'Đã nhận hàng'
+    ]
+
+    const hanldeClickChangeStatus = async (status, id) => {
+        if (window.confirm('Bạn có muốn cập nhật trạng thái đơn hàng không ?') == true) {
+            try {
+                const loadData = await axios.put(
+                    `http://localhost:3500/order/update-status/${id}`, {
+                    orderStatus: status
+                });
+                if (loadData.error) {
+                    toast.error(loadData.error);
+                } else {
+                    console.log(loadData.data);
+                    loadAllOrder();
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
+
     return (
         <>
             <Grid
@@ -207,61 +231,62 @@ export default function BasicTable() {
                     />
                 </Grid>
             </Grid>
-
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell children>ID</TableCell>
-                            <TableCell align="right">Tên người dùng</TableCell>
-                            <TableCell align="right">Ngày đặt hàng</TableCell>
-                            <TableCell align="right">Tổng giá trị</TableCell>
-                            <TableCell align="right">Trạng thái</TableCell>
-                            <TableCell align="right">Chức năng</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data &&
-                            data.map((value, index) => {
-                                return (
-                                    <TableRow
-                                        key={index}
-                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                    >
-                                        <TableCell component="th" scope="row">
-                                            {index + 1}
-                                        </TableCell>
-                                        <TableCell align="right">{value.userId}</TableCell>
-                                        <TableCell align="right">{value.createdAt}</TableCell>
-                                        <TableCell align="right">{value.totalPrice}</TableCell>
-                                        <TableCell align="right">
-                                            {value.status}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <ButtonGroup variant="contained" fullWidth>
-                                                <ButtonCustomize
-                                                    onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
-                                                    variant="contained"
-                                                    // component={RouterLink}
-                                                    nameButton="xem chi tiết"
-                                                    fullWidth
-                                                />
-                                                <ButtonCustomize
-                                                    onClick={(e) => handleDelete(value._id)}
-                                                    backgroundColor="red"
-                                                    variant="contained"
-                                                    // component={RouterLink}
-                                                    nameButton="Xoá"
-                                                    fullWidth
-                                                />
-                                            </ButtonGroup>
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                <TableContainer sx={{ maxHeight: 440 }}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell children>ID</TableCell>
+                                <TableCell align="right">Tên người dùng</TableCell>
+                                <TableCell align="right">Ngày đặt hàng</TableCell>
+                                <TableCell align="right">Tổng giá trị</TableCell>
+                                <TableCell align="right">Trạng thái</TableCell>
+                                <TableCell align="right">Chức năng</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data &&
+                                data.map((value, index) => {
+                                    return (
+                                        <TableRow
+                                            key={index}
+                                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                        >
+                                            <TableCell component="th" scope="row">
+                                                {index + 1}
+                                            </TableCell>
+                                            <TableCell align="right">{value.userId !== null ? value.userId.fullname : ""}</TableCell>
+                                            <TableCell align="right">{value.createdAt}</TableCell>
+                                            <TableCell align="right">{value.totalPrice}</TableCell>
+                                            <TableCell align="right">
+                                                {value.status}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <ButtonGroup variant="contained" fullWidth>
+                                                    <ButtonCustomize
+                                                        onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
+                                                        variant="contained"
+                                                        // component={RouterLink}
+                                                        nameButton="xem chi tiết"
+                                                        fullWidth
+                                                    />
+                                                    <ButtonCustomize
+                                                        onClick={(e) => handleDelete(value._id)}
+                                                        backgroundColor="red"
+                                                        variant="contained"
+                                                        // component={RouterLink}
+                                                        nameButton="Xoá"
+                                                        fullWidth
+                                                    />
+                                                </ButtonGroup>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
 
             <Modal
                 open={open}
@@ -273,6 +298,26 @@ export default function BasicTable() {
                     <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
                         {option === "view" ? "Chi tiết đơn hàng" : "Đang cập nhật ......"}
                     </DialogTitle>
+                    <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+                        <InputLabel id="demo-select-small-label">Trạng thái</InputLabel>
+                        <Select
+                            label="Loại dịch vụ"
+                        // value={selectedCategory}
+                        // onChange={handleChangeCate}
+                        >
+                            {statusList.map((value, index) => {
+                                return (
+                                    <MenuItem
+                                        key={index}
+                                        value={'dsadsadsa'}
+                                        onClick={(e) => hanldeClickChangeStatus(value, orderDetail[0].orderId)}
+                                    >
+                                        {value}
+                                    </MenuItem>
+                                );
+                            })}
+                        </Select>
+                    </FormControl>
                     <IconButton
                         aria-label="close"
                         onClick={handleClose}
@@ -299,7 +344,6 @@ export default function BasicTable() {
                                         <TableCell align="right">Tên sản phẩm</TableCell>
                                         <TableCell align="right">Số lượng</TableCell>
                                         <TableCell align="right">Giá</TableCell>
-                                        <TableCell align="right">Chức năng</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -316,7 +360,7 @@ export default function BasicTable() {
                                                     <TableCell align="right">{value.orderId}</TableCell>
                                                     <TableCell align="right">{value.productId.productName}</TableCell>
                                                     <TableCell align="right">{value.quantity}</TableCell>
-                                                    <TableCell align="right">default</TableCell>
+                                                    <TableCell align="right">{value.productId.price}</TableCell>
                                                     <TableCell align="right"></TableCell>
                                                 </TableRow>
                                             );
@@ -326,16 +370,17 @@ export default function BasicTable() {
 
                         </Grid>
                     </DialogContent>
+                    {/* 
                     <DialogActions>
                         <Button
                             variant="contained"
                             margin="normal"
                             color="primary"
-                            // onClick={handleUpdate}
+                        // onClick={handleUpdate}
                         >
                             Cập nhật thông tin
                         </Button>
-                    </DialogActions>
+                    </DialogActions> */}
                 </Box>
             </Modal>
         </>

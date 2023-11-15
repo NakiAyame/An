@@ -30,6 +30,8 @@ export default function CartProduct() {
 
   const [data, setData] = useState([]);
   const [quantity, setQuantity] = useState(0)
+  const [loged, setLoged] = useState(false)
+  const [total, setTotal] = useState(0)
 
   const context = useAuth();
   console.log(context.auth)
@@ -46,31 +48,64 @@ export default function CartProduct() {
     console.log(quantity)
   }
 
-
   const handleLoadCartService = async () => {
-    try {
-      const loadData = await axios.get(
-        `http://localhost:3500/cartProduct/view-cart`,
-        {
-          headers: { 'Authorization': context.auth.token },
-          withCredentials: true
+    if (context.auth.token !== undefined) {
+      setLoged(true)
+      try {
+        const loadData = await axios.get(
+          `http://localhost:3500/cartProduct/view-cart`,
+          {
+            headers: { 'Authorization': context.auth.token },
+            withCredentials: true
+          }
+        );
+        if (loadData.error) {
+          toast.error(loadData.error);
+        } else {
+          setData(loadData.data)
+          console.log(loadData.data);
+          let totalPrice = 0;
+          for (let i = 0; i < loadData.data.length; i++) {
+            totalPrice += loadData.data[i].quantity * loadData.data[i].productId.price
+          }
+          setTotal(totalPrice);
         }
-      );
-      if (loadData.error) {
-        toast.error(loadData.error);
-      } else {
-        setData(loadData.data)
-        toast.success("Login successful");
-        console.log(loadData.data);
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   }
 
   useEffect(() => {
     handleLoadCartService()
-}, []);
+  }, []);
+
+  // ----------------------------------------------------------------
+
+  const handleCheckOut = async () => {
+    if(window.confirm('Bạn có muốn đặt sản phẩm này ?') == true){
+      if(data.length === 0){
+        alert('Bạn không có sản phẩm trong giỏ hàng')
+      }else{
+        try {
+          const checkout = await axios.get(
+            `http://localhost:3500/cartProduct/checkout`,
+            {
+              headers: { 'Authorization': context.auth.token },
+              withCredentials: true
+            }
+          )
+          .then((data)=>{
+            alert('Đặt sản phẩm thành công')
+            handleLoadCartService()
+          })
+          
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
+  }
 
   // ----------------------------------------------------------------
   const productStyle = {
@@ -105,8 +140,8 @@ export default function CartProduct() {
 
   return (
     <>
-      <h1 style={{textAlign: 'center'}}>GIỎ HÀNG SẢN PHẨM</h1>
-      <Card sx={{ minWidth: 275 }} style={{padding: '20px'}}>
+      <h1 style={{ textAlign: 'center' }}>GIỎ HÀNG SẢN PHẨM</h1>
+      <Card sx={{ minWidth: 275 }} style={{ padding: '20px' }}>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             <Grid item xs={8}>
@@ -126,39 +161,43 @@ export default function CartProduct() {
               </Grid>
               <hr />
               {
-                data.map((value, index) => {
-                  return (
-                    <Grid container spacing={2} style={{padding: '10px 0'}}>
-                      <Grid item xs>
-                        {value.productId}
-                      </Grid>
-                      <Grid item xs>
-                        GIÁ
-                      </Grid>
-                      <Grid item xs>
-                        <button style={quantityButtonLeftStyle}>-</button>
-                        <input type='text' style={quantityInputStyle} value={value.quantity} onChange={(e) => setQuantity(e.target.value)} />
-                        <button onClick={() => handleProduct()} style={quantityButtonRightStyle}>+</button>
-                      </Grid>
-                      <Grid item xs>
-                        TỔNG
-                      </Grid>
-                    </Grid>
-                  )
-                })
+                loged === false
+                  ? <h3 style={{ textAlign: 'center' }}>VUI LÒNG ĐĂNG NHẬP</h3>
+                  : data.length === 0
+                    ? <h3 style={{ textAlign: 'center' }}>KHÔNG CÓ SẢN PHẨM TRONG GIỎ HÀNG</h3>
+                    : data.map((value, index) => {
+                      return (
+                        <Grid container spacing={2} style={{ padding: '10px 0' }}>
+                          <Grid item xs>
+                            {value.productId.productName}
+                          </Grid>
+                          <Grid item xs>
+                          {(value.productId.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                          </Grid>
+                          <Grid item xs>
+                            <button style={quantityButtonLeftStyle}>-</button>
+                            <input type='text' style={quantityInputStyle} value={value.quantity} onChange={(e) => setQuantity(e.target.value)} />
+                            <button onClick={() => handleProduct()} style={quantityButtonRightStyle}>+</button>
+                          </Grid>
+                          <Grid item xs>
+                          {(value.productId.price * value.quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                          </Grid>
+                        </Grid>
+                      )
+                    })
               }
             </Grid>
             <Grid item xs={4}>
-              <Grid container spacing={3} style={{paddingBottom: '20px'}}>
+              <Grid container spacing={3} style={{ paddingBottom: '20px' }}>
                 <Grid item xs>
                   TẤT CẢ
                 </Grid>
                 <Grid item xs>
-                  PRICE
+                  {total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                 </Grid>
               </Grid>
               <p>Phí vận chuyển được tính khi thanh toán</p>
-              <button style={{color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0'}}>CHECK OUT</button> 
+              <button onClick={() => handleCheckOut()} style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}>CHECK OUT</button>
             </Grid>
           </Grid>
         </Box>
