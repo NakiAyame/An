@@ -25,6 +25,7 @@ import ScrollableTabService from "../../../components/ScrollableTab/TabService";
 import ServiceDetailModal from "./ServiceDetailModal";
 import TypographyCus from "../../../components/Typography/DescriptionCus";
 import Footer from "../../../components/Footer/Footer";
+import MainPost from "../../../components/MainPost.jsx/MainPost";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -32,6 +33,14 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const defaultTheme = createTheme();
 
 const BASE_URL = "http://localhost:3500";
+
+const mainPost = {
+  title: "Dịch vụ chăm sóc thú cưng",
+  description:
+    "Tại PetCare, đội ngũ bác sĩ của chúng tôi được đào tạo để nâng cao năng lực chuyên môn và làm việc tại bệnh viện với cơ sở vật chất hiện đại nhằm duy trì tiêu chuẩn cao trong công tác chăm sóc sức khỏe vật nuôi",
+  image: "https://toplist.vn/images/800px/-795198.jpg",
+  imageText: "Ảnh",
+};
 
 export default function ServiceList() {
   const [data, setData] = useState([]);
@@ -156,78 +165,7 @@ export default function ServiceList() {
       <CssBaseline />
 
       <main>
-        {/* Hero unit */}
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-          }}
-        >
-          <Container
-            maxWidth="full"
-            sx={{
-              backgroundImage: `url('https://toplist.vn/images/800px/-795198.jpg')`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              height: "500px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
-              sx={{
-                textShadow: "2px 2px rgba(0, 0, 0, 0.5)",
-                backgroundColor: "rgba(255, 255, 255, 0.4)",
-              }}
-            >
-              Dịch vụ chăm sóc thú cưng
-            </Typography>
-            <Typography
-              variant="h5"
-              align="center"
-              color="text.primary"
-              paragraph
-              sx={{
-                backgroundColor: "rgba(255, 255, 255, 0.4)",
-              }}
-            >
-              Tại PetCare, đội ngũ bác sĩ của chúng tôi được đào tạo để nâng cao
-              năng lực chuyên môn và làm việc tại bệnh viện với cơ sở vật chất
-              hiện đại nhằm duy trì tiêu chuẩn cao trong công tác chăm sóc sức
-              khỏe vật nuôi
-            </Typography>
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-              <ButtonCustomize
-                Button
-                size="small"
-                variant="contained"
-                // component={RouterLink}
-                nameButton="Đăng kí dịch vụ"
-                fullWidth
-              />
-              <ButtonCustomize
-                Button
-                size="small"
-                variant="contained"
-                // component={RouterLink}
-                nameButton="Liên hệ dịch vụ chăm sóc"
-                fullWidth
-              />
-            </Stack>
-          </Container>
-        </Box>
+        <MainPost post={mainPost} />
 
         <CustomBox
           sx={{
