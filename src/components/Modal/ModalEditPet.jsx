@@ -15,16 +15,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const PET_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
 
 const ModalEditPet = (props) => {
-  const { open, onClose, dataEditPet, handUpdateEditTable, page } = props;
+  const { open, onClose, dataEditPet, handUpdateEditTable, page, category } =
+    props;
 
   const [userId, setUserId] = useState("");
   const [petName, setPetName] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
   const [status, setStatus] = useState(true);
 
@@ -48,7 +53,7 @@ const ModalEditPet = (props) => {
     if (open) {
       setUserId(dataEditPet.userId);
       setPetName(dataEditPet.petName);
-      setCategory(dataEditPet.category);
+      setCategoryId(dataEditPet.categoryId);
       setRank(dataEditPet.rank);
       setStatus(dataEditPet.status);
     }
@@ -65,7 +70,7 @@ const ModalEditPet = (props) => {
           id: petID,
           userId: userId,
           petName: petName,
-          categoryId: category,
+          categoryId: categoryId,
           rank: rank,
           status: status,
         });
@@ -80,6 +85,13 @@ const ModalEditPet = (props) => {
         toast.error(err.message); // xuất thông báo lỗi ra màn hình
       }
     }
+  };
+
+  // --------------------- HANDLE CHANGE CATEGORY PET -----------------------------
+  const handleChangePet = (e) => {
+    const selectedCategory = e.target.value;
+    console.log("Check ID cate add Product", selectedCategory);
+    setCategoryId(selectedCategory);
   };
 
   return (
@@ -131,14 +143,30 @@ const ModalEditPet = (props) => {
               onChange={(e) => handleValidationPetName(e)}
               error={!valid}
             />
-            <TextField
-              required={true}
-              fullWidth
-              label="Loại thú cưng"
-              margin="normal"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
+
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="demo-select-small-label">
+                Chọn loại thú cưng
+              </InputLabel>
+              <Select
+                label="Loại sản phẩm"
+                value={categoryId}
+                onChange={handleChangePet}
+              >
+                {category &&
+                  category.map((value) => {
+                    return (
+                      <MenuItem
+                        key={value._id}
+                        value={value._id}
+                        // onClick={(e) => hanldeClickCategory(e.target.value)}
+                      >
+                        {value.feature}
+                      </MenuItem>
+                    );
+                  })}
+              </Select>
+            </FormControl>
 
             <TextField
               required={true}

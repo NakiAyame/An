@@ -15,13 +15,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const PET_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
 // /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]+$/;
 
 const ModalAddPet = (props) => {
-  const { open, onClose, handUpdateTable, page, data } = props;
+  const { open, onClose, handUpdateTable, page, data, category } = props;
+  console.log("Kiểm tra data", data);
 
   const [userId, setUserId] = useState("");
   const [petName, setPetName] = useState("");
@@ -90,6 +95,13 @@ const ModalAddPet = (props) => {
     }
   };
 
+  // --------------------- HANDLE CHANGE CATEGORY PET -----------------------------
+  const handleChangePet = (e) => {
+    const selectedCategory = e.target.value;
+    console.log("Check ID cate add Product", selectedCategory);
+    setCategoryId(selectedCategory);
+  };
+
   return (
     <Dialog
       open={open}
@@ -125,7 +137,7 @@ const ModalAddPet = (props) => {
               fullWidth
               label="Id chủ thú cưng"
               margin="normal"
-              value={userId}
+              value={data}
               onChange={(e) => setUserId(e.target.value)}
               sx={{ display: "none" }}
             />
@@ -138,14 +150,29 @@ const ModalAddPet = (props) => {
               onChange={(e) => handleValidationPetName(e)}
               error={!valid}
             />
-            <TextField
-              required={true}
-              fullWidth
-              label="Loại thú cưng"
-              margin="normal"
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="demo-select-small-label">
+                Chọn loại thú cưng
+              </InputLabel>
+              <Select
+                label="Loại sản phẩm"
+                value={categoryId}
+                onChange={handleChangePet}
+              >
+                {category &&
+                  category.map((value) => {
+                    return (
+                      <MenuItem
+                        key={value._id}
+                        value={value._id}
+                        // onClick={(e) => hanldeClickCategory(e.target.value)}
+                      >
+                        {value.feature}
+                      </MenuItem>
+                    );
+                  })}
+              </Select>
+            </FormControl>
 
             <TextField
               required={true}

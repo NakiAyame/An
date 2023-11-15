@@ -37,8 +37,8 @@ import ModalEditSerivce from "../../../components/Modal/ModalEditService";
 import ModalComfirmSerivce from "../../../components/Modal/ModalComfirmService";
 import ButtonCustomize from "../../../components/Button/Button";
 import DropDownService from "../../../components/DropDown/DropDownService";
-import ServiceDetailModal from "./ServiceDetailModal";
 import TypographyCus from "../../../components/Typography/DescriptionCus";
+import ServiceDetail from "../../../components/Modal/ModalDetaiService";
 
 const BASE_URL = "http://localhost:3500";
 
@@ -385,7 +385,7 @@ export default function ServiceTable() {
         handUpdateDeleteTable={loadAllService}
       />
 
-      <ServiceDetailModal
+      <ServiceDetail
         open={isModalOpen}
         onClose={handleCloseEditModal}
         serviceId={selectedService}
