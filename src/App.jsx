@@ -22,6 +22,7 @@ import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./layouts/User/ChangePassword";
 import UserPRofile from "./layouts/User/UserProfile";
 import PetUser from "./layouts/User/PetUser";
+import VerifyCode from "./layouts/common/verify/VerifyCode";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -66,6 +67,7 @@ function App() {
             <Route path="user-profile" element={<UserPRofile />} />
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="pet-user" element={<PetUser />} />
+            <Route path="verify" element={<VerifyCode />} />
           </Route>
         </Routes>
       </BrowserRouter>

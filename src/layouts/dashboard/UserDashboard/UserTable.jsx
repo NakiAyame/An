@@ -79,10 +79,6 @@ export default function BasicTable() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const handleUpdateTable = (value) => {
-        setData([value, ...data]);
-    };
-
     // --------------------- HANDLE ROLE -----------------------------
     const handleRoleChange = (event) => {
         setRole(event.target.value);
@@ -199,22 +195,29 @@ export default function BasicTable() {
                     address,
                     phone,
                     gender,
-                });
-                if (data.error) {
-                    toast.error(data.error);
-                } else {
-                    toast.success("Register successful. Welcome!");
-                    handleUpdateTable({
-                        fullname: fullname,
-                        email: email,
-                        phone: phone,
-                        gender: gender,
-                        address: address,
-                    });
-                    console.log(data)
-                    // handleClose();
-                    loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
-                }
+                    status: 'verifying'
+                })
+                    .then((data) => {
+                        if (data.data.error === 'Email was taken') {
+                            alert('Email đã được sử dụng')
+                        } else {
+                            toast.success("Register successful. Welcome!");
+                            console.log(data)
+                            handleClose();
+                            loadAllUser();
+                        }
+                    })
+                    .catch((err) => {
+                        alert(err.data)
+                    })
+                // if (data.error) {
+                //     toast.error(data.error);
+                // } else {
+                //     toast.success("Register successful. Welcome!");
+                //     console.log(data)
+                //     // handleClose();
+                //     loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+                // }
             } catch (err) {
                 console.log(err);
             }
@@ -261,8 +264,8 @@ export default function BasicTable() {
                 width="15%"
             />
 
-            <Paper sx={{ width: "100%", overflow: "hidden" }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
+            <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "20px" }}>
+                <TableContainer sx={{ maxHeight: 550 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
@@ -271,6 +274,7 @@ export default function BasicTable() {
                                 <TableCell align="right">Phone</TableCell>
                                 <TableCell align="right">Gender</TableCell>
                                 <TableCell align="right">Email</TableCell>
+                                <TableCell align="right">Status</TableCell>
                                 <TableCell align="right">Address</TableCell>
                                 <TableCell align="right">Chức năng</TableCell>
                             </TableRow>
@@ -292,6 +296,7 @@ export default function BasicTable() {
                                                 {(value.gender == true ? "Nam" : "Nữ")}
                                             </TableCell>
                                             <TableCell align="right">{value.email}</TableCell>
+                                            <TableCell align="right">{value.status}</TableCell>
                                             <TableCell align="right">{value.address}</TableCell>
                                             <TableCell align="right">
                                                 <ButtonGroup variant="contained" fullWidth>
