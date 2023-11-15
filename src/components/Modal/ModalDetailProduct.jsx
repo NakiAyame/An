@@ -85,7 +85,7 @@ const ProductDetail = ({ open, onClose, product }) => {
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Chi tiết sản phẩm
+            Chi tiết dịch vụ
           </Typography>
           <IconButton
             aria-label="close"
@@ -102,7 +102,7 @@ const ProductDetail = ({ open, onClose, product }) => {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ flexGrow: 2, padding: 8 }}>
+      <Box sx={{ flexGrow: 2, padding: 12 }}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <Image src={`${productImage}`} />
@@ -174,7 +174,7 @@ const ProductDetail = ({ open, onClose, product }) => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Comments value={{ _id }} />
+          <Comments value={_id} />
         </AccordionDetails>
       </Accordion>
       <Accordion

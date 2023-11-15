@@ -1,156 +1,238 @@
 import { styled } from "@mui/material/styles";
-import { Box, Grid, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  Button,
+  Toolbar,
+  AppBar,
+  CircularProgress,
+  Backdrop,
+  Paper,
+  Avatar,
+  Divider,
+} from "@mui/material";
 import Rating from "@mui/material/Rating";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
 import StarIcon from "@mui/icons-material/Star";
+import Dialog from "@mui/material/Dialog";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
-import AccordionGroup from "@mui/joy/AccordionGroup";
-import Accordion from "@mui/joy/Accordion";
-import AccordionDetails, {
-  accordionDetailsClasses,
-} from "@mui/joy/AccordionDetails";
-import AccordionSummary, {
-  accordionSummaryClasses,
-} from "@mui/joy/AccordionSummary";
-
-const Root = styled(Box)(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(20),
-}));
-
-const Title = styled(Typography)(({ theme }) => ({
-  fontWeight: "bold",
-  marginBottom: theme.spacing(1),
-}));
-
-const Price = styled(Typography)(({ theme }) => ({
-  color: theme.palette.secondary.main,
-  fontWeight: "bold",
-  marginBottom: theme.spacing(1),
-}));
-
-const Description = styled(Typography)(({ theme }) => ({
-  marginBottom: theme.spacing(1),
-}));
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Description } from "@mui/icons-material";
+import TypographyCus from "../Typography/DescriptionCus";
+import ChoosePet from "./ModalChoosePet";
 
 const Image = styled("img")({
   maxWidth: "100%",
   maxHeight: 400,
 });
 
-const RatingWrapper = styled(Box)({
-  display: "flex",
-  alignItems: "center",
-  marginBottom: "8px",
-});
-
-const Reviews = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  marginLeft: theme.spacing(1),
-}));
-
-const ServiceDetail = ({ service }) => {
-  const [quantity, setQuantity] = useState(1);
+const ServiceDetail = ({ open, onClose, service }) => {
+  const [quantitySell, setQuantitySell] = useState(1);
 
   const handleIncreaseClick = () => {
-    setQuantity((quantity) => quantity + 1);
+    setQuantitySell((quantitySell) => quantitySell + 1);
   };
 
   const handleDecreaseClick = () => {
-    setQuantity((quantity) => Math.max(quantity - 1, 1));
+    setQuantitySell((quantitySell) => Math.max(quantitySell - 1, 1));
   };
 
+  // --------------------- GET DETAIL SERVICE BY ID -----------------------------
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState({});
+
+  const handleCloseEditModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
+  };
   const handleAddToCartClick = () => {
-    console.log(`Add ${quantity} '${service?.serviceName}' to cart`);
+    console.log("Check data", service);
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const [expanded, setExpanded] = useState(false);
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
   };
 
   if (!service) {
-    return <div>Loading...</div>;
+    return (
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+        onClose={onClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
   }
 
-  const { serviceName, description, price, rating, reviews } = service;
+  const {
+    serviceName,
+    description,
+    price,
+    rating,
+    reviews,
+    _id,
+    serviceImage,
+  } = service;
 
   return (
-    <Root>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <img src={service.image} alt={serviceName} />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Typography variant="h5">{serviceName}</Typography>
-          <Typography variant="subtitle1">{`${price} VNĐ`}</Typography>
-          <Typography variant="body1">{description}</Typography>
-          <Typography>
-            <Rating
-              value={rating}
-              precision={0.5}
-              readOnly
-              emptyIcon={<StarBorderIcon />}
-              halfIcon={<StarHalfIcon />}
-              icon={<StarIcon />}
-            />
-            <Reviews variant="subtitle2">{`(${reviews} đánh giá)`}</Reviews>
+    <Dialog
+      fullScreen
+      open={open}
+      onClose={onClose}
+      sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+    >
+      <AppBar sx={{ position: "relative" }}>
+        <Toolbar>
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            Chi tiết dịch vụ
           </Typography>
-          <Typography variant="body1">Số lượng:</Typography>
-          <Box display="flex" alignItems="center">
-            <Button onClick={handleDecreaseClick} variant="outlined">
-              -
-            </Button>
-            <Box mx={2}>{quantity}</Box>
-            <Button onClick={handleIncreaseClick} variant="outlined">
-              +
-            </Button>
-          </Box>
-          <Button
-            onClick={handleAddToCartClick}
-            variant="contained"
-            sx={{ marginTop: "8px" }}
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            color="inherit"
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+            }}
           >
-            Thêm vào giỏ hàng
-          </Button>
+            <CloseIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      <Box sx={{ flexGrow: 2, padding: 12 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <Image src={`${serviceImage}`} />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
+              <strong>{serviceName}</strong>
+            </Typography>
+            <Typography variant="h5">
+              <strong>{`${price} VNĐ`}</strong>
+            </Typography>
+            <Box>
+              <Rating
+                value={rating}
+                precision={0.5}
+                readOnly
+                emptyIcon={<StarBorderIcon sx={{ fontSize: "1.5rem" }} />}
+                halfIcon={<StarHalfIcon sx={{ fontSize: "1.5rem" }} />}
+                icon={<StarIcon sx={{ fontSize: "1.5rem" }} />}
+              />
+            </Box>
+            <Typography variant="body1">Số lượng:</Typography>
+            <Box display="flex" alignItems="center">
+              <Button onClick={handleDecreaseClick} variant="outlined">
+                -
+              </Button>
+              <Box mx={2}>{quantitySell}</Box>
+              <Button onClick={handleIncreaseClick} variant="outlined">
+                +
+              </Button>
+            </Box>
+            <Button
+              onClick={handleAddToCartClick}
+              variant="contained"
+              sx={{ marginTop: "8px" }}
+            >
+              Thêm vào giỏ hàng
+            </Button>
+          </Grid>
         </Grid>
-        <AccordionGroup
-          variant="outlined"
-          transition="0.2s"
-          sx={{
-            maxWidth: 400,
-            borderRadius: "lg",
-            [`& .${accordionSummaryClasses.button}:hover`]: {
-              bgcolor: "transparent",
-            },
-            [`& .${accordionDetailsClasses.content}`]: {
-              boxShadow: (theme) => `inset 0 1px ${theme.vars.palette.divider}`,
-              [`&.${accordionDetailsClasses.expanded}`]: {
-                paddingBlock: "0.75rem",
-              },
-            },
-          }}
+      </Box>
+      <Accordion
+        expanded={expanded === "panel1"}
+        onChange={handleChange("panel1")}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
         >
-          <Accordion defaultExpanded>
-            <AccordionSummary>First accordion</AccordionSummary>
-            <AccordionDetails variant="soft">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary>Second accordion</AccordionSummary>
-            <AccordionDetails variant="soft">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary>Third accordion</AccordionSummary>
-            <AccordionDetails variant="soft">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </AccordionDetails>
-          </Accordion>
-        </AccordionGroup>
-      </Grid>
-    </Root>
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>
+            Thông tin chi tiết sản phẩm
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>{description}</AccordionDetails>
+      </Accordion>
+      <Accordion
+        expanded={expanded === "panel2"}
+        onChange={handleChange("panel2")}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel2bh-content"
+          id="panel2bh-header"
+        >
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>
+            Đánh giá sản phẩm
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>{/* <Comments value={_id} /> */}</AccordionDetails>
+      </Accordion>
+      <Accordion
+        expanded={expanded === "panel3"}
+        onChange={handleChange("panel3")}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel3bh-content"
+          id="panel3bh-header"
+        >
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>
+            Advanced settings
+          </Typography>
+          <Typography sx={{ color: "text.secondary" }}>
+            Filtering has been entirely disabled for whole web server
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
+            sit amet egestas eros, vitae egestas augue. Duis vel est augue.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion
+        expanded={expanded === "panel4"}
+        onChange={handleChange("panel4")}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel4bh-content"
+          id="panel4bh-header"
+        >
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>
+            Personal data
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
+            sit amet egestas eros, vitae egestas augue. Duis vel est augue.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <ChoosePet
+        open={isModalOpen}
+        onClose={handleCloseEditModal}
+        service={selectedService}
+      />
+    </Dialog>
   );
 };
 

@@ -120,7 +120,7 @@ const ModalEditProduct = (props) => {
     }
   };
 
-  // --------------------- HANDLE CHANGE CATEGORY SERVICE -----------------------------
+  // --------------------- HANDLE CHANGE CATEGORY PRODUCT -----------------------------
   const handleChange = (e) => {
     const selectedCategory = e.target.value;
     console.log("Check ID cate add Product", selectedCategory);
