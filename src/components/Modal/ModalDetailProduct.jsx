@@ -27,14 +27,19 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Description } from "@mui/icons-material";
 import TypographyCus from "../Typography/DescriptionCus";
 import Comments from "../Comments/Comments";
+import useAuth from "../../hooks/useAuth";
+import axios from "axios";
 
 const Image = styled("img")({
   maxWidth: "100%",
   maxHeight: 400,
 });
 
+const BASE_URL = "http://localhost:3500";
+
 const ProductDetail = ({ open, onClose, product }) => {
   const [quantitySell, setQuantitySell] = useState(1);
+  const context = useAuth();
 
   const handleIncreaseClick = () => {
     setQuantitySell((quantitySell) => quantitySell + 1);
@@ -74,6 +79,33 @@ const ProductDetail = ({ open, onClose, product }) => {
     productImage,
     _id,
   } = product;
+
+  const handleAddToCart = async (id) => {
+    if (context.auth.token === undefined) {
+      alert("Bạn chưa đăng nhập, vui lòng đăng nhập !");
+    } else if (
+      window.confirm("Bạn có muốn thêm sản phẩm này không ?") == true
+    ) {
+      try {
+        const addProductToCart = await axios
+          .post(
+            `${BASE_URL}/cartProduct/add-to-cart`,
+            {
+              productId: id,
+            },
+            {
+              headers: { Authorization: context.auth.token },
+              withCredentials: true,
+            }
+          )
+          .then((data) => {
+            alert("Thêm sản phẩm vào giỏ hàng thành công");
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   return (
     <Dialog
@@ -136,7 +168,7 @@ const ProductDetail = ({ open, onClose, product }) => {
               </Button>
             </Box>
             <Button
-              onClick={handleAddToCartClick}
+              onClick={() => handleAddToCart(_id)}
               variant="contained"
               sx={{ marginTop: "8px" }}
             >
