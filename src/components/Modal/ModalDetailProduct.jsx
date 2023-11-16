@@ -137,7 +137,13 @@ const ProductDetail = ({ open, onClose, product }) => {
       <Box sx={{ flexGrow: 2, padding: 12 }}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
-            <Image src={`${productImage}`} />
+            <Image
+              src={
+                productImage !== null
+                  ? `${productImage}`
+                  : "https://cdnimg.vietnamplus.vn/uploaded/mtpyelagtpy/2018_11_30/pet_1.jpg"
+              }
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
@@ -147,16 +153,7 @@ const ProductDetail = ({ open, onClose, product }) => {
               <strong>{`${price} VNĐ`}</strong>
             </Typography>
             <Typography variant="body1">Số lượng còn:{quantity}</Typography>
-            <Box>
-              <Rating
-                value={rating}
-                precision={0.5}
-                readOnly
-                emptyIcon={<StarBorderIcon sx={{ fontSize: "1.5rem" }} />}
-                halfIcon={<StarHalfIcon sx={{ fontSize: "1.5rem" }} />}
-                icon={<StarIcon sx={{ fontSize: "1.5rem" }} />}
-              />
-            </Box>
+
             <Typography variant="body1">Số lượng:</Typography>
             <Box display="flex" alignItems="center">
               <Button onClick={handleDecreaseClick} variant="outlined">
@@ -207,49 +204,6 @@ const ProductDetail = ({ open, onClose, product }) => {
         </AccordionSummary>
         <AccordionDetails>
           <Comments value={_id} />
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel3"}
-        onChange={handleChange("panel3")}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel3bh-content"
-          id="panel3bh-header"
-        >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            Advanced settings
-          </Typography>
-          <Typography sx={{ color: "text.secondary" }}>
-            Filtering has been entirely disabled for whole web server
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
-            sit amet egestas eros, vitae egestas augue. Duis vel est augue.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel4"}
-        onChange={handleChange("panel4")}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel4bh-content"
-          id="panel4bh-header"
-        >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            Personal data
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
-            sit amet egestas eros, vitae egestas augue. Duis vel est augue.
-          </Typography>
         </AccordionDetails>
       </Accordion>
     </Dialog>

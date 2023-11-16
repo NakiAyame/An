@@ -148,10 +148,12 @@ export default function ProductList() {
         <Container
           maxWidth="full"
           sx={{
+            bgcolor: "background.paper",
             p: 3,
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
+            borderRadius: "16px",
           }}
         >
           <Breadcrumbs maxItems={2} aria-label="breadcrumb">
