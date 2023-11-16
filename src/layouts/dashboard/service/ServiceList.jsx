@@ -26,6 +26,32 @@ import TypographyCus from "../../../components/Typography/DescriptionCus";
 import Footer from "../../../components/Footer/Footer";
 import MainPost from "../../../components/MainPost.jsx/MainPost";
 import ServiceDetail from "../../../components/Modal/ModalDetaiService";
+import { NavLink } from "react-router-dom";
+import Chip from "@mui/material/Chip";
+import HomeIcon from "@mui/icons-material/Home";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { emphasize } from "@mui/material/styles";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+
+const StyledBreadcrumb = styled(Chip)(({ theme }) => {
+  const backgroundColor =
+    theme.palette.mode === "light"
+      ? theme.palette.grey[100]
+      : theme.palette.grey[800];
+  return {
+    backgroundColor,
+    height: theme.spacing(3),
+    color: theme.palette.text.primary,
+    fontWeight: theme.typography.fontWeightRegular,
+    "&:hover, &:focus": {
+      backgroundColor: emphasize(backgroundColor, 0.06),
+    },
+    "&:active": {
+      boxShadow: theme.shadows[1],
+      backgroundColor: emphasize(backgroundColor, 0.12),
+    },
+  };
+});
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -164,27 +190,48 @@ export default function ServiceList() {
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
 
-      <main>
+      <CustomContainer component="main" maxWidth="full" sx={{ mt: 8 }}>
         <MainPost post={mainPost} />
-
-        <CustomBox
+        <Box
+          maxWidth="full"
           sx={{
             bgcolor: "background.paper",
-            pt: 1,
-            pb: 1,
+            p: 3,
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: "space-between",
+            borderRadius: "16px",
           }}
         >
-          <ScrollableTabService
-            category={category}
-            handUpdateEditTable={hanldeClickCategory}
-            handleLoadAllService={loadAllService}
-          />
-        </CustomBox>
-        <CustomContainer sx={{ py: 8 }} maxWidth="full">
+          <Box>
+            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+              <StyledBreadcrumb
+                component={NavLink}
+                to="/"
+                label="Trang chủ"
+                icon={<HomeIcon fontSize="small" />}
+              />
+              {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
+              <StyledBreadcrumb
+                component={NavLink}
+                to="/service-homepage"
+                label="Dịch vụ"
+              />
+            </Breadcrumbs>
+          </Box>
+          <Box
+            sx={{
+              justifyContent: "center",
+            }}
+          >
+            <ScrollableTabService
+              category={category}
+              handUpdateEditTable={hanldeClickCategory}
+              handleLoadAllService={loadAllService}
+            />
+          </Box>
+        </Box>
+
+        <Container sx={{ py: 8 }}>
           {/* End hero unit */}
           <Grid container spacing={4}>
             {data &&
@@ -255,8 +302,8 @@ export default function ServiceList() {
               />
             </Stack>
           </Container>
-        </CustomContainer>
-      </main>
+        </Container>
+      </CustomContainer>
 
       <ServiceDetail
         open={isModalOpen}

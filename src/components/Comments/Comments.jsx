@@ -1,10 +1,21 @@
 import React from "react";
 
-import { Divider, Avatar, Grid, Paper, Typography } from "@mui/material";
+import {
+  Divider,
+  Avatar,
+  Grid,
+  Paper,
+  Typography,
+  Rating,
+  Box,
+} from "@mui/material";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarHalfIcon from "@mui/icons-material/StarHalf";
+import StarIcon from "@mui/icons-material/Star";
 
 const imgLink =
   "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260";
@@ -52,13 +63,22 @@ export default function Comments({ value }) {
                 </Grid>
                 <Grid justifyContent="left" item xs zeroMinWidth>
                   <Typography sx={{ margin: 0, textAlign: "left" }}>
-                    {fb.userId !== null ? fb.userId.fullname : ""}
+                    {fb.userId.fullname !== null ? fb.userId.fullname : ""}
                   </Typography>
-                  <p sx={{ textAlign: "left" }}>{fb.comment}</p>
-                  <p sx={{ textAlign: "left", color: "gray" }}>{fb.star}</p>
+
+                  <Box>
+                    <Rating
+                      value={fb.star}
+                      precision={0.5}
+                      readOnly
+                      emptyIcon={<StarBorderIcon sx={{ fontSize: "1.5rem" }} />}
+                      halfIcon={<StarHalfIcon sx={{ fontSize: "1.5rem" }} />}
+                      icon={<StarIcon sx={{ fontSize: "1.5rem" }} />}
+                    />
+                    <p sx={{ textAlign: "left" }}>{fb.comment}</p>
+                  </Box>
                 </Grid>
               </Grid>
-              <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
             </Paper>
           );
         })}
