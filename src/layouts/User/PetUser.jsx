@@ -14,9 +14,34 @@ import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import { Avatar, Container, Stack, TextField } from "@mui/joy";
 import PetsIcon from "@mui/icons-material/Pets";
-import { Pagination } from "@mui/material";
+import { Breadcrumbs, Pagination } from "@mui/material";
 import ModalAddPet from "../../components/Modal/ModalAddPet";
 import ModalEditPet from "../../components/Modal/ModalEditPet";
+import { NavLink } from "react-router-dom";
+import Chip from "@mui/material/Chip";
+import HomeIcon from "@mui/icons-material/Home";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { emphasize, styled } from "@mui/material/styles";
+
+const StyledBreadcrumb = styled(Chip)(({ theme }) => {
+  const backgroundColor =
+    theme.palette.mode === "light"
+      ? theme.palette.grey[100]
+      : theme.palette.grey[800];
+  return {
+    backgroundColor,
+    height: theme.spacing(3),
+    color: theme.palette.text.primary,
+    fontWeight: theme.typography.fontWeightRegular,
+    "&:hover, &:focus": {
+      backgroundColor: emphasize(backgroundColor, 0.06),
+    },
+    "&:active": {
+      boxShadow: theme.shadows[1],
+      backgroundColor: emphasize(backgroundColor, 0.12),
+    },
+  };
+});
 
 export default function PetUser() {
   const [data, setData] = useState([]);
@@ -31,9 +56,10 @@ export default function PetUser() {
   // ----------------------------------- API GET ALL PET BY USER ID--------------------------------
   useEffect(() => {
     loadAllPetByUserId(currentPage);
-  }, [context.auth.id]);
+  }, [currentPage]);
 
   const loadAllPetByUserId = async (page) => {
+    console.log("Kiểm tra page", page);
     try {
       const loadDataPet = await axios.get(
         `http://localhost:3500/pet/userid?id=${context.auth.id}&limit=3&page=${page}`
@@ -103,6 +129,23 @@ export default function PetUser() {
 
   return (
     <React.Fragment>
+      <Container
+        component="main"
+        maxWidth="lg"
+        sx={{ mt: 4, display: "flex", flexDirection: "row" }}
+      >
+        <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+          <StyledBreadcrumb
+            component={NavLink}
+            to="/"
+            label="Trang chủ"
+            icon={<HomeIcon fontSize="small" />}
+          />
+          {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
+          <StyledBreadcrumb label="Thông tin thú cưng" />
+        </Breadcrumbs>
+      </Container>
+
       <Container
         component="main"
         maxWidth="lg"

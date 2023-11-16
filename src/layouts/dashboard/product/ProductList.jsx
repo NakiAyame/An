@@ -26,6 +26,32 @@ import ProductDetail from "../../../components/Modal/ModalDetailProduct";
 import Footer from "../../../components/Footer/Footer";
 import MainPost from "../../../components/MainPost.jsx/MainPost";
 import useAuth from "../../../hooks/useAuth";
+import { NavLink } from "react-router-dom";
+import Chip from "@mui/material/Chip";
+import HomeIcon from "@mui/icons-material/Home";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { emphasize } from "@mui/material/styles";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+
+const StyledBreadcrumb = styled(Chip)(({ theme }) => {
+  const backgroundColor =
+    theme.palette.mode === "light"
+      ? theme.palette.grey[100]
+      : theme.palette.grey[800];
+  return {
+    backgroundColor,
+    height: theme.spacing(3),
+    color: theme.palette.text.primary,
+    fontWeight: theme.typography.fontWeightRegular,
+    "&:hover, &:focus": {
+      backgroundColor: emphasize(backgroundColor, 0.06),
+    },
+    "&:active": {
+      boxShadow: theme.shadows[1],
+      backgroundColor: emphasize(backgroundColor, 0.12),
+    },
+  };
+});
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -49,7 +75,7 @@ export default function ProductList() {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [loged, setLoged] = useState(false)
+  const [loged, setLoged] = useState(false);
 
   const context = useAuth();
 
@@ -113,45 +139,48 @@ export default function ProductList() {
     setSelectedProduct(null);
   };
 
-  const handleAddToCart = async (id) =>{
-    if(context.auth.token === undefined){
-      alert('Bạn chưa đăng nhập, vui lòng đăng nhập !');
-    }
-    else if(window.confirm('Bạn có muốn thêm sản phẩm này không ?') == true){
-      try {
-        const addProductToCart = await axios.post(
-          `${BASE_URL}/cartProduct/add-to-cart`,
-          {
-            productId: id
-          },
-          {
-            headers: { 'Authorization': context.auth.token },
-            withCredentials: true
-          }
-        )
-        .then((data) => {
-          alert('Thêm sản phẩm vào giỏ hàng thành công')
-        })
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
 
-      <main>
+      <CustomContainer component="main" maxWidth="full" sx={{ mt: 8 }}>
         <MainPost post={mainPost} />
+        <Container
+          maxWidth="full"
+          sx={{
+            p: 3,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+            <StyledBreadcrumb
+              component={NavLink}
+              to="/"
+              label="Trang chủ"
+              icon={<HomeIcon fontSize="small" />}
+            />
+            {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
+            <StyledBreadcrumb label="Sản phẩm" />
+          </Breadcrumbs>
+        </Container>
 
-        <CustomContainer sx={{ py: 8 }} maxWidth="full">
+        <Container sx={{ py: 8 }}>
           {/* End hero unit */}
           <Grid container spacing={4}>
             {data &&
               data.map((value, index) => {
                 return (
-                  <Grid item key={index} xs={12} sm={6} md={4}>
+                  <Grid
+                    hover
+                    item
+                    key={index}
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    onClick={() => handleShowDetail(value)}
+                  >
                     <Card
                       sx={{
                         height: "100%",
@@ -176,27 +205,6 @@ export default function ProductList() {
                         </Typography>
                         <Typography>SỐ LƯỢNG CÒN: {value.quantity}</Typography>
                       </CardContent>
-                      <CardActions>
-                        <ButtonCustomize
-                          Button
-                          size="small"
-                          variant="contained"
-                          // component={RouterLink}
-                          onClick={() => handleShowDetail(value)}
-                          nameButton="Chi tiết"
-                          fullWidth
-                        />
-                        <ButtonCustomize
-                          Button
-                          size="small"
-                          variant="contained"
-                          backgroundColor="Pink"
-                          // component={RouterLink}
-                          nameButton="Thêm vào giỏ hàng"
-                          onClick={() => handleAddToCart(value._id)}
-                          fullWidth
-                        />
-                      </CardActions>
                     </Card>
                   </Grid>
                 );
@@ -223,8 +231,8 @@ export default function ProductList() {
               />
             </Stack>
           </Container>
-        </CustomContainer>
-      </main>
+        </Container>
+      </CustomContainer>
       <ProductDetail
         open={isModalOpen}
         onClose={handleCloseEditModal}
