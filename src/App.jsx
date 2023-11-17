@@ -22,6 +22,8 @@ import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./layouts/User/ChangePassword";
 import UserPRofile from "./layouts/User/UserProfile";
 import PetUser from "./layouts/User/PetUser";
+import BlogTable from "./layouts/dashboard/blog/BlogTable";
+import CategoryTable from "./layouts/dashboard/category/CategoryTable";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -53,6 +55,11 @@ function App() {
                 path="/dashboard/product-list"
                 element={<ProductTable />}
               />
+              <Route
+                path="/dashboard/category-list"
+                element={<CategoryTable />}
+              />
+              <Route path="/dashboard/blog-list" element={<BlogTable />} />
             </Route>
           </Route>
           <Route path="/sign-up" element={<Register />} />

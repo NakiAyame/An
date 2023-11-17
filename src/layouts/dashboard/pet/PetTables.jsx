@@ -36,6 +36,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import ModalAddPet from "../../../components/Modal/ModalAddPet";
 import ModalEditPet from "../../../components/Modal/ModalEditPet";
+import useAuth from "../../../hooks/useAuth";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -64,6 +65,9 @@ export default function PetTable() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataEditPet, setDataEditPet] = useState({});
+
+  const context = useAuth();
+  console.log(context);
 
   // --------------------- OPEN MODAL  -----------------------------
   const handleCreateModal = () => {
@@ -116,7 +120,6 @@ export default function PetTable() {
     (event, page) => {
       setCurrentPage(page);
       if (!keyword) {
-        toast.warning("Không có kết quả");
         loadAllPet(page);
       } else {
         searchPetById();
@@ -150,12 +153,34 @@ export default function PetTable() {
         setData(loadData.data.docs);
         setTotalPets(loadData.data.limit);
         setTotalPages(loadData.data.pages);
-        console.log( loadData.data);
+        console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);
     }
   };
+
+  // --------------------- GET ALL CATEGORY PET -----------------------------
+  const [category, setCategory] = useState([]);
+  async function loadAllCategoryPet() {
+    try {
+      const loadDataCategoryPet = await axios.get(
+        `http://localhost:3500/category?categoryName=animal`
+      );
+      if (loadDataCategoryPet.error) {
+        toast.error(loadDataCategoryPet.error);
+      } else {
+        setCategory(loadDataCategoryPet.data.docs);
+        console.log(loadDataCategoryPet.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    loadAllCategoryPet();
+  }, []);
 
   return (
     <>
@@ -276,6 +301,8 @@ export default function PetTable() {
         onClose={handleCloseModal}
         handUpdateTable={loadAllPet}
         page={currentPage}
+        data={context.auth.id}
+        category={category}
       />
       {/* Modal update */}
       <ModalEditPet
@@ -284,6 +311,7 @@ export default function PetTable() {
         dataEditPet={dataEditPet}
         handUpdateEditTable={loadAllPet}
         page={currentPage}
+        category={category}
       />
     </>
   );
