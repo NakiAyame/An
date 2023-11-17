@@ -18,7 +18,7 @@ import {
 //MUI Icon
 import PetsIcon from "@mui/icons-material/Pets";
 // Router
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -171,14 +171,14 @@ const Register = () => {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <NavLink to="#" variant="body2">
                     Quên mật khẩu
-                  </Link>
+                  </NavLink>
                 </Grid>
                 <Grid item>
-                  <Link href="/sign-in" variant="body2">
+                  <NavLink to="/sign-in" variant="body2">
                     {"Bạn đã có tài khoản? Đăng nhập tại đây!"}
-                  </Link>
+                  </NavLink>
                 </Grid>
               </Grid>
             </Box>
