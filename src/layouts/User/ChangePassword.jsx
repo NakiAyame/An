@@ -33,6 +33,8 @@ const ChangePassword = () => {
   const context = useAuth();
   console.log(context);
 
+  const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
+
   const handleChangePassword = async () => {
     try {
       const response = await axios.put("http://localhost:3500/changePassword", {
