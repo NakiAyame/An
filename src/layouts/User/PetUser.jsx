@@ -22,6 +22,14 @@ import Chip from "@mui/material/Chip";
 import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { emphasize, styled } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const CustomContainer = styled(Container)({
+  background:
+    "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
+});
+
+const defaultTheme = createTheme();
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =

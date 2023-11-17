@@ -22,11 +22,15 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Radio, RadioGroup } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import Footer from "../../components/Footer/Footer";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const CustomContainer = styled(Container)({
   background:
     "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
 });
+
+const defaultTheme = createTheme();
 
 export default function UserPRofile() {
   const [fullname, setFullName] = useState("");
@@ -110,14 +114,14 @@ export default function UserPRofile() {
   }, [fullname, email, password, phone, role, gender, address]);
 
   return (
-    <React.Fragment>
-      <CssBaseline />
-      <Container component="main" maxWidth="sm" sx={{ mt: 13, mb: 4 }}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-        >
-          <React.Fragment>
+    <ThemeProvider theme={defaultTheme}>
+      <CustomContainer component="main" maxWidth="false" sx={{ pt: 13, pb: 4 }}>
+        <CssBaseline />
+        <Container maxWidth="sm">
+          <Paper
+            variant="outlined"
+            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+          >
             <Typography variant="h6" gutterBottom>
               Thông tin cá nhân
             </Typography>
@@ -232,9 +236,10 @@ export default function UserPRofile() {
                 Cập nhật
               </Button>
             </Box>
-          </React.Fragment>
-        </Paper>
-      </Container>
-    </React.Fragment>
+          </Paper>
+        </Container>
+      </CustomContainer>
+      <Footer />
+    </ThemeProvider>
   );
 }
