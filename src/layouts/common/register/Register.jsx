@@ -50,7 +50,7 @@ const Register = () => {
       } else {
         setData({});
         toast.success("Register successful. Welcome!");
-        navigate("/login");
+        navigate("/sign-in");
       }
     } catch (err) {
       console.log(err);

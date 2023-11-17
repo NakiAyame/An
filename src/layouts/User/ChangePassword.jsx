@@ -11,11 +11,14 @@ import {
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
+  const navigate = useNavigate();
 
   const context = useAuth();
   console.log(context);
@@ -28,15 +31,22 @@ const ChangePassword = () => {
         newPassword: newPassword,
         rePassword: rePassword,
       });
-
-      console.log(response.data);
+      if (response.error) {
+        toast.error(response.error);
+      } else {
+        console.log(response.data);
+        toast.success("Đổi mật khẩu thành công");
+        navigate("/sign-in");
+        localStorage.removeItem("token");
+        toast.success("Hãy đăng nhập lại");
+      }
     } catch (error) {
       console.error("Error changing password:", error);
     }
   };
 
   return (
-    <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+    <Container component="main" maxWidth="sm" sx={{ mt: 16, mb: 4 }}>
       <Paper
         variant="outlined"
         sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
