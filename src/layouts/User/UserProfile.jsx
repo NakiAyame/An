@@ -69,15 +69,7 @@ export default function UserPRofile() {
   };
   useEffect(() => {
     handleGetUserById();
-  }, [fullname, email, password, phone, role, gender, address]);
-
-  const handleNext = () => {
-    // setActiveStep(activeStep + 1);
-  };
-
-  const handleBack = () => {
-    // setActiveStep(activeStep - 1);
-  };
+  }, []);
 
   // --------------------- HANDLE UPDATE -----------------------------
 
@@ -99,6 +91,7 @@ export default function UserPRofile() {
         toast.error(data.error);
       } else {
         console.log(data);
+        handleGetUserById();
         toast.success("Cập nhật thành công");
       }
     } catch (err) {
@@ -106,10 +99,20 @@ export default function UserPRofile() {
     }
   };
 
+  useEffect(() => {
+    setFullName(fullname);
+    setEmail(email);
+    setPhone(phone);
+    setAddress(address);
+    setGender(gender);
+    setPassWord(password);
+    setRole(role);
+  }, [fullname, email, password, phone, role, gender, address]);
+
   return (
     <React.Fragment>
       <CssBaseline />
-      <CustomContainer component="main" maxWidth="sm" sx={{ mb: 4 }}>
+      <Container component="main" maxWidth="sm" sx={{ mt: 13, mb: 4 }}>
         <Paper
           variant="outlined"
           sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
@@ -189,6 +192,9 @@ export default function UserPRofile() {
                   fullWidth
                   autoComplete="shipping email"
                   variant="standard"
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -228,7 +234,7 @@ export default function UserPRofile() {
             </Box>
           </React.Fragment>
         </Paper>
-      </CustomContainer>
+      </Container>
     </React.Fragment>
   );
 }
