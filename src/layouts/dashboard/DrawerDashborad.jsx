@@ -23,6 +23,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import SpaIcon from "@mui/icons-material/Spa";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
 
 const DrawerDashborad = () => {
   const navigate = useNavigate();
@@ -54,6 +55,14 @@ const DrawerDashborad = () => {
     {
       text: "Lịch sử thanh toán sản phẩm",
       path: "/dashboard/order-list",
+    },
+  ];
+
+  const links5 = [
+    { text: "Danh sách tin tức", path: "/dashboard/blog-list" },
+    {
+      text: "Danh sách thể loại",
+      path: "/dashboard/category-list",
     },
   ];
 
@@ -147,6 +156,24 @@ const DrawerDashborad = () => {
         ))}
       </List>
       <Divider />
+
+      <List>
+        <ListSubheader component="div" id="nested-list-subheader">
+          Blog & Thể loại
+        </ListSubheader>
+        {links5.map((link, index) => (
+          <ListItem key={link.text} disablePadding>
+            <ListItemButton component={NavLink} to={link.path}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <NewspaperIcon /> : <CategoryIcon />}
+              </ListItemIcon>
+              <ListItemText primary={link.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+
       <List>
         <ListItemButton onClick={() => handleLogout()}>
           Đăng xuất
