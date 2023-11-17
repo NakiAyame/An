@@ -28,6 +28,7 @@ import { Description } from "@mui/icons-material";
 import TypographyCus from "../Typography/DescriptionCus";
 import ChoosePet from "./ModalChoosePet";
 import useAuth from "../../hooks/useAuth";
+import CommentService from "../Comments/CommentsService";
 
 const Image = styled("img")({
   maxWidth: "100%",
@@ -56,7 +57,7 @@ const ServiceDetail = ({ open, onClose, service }) => {
   };
   const handleAddToCartClick = () => {
     if (context.auth.token === undefined) {
-      alert('Bạn chưa đăng nhập, vui lòng đăng nhập !')
+      alert("Bạn chưa đăng nhập, vui lòng đăng nhập !");
     } else {
       console.log("Check data", service);
       setSelectedService(service);
@@ -121,7 +122,13 @@ const ServiceDetail = ({ open, onClose, service }) => {
       <Box sx={{ flexGrow: 2, padding: 12 }}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
-            <Image src={`${serviceImage}`} />
+            <Image
+              src={
+                serviceImage !== undefined
+                  ? `${serviceImage}`
+                  : "https://mcdn.coolmate.me/uploads/November2021/spa-thu-cung-la-gi-24.jpg"
+              }
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
@@ -170,7 +177,7 @@ const ServiceDetail = ({ open, onClose, service }) => {
           id="panel1bh-header"
         >
           <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            Thông tin chi tiết sản phẩm
+            Thông tin chi tiết dịch vụ
           </Typography>
         </AccordionSummary>
         <AccordionDetails>{description}</AccordionDetails>
@@ -185,54 +192,14 @@ const ServiceDetail = ({ open, onClose, service }) => {
           id="panel2bh-header"
         >
           <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            Đánh giá sản phẩm
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>{/* <Comments value={_id} /> */}</AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel3"}
-        onChange={handleChange("panel3")}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel3bh-content"
-          id="panel3bh-header"
-        >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            Advanced settings
-          </Typography>
-          <Typography sx={{ color: "text.secondary" }}>
-            Filtering has been entirely disabled for whole web server
+            Đánh giá dịch vụ
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
-            sit amet egestas eros, vitae egestas augue. Duis vel est augue.
-          </Typography>
+          <CommentService value={_id} />
         </AccordionDetails>
       </Accordion>
-      <Accordion
-        expanded={expanded === "panel4"}
-        onChange={handleChange("panel4")}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel4bh-content"
-          id="panel4bh-header"
-        >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>
-            Personal data
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
-            sit amet egestas eros, vitae egestas augue. Duis vel est augue.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+
       <ChoosePet
         open={isModalOpen}
         onClose={handleCloseEditModal}

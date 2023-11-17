@@ -26,7 +26,7 @@ import useAuth from "../../hooks/useAuth";
 const imgLink =
   "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260";
 
-export default function Comments({ value }) {
+export default function CommentService({ value }) {
   let id = value;
   const [data, setData] = useState([]);
   const [comment, setComment] = useState("");
@@ -38,7 +38,7 @@ export default function Comments({ value }) {
 
   const context = useAuth();
   console.log("Check người dùng", context.auth.token);
-  // ----------------------------------- API GET FEEDBACK BY ID PRODUCT --------------------------------
+  // ----------------------------------- API GET FEEDBACK BY ID SERVICE --------------------------------
   useEffect(() => {
     loadAllFeedbackById(currentPage);
   }, [currentPage]);
@@ -47,7 +47,7 @@ export default function Comments({ value }) {
     console.log("Check id", id);
     try {
       const loadDataFeedback = await axios.get(
-        `http://localhost:3500/feedback/product?productId=${id}&limit=3&page=${page}`
+        `http://localhost:3500/feedback/service?serviceId=${id}&limit=3&page=${page}`
       );
       if (loadDataFeedback.error) {
         toast.error(loadDataFeedback.error);
@@ -74,9 +74,9 @@ export default function Comments({ value }) {
     try {
       const addComment = await axios
         .post(
-          `http://localhost:3500/feedback/product`,
+          `http://localhost:3500/feedback/service`,
           {
-            productId: id,
+            serviceId: id,
             comment: comment,
             star: star,
           },
