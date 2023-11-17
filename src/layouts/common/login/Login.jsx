@@ -19,7 +19,7 @@ import {
 import PetsIcon from "@mui/icons-material/Pets";
 //React
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, NavLink } from "react-router-dom";
 
 // Axios
 import axios from "axios";
@@ -67,7 +67,7 @@ const Login = () => {
       if (data.error) {
         toast.error(data.error);
       } else {
-        const dataDecode = jwtDecode(data.token)
+        const dataDecode = jwtDecode(data.token);
 
         localStorage.setItem("token", data.token);
 
@@ -75,8 +75,8 @@ const Login = () => {
           id: dataDecode.id,
           email: dataDecode.email,
           role: dataDecode.role,
-          token: data.token
-        })
+          token: data.token,
+        });
 
         toast.success("Login successful");
         navigate(from, { replace: true });
@@ -180,14 +180,14 @@ const Login = () => {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <NavLink href="" variant="body2">
                     Quên mật khẩu?
-                  </Link>
+                  </NavLink>
                 </Grid>
                 <Grid item>
-                  <Link href="/sign-up" variant="body2">
+                  <NavLink to="/sign-up" variant="body2">
                     {"Bạn chưa có tài khoản? Tạo tài khoản tại đây!"}
-                  </Link>
+                  </NavLink>
                 </Grid>
               </Grid>
             </Box>
