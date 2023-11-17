@@ -139,10 +139,11 @@ const ProductDetail = ({ open, onClose, product }) => {
           <Grid item xs={12} sm={6}>
             <Image
               src={
-                productImage !== null
+                productImage !== undefined
                   ? `${productImage}`
                   : "https://cdnimg.vietnamplus.vn/uploaded/mtpyelagtpy/2018_11_30/pet_1.jpg"
               }
+              alt=""
             />
           </Grid>
           <Grid item xs={12} sm={6}>
