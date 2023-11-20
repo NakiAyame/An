@@ -32,6 +32,8 @@ import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Avatar } from "@mui/material";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -139,6 +141,31 @@ export default function ProductList() {
     setSelectedProduct(null);
   };
 
+  const handleAddToCart = async (id) => {
+    if (context.auth.token === undefined) {
+      toast.warning("Bạn chưa đăng nhập, vui lòng đăng nhập !");
+    } else {
+      try {
+        const addProductToCart = await axios
+          .post(
+            `${BASE_URL}/cartProduct/add-to-cart`,
+            {
+              productId: id,
+            },
+            {
+              headers: { Authorization: context.auth.token },
+              withCredentials: true,
+            }
+          )
+          .then((data) => {
+            toast.success("Thêm sản phẩm vào giỏ hàng thành công");
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -202,9 +229,22 @@ export default function ProductList() {
                         <Typography gutterBottom variant="h5" component="h2">
                           {value.productName}
                         </Typography>
-                        <Typography gutterBottom variant="h6" component="h2">
-                          {numberToVND(value.price)}
-                        </Typography>
+                        <Box
+                          display="flex"
+                          flexGrow={1}
+                          sx={{ justifyContent: "space-between" }}
+                        >
+                          <Typography gutterBottom variant="h6" component="h2">
+                            {numberToVND(value.price)}
+                          </Typography>
+                          <Avatar
+                            title="Thêm nhanh"
+                            onClick={() => handleAddToCart(value._id)}
+                            sx={{ backgroundColor: "pink" }}
+                          >
+                            <AddShoppingCartIcon />
+                          </Avatar>
+                        </Box>
                         <Typography>SỐ LƯỢNG CÒN: {value.quantity}</Typography>
                       </CardContent>
                     </Card>

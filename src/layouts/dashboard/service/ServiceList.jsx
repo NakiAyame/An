@@ -32,6 +32,11 @@ import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Avatar, Tooltip } from "@mui/material";
+import DropDownService from "../../../components/DropDown/DropDownService";
+import ChoosePet from "../../../components/Modal/ModalChoosePet";
+import useAuth from "../../../hooks/useAuth";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -73,6 +78,7 @@ export default function ServiceList() {
   const [totalServices, setTotalServices] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const context = useAuth();
 
   const numberToVND = (number) => {
     return number.toLocaleString("vi-VN", {
@@ -174,6 +180,7 @@ export default function ServiceList() {
 
   // --------------------- GET DETAIL SERVICE BY ID -----------------------------
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalChoosePetOpen, setIsModalChoosePetOpen] = useState(false);
   const [selectedService, setSelectedService] = useState({});
   const handleShowDetail = (serviceId) => {
     console.log("Check data", serviceId);
@@ -183,7 +190,18 @@ export default function ServiceList() {
 
   const handleCloseEditModal = () => {
     setIsModalOpen(false);
+    setIsModalChoosePetOpen(false);
     setSelectedService(null);
+  };
+
+  const handleAddToCartClick = () => {
+    if (context.auth.token === undefined) {
+      toast.warning("Bạn chưa đăng nhập, vui lòng đăng nhập !");
+    } else {
+      console.log("Check data", selectedService);
+      setSelectedService(selectedService);
+      setIsModalChoosePetOpen(true);
+    }
   };
 
   return (
@@ -223,10 +241,10 @@ export default function ServiceList() {
               justifyContent: "center",
             }}
           >
-            <ScrollableTabService
+            <DropDownService
               category={category}
+              cateName="Loại dịch vụ"
               handUpdateEditTable={hanldeClickCategory}
-              handleLoadAllService={loadAllService}
             />
           </Box>
         </Box>
@@ -261,22 +279,25 @@ export default function ServiceList() {
                         <Typography gutterBottom variant="h5" component="h2">
                           {value.serviceName}
                         </Typography>
-                        <Typography gutterBottom variant="h6" component="h2">
-                          {numberToVND(value.price)}
-                        </Typography>
+
+                        <Box
+                          display="flex"
+                          flexGrow={1}
+                          sx={{ justifyContent: "space-between" }}
+                        >
+                          <Typography gutterBottom variant="h6" component="h2">
+                            {numberToVND(value.price)}
+                          </Typography>
+                          <Avatar
+                            title="Thêm nhanh"
+                            onClick={handleAddToCartClick}
+                            sx={{ backgroundColor: "pink" }}
+                          >
+                            <AddShoppingCartIcon />
+                          </Avatar>
+                        </Box>
                         <TypographyCus value={value} />
                       </CardContent>
-                      {/* <CardActions>
-                        <ButtonCustomize
-                          Button
-                          size="small"
-                          variant="contained"
-                          backgroundColor="Pink"
-                          // component={RouterLink}
-                          nameButton="Thêm vào giỏ hàng"
-                          fullWidth
-                        />
-                      </CardActions> */}
                     </Card>
                   </Grid>
                 );
@@ -307,6 +328,12 @@ export default function ServiceList() {
 
       <ServiceDetail
         open={isModalOpen}
+        onClose={handleCloseEditModal}
+        service={selectedService}
+      />
+      {/* Choose pet */}
+      <ChoosePet
+        open={isModalChoosePetOpen}
         onClose={handleCloseEditModal}
         service={selectedService}
       />
