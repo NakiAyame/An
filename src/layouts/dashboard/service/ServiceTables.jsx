@@ -60,9 +60,11 @@ export default function ServiceTable() {
     loadAllService(currentPage);
   }, [currentPage]);
 
-  const loadAllService = async (page) => {
+  const loadAllService = async (page, order) => {
     try {
-      const loadData = await axios.get(`${BASE_URL}/service?page=${page}`);
+      const loadData = await axios.get(
+        `${BASE_URL}/service?page=${page}&sortPrice=${order}`
+      );
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
@@ -223,8 +225,8 @@ export default function ServiceTable() {
   // ----------------------------------- GET ALL SERVICE BY SERVICE NAME --------------------------------
   const [order, setOrder] = useState("");
   const handleSortPrice = () => {
-    // Toggle giữa 'asc' và 'desc' mỗi khi nhấp vào TableSortLabel
     setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    loadAllService(currentPage, order);
   };
 
   return (

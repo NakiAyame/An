@@ -33,7 +33,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { Avatar, Tooltip } from "@mui/material";
+import { Avatar, IconButton, Tooltip } from "@mui/material";
 import DropDownService from "../../../components/DropDown/DropDownService";
 import ChoosePet from "../../../components/Modal/ModalChoosePet";
 import useAuth from "../../../hooks/useAuth";
@@ -263,23 +263,29 @@ export default function ServiceList() {
                         flexDirection: "column",
                       }}
                     >
-                      <CardMedia
-                        component="div"
-                        sx={{
-                          // 16:9
-                          pt: "56.25%",
-                        }}
-                        image="https://source.unsplash.com/random?wallpapers"
-                      />
-                      <CardContent
-                        hover
+                      <Tooltip
+                        title="Xem chi tiết dịch vụ"
                         onClick={() => handleShowDetail(value)}
-                        sx={{ flexGrow: 1 }}
                       >
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {value.serviceName}
-                        </Typography>
+                        <CardMedia
+                          component="div"
+                          sx={{
+                            // 16:9
+                            pt: "56.25%",
+                          }}
+                          image="https://source.unsplash.com/random?wallpapers"
+                        />
+                      </Tooltip>
 
+                      <CardContent hover sx={{ flexGrow: 1 }}>
+                        <Tooltip
+                          title="Xem chi tiết dịch vụ"
+                          onClick={() => handleShowDetail(value)}
+                        >
+                          <Typography gutterBottom variant="h5" component="h2">
+                            {value.serviceName}
+                          </Typography>
+                        </Tooltip>
                         <Box
                           display="flex"
                           flexGrow={1}
@@ -288,13 +294,15 @@ export default function ServiceList() {
                           <Typography gutterBottom variant="h6" component="h2">
                             {numberToVND(value.price)}
                           </Typography>
-                          <Avatar
-                            title="Thêm nhanh"
+                          <Tooltip
+                            title="Thêm vào giỏ dịch vụ"
                             onClick={handleAddToCartClick}
                             sx={{ backgroundColor: "pink" }}
                           >
-                            <AddShoppingCartIcon />
-                          </Avatar>
+                            <IconButton>
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </Tooltip>
                         </Box>
                         <TypographyCus value={value} />
                       </CardContent>

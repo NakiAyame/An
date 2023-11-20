@@ -33,7 +33,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { Avatar } from "@mui/material";
+import { Avatar, IconButton, Tooltip } from "@mui/material";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -201,15 +201,7 @@ export default function ProductList() {
             {data &&
               data.map((value, index) => {
                 return (
-                  <Grid
-                    hover
-                    item
-                    key={index}
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    onClick={() => handleShowDetail(value)}
-                  >
+                  <Grid hover item key={index} xs={12} sm={6} md={4}>
                     <Card
                       sx={{
                         height: "100%",
@@ -217,18 +209,30 @@ export default function ProductList() {
                         flexDirection: "column",
                       }}
                     >
-                      <CardMedia
-                        component="div"
-                        sx={{
-                          // 16:9
-                          pt: "56.25%",
-                        }}
-                        image="https://source.unsplash.com/random?wallpapers"
-                      />
+                      <Tooltip
+                        title="Xem chi tiết"
+                        onClick={() => handleShowDetail(value)}
+                      >
+                        <CardMedia
+                          component="div"
+                          sx={{
+                            // 16:9
+                            pt: "56.25%",
+                          }}
+                          image="https://source.unsplash.com/random?wallpapers"
+                        />
+                      </Tooltip>
+
                       <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {value.productName}
-                        </Typography>
+                        <Tooltip
+                          title="Xem chi tiết"
+                          onClick={() => handleShowDetail(value)}
+                        >
+                          <Typography gutterBottom variant="h5" component="h2">
+                            {value.productName}
+                          </Typography>
+                        </Tooltip>
+
                         <Box
                           display="flex"
                           flexGrow={1}
@@ -237,13 +241,15 @@ export default function ProductList() {
                           <Typography gutterBottom variant="h6" component="h2">
                             {numberToVND(value.price)}
                           </Typography>
-                          <Avatar
-                            title="Thêm nhanh"
+                          <Tooltip
+                            title="Thêm vào giỏ hàng"
                             onClick={() => handleAddToCart(value._id)}
                             sx={{ backgroundColor: "pink" }}
                           >
-                            <AddShoppingCartIcon />
-                          </Avatar>
+                            <IconButton>
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </Tooltip>
                         </Box>
                         <Typography>SỐ LƯỢNG CÒN: {value.quantity}</Typography>
                       </CardContent>

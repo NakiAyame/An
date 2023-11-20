@@ -29,6 +29,8 @@ import { Avatar, Container, Stack, TextField } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
 import { Pagination } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
+import ModalAddPet from "./ModalAddPet";
 
 const ChoosePet = ({ open, onClose, service }) => {
   console.log(service);
@@ -159,7 +161,26 @@ const ChoosePet = ({ open, onClose, service }) => {
               </ListItem>
             );
           })}
+        <ListItem disableGutters>
+          <ListItemButton onClick={handleCreateModal}>
+            <ListItemAvatar>
+              <Avatar>
+                <AddIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary="Thêm thú cưng" />
+          </ListItemButton>
+        </ListItem>
       </List>
+      {/* Modal create */}
+      <ModalAddPet
+        open={openCreateModal}
+        onClose={handleCloseModal}
+        handUpdateTable={loadAllPetByUserId}
+        page={currentPage}
+        data={context.auth.id}
+        category={category}
+      />
     </Dialog>
   );
 };
