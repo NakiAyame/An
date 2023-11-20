@@ -36,24 +36,34 @@ const ChangePassword = () => {
   const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
   const handleChangePassword = async () => {
-    try {
-      const response = await axios.put("http://localhost:3500/changePassword", {
-        id: context.auth.id,
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-        rePassword: rePassword,
-      });
-      if (response.error) {
-        toast.error(response.error);
-      } else {
-        console.log(response.data);
-        toast.success("Đổi mật khẩu thành công");
-        navigate("/sign-in");
-        localStorage.removeItem("token");
-        toast.success("Hãy đăng nhập lại");
+    if (newPassword !== rePassword) {
+      toast.error(
+        "Mật khẩu Mới và Xác nhận phải khớp nhau. Vui lòng nhập lại chúng. "
+      );
+    } else {
+      try {
+        const response = await axios.put(
+          "http://localhost:3500/changePassword",
+          {
+            id: context.auth.id,
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+            rePassword: rePassword,
+          }
+        );
+        if (response.error) {
+          toast.error(response.error);
+        } else {
+          console.log(response.data);
+          toast.success("Đổi mật khẩu thành công");
+          // navigate("/sign-in");
+          // localStorage.removeItem("token");
+          // toast.success("Hãy đăng nhập lại");
+        }
+      } catch (error) {
+        console.error("Error changing password:", error);
+        toast.error(error);
       }
-    } catch (error) {
-      console.error("Error changing password:", error);
     }
   };
 
