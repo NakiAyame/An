@@ -31,7 +31,7 @@ const ModalAddPet = (props) => {
   const [petName, setPetName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
-  const [status, setStatus] = useState(true);
+  const [status, setStatus] = useState(false);
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);

@@ -16,6 +16,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PetsIcon from "@mui/icons-material/Pets";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import HomeIcon from "@mui/icons-material/Home";
+import VpnKeyIcon from "@mui/icons-material/VpnKey";
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -126,7 +127,7 @@ export default function AccountMenu() {
           to="/change-password"
         >
           <ListItemIcon>
-            <DashboardIcon fontSize="small" />
+            <VpnKeyIcon fontSize="small" />
           </ListItemIcon>
           Đổi mật khẩu
         </MenuItem>
