@@ -99,7 +99,7 @@ const ModalAddProduct = (props) => {
           toast.error(response.error);
         } else {
           console.log("Thành công!!", response);
-          toast.success("Thêm mới thú cưng thành công!");
+          toast.success("Thêm mới sản phẩm thành công!");
           setProductName("");
           setCategoryId("");
           setQuantity();

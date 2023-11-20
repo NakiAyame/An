@@ -41,6 +41,29 @@ export default function UserPRofile() {
   const [gender, setGender] = useState(false);
   const [role, setRole] = useState("");
 
+  const FULL_NAME_REGEX =
+    /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
+  const PHONE_NUMBER_REGEX = /^(0[3|5|7|8|9])+([0-9]{8})$/;
+
+  // --------------------- VALIDATION -----------------------------
+  const [validFullName, setValidFullName] = useState("");
+  const [validPhone, setValidPhone] = useState();
+  useEffect(() => {
+    setValidFullName(FULL_NAME_REGEX.test(fullname));
+  }, [fullname]);
+
+  const handleValidationFullName = (e) => {
+    setFullName(e.target.value);
+  };
+
+  useEffect(() => {
+    setValidPhone(PHONE_NUMBER_REGEX.test(phone));
+  }, [phone]);
+
+  const handleValidationPhone = (e) => {
+    setPhone(e.target.value);
+  };
+
   const handleGenderChange = (event) => {
     setGender(event.target.value);
     console.log(gender);
@@ -80,26 +103,36 @@ export default function UserPRofile() {
   const handleUpdate = async (userId) => {
     console.log("Check userID", userId);
     console.log(gender);
-    try {
-      const data = await axios.patch(`http://localhost:3500/user`, {
-        _id: userId,
-        fullname: fullname,
-        email: email,
-        password: password,
-        role: role,
-        address: address,
-        phone: phone,
-        gender: gender,
-      });
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        console.log(data);
-        handleGetUserById();
-        toast.success("Cập nhật thành công");
+    if (!validFullName) {
+      toast.error(
+        "Tên không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
+      );
+    } else if (!validPhone) {
+      toast.error(
+        "Số điện thoại phải có 10 chữ số và 2 đầu số phải là 0(3,5,7,8,9)"
+      );
+    } else {
+      try {
+        const data = await axios.patch(`http://localhost:3500/user`, {
+          _id: userId,
+          fullname: fullname,
+          email: email,
+          password: password,
+          role: role,
+          address: address,
+          phone: phone,
+          gender: gender,
+        });
+        if (data.error) {
+          toast.error(data.error);
+        } else {
+          console.log(data);
+          handleGetUserById();
+          toast.success("Cập nhật thành công");
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   };
 
@@ -136,7 +169,7 @@ export default function UserPRofile() {
                   value={fullname}
                   autoComplete="given-name"
                   variant="standard"
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => handleValidationFullName(e)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -220,10 +253,11 @@ export default function UserPRofile() {
                   name="phone"
                   label="Số điện thoại"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => handleValidationPhone(e)}
                   fullWidth
                   autoComplete="shipping phone"
                   variant="standard"
+                  error={!validPhone}
                 />
               </Grid>
             </Grid>
