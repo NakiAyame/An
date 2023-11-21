@@ -233,11 +233,11 @@ export default function PetTable() {
             >
               <TableRow>
                 <TableCell children>ID</TableCell>
-                <TableCell align="center">Chủ thú cưng</TableCell>
-                <TableCell align="center">Tên thú cưng</TableCell>
-                <TableCell align="center">Cấp thú cưng</TableCell>
-                <TableCell align="center">Loại thú cưng</TableCell>
-                <TableCell align="center">Trạng thái</TableCell>
+                <TableCell align="left">Chủ thú cưng</TableCell>
+                <TableCell align="left">Tên thú cưng</TableCell>
+                <TableCell align="left">Cấp thú cưng</TableCell>
+                <TableCell align="left">Loại thú cưng</TableCell>
+                <TableCell align="left">Trạng thái</TableCell>
                 {/* <TableCell align="center">Chức năng</TableCell> */}
               </TableRow>
             </TableHead>
@@ -259,13 +259,17 @@ export default function PetTable() {
                         {value.userId !== null ? value.userId.fullname : ""}
                       </TableCell>
                       <TableCell align="left">{value.petName}</TableCell>
-                      <TableCell align="center">{value.rank}</TableCell>
-                      <TableCell align="center">{value.category}</TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">{value.rank}</TableCell>
+                      <TableCell align="left">{value.category}</TableCell>
+                      <TableCell align="left">
                         <Chip
                           size="small"
                           variant="outlined"
-                          label={value.status ? "Hoạt động" : "Ẩn"}
+                          label={
+                            value.status
+                              ? "Đang chọn dịch vụ"
+                              : "Chưa chọn dịch vụ"
+                          }
                           color={statusColor}
                         />
                       </TableCell>

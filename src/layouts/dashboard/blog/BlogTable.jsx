@@ -37,6 +37,9 @@ import { toast } from "react-toastify";
 import ModalAddPet from "../../../components/Modal/ModalAddPet";
 import ModalEditPet from "../../../components/Modal/ModalEditPet";
 import ContentCus from "../../../components/Typography/ContentCus";
+import ModalAddBlog from "../../../components/Modal/ModalAddBlog";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import useAuth from "../../../hooks/useAuth";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -65,6 +68,8 @@ export default function BlogTable() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataEditPet, setDataEditPet] = useState({});
+  const context = useAuth();
+  console.log(context);
 
   // --------------------- OPEN MODAL  -----------------------------
   const handleCreateModal = () => {
@@ -112,6 +117,22 @@ export default function BlogTable() {
 
   return (
     <>
+      <Grid
+        spacing={2}
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
+        <Grid item>
+          <ButtonCustomize
+            onClick={handleCreateModal}
+            color="white"
+            nameButton="Thêm mới"
+            startIcon={<AddCircleOutlineIcon />}
+          />
+        </Grid>
+      </Grid>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -175,20 +196,21 @@ export default function BlogTable() {
         />
       </Stack>
       {/* Modal create */}
-      <ModalAddPet
+      <ModalAddBlog
         open={openCreateModal}
         onClose={handleCloseModal}
         handUpdateTable={loadAllBlog}
         page={currentPage}
+        uId={context.auth.id}
       />
       {/* Modal update */}
-      <ModalEditPet
+      {/* <ModalEditPet
         open={openEditModal}
         onClose={handleCloseModal}
         dataEditPet={dataEditPet}
         handUpdateEditTable={loadAllBlog}
         page={currentPage}
-      />
+      /> */}
     </>
   );
 }
