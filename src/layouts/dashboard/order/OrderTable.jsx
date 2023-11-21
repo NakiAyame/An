@@ -24,13 +24,16 @@ import {
     RadioGroup,
     FormControlLabel,
     Radio,
-    ButtonGroup
+    ButtonGroup,
+    Stack,
+    Pagination
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
 
 import ButtonCustomize from "../../../components/Button/Button";
+import DateFormat from "../../../components/DateFormat";
 
 //React
 import { useState } from "react";
@@ -55,7 +58,9 @@ const style = {
 
 export default function BasicTable() {
     const DEFAULT_PAGE = 1;
-    const DEFAULT_LIMIT = 5;
+    const DEFAULT_LIMIT = 10;
+    const [pages, setPages] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
 
     const OPTION_VIEW_ORDER_BY_ID = 'view'
 
@@ -117,13 +122,12 @@ export default function BasicTable() {
         try {
             const loadData = await axios.get(
                 `http://localhost:3500/order?page=${page}&limit=${limit}`
-            );
-            if (loadData.error) {
-                toast.error(loadData.error);
-            } else {
-                setData(loadData.data.docs);
-                console.log(loadData.data.docs);
-            }
+            )
+                .then((data) => {
+                    setData(data.data.docs);
+                    setPages(data.data.pages);
+                    console.log(data.data.docs);
+                })
         } catch (err) {
             console.log(err);
         }
@@ -171,7 +175,12 @@ export default function BasicTable() {
 
     // ---------------------------------------------------------------
 
-    // ----------------------------------------------------------------
+    const handlePaging = (event, value) => {
+        setCurrentPage(value === undefined ? 1 : value)
+        loadAllOrder(value, DEFAULT_LIMIT);
+    }
+
+    // ---------------------------------------------------------------
 
     const errorStyle = {
         color: "red",
@@ -233,15 +242,14 @@ export default function BasicTable() {
             </Grid>
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
                                 <TableCell children>ID</TableCell>
-                                <TableCell align="right">Tên người dùng</TableCell>
-                                <TableCell align="right">Ngày đặt hàng</TableCell>
-                                <TableCell align="right">Tổng giá trị</TableCell>
-                                <TableCell align="right">Trạng thái</TableCell>
-                                <TableCell align="right">Chức năng</TableCell>
+                                <TableCell align="left">Tên người dùng</TableCell>
+                                <TableCell align="left">Ngày đặt hàng</TableCell>
+                                <TableCell align="left">Tổng giá trị</TableCell>
+                                <TableCell align="left">Trạng thái</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -251,25 +259,19 @@ export default function BasicTable() {
                                         <TableRow
                                             key={index}
                                             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                            onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
                                         >
                                             <TableCell component="th" scope="row">
                                                 {index + 1}
                                             </TableCell>
-                                            <TableCell align="right">{value.userId !== null ? value.userId.fullname : ""}</TableCell>
-                                            <TableCell align="right">{value.createdAt}</TableCell>
-                                            <TableCell align="right">{value.totalPrice}</TableCell>
-                                            <TableCell align="right">
+                                            <TableCell align="left">{value.userId !== null ? value.userId.fullname : ""}</TableCell>
+                                            <TableCell align="left"><DateFormat date={value.createdAt} /></TableCell>
+                                            <TableCell align="left">{value.totalPrice}</TableCell>
+                                            <TableCell align="left">
                                                 {value.status}
                                             </TableCell>
-                                            <TableCell align="right">
+                                            {/* <TableCell align="right">
                                                 <ButtonGroup variant="contained" fullWidth>
-                                                    <ButtonCustomize
-                                                        onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
-                                                        variant="contained"
-                                                        // component={RouterLink}
-                                                        nameButton="xem chi tiết"
-                                                        fullWidth
-                                                    />
                                                     <ButtonCustomize
                                                         onClick={(e) => handleDelete(value._id)}
                                                         backgroundColor="red"
@@ -279,13 +281,22 @@ export default function BasicTable() {
                                                         fullWidth
                                                     />
                                                 </ButtonGroup>
-                                            </TableCell>
+                                            </TableCell> */}
                                         </TableRow>
                                     );
                                 })}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <hr style={{ opacity: '0.5' }} />
+                <Stack spacing={2} sx={{ float: "right" }} style={{ margin: '10px 0', justifyContent: 'center' }}>
+                    <Pagination
+                        count={pages}
+                        page={currentPage}
+                        color="primary"
+                        onChange={handlePaging}
+                    />
+                </Stack>
             </Paper>
 
             <Modal
@@ -340,10 +351,10 @@ export default function BasicTable() {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell children>STT</TableCell>
-                                        <TableCell align="right">Mã đơn hàng</TableCell>
-                                        <TableCell align="right">Tên sản phẩm</TableCell>
-                                        <TableCell align="right">Số lượng</TableCell>
-                                        <TableCell align="right">Giá</TableCell>
+                                        <TableCell align="left">Mã đơn hàng</TableCell>
+                                        <TableCell align="left">Tên sản phẩm</TableCell>
+                                        <TableCell align="left">Số lượng</TableCell>
+                                        <TableCell align="left">Giá</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -357,11 +368,11 @@ export default function BasicTable() {
                                                     <TableCell component="th" scope="row">
                                                         {index + 1}
                                                     </TableCell>
-                                                    <TableCell align="right">{value.orderId}</TableCell>
-                                                    <TableCell align="right">{value.productId.productName}</TableCell>
-                                                    <TableCell align="right">{value.quantity}</TableCell>
-                                                    <TableCell align="right">{value.productId.price}</TableCell>
-                                                    <TableCell align="right"></TableCell>
+                                                    <TableCell align="left">{value.orderId}</TableCell>
+                                                    <TableCell align="left">{value.productId.productName}</TableCell>
+                                                    <TableCell align="left">{value.quantity}</TableCell>
+                                                    <TableCell align="left">{value.productId.price}</TableCell>
+                                                    <TableCell align="left"></TableCell>
                                                 </TableRow>
                                             );
                                         })}

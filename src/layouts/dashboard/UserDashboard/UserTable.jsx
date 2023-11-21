@@ -24,8 +24,11 @@ import {
     RadioGroup,
     FormControlLabel,
     Radio,
-    ButtonGroup
+    ButtonGroup,
+    Stack,
+    Pagination
 } from "@mui/material";
+import { DataGrid } from '@mui/x-data-grid';
 
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
@@ -53,9 +56,11 @@ const style = {
     p: 4,
 };
 
-export default function BasicTable() {
+const BasicTable = () => {
     const DEFAULT_PAGE = 1;
-    const DEFAULT_LIMIT = 5;
+    const DEFAULT_LIMIT = 10;
+    const [pages, setPages] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
 
     const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -78,10 +83,6 @@ export default function BasicTable() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-    const handleUpdateTable = (value) => {
-        setData([value, ...data]);
-    };
 
     // --------------------- HANDLE ROLE -----------------------------
     const handleRoleChange = (event) => {
@@ -156,7 +157,7 @@ export default function BasicTable() {
 
     // --------------------- HANDLE DELETE -----------------------------
     const handleDelete = async (id) => {
-        if (window.confirm('Bạn có muốn xoá không ?') == true) {
+        if (window.confirm(`Bạn có muốn xoá không ?`) == true) {
             try {
                 console.log(id);
                 const data = await axios.delete(`http://localhost:3500/user/${id}`);
@@ -165,7 +166,7 @@ export default function BasicTable() {
                 } else {
                     console.log(data);
                     toast.success("Delete successfully");
-                    loadAllUser()
+                    loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
                 }
             } catch (err) {
                 console.log(err);
@@ -199,22 +200,21 @@ export default function BasicTable() {
                     address,
                     phone,
                     gender,
-                });
-                if (data.error) {
-                    toast.error(data.error);
-                } else {
-                    toast.success("Register successful. Welcome!");
-                    handleUpdateTable({
-                        fullname: fullname,
-                        email: email,
-                        phone: phone,
-                        gender: gender,
-                        address: address,
-                    });
-                    console.log(data)
-                    // handleClose();
-                    loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
-                }
+                    status: 'verifying'
+                })
+                    .then((data) => {
+                        if (data.data.error === 'Email was taken') {
+                            alert('Email đã được sử dụng')
+                        } else {
+                            toast.success("Register successful. Welcome!");
+                            console.log(data)
+                            handleClose();
+                            loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+                        }
+                    })
+                    .catch((err) => {
+                        alert(err.data)
+                    })
             } catch (err) {
                 console.log(err);
             }
@@ -225,15 +225,15 @@ export default function BasicTable() {
     // ----------------------------------- API GET ALL USER --------------------------------
     async function loadAllUser(page, limit) {
         try {
+            const row = [];
             const loadData = await axios.get(
-                `http://localhost:3500/user`
-            );
-            if (loadData.error) {
-                toast.error(loadData.error);
-            } else {
-                setData(loadData.data.docs);
-                console.log(loadData.data.docs);
-            }
+                `http://localhost:3500/user?page=${page}&limit=${limit}`
+            )
+                .then((data) => {
+                    setData(data.data.docs);
+                    setPages(data.data.pages);
+                    console.log(data.data);
+                })
         } catch (err) {
             console.log(err);
         }
@@ -251,6 +251,12 @@ export default function BasicTable() {
         fontSize: "12px"
     };
 
+    // ----------------------------------------------------------------
+    const handlePaging = (event, value) => {
+        setCurrentPage(value === undefined ? 1 : value)
+        loadAllUser(value, DEFAULT_LIMIT);
+    }
+
     return (
         <>
             <ButtonCustomize
@@ -261,18 +267,18 @@ export default function BasicTable() {
                 width="15%"
             />
 
-            <Paper sx={{ width: "100%", overflow: "hidden" }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
+            <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "20px" }}>
+                <TableContainer sx={{ maxHeight: 550 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <TableCell children>ID</TableCell>
-                                <TableCell align="right">Name</TableCell>
-                                <TableCell align="right">Phone</TableCell>
-                                <TableCell align="right">Gender</TableCell>
+                                <TableCell children>STT</TableCell>
+                                <TableCell align="right">Họ và tên</TableCell>
+                                <TableCell align="right">Số điện thoại</TableCell>
+                                <TableCell align="right">Giới tính</TableCell>
                                 <TableCell align="right">Email</TableCell>
-                                <TableCell align="right">Address</TableCell>
-                                <TableCell align="right">Chức năng</TableCell>
+                                <TableCell align="right">Trạng thái</TableCell>
+                                <TableCell align="right">Địa chỉ</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -282,9 +288,10 @@ export default function BasicTable() {
                                         <TableRow
                                             key={index}
                                             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                            onClick={(e) => handleLoadUserbId(value._id, value.password)}
                                         >
                                             <TableCell component="th" scope="row">
-                                                {index}
+                                                {index + 1}
                                             </TableCell>
                                             <TableCell align="right">{value.fullname}</TableCell>
                                             <TableCell align="right">{value.phone}</TableCell>
@@ -292,33 +299,25 @@ export default function BasicTable() {
                                                 {(value.gender == true ? "Nam" : "Nữ")}
                                             </TableCell>
                                             <TableCell align="right">{value.email}</TableCell>
+                                            <TableCell align="right">{value.status}</TableCell>
                                             <TableCell align="right">{value.address}</TableCell>
-                                            <TableCell align="right">
-                                                <ButtonGroup variant="contained" fullWidth>
-                                                    <ButtonCustomize
-                                                        onClick={(e) => handleLoadUserbId(value._id, value.password)}
-                                                        variant="contained"
-                                                        // component={RouterLink}
-                                                        nameButton="Cập nhật"
-                                                        fullWidth
-                                                    />
-                                                    <ButtonCustomize
-                                                        onClick={(e) => handleDelete(value._id)}
-                                                        backgroundColor="red"
-                                                        variant="contained"
-                                                        // component={RouterLink}
-                                                        nameButton="Xoá"
-                                                        fullWidth
-                                                    />
-                                                </ButtonGroup>
-                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <hr style={{ opacity: '0.5' }} />
+                <Stack spacing={2} sx={{ float: "right" }} style={{ margin: '10px 0', justifyContent: 'center' }}>
+                    <Pagination
+                        count={pages}
+                        page={currentPage}
+                        onChange={handlePaging}
+                        color="primary"
+                    />
+                </Stack>
             </Paper>
+
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -359,14 +358,27 @@ export default function BasicTable() {
                             </Grid>
 
                             <Grid item xs={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    label="Gmail"
-                                    margin="normal"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
+                                {
+                                    option === 'create' 
+                                    ? (<TextField
+                                        required
+                                        fullWidth
+                                        label="Gmail"
+                                        margin="normal"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />)
+                                    : 
+                                    (<TextField
+                                        required
+                                        fullWidth
+                                        label="Gmail"
+                                        margin="normal"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        disabled
+                                    />)
+                                }
                                 {email === "" ? <span style={errorStyle}>Vui lòng điền email</span> : ""}
                             </Grid>
                             {option === "create" ? (
@@ -467,14 +479,25 @@ export default function BasicTable() {
                                 Thêm nhân viên
                             </Button>
                         ) : (
-                            <Button
-                                variant="contained"
-                                margin="normal"
-                                color="primary"
-                                onClick={handleUpdate}
-                            >
-                                Cập nhật thông tin
-                            </Button>
+                            <div>
+                                <Button
+                                    variant="contained"
+                                    margin="normal"
+                                    color="primary"
+                                    onClick={handleUpdate}
+                                >
+                                    Cập nhật thông tin
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    margin="normal"
+                                    style={{ backgroundColor: 'red', marginLeft: '20px' }}
+                                    onClick={(e) => handleDelete(id)}
+                                >
+                                    Xoá
+                                </Button>
+                            </div>
+
                         )}
                     </DialogActions>
                 </Box>
@@ -482,3 +505,5 @@ export default function BasicTable() {
         </>
     );
 }
+
+export default BasicTable;
