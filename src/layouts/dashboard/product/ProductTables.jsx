@@ -269,10 +269,10 @@ export default function ProductTable() {
             <TableHead>
               <TableRow>
                 <TableCell children>STT</TableCell>
-                <TableCell align="center">Tên sản phẩm</TableCell>
-                <TableCell align="center">Số lượng</TableCell>
-                <TableCell align="center">Giá tiền</TableCell>
-                <TableCell align="center">Thông tin sản phẩm</TableCell>
+                <TableCell align="left">Tên sản phẩm</TableCell>
+                <TableCell align="left">Số lượng</TableCell>
+                <TableCell align="left">Giá tiền</TableCell>
+                <TableCell align="left">Thông tin sản phẩm</TableCell>
                 {/* <TableCell align="center">Chức năng</TableCell> */}
               </TableRow>
             </TableHead>
@@ -291,8 +291,8 @@ export default function ProductTable() {
                         {(currentPage - 1) * 10 + (index + 1)}
                       </TableCell>
                       <TableCell align="left">{value.productName}</TableCell>
-                      <TableCell align="center">{value.quantity}</TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">{value.quantity}</TableCell>
+                      <TableCell align="left">
                         {numberToVND(value.price)}
                       </TableCell>
                       <TableCell align="left">{value.description}</TableCell>
