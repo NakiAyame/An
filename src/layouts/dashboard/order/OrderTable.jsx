@@ -92,7 +92,6 @@ export default function BasicTable() {
         } catch (err) {
             console.log(err);
         }
-        console.log(88, orderDetail);
         setOption(option);
         handleOpen();
     };
@@ -205,6 +204,7 @@ export default function BasicTable() {
                 } else {
                     console.log(loadData.data);
                     loadAllOrder();
+                    handleClose();
                 }
             } catch (err) {
                 console.log(err);
@@ -369,9 +369,9 @@ export default function BasicTable() {
                                                         {index + 1}
                                                     </TableCell>
                                                     <TableCell align="left">{value.orderId}</TableCell>
-                                                    <TableCell align="left">{value.productId.productName}</TableCell>
+                                                    <TableCell align="left">{value.productId !== null ? value.productId.productName : ''}</TableCell>
                                                     <TableCell align="left">{value.quantity}</TableCell>
-                                                    <TableCell align="left">{value.productId.price}</TableCell>
+                                                    <TableCell align="left">{value.productId !== null ? value.productId.price : ''}</TableCell>
                                                     <TableCell align="left"></TableCell>
                                                 </TableRow>
                                             );

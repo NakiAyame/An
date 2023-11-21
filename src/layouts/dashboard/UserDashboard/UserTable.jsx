@@ -167,6 +167,7 @@ const BasicTable = () => {
                     console.log(data);
                     toast.success("Delete successfully");
                     loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+                    handleClose()
                 }
             } catch (err) {
                 console.log(err);

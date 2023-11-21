@@ -206,6 +206,7 @@ export default function BookingTable() {
                 } else {
                     console.log(loadData.data);
                     loadAllBooking();
+                    handleClose()
                 }
             } catch (err) {
                 console.log(err);
