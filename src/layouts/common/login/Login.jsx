@@ -64,29 +64,27 @@ const Login = () => {
         email,
         password,
       })
-      .then((data) => {
-        console.log(data)
-        if(data.data.error == 'Unverified'){
-          // navigate('/', { replace: true });
-        }
-      })
-      // if (data.error) {
-      //   toast.error(data.error);
-      // } else {
-      //   const dataDecode = jwtDecode(data.token)
+        .then((data) => {
+          console.log(data)
+          if (data.data.error == 'Unverified') {
+            if (window.confirm('Vui xác nhận tài khoản') == true) {
+              navigate('/verify', { replace: true });
+            }
+          } else {
+            const dataDecode = jwtDecode(data.data.token)
+            localStorage.setItem("token", data.data.token);
 
-      //   localStorage.setItem("token", data.token);
+            context.setAuth({
+              id: dataDecode.id,
+              email: dataDecode.email,
+              role: dataDecode.role,
+              token: data.data.token
+            })
 
-      //   context.setAuth({
-      //     id: dataDecode.id,
-      //     email: dataDecode.email,
-      //     role: dataDecode.role,
-      //     token: data.token
-      //   })
-
-      //   toast.success("Login successful");
-      //   navigate(from, { replace: true });
-      // }
+            toast.success("Login successful");
+            navigate(from, { replace: true });
+          }
+        })
     } catch (err) {
       console.log(err);
     }

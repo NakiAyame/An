@@ -1,94 +1,98 @@
 import React, { useState } from "react";
 import {
-  TextField,
-  Button,
-  Container,
-  Typography,
-  Grid,
-  Paper,
-  Box,
+    TextField,
+    Button,
+    Container,
+    Typography,
+    Grid,
+    Paper,
+    Box,
 } from "@mui/material";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
-const VerifyCode = () => {
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [rePassword, setRePassword] = useState("");
+export default function VerifyCode() {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [verifyCode, setVerifyCode] = useState("");
 
-  const context = useAuth();
-  console.log(context);
+    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-  const handleChangePassword = async () => {
-    try {
-      const response = await axios.put("http://localhost:3500/changePassword", {
-        id: context.auth.id,
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-        rePassword: rePassword,
-      });
+    const handleConfirmVerifyCode = async () => {
+        if (!email.match(validRegex)) {
+            alert('Vui lòng nhập đúng định dạng Email !')
+        } else {
+            try {
+                const response = await axios.post("http://localhost:3500/verify",
+                    {
+                        email: email,
+                        code: verifyCode
+                    }
+                )
+                    .then((data) => {
+                        if (data.data.error === 'Fail') {
+                            alert('Mã xác nhận không chính xác')
+                        } else if (data.data === 'User Not Exists!') {
+                            alert('Địa chỉ Email không tồn tại')
+                        } else {
+                            alert('Xác nhận tài khoản thành công, vui lòng đăng nhập');
+                            navigate('/sign-in', { replace: true });
+                        }
 
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error changing password:", error);
-    }
-  };
+                    })
+            } catch (error) {
+                console.error("Error changing password:", error);
+            }
+        }
+    };
 
-  return (
-    <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-      <Paper
-        variant="outlined"
-        sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-      >
-        <Typography component="h1" variant="h6" gutterBottom>
-          Đổi mật khẩu
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              fullWidth
-              label="Mật khẩu cũ"
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              fullWidth
-              label="Mật khẩu mới"
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              fullWidth
-              label="Nhập lại mật khẩu mới"
-              type="password"
-              value={rePassword}
-              onChange={(e) => setRePassword(e.target.value)}
-            />
-          </Grid>
-        </Grid>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            type="button"
-            sx={{ mt: 3, ml: 1 }}
-            variant="contained"
-            onClick={handleChangePassword}
-          >
-            Đổi mật khẩu
-          </Button>
-        </Box>
-      </Paper>
-    </Container>
-  );
+    return (
+        <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+            <Paper
+                variant="outlined"
+                sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+            >
+                <Typography variant="h4" gutterBottom>
+                    Xác nhận tài khoản
+                </Typography>
+                <Typography variant="h7" gutterBottom>
+                    Vui lòng kiểm tra mã xác nhận được gửi vào email
+                </Typography>
+                <Grid container spacing={3} style={{ marginTop: "15px" }}>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            label="Vui lòng nhập email"
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            label="Vui lòng nhập mã xác nhận"
+                            type="text"
+                            value={verifyCode}
+                            onChange={(e) => setVerifyCode(e.target.value)}
+                        />
+                    </Grid>
+                </Grid>
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                        type="button"
+                        sx={{ mt: 3, ml: 1 }}
+                        variant="contained"
+                        onClick={handleConfirmVerifyCode}
+                    >
+                        Xác nhận
+                    </Button>
+                </Box>
+            </Paper>
+        </Container>
+    );
 };
 
-export default VerifyCode;
+// export default VerifyCode;
