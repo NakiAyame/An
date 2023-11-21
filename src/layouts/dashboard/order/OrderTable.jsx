@@ -31,6 +31,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
 
 import ButtonCustomize from "../../../components/Button/Button";
+import DateFormat from "../../../components/DateFormat";
 
 //React
 import { useState } from "react";
@@ -55,7 +56,7 @@ const style = {
 
 export default function BasicTable() {
     const DEFAULT_PAGE = 1;
-    const DEFAULT_LIMIT = 5;
+    const DEFAULT_LIMIT = 10;
 
     const OPTION_VIEW_ORDER_BY_ID = 'view'
 
@@ -233,7 +234,7 @@ export default function BasicTable() {
             </Grid>
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
                                 <TableCell children>ID</TableCell>
@@ -251,25 +252,19 @@ export default function BasicTable() {
                                         <TableRow
                                             key={index}
                                             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                            onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
                                         >
                                             <TableCell component="th" scope="row">
                                                 {index + 1}
                                             </TableCell>
                                             <TableCell align="right">{value.userId !== null ? value.userId.fullname : ""}</TableCell>
-                                            <TableCell align="right">{value.createdAt}</TableCell>
+                                            <TableCell align="right"><DateFormat date={value.createdAt}/></TableCell>
                                             <TableCell align="right">{value.totalPrice}</TableCell>
                                             <TableCell align="right">
                                                 {value.status}
                                             </TableCell>
                                             <TableCell align="right">
                                                 <ButtonGroup variant="contained" fullWidth>
-                                                    <ButtonCustomize
-                                                        onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
-                                                        variant="contained"
-                                                        // component={RouterLink}
-                                                        nameButton="xem chi tiết"
-                                                        fullWidth
-                                                    />
                                                     <ButtonCustomize
                                                         onClick={(e) => handleDelete(value._id)}
                                                         backgroundColor="red"

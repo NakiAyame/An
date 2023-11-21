@@ -68,6 +68,9 @@ const Login = () => {
         toast.error(data.error);
       } else {
         const dataDecode = jwtDecode(data.token);
+
+        localStorage.setItem("token", data.token);
+
         context.setAuth({
           id: dataDecode.id,
           email: dataDecode.email,
