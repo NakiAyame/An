@@ -256,20 +256,6 @@ export default function ServiceTable() {
             }}
           />
         </Grid>
-        {/* <Grid item>
-        <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
-      <Select
-        label="Loại dịch vụ"
-        value={sortPrice}
-        onChange={handleChangeSort}
-      >
-        <MenuItem value="">Tất cả</MenuItem>
-        <MenuItem value="asc">Tất cả</MenuItem>
-        <MenuItem value="desc">Tất cả</MenuItem>
-        
-      </Select>
-    </FormControl>
-        </Grid> */}
 
         <Grid item>
           <DropDownService
@@ -294,10 +280,10 @@ export default function ServiceTable() {
             <TableHead>
               <TableRow>
                 <TableCell>STT</TableCell>
-                <TableCell align="center">Tên dịch vụ</TableCell>
-                <TableCell align="center">Loại dịch vụ</TableCell>
-                <TableCell align="center">Thông tin</TableCell>
-                <TableCell align="center">
+                <TableCell align="left">Tên dịch vụ</TableCell>
+                <TableCell align="left">Loại dịch vụ</TableCell>
+                <TableCell align="left">Thông tin</TableCell>
+                <TableCell align="left">
                   <TableSortLabel
                     active={!!order}
                     direction={order}
@@ -306,7 +292,7 @@ export default function ServiceTable() {
                     Số tiền
                   </TableSortLabel>
                 </TableCell>
-                <TableCell align="center">Trạng thái</TableCell>
+                <TableCell align="left">Trạng thái</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -337,7 +323,7 @@ export default function ServiceTable() {
                       <TableCell align="left">
                         {numberToVND(value.price)}
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         <Chip
                           size="small"
                           variant="outlined"
