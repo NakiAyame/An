@@ -26,6 +26,37 @@ import TypographyCus from "../../../components/Typography/DescriptionCus";
 import Footer from "../../../components/Footer/Footer";
 import MainPost from "../../../components/MainPost.jsx/MainPost";
 import ServiceDetail from "../../../components/Modal/ModalDetaiService";
+import { NavLink } from "react-router-dom";
+import Chip from "@mui/material/Chip";
+import HomeIcon from "@mui/icons-material/Home";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { emphasize } from "@mui/material/styles";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Avatar, IconButton, Tooltip } from "@mui/material";
+import DropDownService from "../../../components/DropDown/DropDownService";
+import ChoosePet from "../../../components/Modal/ModalChoosePet";
+import useAuth from "../../../hooks/useAuth";
+
+const StyledBreadcrumb = styled(Chip)(({ theme }) => {
+  const backgroundColor =
+    theme.palette.mode === "light"
+      ? theme.palette.grey[100]
+      : theme.palette.grey[800];
+  return {
+    backgroundColor,
+    height: theme.spacing(3),
+    color: theme.palette.text.primary,
+    fontWeight: theme.typography.fontWeightRegular,
+    "&:hover, &:focus": {
+      backgroundColor: emphasize(backgroundColor, 0.06),
+    },
+    "&:active": {
+      boxShadow: theme.shadows[1],
+      backgroundColor: emphasize(backgroundColor, 0.12),
+    },
+  };
+});
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -47,6 +78,7 @@ export default function ServiceList() {
   const [totalServices, setTotalServices] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const context = useAuth();
 
   const numberToVND = (number) => {
     return number.toLocaleString("vi-VN", {
@@ -148,6 +180,7 @@ export default function ServiceList() {
 
   // --------------------- GET DETAIL SERVICE BY ID -----------------------------
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalChoosePetOpen, setIsModalChoosePetOpen] = useState(false);
   const [selectedService, setSelectedService] = useState({});
   const handleShowDetail = (serviceId) => {
     console.log("Check data", serviceId);
@@ -157,34 +190,66 @@ export default function ServiceList() {
 
   const handleCloseEditModal = () => {
     setIsModalOpen(false);
+    setIsModalChoosePetOpen(false);
     setSelectedService(null);
+  };
+
+  const handleAddToCartClick = () => {
+    if (context.auth.token === undefined) {
+      toast.warning("Bạn chưa đăng nhập, vui lòng đăng nhập !");
+    } else {
+      console.log("Check data", selectedService);
+      setSelectedService(selectedService);
+      setIsModalChoosePetOpen(true);
+    }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
 
-      <main>
+      <CustomContainer component="main" maxWidth="full" sx={{ mt: 8 }}>
         <MainPost post={mainPost} />
-
-        <CustomBox
+        <Box
+          maxWidth="full"
           sx={{
             bgcolor: "background.paper",
-            pt: 1,
-            pb: 1,
+            p: 3,
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: "space-between",
+            borderRadius: "16px",
           }}
         >
-          <ScrollableTabService
-            category={category}
-            handUpdateEditTable={hanldeClickCategory}
-            handleLoadAllService={loadAllService}
-          />
-        </CustomBox>
-        <CustomContainer sx={{ py: 8 }} maxWidth="full">
+          <Box>
+            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+              <StyledBreadcrumb
+                component={NavLink}
+                to="/"
+                label="Trang chủ"
+                icon={<HomeIcon fontSize="small" />}
+              />
+              {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
+              <StyledBreadcrumb
+                component={NavLink}
+                to="/service-homepage"
+                label="Dịch vụ"
+              />
+            </Breadcrumbs>
+          </Box>
+          <Box
+            sx={{
+              justifyContent: "center",
+            }}
+          >
+            <DropDownService
+              category={category}
+              cateName="Loại dịch vụ"
+              handUpdateEditTable={hanldeClickCategory}
+            />
+          </Box>
+        </Box>
+
+        <Container sx={{ py: 8 }}>
           {/* End hero unit */}
           <Grid container spacing={4}>
             {data &&
@@ -198,38 +263,49 @@ export default function ServiceList() {
                         flexDirection: "column",
                       }}
                     >
-                      <CardMedia
-                        component="div"
-                        sx={{
-                          // 16:9
-                          pt: "56.25%",
-                        }}
-                        image="https://source.unsplash.com/random?wallpapers"
-                      />
-                      <CardContent
-                        hover
+                      <Tooltip
+                        title="Xem chi tiết dịch vụ"
                         onClick={() => handleShowDetail(value)}
-                        sx={{ flexGrow: 1 }}
                       >
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {value.serviceName}
-                        </Typography>
-                        <Typography gutterBottom variant="h6" component="h2">
-                          {numberToVND(value.price)}
-                        </Typography>
+                        <CardMedia
+                          component="div"
+                          sx={{
+                            // 16:9
+                            pt: "56.25%",
+                          }}
+                          image="https://source.unsplash.com/random?wallpapers"
+                        />
+                      </Tooltip>
+
+                      <CardContent hover sx={{ flexGrow: 1 }}>
+                        <Tooltip
+                          title="Xem chi tiết dịch vụ"
+                          onClick={() => handleShowDetail(value)}
+                        >
+                          <Typography gutterBottom variant="h5" component="h2">
+                            {value.serviceName}
+                          </Typography>
+                        </Tooltip>
+                        <Box
+                          display="flex"
+                          flexGrow={1}
+                          sx={{ justifyContent: "space-between" }}
+                        >
+                          <Typography gutterBottom variant="h6" component="h2">
+                            {numberToVND(value.price)}
+                          </Typography>
+                          <Tooltip
+                            title="Thêm vào giỏ dịch vụ"
+                            onClick={handleAddToCartClick}
+                            sx={{ backgroundColor: "pink" }}
+                          >
+                            <IconButton>
+                              <AddShoppingCartIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
                         <TypographyCus value={value} />
                       </CardContent>
-                      {/* <CardActions>
-                        <ButtonCustomize
-                          Button
-                          size="small"
-                          variant="contained"
-                          backgroundColor="Pink"
-                          // component={RouterLink}
-                          nameButton="Thêm vào giỏ hàng"
-                          fullWidth
-                        />
-                      </CardActions> */}
                     </Card>
                   </Grid>
                 );
@@ -255,11 +331,17 @@ export default function ServiceList() {
               />
             </Stack>
           </Container>
-        </CustomContainer>
-      </main>
+        </Container>
+      </CustomContainer>
 
       <ServiceDetail
         open={isModalOpen}
+        onClose={handleCloseEditModal}
+        service={selectedService}
+      />
+      {/* Choose pet */}
+      <ChoosePet
+        open={isModalChoosePetOpen}
         onClose={handleCloseEditModal}
         service={selectedService}
       />

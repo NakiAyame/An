@@ -19,7 +19,7 @@ import {
 import PetsIcon from "@mui/icons-material/Pets";
 //React
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, NavLink } from "react-router-dom";
 
 // Axios
 import axios from "axios";
@@ -63,6 +63,7 @@ const Login = () => {
       const { data } = await axios.post("http://localhost:3500/login", {
         email,
         password,
+<<<<<<< HEAD
       })
         .then((data) => {
           console.log(data)
@@ -73,6 +74,13 @@ const Login = () => {
           } else {
             const dataDecode = jwtDecode(data.data.token)
             localStorage.setItem("token", data.data.token);
+=======
+      });
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        const dataDecode = jwtDecode(data.token);
+>>>>>>> f1581b5c8b0f677f9321bfb6f0903ee40e6b8766
 
             context.setAuth({
               id: dataDecode.id,
@@ -81,10 +89,23 @@ const Login = () => {
               token: data.data.token
             })
 
+<<<<<<< HEAD
             toast.success("Login successful");
             navigate(from, { replace: true });
           }
         })
+=======
+        context.setAuth({
+          id: dataDecode.id,
+          email: dataDecode.email,
+          role: dataDecode.role,
+          token: data.token,
+        });
+
+        toast.success("Login successful");
+        navigate(from, { replace: true });
+      }
+>>>>>>> f1581b5c8b0f677f9321bfb6f0903ee40e6b8766
     } catch (err) {
       console.log(err);
     }
@@ -184,14 +205,14 @@ const Login = () => {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <NavLink href="" variant="body2">
                     Quên mật khẩu?
-                  </Link>
+                  </NavLink>
                 </Grid>
                 <Grid item>
-                  <Link href="/sign-up" variant="body2">
+                  <NavLink to="/sign-up" variant="body2">
                     {"Bạn chưa có tài khoản? Tạo tài khoản tại đây!"}
-                  </Link>
+                  </NavLink>
                 </Grid>
               </Grid>
             </Box>

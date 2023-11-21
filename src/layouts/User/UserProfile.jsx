@@ -22,11 +22,15 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Radio, RadioGroup } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import Footer from "../../components/Footer/Footer";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const CustomContainer = styled(Container)({
   background:
     "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
 });
+
+const defaultTheme = createTheme();
 
 export default function UserPRofile() {
   const [fullname, setFullName] = useState("");
@@ -36,6 +40,29 @@ export default function UserPRofile() {
   const [password, setPassWord] = useState("");
   const [gender, setGender] = useState(false);
   const [role, setRole] = useState("");
+
+  const FULL_NAME_REGEX =
+    /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
+  const PHONE_NUMBER_REGEX = /^(0[3|5|7|8|9])+([0-9]{8})$/;
+
+  // --------------------- VALIDATION -----------------------------
+  const [validFullName, setValidFullName] = useState("");
+  const [validPhone, setValidPhone] = useState();
+  useEffect(() => {
+    setValidFullName(FULL_NAME_REGEX.test(fullname));
+  }, [fullname]);
+
+  const handleValidationFullName = (e) => {
+    setFullName(e.target.value);
+  };
+
+  useEffect(() => {
+    setValidPhone(PHONE_NUMBER_REGEX.test(phone));
+  }, [phone]);
+
+  const handleValidationPhone = (e) => {
+    setPhone(e.target.value);
+  };
 
   const handleGenderChange = (event) => {
     setGender(event.target.value);
@@ -69,52 +96,65 @@ export default function UserPRofile() {
   };
   useEffect(() => {
     handleGetUserById();
-  }, [fullname, email, password, phone, role, gender, address]);
-
-  const handleNext = () => {
-    // setActiveStep(activeStep + 1);
-  };
-
-  const handleBack = () => {
-    // setActiveStep(activeStep - 1);
-  };
+  }, []);
 
   // --------------------- HANDLE UPDATE -----------------------------
 
   const handleUpdate = async (userId) => {
     console.log("Check userID", userId);
     console.log(gender);
-    try {
-      const data = await axios.patch(`http://localhost:3500/user`, {
-        _id: userId,
-        fullname: fullname,
-        email: email,
-        password: password,
-        role: role,
-        address: address,
-        phone: phone,
-        gender: gender,
-      });
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        console.log(data);
-        toast.success("Cập nhật thành công");
+    if (!validFullName) {
+      toast.error(
+        "Tên không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
+      );
+    } else if (!validPhone) {
+      toast.error(
+        "Số điện thoại phải có 10 chữ số và 2 đầu số phải là 0(3,5,7,8,9)"
+      );
+    } else {
+      try {
+        const data = await axios.patch(`http://localhost:3500/user`, {
+          _id: userId,
+          fullname: fullname,
+          email: email,
+          password: password,
+          role: role,
+          address: address,
+          phone: phone,
+          gender: gender,
+        });
+        if (data.error) {
+          toast.error(data.error);
+        } else {
+          console.log(data);
+          handleGetUserById();
+          toast.success("Cập nhật thành công");
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   };
 
+  useEffect(() => {
+    setFullName(fullname);
+    setEmail(email);
+    setPhone(phone);
+    setAddress(address);
+    setGender(gender);
+    setPassWord(password);
+    setRole(role);
+  }, [fullname, email, password, phone, role, gender, address]);
+
   return (
-    <React.Fragment>
-      <CssBaseline />
-      <CustomContainer component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-        >
-          <React.Fragment>
+    <ThemeProvider theme={defaultTheme}>
+      <CustomContainer component="main" maxWidth="false" sx={{ pt: 13, pb: 4 }}>
+        <CssBaseline />
+        <Container maxWidth="sm">
+          <Paper
+            variant="outlined"
+            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+          >
             <Typography variant="h6" gutterBottom>
               Thông tin cá nhân
             </Typography>
@@ -129,7 +169,7 @@ export default function UserPRofile() {
                   value={fullname}
                   autoComplete="given-name"
                   variant="standard"
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => handleValidationFullName(e)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -189,6 +229,9 @@ export default function UserPRofile() {
                   fullWidth
                   autoComplete="shipping email"
                   variant="standard"
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -210,10 +253,11 @@ export default function UserPRofile() {
                   name="phone"
                   label="Số điện thoại"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => handleValidationPhone(e)}
                   fullWidth
                   autoComplete="shipping phone"
                   variant="standard"
+                  error={!validPhone}
                 />
               </Grid>
             </Grid>
@@ -226,9 +270,10 @@ export default function UserPRofile() {
                 Cập nhật
               </Button>
             </Box>
-          </React.Fragment>
-        </Paper>
+          </Paper>
+        </Container>
       </CustomContainer>
-    </React.Fragment>
+      <Footer />
+    </ThemeProvider>
   );
 }

@@ -23,6 +23,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useState } from "react";
 import { useEffect } from "react";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 
 const CustomAppBar = styled(AppBar)({
   background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
@@ -70,7 +71,7 @@ function Header() {
 
   return (
     <>
-      <CustomAppBar position="static">
+      <CustomAppBar position="fixed">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <PetsIcon
@@ -234,16 +235,16 @@ function Header() {
                   textAlign: "center",
                 }}
               >
-                <Tooltip title="Giỏ hàng">
+                <Tooltip title="Giỏ hàng dịch vụ">
                   <NavLink to="cart-service">
                     <IconButton size="small" sx={{ ml: 2 }}>
-                      <ShoppingCartIcon
+                      <ShoppingBagIcon
                         sx={{ width: 32, height: 32 }}
-                      ></ShoppingCartIcon>
+                      ></ShoppingBagIcon>
                     </IconButton>
                   </NavLink>
                 </Tooltip>
-                <Tooltip title="Giỏ hàng">
+                <Tooltip title="Giỏ hàng sản phẩm">
                   <NavLink to="cart-product">
                     <IconButton size="small" sx={{ ml: 2 }}>
                       <ShoppingCartIcon

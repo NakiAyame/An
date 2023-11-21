@@ -11,6 +11,7 @@ function MainPost(props) {
 
   return (
     <Paper
+      maxWidth="full"
       sx={{
         position: "relative",
         backgroundColor: "grey.800",

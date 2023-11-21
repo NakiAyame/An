@@ -26,13 +26,12 @@ const PET_NAME_REGEX =
 
 const ModalAddPet = (props) => {
   const { open, onClose, handUpdateTable, page, data, category } = props;
-  console.log("Kiểm tra data", data);
 
   const [userId, setUserId] = useState("");
   const [petName, setPetName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
-  const [status, setStatus] = useState(true);
+  const [status, setStatus] = useState(false);
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
@@ -148,7 +147,7 @@ const ModalAddPet = (props) => {
               margin="normal"
               value={petName}
               onChange={(e) => handleValidationPetName(e)}
-              error={!valid}
+              // error={!valid}
             />
             <FormControl fullWidth margin="normal">
               <InputLabel id="demo-select-small-label">

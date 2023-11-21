@@ -14,10 +14,21 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
+import { Container, Grid, styled } from "@mui/material";
+import FeaturedPost from "../../components/MainPost.jsx/FeaturePost";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 function Home() {
+  const CustomBox = styled(Box)({
+    background: "linear-gradient(to right, #ADF9F0, #FADAF7, #EEDCF1, #EBEAEB)",
+  });
+
+  const CustomContainer = styled(Container)({
+    background:
+      "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
+  });
+
   const images = [
     {
       imgPath:
@@ -37,6 +48,37 @@ function Home() {
     },
   ];
 
+  const post1 = {
+    title: "Chăm sóc - Làm đẹp",
+    description: "Tắm gội, cắt tỉa lông móng, ",
+    description2: "vệ sinh răng miệng",
+    description3: "vệ sinh tai mũi, massage,...",
+    image:
+      "https://www.adventuresofyoo.com/wp-content/uploads/2016/07/4-Herman-After.jpg",
+    imageLabel: "Image Text",
+  };
+
+  const post2 = {
+    title: "Ký gửi thú cưng",
+    description:
+      "Homestay cho thú cưng - các chuồng với đa dạng kiểu dáng, được trang bị ",
+    description2: "đầy đủ các tính năng cùng với ",
+    description3: "chế độ chăm sóc đạt chuẩn.",
+    image:
+      "https://vethospital.vnua.edu.vn/wp-content/uploads/2019/12/61c4036d5df6a4a8fde7-1024x768.jpg",
+    imageLabel: "Image Text",
+  };
+
+  const post3 = {
+    title: "Khám - Chữa bệnh",
+    description: "Cung cấp nhiều dịch vụ khám chữa bệnh",
+    description2: "với trang thiết bị y tế hiện đại,",
+    description3: "đội ngũ nhân viên y tế tận tình.",
+    image:
+      "https://dreampet.com.vn/wp-content/uploads/2021/02/phong-kham-thu-y.jpg",
+    imageLabel: "Image Text",
+  };
+
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
   const maxSteps = images.length;
@@ -54,7 +96,7 @@ function Home() {
   };
 
   return (
-    <>
+    <CustomContainer component="main" maxWidth={false} disableGutters>
       <Box sx={{ flexGrow: 1 }}>
         <AutoPlaySwipeableViews
           axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -115,56 +157,27 @@ function Home() {
         />
       </Box>
 
-      <div className="container">
-        <div className="image-container">
-          <img
-            src="https://media.macphun.com/img/uploads/customer/how-to/608/15542038745ca344e267fb80.28757312.jpg?q=85&w=1340"
-            alt="Image"
-          />
-        </div>
-        <div className="text-container">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur,
-            natus. Sequi earum error ut, veritatis nisi aspernatur voluptatem
-            explicabo vel natus modi magni dolorum at voluptas dolorem cum
-            officia praesentium.
-          </p>
-        </div>
-      </div>
-      <div className="container">
-        <div className="text-container">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur,
-            natus. Sequi earum error ut, veritatis nisi aspernatur voluptatem
-            explicabo vel natus modi magni dolorum at voluptas dolorem cum
-            officia praesentium.
-          </p>
-        </div>
-        <div className="image-container">
-          <img
-            src="https://media.macphun.com/img/uploads/customer/how-to/608/15542038745ca344e267fb80.28757312.jpg?q=85&w=1340"
-            alt="Image"
-          />
-        </div>
-      </div>
-      <div className="container">
-        <div className="image-container">
-          <img
-            src="https://media.macphun.com/img/uploads/customer/how-to/608/15542038745ca344e267fb80.28757312.jpg?q=85&w=1340"
-            alt="Image"
-          />
-        </div>
-        <div className="text-container">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur,
-            natus. Sequi earum error ut, veritatis nisi aspernatur voluptatem
-            explicabo vel natus modi magni dolorum at voluptas dolorem cum
-            officia praesentium.
-          </p>
-        </div>
-      </div>
+      <CustomBox
+        sx={{
+          p: 3,
+          justifyContent: "center",
+          textAlign: "center",
+          borderRadius: "16px",
+          fontSize: "30px",
+        }}
+      >
+        <strong>
+          PetCare - Điểm đến uy tín hàng đầu chuyên cung cấp dịch vụ chăm sóc
+          thú cưng.
+        </strong>
+      </CustomBox>
+
+      <Grid container spacing={4} sx={{ m: 1, justifyContent: "center" }}>
+        <FeaturedPost post1={post1} post2={post2} post3={post3} />
+      </Grid>
+
       <Footer />
-    </>
+    </CustomContainer>
   );
 }
 
