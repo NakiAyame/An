@@ -43,7 +43,7 @@ const Register = () => {
         fullname,
         email,
         password,
-        roleId: "6526fab151d1657177f5fd34",
+        role: "customer",
       });
       if (data.error) {
         toast.error(data.error);
