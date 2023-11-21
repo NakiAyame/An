@@ -63,38 +63,11 @@ const Login = () => {
       const { data } = await axios.post("http://localhost:3500/login", {
         email,
         password,
-<<<<<<< HEAD
-      })
-        .then((data) => {
-          console.log(data)
-          if (data.data.error == 'Unverified') {
-            if (window.confirm('Vui xác nhận tài khoản') == true) {
-              navigate('/verify', { replace: true });
-            }
-          } else {
-            const dataDecode = jwtDecode(data.data.token)
-            localStorage.setItem("token", data.data.token);
-=======
       });
       if (data.error) {
         toast.error(data.error);
       } else {
         const dataDecode = jwtDecode(data.token);
->>>>>>> f1581b5c8b0f677f9321bfb6f0903ee40e6b8766
-
-            context.setAuth({
-              id: dataDecode.id,
-              email: dataDecode.email,
-              role: dataDecode.role,
-              token: data.data.token
-            })
-
-<<<<<<< HEAD
-            toast.success("Login successful");
-            navigate(from, { replace: true });
-          }
-        })
-=======
         context.setAuth({
           id: dataDecode.id,
           email: dataDecode.email,
@@ -105,7 +78,6 @@ const Login = () => {
         toast.success("Login successful");
         navigate(from, { replace: true });
       }
->>>>>>> f1581b5c8b0f677f9321bfb6f0903ee40e6b8766
     } catch (err) {
       console.log(err);
     }

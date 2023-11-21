@@ -22,12 +22,9 @@ import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./layouts/User/ChangePassword";
 import UserPRofile from "./layouts/User/UserProfile";
 import PetUser from "./layouts/User/PetUser";
-<<<<<<< HEAD
 import VerifyCode from "./layouts/common/verify/VerifyCode";
-=======
 import BlogTable from "./layouts/dashboard/blog/BlogTable";
 import CategoryTable from "./layouts/dashboard/category/CategoryTable";
->>>>>>> f1581b5c8b0f677f9321bfb6f0903ee40e6b8766
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 

@@ -12,12 +12,12 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import SwipeableViews from "react-swipeable-views";
-import { autoPlay } from "react-swipeable-views-utils";
-import { Container, Grid, styled } from "@mui/material";
-import FeaturedPost from "../../components/MainPost.jsx/FeaturePost";
+// import SwipeableViews from "react-swipeable-views";
+// import { autoPlay } from "react-swipeable-views-utils";
+// import { Container, Grid, styled } from "@mui/material";
+// import FeaturedPost from "../../components/MainPost.jsx/FeaturePost";
 
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+// const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 function Home() {
   const CustomBox = styled(Box)({
@@ -97,7 +97,7 @@ function Home() {
 
   return (
     <CustomContainer component="main" maxWidth={false} disableGutters>
-      <Box sx={{ flexGrow: 1 }}>
+      {/* <Box sx={{ flexGrow: 1 }}>
         <AutoPlaySwipeableViews
           axis={theme.direction === "rtl" ? "x-reverse" : "x"}
           index={activeStep}
@@ -174,7 +174,7 @@ function Home() {
 
       <Grid container spacing={4} sx={{ m: 1, justifyContent: "center" }}>
         <FeaturedPost post1={post1} post2={post2} post3={post3} />
-      </Grid>
+      </Grid> */}
 
       <Footer />
     </CustomContainer>
