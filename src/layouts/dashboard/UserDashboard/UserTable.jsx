@@ -60,6 +60,7 @@ const BasicTable = () => {
     const DEFAULT_PAGE = 1;
     const DEFAULT_LIMIT = 10;
     const [pages, setPages] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
 
     const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -250,6 +251,12 @@ const BasicTable = () => {
         fontSize: "12px"
     };
 
+    // ----------------------------------------------------------------
+    const handlePaging = (event, value) => {
+        setCurrentPage(value === undefined ? 1 : value)
+        loadAllUser(value, DEFAULT_LIMIT);
+    }
+
     return (
         <>
             <ButtonCustomize
@@ -301,14 +308,14 @@ const BasicTable = () => {
                     </Table>
                 </TableContainer>
                 <hr style={{ opacity: '0.5' }} />
-                <div style={{ margin: '0 auto' }}>
-                    <Stack spacing={2} style={{ margin: '10px 0', justifyContent: 'center' }}>
-                        <Pagination
-                            count={pages}
-                            color="primary"
-                        />
-                    </Stack>
-                </div>
+                <Stack spacing={2} sx={{ float: "right" }} style={{ margin: '10px 0', justifyContent: 'center' }}>
+                    <Pagination
+                        count={pages}
+                        page={currentPage}
+                        onChange={handlePaging}
+                        color="primary"
+                    />
+                </Stack>
             </Paper>
 
             <Modal
@@ -351,15 +358,27 @@ const BasicTable = () => {
                             </Grid>
 
                             <Grid item xs={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    label="Gmail"
-                                    margin="normal"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    disabled
-                                />
+                                {
+                                    option === 'create' 
+                                    ? (<TextField
+                                        required
+                                        fullWidth
+                                        label="Gmail"
+                                        margin="normal"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />)
+                                    : 
+                                    (<TextField
+                                        required
+                                        fullWidth
+                                        label="Gmail"
+                                        margin="normal"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        disabled
+                                    />)
+                                }
                                 {email === "" ? <span style={errorStyle}>Vui lòng điền email</span> : ""}
                             </Grid>
                             {option === "create" ? (

@@ -63,24 +63,27 @@ const Login = () => {
       const { data } = await axios.post("http://localhost:3500/login", {
         email,
         password,
-      });
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        const dataDecode = jwtDecode(data.token);
+      })
+        .then((data) => {
+          if (data.data.error === 'Unverified') {
+            navigate('/verify', { replace: true });
+          } else {
+            // console.log(data)
+            const dataDecode = jwtDecode(data.data.token);
 
-        localStorage.setItem("token", data.token);
+            localStorage.setItem("token", data.data.token);
 
-        context.setAuth({
-          id: dataDecode.id,
-          email: dataDecode.email,
-          role: dataDecode.role,
-          token: data.token,
-        });
+            context.setAuth({
+              id: dataDecode.id,
+              email: dataDecode.email,
+              role: dataDecode.role,
+              token: data.data.token,
+            });
 
-        toast.success("Login successful");
-        navigate(from, { replace: true });
-      }
+            toast.success("Login successful");
+            navigate(from, { replace: true });
+          }
+        })
     } catch (err) {
       console.log(err);
     }

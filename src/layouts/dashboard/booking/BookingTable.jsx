@@ -24,13 +24,16 @@ import {
     RadioGroup,
     FormControlLabel,
     Radio,
-    ButtonGroup
+    ButtonGroup,
+    Stack,
+    Pagination
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
 
 import ButtonCustomize from "../../../components/Button/Button";
+import DateFormat from "../../../components/DateFormat";
 
 //React
 import { useState } from "react";
@@ -55,7 +58,9 @@ const style = {
 
 export default function BookingTable() {
     const DEFAULT_PAGE = 1;
-    const DEFAULT_LIMIT = 5;
+    const DEFAULT_LIMIT = 10;
+    const [pages, setPages] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
 
     const OPTION_VIEW_ORDER_BY_ID = 'view'
 
@@ -117,14 +122,13 @@ export default function BookingTable() {
     async function loadAllBooking(page, limit) {
         try {
             const loadData = await axios.get(
-                `http://localhost:3500/booking?sort=asc`
-            );
-            if (loadData.error) {
-                toast.error(loadData.error);
-            } else {
-                setData(loadData.data.docs);
-                console.log(loadData.data.docs);
-            }
+                `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc`
+            )
+                .then((data) => {
+                    setData(data.data.docs);
+                    setPages(data.data.pages);
+                    console.log(data.data.docs);
+                })
         } catch (err) {
             console.log(err);
         }
@@ -171,6 +175,11 @@ export default function BookingTable() {
     }
 
     // ---------------------------------------------------------------
+
+    const handlePaging = (event, value) => {
+        setCurrentPage(value === undefined ? 1 : value)
+        loadAllBooking(value, DEFAULT_LIMIT);
+    }
 
     // ----------------------------------------------------------------
 
@@ -238,11 +247,10 @@ export default function BookingTable() {
                         <TableHead>
                             <TableRow>
                                 <TableCell children>ID</TableCell>
-                                <TableCell align="right">Tên người dùng</TableCell>
-                                <TableCell align="right">Ngày đặt dịch vụ</TableCell>
-                                <TableCell align="right">Tổng giá trị</TableCell>
-                                <TableCell align="right">Trạng thái</TableCell>
-                                <TableCell align="right">Chức năng</TableCell>
+                                <TableCell align="left">Tên người dùng</TableCell>
+                                <TableCell align="left">Ngày đặt dịch vụ</TableCell>
+                                <TableCell align="left">Tổng giá trị</TableCell>
+                                <TableCell align="left">Trạng thái</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -252,20 +260,21 @@ export default function BookingTable() {
                                         <TableRow
                                             key={index}
                                             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                            onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
                                         >
                                             <TableCell component="th" scope="row">
                                                 {index + 1}
                                             </TableCell>
-                                            <TableCell align="right">{value.userId !== null ? value.userId.fullname : ""}</TableCell>
-                                            <TableCell align="right">{value.createdAt}</TableCell>
-                                            <TableCell align="right">{value.totalPrice}</TableCell>
-                                            <TableCell align="right">
+                                            <TableCell align="left">{value.userId !== null ? value.userId.fullname : ""}</TableCell>
+                                            <TableCell align="left"><DateFormat date={value.createdAt} /></TableCell>
+                                            <TableCell align="left">{value.totalPrice}</TableCell>
+                                            <TableCell align="left">
                                                 {value.status}
                                             </TableCell>
-                                            <TableCell align="right">
+                                            {/* <TableCell align="left">
                                                 <ButtonGroup variant="contained" fullWidth>
                                                     <ButtonCustomize
-                                                        onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
+                                                        
                                                         variant="contained"
                                                         // component={RouterLink}
                                                         nameButton="xem chi tiết"
@@ -280,14 +289,24 @@ export default function BookingTable() {
                                                         fullWidth
                                                     />
                                                 </ButtonGroup>
-                                            </TableCell>
+                                            </TableCell> */}
                                         </TableRow>
                                     );
                                 })}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <hr style={{ opacity: '0.5' }} />
+                <Stack spacing={2} sx={{ float: "right" }} style={{ margin: '10px 0', justifyContent: 'center' }}>
+                    <Pagination
+                        count={pages}
+                        page={currentPage}
+                        color="primary"
+                        onChange={handlePaging}
+                    />
+                </Stack>
             </Paper>
+
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -340,10 +359,10 @@ export default function BookingTable() {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell children>STT</TableCell>
-                                        <TableCell align="right">Tên thú cưng</TableCell>
-                                        <TableCell align="right">Tên dịch vụ</TableCell>
-                                        <TableCell align="right">Số lượng</TableCell>
-                                        <TableCell align="right">Giá</TableCell>
+                                        <TableCell align="left">Tên thú cưng</TableCell>
+                                        <TableCell align="left">Tên dịch vụ</TableCell>
+                                        <TableCell align="left">Số lượng</TableCell>
+                                        <TableCell align="left">Giá</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -357,11 +376,11 @@ export default function BookingTable() {
                                                     <TableCell component="th" scope="row">
                                                         {index + 1}
                                                     </TableCell>
-                                                    <TableCell align="right">{value.petId !== null ? value.petId.petName : ''}</TableCell>
-                                                    <TableCell align="right">{value.serviceId !== null ? value.serviceId.serviceName : ''}</TableCell>
-                                                    <TableCell align="right">{value.quantity}</TableCell>
-                                                    <TableCell align="right">{value.serviceId !== null ? value.serviceId.price : ''}</TableCell>
-                                                    <TableCell align="right"></TableCell>
+                                                    <TableCell align="left">{value.petId !== null ? value.petId.petName : ''}</TableCell>
+                                                    <TableCell align="left">{value.serviceId !== null ? value.serviceId.serviceName : ''}</TableCell>
+                                                    <TableCell align="left">{value.quantity}</TableCell>
+                                                    <TableCell align="left">{value.serviceId !== null ? value.serviceId.price : ''}</TableCell>
+                                                    <TableCell align="left"></TableCell>
                                                 </TableRow>
                                             );
                                         })}
