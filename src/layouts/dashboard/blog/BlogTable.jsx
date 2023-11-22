@@ -147,7 +147,7 @@ export default function BlogTable() {
                 <TableCell align="center">Tiêu đề</TableCell>
                 <TableCell align="center">Nội dung</TableCell>
                 <TableCell align="center">Người đăng</TableCell>
-                {/* <TableCell align="center">Image</TableCell> */}
+                <TableCell align="center">Image</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -171,14 +171,14 @@ export default function BlogTable() {
                       <TableCell align="center">
                         {value.userId !== null ? value.userId.fullname : ""}
                       </TableCell>
-                      {/* <TableCell align="center">
+                      <TableCell align="center">
                         <img
                           src={`${value.image}`}
-                          alt={value.title}
+                          alt={value.image}
                           height="100px"
                           width="150px"
                         />
-                      </TableCell> */}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
