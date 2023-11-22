@@ -43,7 +43,7 @@ export default function UserPRofile() {
 
   const FULL_NAME_REGEX =
     /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
-  const PHONE_NUMBER_REGEX = /^(0[3|5|7|8|9])+([0-9]{8})$/;
+  const PHONE_NUMBER_REGEX = /^(84|0[3|5|7|8|9])+([0-9]{8})$/;
 
   // --------------------- VALIDATION -----------------------------
   const [validFullName, setValidFullName] = useState("");

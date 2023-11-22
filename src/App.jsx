@@ -25,6 +25,7 @@ import PetUser from "./layouts/User/PetUser";
 import VerifyCode from "./layouts/common/verify/VerifyCode";
 import BlogTable from "./layouts/dashboard/blog/BlogTable";
 import CategoryTable from "./layouts/dashboard/category/CategoryTable";
+import BlogPage from "./layouts/LandingPage/BlogPage";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -69,6 +70,7 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="service-homepage" element={<ServiceList />} />
             <Route path="product-homepage" element={<ProductList />} />
+            <Route path="blog-homepage" element={<BlogPage />} />
             <Route path="cart-service" element={<CartService />} />
             <Route path="cart-product" element={<CartProduct />} />
             <Route path="user-profile" element={<UserPRofile />} />

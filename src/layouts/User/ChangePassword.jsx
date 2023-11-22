@@ -51,8 +51,9 @@ const ChangePassword = () => {
             rePassword: rePassword,
           }
         );
-        if (response.error) {
-          toast.error(response.error);
+        if (response.data.error) {
+          console.error("Error changing password:", response.data.error);
+          toast.error(response.data.error.error);
         } else {
           console.log(response.data);
           toast.success("Đổi mật khẩu thành công");
@@ -60,9 +61,9 @@ const ChangePassword = () => {
           // localStorage.removeItem("token");
           // toast.success("Hãy đăng nhập lại");
         }
-      } catch (error) {
-        console.error("Error changing password:", error);
-        toast.error(error);
+      } catch (err) {
+        console.error("Error changing password:", err);
+        toast.error(err);
       }
     }
   };

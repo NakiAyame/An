@@ -153,7 +153,6 @@ export default function BlogTable() {
             <TableBody>
               {data &&
                 data.map((value, index) => {
-                  const statusColor = value.status ? "primary" : "error";
                   return (
                     <TableRow
                       hover
