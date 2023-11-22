@@ -33,7 +33,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { Avatar, IconButton, Tooltip } from "@mui/material";
+import { Avatar, CardActionArea, IconButton, Tooltip } from "@mui/material";
 import DropDownService from "../../../components/DropDown/DropDownService";
 import ChoosePet from "../../../components/Modal/ModalChoosePet";
 import useAuth from "../../../hooks/useAuth";
@@ -256,57 +256,67 @@ export default function ServiceList() {
               data.map((value, index) => {
                 return (
                   <Grid item key={index} xs={12} sm={6} md={4}>
-                    <Card
-                      sx={{
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <Tooltip
-                        title="Xem chi tiết dịch vụ"
-                        onClick={() => handleShowDetail(value)}
+                    <CardActionArea>
+                      <Card
+                        sx={{
+                          height: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
                       >
-                        <CardMedia
-                          component="div"
-                          sx={{
-                            // 16:9
-                            pt: "56.25%",
-                          }}
-                          image="https://source.unsplash.com/random?wallpapers"
-                        />
-                      </Tooltip>
-
-                      <CardContent hover sx={{ flexGrow: 1 }}>
                         <Tooltip
                           title="Xem chi tiết dịch vụ"
                           onClick={() => handleShowDetail(value)}
                         >
-                          <Typography gutterBottom variant="h5" component="h2">
-                            {value.serviceName}
-                          </Typography>
+                          <CardMedia
+                            component="div"
+                            sx={{
+                              // 16:9
+                              pt: "56.25%",
+                            }}
+                            image="https://source.unsplash.com/random?wallpapers"
+                          />
                         </Tooltip>
-                        <Box
-                          display="flex"
-                          flexGrow={1}
-                          sx={{ justifyContent: "space-between" }}
-                        >
-                          <Typography gutterBottom variant="h6" component="h2">
-                            {numberToVND(value.price)}
-                          </Typography>
+
+                        <CardContent hover sx={{ flexGrow: 1 }}>
                           <Tooltip
-                            title="Thêm vào giỏ dịch vụ"
-                            onClick={handleAddToCartClick}
-                            sx={{ backgroundColor: "pink" }}
+                            title="Xem chi tiết dịch vụ"
+                            onClick={() => handleShowDetail(value)}
                           >
-                            <IconButton>
-                              <AddShoppingCartIcon />
-                            </IconButton>
+                            <Typography
+                              gutterBottom
+                              variant="h5"
+                              component="h2"
+                            >
+                              {value.serviceName}
+                            </Typography>
                           </Tooltip>
-                        </Box>
-                        <TypographyCus value={value} />
-                      </CardContent>
-                    </Card>
+                          <Box
+                            display="flex"
+                            flexGrow={1}
+                            sx={{ justifyContent: "space-between" }}
+                          >
+                            <Typography
+                              gutterBottom
+                              variant="h6"
+                              component="h2"
+                            >
+                              {numberToVND(value.price)}
+                            </Typography>
+                            <Tooltip
+                              title="Thêm vào giỏ dịch vụ"
+                              onClick={handleAddToCartClick}
+                              sx={{ backgroundColor: "pink" }}
+                            >
+                              <IconButton>
+                                <AddShoppingCartIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
+                          <TypographyCus value={value} />
+                        </CardContent>
+                      </Card>
+                    </CardActionArea>
                   </Grid>
                 );
               })}

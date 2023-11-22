@@ -190,10 +190,11 @@ function Header() {
               </Button>
               {/* ------------BLOG--------------- */}
               <Button
-                onClick={handleClick}
+                component={NavLink}
+                to="blog-homepage"
                 sx={{ my: 2, color: "white", display: "block", color: "black" }}
               >
-                Blog
+                <Typography>Blog</Typography>
               </Button>
               {/* ------------GIỚI THIỆU--------------- */}
               <Button
