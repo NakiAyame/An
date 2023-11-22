@@ -26,6 +26,7 @@ import VerifyCode from "./layouts/common/verify/VerifyCode";
 import BlogTable from "./layouts/dashboard/blog/BlogTable";
 import CategoryTable from "./layouts/dashboard/category/CategoryTable";
 import BlogPage from "./layouts/LandingPage/BlogPage";
+import BlogDetail from "./layouts/LandingPage/BlogDetail";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -71,6 +72,7 @@ function App() {
             <Route path="service-homepage" element={<ServiceList />} />
             <Route path="product-homepage" element={<ProductList />} />
             <Route path="blog-homepage" element={<BlogPage />} />
+            <Route path="blog-homepage/:blogId" element={<BlogDetail />} />
             <Route path="cart-service" element={<CartService />} />
             <Route path="cart-product" element={<CartProduct />} />
             <Route path="user-profile" element={<UserPRofile />} />
