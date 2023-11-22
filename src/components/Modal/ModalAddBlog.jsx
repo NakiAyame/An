@@ -58,14 +58,20 @@ const ModalAddBlog = (props) => {
       if (image) {
         const formData = new FormData();
         formData.append("image", image);
-        const response = await axios.post(`http://localhost:3500/blog/upload`, {
-          image: formData,
-        });
-        const imagePath = response.data.image;
+        const response = await axios.post(
+          `http://localhost:3500/blog/upload`,
+          formData
+        );
+        console.log("Response data:", response.data.docs.image);
+        const imagePath = response.data.docs.image;
 
-        console.log("Đã tải ảnh lên:", imagePath);
-        toast.success("Thêm ảnh thành công");
-        setImage(imagePath);
+        if (imagePath) {
+          console.log("Đã tải ảnh lên:", imagePath);
+          toast.success("Thêm ảnh thành công");
+          handleCreateBlog(imagePath);
+        } else {
+          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+        }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
       }
@@ -75,8 +81,8 @@ const ModalAddBlog = (props) => {
   };
 
   // --------------------- HANDLE CREATE BLOG -----------------------------
-  const handleCreateBlog = async () => {
-    console.log("Check data truyền vào", title, content, userId, image);
+  const handleCreateBlog = async (imageUrl) => {
+    console.log("Check data truyền vào", title, content, userId, imageUrl);
     if (!validTitle) {
       toast.error(
         "Tiêu đề không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
@@ -89,7 +95,7 @@ const ModalAddBlog = (props) => {
             title,
             content,
             userId: uId,
-            image: image,
+            imageUrl: imageUrl,
           }
         );
         if (response.error) {
@@ -183,13 +189,13 @@ const ModalAddBlog = (props) => {
                 onChange={handleImageChange}
                 style={{ marginBottom: "1rem" }}
               />
-              <Button
+              {/* <Button
                 variant="contained"
                 color="primary"
                 onClick={handleUpload}
               >
                 Tải lên
-              </Button>
+              </Button> */}
             </Container>
           </form>
         </DialogContent>
@@ -198,7 +204,7 @@ const ModalAddBlog = (props) => {
             variant="contained"
             margin="normal"
             color="primary"
-            onClick={handleCreateBlog}
+            onClick={handleUpload}
           >
             Tạo
           </Button>
