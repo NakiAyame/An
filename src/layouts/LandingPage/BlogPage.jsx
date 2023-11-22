@@ -38,6 +38,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import useAuth from "../../hooks/useAuth";
 import ContentCus from "../../components/Typography/ContentCus";
+import DateFormat from "../../components/DateFormat";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -208,7 +209,7 @@ export default function BlogPage() {
                           title={
                             value.userId !== null ? value.userId.fullname : ""
                           }
-                          subheader={value.createdAt}
+                          subheader={<DateFormat date={value.createdAt} />}
                         />
                         <CardMedia
                           component="img"
@@ -222,7 +223,9 @@ export default function BlogPage() {
                         />
                         <CardContent>
                           <Typography gutterBottom variant="h6" component="h2">
-                            {value.title}
+                            <NavLink to={`/blog-homepage/${value._id}`}>
+                              {value.title}
+                            </NavLink>
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
                             <ContentCus value={value} />
