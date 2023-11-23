@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 //@material-ui/core
 import { styled } from "@mui/material/styles";
 import Footer from "../../components/Footer/Footer";
-import MainPost from "../../components/MainPost.jsx/MainPost";
+import MainPost from "../../components/MainPost/MainPost";
 import { NavLink } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import HomeIcon from "@mui/icons-material/Home";

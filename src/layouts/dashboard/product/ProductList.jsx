@@ -24,7 +24,7 @@ import { styled } from "@mui/material/styles";
 import ScrollableTabService from "../../../components/ScrollableTab/TabService";
 import ProductDetail from "../../../components/Modal/ModalDetailProduct";
 import Footer from "../../../components/Footer/Footer";
-import MainPost from "../../../components/MainPost.jsx/MainPost";
+import MainPost from "../../../components/MainPost/MainPost";
 import useAuth from "../../../hooks/useAuth";
 import { NavLink } from "react-router-dom";
 import Chip from "@mui/material/Chip";
@@ -180,7 +180,8 @@ export default function ProductList() {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            borderRadius: "16px",
+            borderEndStartRadius: "5px",
+            borderEndEndRadius: "5px",
           }}
         >
           <Breadcrumbs maxItems={2} aria-label="breadcrumb">
