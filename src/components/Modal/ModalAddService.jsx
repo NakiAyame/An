@@ -19,6 +19,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { Input } from "@mui/material";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
@@ -32,6 +33,7 @@ const ModalAddSerivce = (props) => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [status, setStatus] = useState(true);
+  const [image, setImage] = useState(null);
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
@@ -59,15 +61,49 @@ const ModalAddSerivce = (props) => {
     setPrice(e.target.value);
   };
 
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+    console.log("Kiểm tra image: ", e.target.files);
+  };
+
+  // --------------------- HANDLE HANLDE UPLOAD IMAGE SERVICE -----------------------------
+  const handleUpload = async () => {
+    try {
+      if (image) {
+        const formData = new FormData();
+        formData.append("image", image);
+        const response = await axios.post(
+          `http://localhost:3500/service/upload`,
+          formData
+        );
+        console.log("Response data:", response.data.image);
+        const imagePath = response.data.image;
+
+        if (imagePath) {
+          console.log("Đã tải ảnh lên:", imagePath);
+          toast.success("Thêm ảnh thành công");
+          handleCreateService(imagePath);
+        } else {
+          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+        }
+      } else {
+        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải ảnh lên:", error);
+    }
+  };
+
   // --------------------- HANDLE CREATE SERVICE -----------------------------
-  const handleCreateService = async () => {
+  const handleCreateService = async (serviceImage) => {
     console.log(
       "Check data truyền vào",
       serviceName,
       categoryId,
       description,
       price,
-      status
+      status,
+      serviceImage
     );
     if (!validServiceName) {
       toast.error(
@@ -85,6 +121,7 @@ const ModalAddSerivce = (props) => {
           description,
           price,
           status,
+          serviceImage,
         });
         if (response.error) {
           toast.error(response.error);
@@ -95,6 +132,7 @@ const ModalAddSerivce = (props) => {
           setCategoryId("");
           setDescription("");
           setPrice();
+          setImage(null);
           handUpdateTable(page);
           onClose();
         }
@@ -195,6 +233,12 @@ const ModalAddSerivce = (props) => {
               value={price}
               onChange={(e) => handleValidationPrice(e)}
             />
+            <Input
+              type="file"
+              inputProps={{ accept: "image/*" }}
+              onChange={handleImageChange}
+              style={{ marginBottom: "1rem" }}
+            />
             <RadioGroup
               value={status}
               onChange={handleStatusChange}
@@ -207,6 +251,7 @@ const ModalAddSerivce = (props) => {
                 control={<Radio />}
                 label="Hoạt động"
               />
+
               <FormControlLabel
                 value={false}
                 control={<Radio />}
@@ -220,7 +265,7 @@ const ModalAddSerivce = (props) => {
             variant="contained"
             margin="normal"
             color="primary"
-            onClick={handleCreateService}
+            onClick={handleUpload}
           >
             Tạo dịch vụ
           </Button>

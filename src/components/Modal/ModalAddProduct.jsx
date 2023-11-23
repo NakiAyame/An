@@ -19,6 +19,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { Input } from "@mui/material";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
@@ -33,6 +34,7 @@ const ModalAddProduct = (props) => {
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [image, setImage] = useState(null);
   //   const [status, setStatus] = useState(true);
 
   //   const handleStatusChange = (event) => {
@@ -68,15 +70,49 @@ const ModalAddProduct = (props) => {
     setQuantity(e.target.value);
   };
 
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+    console.log("Kiểm tra image: ", e.target.files);
+  };
+
+  // --------------------- HANDLE HANLDE UPLOAD IMAGE PRODUCT -----------------------------
+  const handleUpload = async () => {
+    try {
+      if (image) {
+        const formData = new FormData();
+        formData.append("image", image);
+        const response = await axios.post(
+          `http://localhost:3500/product/upload`,
+          formData
+        );
+        console.log("Response data:", response.data.image);
+        const imagePath = response.data.image;
+
+        if (imagePath) {
+          console.log("Đã tải ảnh lên:", imagePath);
+          toast.success("Thêm ảnh thành công");
+          handleCreateProduct(imagePath);
+        } else {
+          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+        }
+      } else {
+        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải ảnh lên:", error);
+    }
+  };
+
   // --------------------- HANDLE CREATE PRODUCT -----------------------------
-  const handleCreateService = async () => {
+  const handleCreateProduct = async (productImage) => {
     console.log(
       "Check data truyền vào sản phẩm",
       productName,
       categoryId,
       quantity,
       price,
-      description
+      description,
+      productImage
     );
     if (!validProductName) {
       toast.error(
@@ -94,6 +130,7 @@ const ModalAddProduct = (props) => {
           quantity,
           price,
           description,
+          productImage,
         });
         if (response.error) {
           toast.error(response.error);
@@ -106,6 +143,7 @@ const ModalAddProduct = (props) => {
           setPrice();
           setDescription("");
           // setStatus(true);
+          setImage(null);
           handUpdateTable(page);
           onClose();
         }
@@ -221,6 +259,13 @@ const ModalAddProduct = (props) => {
               onChange={(e) => setDescription(e.target.value)}
             />
 
+            <Input
+              type="file"
+              inputProps={{ accept: "image/*" }}
+              onChange={handleImageChange}
+              style={{ marginBottom: "1rem" }}
+            />
+
             {/* Status */}
             {/* <RadioGroup
               value={status}
@@ -243,7 +288,7 @@ const ModalAddProduct = (props) => {
             variant="contained"
             margin="normal"
             color="primary"
-            onClick={handleCreateService}
+            onClick={handleUpload}
           >
             Thêm
           </Button>

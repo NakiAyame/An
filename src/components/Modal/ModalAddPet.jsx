@@ -19,6 +19,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { Input } from "@mui/material";
 
 const PET_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
@@ -32,6 +33,7 @@ const ModalAddPet = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
   const [status, setStatus] = useState(false);
+  const [image, setImage] = useState(null);
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
@@ -53,9 +55,42 @@ const ModalAddPet = (props) => {
     }
   }, [data]);
 
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+    console.log("Kiểm tra image: ", e.target.files);
+  };
+
+  // --------------------- HANDLE HANLDE UPLOAD IMAGE SERVICE -----------------------------
+  const handleUpload = async () => {
+    try {
+      if (image) {
+        const formData = new FormData();
+        formData.append("image", image);
+        const response = await axios.post(
+          `http://localhost:3500/pet/upload`,
+          formData
+        );
+        console.log("Response data:", response.data.image);
+        const imagePath = response.data.image;
+
+        if (imagePath) {
+          console.log("Đã tải ảnh lên:", imagePath);
+          toast.success("Thêm ảnh thành công");
+          handleCreateService(imagePath);
+        } else {
+          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+        }
+      } else {
+        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải ảnh lên:", error);
+    }
+  };
+
   // --------------------- HANDLE CREATE PET -----------------------------
-  const handleCreateService = async () => {
-    console.log(userId, petName, categoryId, rank, status);
+  const handleCreateService = async (petImage) => {
+    console.log(userId, petName, categoryId, rank, status, petImage);
     if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
@@ -68,6 +103,7 @@ const ModalAddPet = (props) => {
           categoryId,
           rank,
           status,
+          petImage,
         });
         if (response.error) {
           toast.error(response.error);
@@ -186,6 +222,14 @@ const ModalAddPet = (props) => {
               }}
               variant="filled"
             />
+
+            <Input
+              type="file"
+              inputProps={{ accept: "image/*" }}
+              onChange={handleImageChange}
+              style={{ marginBottom: "1rem" }}
+            />
+
             <RadioGroup
               value={status}
               onChange={handleStatusChange}
@@ -196,9 +240,13 @@ const ModalAddPet = (props) => {
               <FormControlLabel
                 value={true}
                 control={<Radio />}
-                label="Hoạt động"
+                label="Đang dùng dịch vụ"
               />
-              <FormControlLabel value={false} control={<Radio />} label="Ẩn" />
+              <FormControlLabel
+                value={false}
+                control={<Radio />}
+                label="Chưa dùng dịch vụ"
+              />
             </RadioGroup>
           </form>
         </DialogContent>
@@ -207,7 +255,7 @@ const ModalAddPet = (props) => {
             variant="contained"
             margin="normal"
             color="primary"
-            onClick={handleCreateService}
+            onClick={handleUpload}
           >
             Thêm thú cưng
           </Button>
