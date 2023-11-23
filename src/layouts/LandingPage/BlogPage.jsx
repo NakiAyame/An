@@ -153,7 +153,7 @@ export default function BlogPage() {
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
 
-      <CustomContainer component="main" maxWidth="full" sx={{ mt: 8 }}>
+      <CustomContainer component="main" maxWidth="full" sx={{ pt: 12 }}>
         {/* <MainPost post={mainPost} /> */}
         <Container
           maxWidth="full"
@@ -186,10 +186,13 @@ export default function BlogPage() {
                   <Grid item xs={12} sm={6} md={4}>
                     <CardActionArea>
                       <Card
+                        component={NavLink}
+                        to={`/blog-homepage/${value._id}`}
                         sx={{
                           height: "100%",
                           display: "flex",
                           flexDirection: "column",
+                          textDecoration: "none",
                         }}
                       >
                         <CardHeader
@@ -223,7 +226,13 @@ export default function BlogPage() {
                         />
                         <CardContent>
                           <Typography gutterBottom variant="h6" component="h2">
-                            <NavLink to={`/blog-homepage/${value._id}`}>
+                            <NavLink
+                              to={`/blog-homepage/${value._id}`}
+                              style={{
+                                textDecoration: "none",
+                                color: "inherit",
+                              }}
+                            >
                               {value.title}
                             </NavLink>
                           </Typography>
