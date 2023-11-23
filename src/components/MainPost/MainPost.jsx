@@ -54,10 +54,16 @@ function MainPost(props) {
               variant="h2"
               color="inherit"
               gutterBottom
+              sx={{ opacity: "0.8" }}
             >
               {post.title}
             </Typography>
-            <Typography variant="h4" color="inherit" paragraph>
+            <Typography
+              variant="h4"
+              color="inherit"
+              paragraph
+              sx={{ opacity: "0.8" }}
+            >
               {post.description}
             </Typography>
           </Box>

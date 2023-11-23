@@ -24,7 +24,7 @@ import { styled } from "@mui/material/styles";
 import ScrollableTabService from "../../../components/ScrollableTab/TabService";
 import TypographyCus from "../../../components/Typography/DescriptionCus";
 import Footer from "../../../components/Footer/Footer";
-import MainPost from "../../../components/MainPost.jsx/MainPost";
+import MainPost from "../../../components/MainPost/MainPost";
 import ServiceDetail from "../../../components/Modal/ModalDetaiService";
 import { NavLink } from "react-router-dom";
 import Chip from "@mui/material/Chip";
@@ -194,12 +194,12 @@ export default function ServiceList() {
     setSelectedService(null);
   };
 
-  const handleAddToCartClick = () => {
+  const handleAddToCartClick = (serviceId) => {
     if (context.auth.token === undefined) {
       toast.warning("Bạn chưa đăng nhập, vui lòng đăng nhập !");
     } else {
-      console.log("Check data", selectedService);
-      setSelectedService(selectedService);
+      console.log("Check data", serviceId);
+      setSelectedService(serviceId);
       setIsModalChoosePetOpen(true);
     }
   };
@@ -217,7 +217,8 @@ export default function ServiceList() {
             p: 3,
             display: "flex",
             justifyContent: "space-between",
-            borderRadius: "16px",
+            borderEndStartRadius: "5px",
+            borderEndEndRadius: "5px",
           }}
         >
           <Box>
@@ -305,7 +306,7 @@ export default function ServiceList() {
                             </Typography>
                             <Tooltip
                               title="Thêm vào giỏ dịch vụ"
-                              onClick={handleAddToCartClick}
+                              onClick={() => handleAddToCartClick(value)}
                               sx={{ backgroundColor: "pink" }}
                             >
                               <IconButton>
