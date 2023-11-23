@@ -83,10 +83,10 @@ export default function CartService() {
   // ----------------------------------------------------------------
 
   const handleCheckOut = async () => {
-    if(window.confirm('Bạn có muốn đặt sản phẩm này ?') == true){
-      if(data.length === 0){
+    if (window.confirm('Bạn có muốn đặt sản phẩm này ?') == true) {
+      if (data.length === 0) {
         alert('Bạn không có sản phẩm trong giỏ hàng')
-      }else{
+      } else {
         try {
           const checkout = await axios.get(
             `http://localhost:3500/cartService/checkout`,
@@ -95,11 +95,11 @@ export default function CartService() {
               withCredentials: true
             }
           )
-          .then((data)=>{
-            alert('Đặt sản phẩm thành công')
-            handleLoadCartService()
-          })
-          
+            .then((data) => {
+              alert('Đặt sản phẩm thành công')
+              handleLoadCartService()
+            })
+
         } catch (err) {
           console.log(err);
         }
@@ -109,8 +109,9 @@ export default function CartService() {
 
   // ----------------------------------------------------------------
   const productStyle = {
-    display: 'flex',
-    justifyContent: 'space-around'
+    padding: '16px 0',
+    marginTop: '0',
+    border: '1px solid rgba(0, 0, 0, .2)'
   }
 
   const cartHeader = {
@@ -138,14 +139,24 @@ export default function CartService() {
     borderLeft: 'none'
   }
 
+  const checkout = {
+    position: 'fixed',
+    left: '0',
+    bottom: '0',
+    width: '100%',
+    backgroundColor: 'white',
+    // color: 'white',
+    textAlign: 'center'
+  }
+
   return (
     <>
-      <h1 style={{ textAlign: 'center' }}>GIỎ HÀNG DỊCH VỤ</h1>
-      <Card sx={{ minWidth: 275 }} style={{ padding: '20px' }}>
+      <h1 style={{ textAlign: 'center', marginTop: '100px' }}>GIỎ HÀNG SẢN PHẨM</h1>
+      <Card sx={{ minWidth: 275 }} style={{ padding: '20px', margin: '0 50px', boxShadow: 'none' }}>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
-            <Grid item xs={8}>
-              <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Grid container spacing={2} style={{ border: '1px solid rgba(0, 0, 0, .2)', paddingBottom: '16px' }}>
                 <Grid item xs>
                   DỊCH VỤ
                 </Grid>
@@ -162,10 +173,9 @@ export default function CartService() {
                   TỔNG
                 </Grid>
               </Grid>
-              <hr />
               {
-                loged == false
-                  ? <h3 style={{ textAlign: 'center' }}>BẠN CHƯA ĐĂNG NHẬP</h3>
+                loged === false
+                  ? <h3 style={{ textAlign: 'center' }}>VUI LÒNG ĐĂNG NHẬP</h3>
                   : data.length === 0
                     ? <h3 style={{ textAlign: 'center' }}>KHÔNG CÓ SẢN PHẨM TRONG GIỎ HÀNG</h3>
                     : data.map((value, index) => {
@@ -193,20 +203,40 @@ export default function CartService() {
                     })
               }
             </Grid>
-            <Grid item xs={4}>
-              <Grid container spacing={3} style={{ paddingBottom: '20px' }}>
-                <Grid item xs>
-                  TẤT CẢ
-                </Grid>
-                <Grid item xs>
-                  <span>{total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
-                </Grid>
-              </Grid>
-              <p>Phí vận chuyển được tính khi thanh toán</p>
-              <button onClick={() => handleCheckOut()} style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}>CHECK OUT</button>
-            </Grid>
           </Grid>
         </Box>
+        <Grid item xs={12} style={checkout}>
+          <Grid container spacing={3} style={{ paddingBottom: '20px' }}>
+            <Grid item xs>
+              TẤT CẢ
+            </Grid>
+            <Grid item xs>
+              {total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+            </Grid>
+          </Grid>
+          <p>Phí vận chuyển được tính khi thanh toán</p>
+          {
+            data.length === 0
+              ?
+              <button
+                type='button'
+                onClick={() => handleCheckOut()}
+                style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
+                disabled
+              >
+                CHECK OUT
+              </button>
+              :
+              <button
+                type='button'
+                onClick={() => handleCheckOut()}
+                style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
+              >
+                CHECK OUT
+              </button>
+          }
+
+        </Grid>
         {/* <button onClick={() => handleTest()}>click</button> */}
       </Card>
     </>
