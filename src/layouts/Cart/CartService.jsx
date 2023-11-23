@@ -83,10 +83,10 @@ export default function CartService() {
   // ----------------------------------------------------------------
 
   const handleCheckOut = async () => {
-    if(window.confirm('Bạn có muốn đặt sản phẩm này ?') == true){
-      if(data.length === 0){
+    if (window.confirm('Bạn có muốn đặt sản phẩm này ?') == true) {
+      if (data.length === 0) {
         alert('Bạn không có sản phẩm trong giỏ hàng')
-      }else{
+      } else {
         try {
           const checkout = await axios.get(
             `http://localhost:3500/cartService/checkout`,
@@ -95,11 +95,11 @@ export default function CartService() {
               withCredentials: true
             }
           )
-          .then((data)=>{
-            alert('Đặt sản phẩm thành công')
-            handleLoadCartService()
-          })
-          
+            .then((data) => {
+              alert('Đặt sản phẩm thành công')
+              handleLoadCartService()
+            })
+
         } catch (err) {
           console.log(err);
         }
@@ -157,7 +157,7 @@ export default function CartService() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Grid container spacing={2} style={{ border: '1px solid rgba(0, 0, 0, .2)', paddingBottom: '16px' }}>
-              <Grid item xs>
+                <Grid item xs>
                   DỊCH VỤ
                 </Grid>
                 <Grid item xs>
@@ -215,7 +215,27 @@ export default function CartService() {
             </Grid>
           </Grid>
           <p>Phí vận chuyển được tính khi thanh toán</p>
-          <button onClick={() => handleCheckOut()} style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}>CHECK OUT</button>
+          {
+            data.length === 0
+              ?
+              <button
+                type='button'
+                onClick={() => handleCheckOut()}
+                style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
+                disabled
+              >
+                CHECK OUT
+              </button>
+              :
+              <button
+                type='button'
+                onClick={() => handleCheckOut()}
+                style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
+              >
+                CHECK OUT
+              </button>
+          }
+
         </Grid>
         {/* <button onClick={() => handleTest()}>click</button> */}
       </Card>

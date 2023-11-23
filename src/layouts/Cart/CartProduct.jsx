@@ -214,7 +214,26 @@ export default function CartProduct() {
             </Grid>
           </Grid>
           <p>Phí vận chuyển được tính khi thanh toán</p>
-          <button onClick={() => handleCheckOut()} style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}>CHECK OUT</button>
+          {
+            data.length === 0
+              ?
+              <button
+                type='button'
+                onClick={() => handleCheckOut()}
+                style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
+                disabled
+              >
+                CHECK OUT
+              </button>
+              :
+              <button
+                type='button'
+                onClick={() => handleCheckOut()}
+                style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
+              >
+                CHECK OUT
+              </button>
+          }
         </Grid>
         {/* <button onClick={() => handleTest()}>click</button> */}
       </Card>
