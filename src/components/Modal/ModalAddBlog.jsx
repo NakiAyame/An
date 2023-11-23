@@ -53,6 +53,7 @@ const ModalAddBlog = (props) => {
     console.log("Kiểm tra image: ", e.target.files);
   };
 
+  // --------------------- HANDLE HANLDE UPLOAD IMAGE BLOG -----------------------------
   const handleUpload = async () => {
     try {
       if (image) {

@@ -267,8 +267,8 @@ export default function PetTable() {
                           variant="outlined"
                           label={
                             value.status
-                              ? "Đang chọn dịch vụ"
-                              : "Chưa chọn dịch vụ"
+                              ? "Đang dùng dịch vụ"
+                              : "Chưa dùng dịch vụ"
                           }
                           color={statusColor}
                         />
