@@ -280,7 +280,7 @@ const ProductDetail = () => {
                     <strong>Sản phẩm mới</strong>
                   </Typography>
                 </Grid>
-                <ProductSlider />
+                <ProductSlider loadProductById={loadProductById} />
               </Paper>
             </Container>
           </Grid>
