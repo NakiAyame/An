@@ -12,22 +12,22 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-// import SwipeableViews from "react-swipeable-views";
-// import { autoPlay } from "react-swipeable-views-utils";
-// import { Container, Grid, styled } from "@mui/material";
-// import FeaturedPost from "../../components/MainPost.jsx/FeaturePost";
+import SwipeableViews from "react-swipeable-views";
+import { autoPlay } from "react-swipeable-views-utils";
+import { Container, Grid, styled } from "@mui/material";
+import FeaturedPost from "../../components/MainPost/FeaturePost";
 
-// const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 function Home() {
-  // const CustomBox = styled(Box)({
-  //   background: "linear-gradient(to right, #ADF9F0, #FADAF7, #EEDCF1, #EBEAEB)",
-  // });
+  const CustomBox = styled(Box)({
+    background: "linear-gradient(to right, #ADF9F0, #FADAF7, #EEDCF1, #EBEAEB)",
+  });
 
-  // const CustomContainer = styled(Container)({
-  //   background:
-  //     "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
-  // });
+  const CustomContainer = styled(Container)({
+    background:
+      "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
+  });
 
   const images = [
     {
@@ -96,89 +96,90 @@ function Home() {
   };
 
   return (
-    <></>
-    // <CustomContainer component="main" maxWidth={false} disableGutters>
-    //   <Box sx={{ flexGrow: 1 }}>
-    //     <AutoPlaySwipeableViews
-    //       axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-    //       index={activeStep}
-    //       onChangeIndex={handleStepChange}
-    //       enableMouseEvents
-    //     >
-    //       {images.map((step, index) => (
-    //         <div key={step.label}>
-    //           {Math.abs(activeStep - index) <= 2 ? (
-    //             <Box
-    //               component="img"
-    //               sx={{
-    //                 height: 600,
-    //                 display: "block",
-    //                 overflow: "hidden",
-    //                 width: "100%",
-    //               }}
-    //               src={step.imgPath}
-    //               alt={step.label}
-    //             />
-    //           ) : null}
-    //         </div>
-    //       ))}
-    //     </AutoPlaySwipeableViews>
-    //     <MobileStepper
-    //       steps={maxSteps}
-    //       position="static"
-    //       activeStep={activeStep}
-    //       nextButton={
-    //         <Button
-    //           size="small"
-    //           onClick={handleNext}
-    //           disabled={activeStep === maxSteps - 1}
-    //         >
-    //           Next
-    //           {theme.direction === "rtl" ? (
-    //             <KeyboardArrowLeft />
-    //           ) : (
-    //             <KeyboardArrowRight />
-    //           )}
-    //         </Button>
-    //       }
-    //       backButton={
-    //         <Button
-    //           size="small"
-    //           onClick={handleBack}
-    //           disabled={activeStep === 0}
-    //         >
-    //           {theme.direction === "rtl" ? (
-    //             <KeyboardArrowRight />
-    //           ) : (
-    //             <KeyboardArrowLeft />
-    //           )}
-    //           Back
-    //         </Button>
-    //       }
-    //     />
-    //   </Box>
+    <>
+      <CustomContainer component="main" maxWidth={false} disableGutters>
+        <Box sx={{ flexGrow: 1 }}>
+          <AutoPlaySwipeableViews
+            axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+            index={activeStep}
+            onChangeIndex={handleStepChange}
+            enableMouseEvents
+          >
+            {images.map((step, index) => (
+              <div key={step.label}>
+                {Math.abs(activeStep - index) <= 2 ? (
+                  <Box
+                    component="img"
+                    sx={{
+                      height: 600,
+                      display: "block",
+                      overflow: "hidden",
+                      width: "100%",
+                    }}
+                    src={step.imgPath}
+                    alt={step.label}
+                  />
+                ) : null}
+              </div>
+            ))}
+          </AutoPlaySwipeableViews>
+          <MobileStepper
+            steps={maxSteps}
+            position="static"
+            activeStep={activeStep}
+            nextButton={
+              <Button
+                size="small"
+                onClick={handleNext}
+                disabled={activeStep === maxSteps - 1}
+              >
+                Next
+                {theme.direction === "rtl" ? (
+                  <KeyboardArrowLeft />
+                ) : (
+                  <KeyboardArrowRight />
+                )}
+              </Button>
+            }
+            backButton={
+              <Button
+                size="small"
+                onClick={handleBack}
+                disabled={activeStep === 0}
+              >
+                {theme.direction === "rtl" ? (
+                  <KeyboardArrowRight />
+                ) : (
+                  <KeyboardArrowLeft />
+                )}
+                Back
+              </Button>
+            }
+          />
+        </Box>
 
-    //   <CustomBox
-    //     sx={{
-    //       p: 3,
-    //       justifyContent: "center",
-    //       textAlign: "center",
-    //       borderRadius: "16px",
-    //       fontSize: "30px",
-    //     }}
-    //   >
-    //     <strong>
-    //       PetCare - Điểm đến uy tín hàng đầu chuyên cung cấp dịch vụ chăm sóc
-    //       thú cưng.
-    //     </strong>
-    //   </CustomBox>
+        <CustomBox
+          sx={{
+            p: 3,
+            justifyContent: "center",
+            textAlign: "center",
+            borderRadius: "16px",
+            fontSize: "30px",
+          }}
+        >
+          <strong>
+            PetCare - Điểm đến uy tín hàng đầu chuyên cung cấp dịch vụ chăm sóc
+            thú cưng.
+          </strong>
+        </CustomBox>
 
-    //   <Grid container spacing={4} sx={{ m: 1, justifyContent: "center" }}>
-    //     <FeaturedPost post1={post1} post2={post2} post3={post3} />
-    //   </Grid>
+        <Grid container spacing={4} sx={{ m: 1, justifyContent: "center" }}>
+          <FeaturedPost post1={post1} post2={post2} post3={post3} />
+        </Grid>
 
-    //   <Footer />
-    // </CustomContainer>
+        <Footer />
+      </CustomContainer>
+    </>
   );
 }
 

@@ -17,8 +17,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Footer from "../../components/Footer/Footer";
-import MainPost from "../../components/MainPost.jsx/MainPost";
+import Footer from "../../../components/Footer/Footer";
 import { NavLink } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import HomeIcon from "@mui/icons-material/Home";
@@ -33,11 +32,16 @@ import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import useAuth from "../../hooks/useAuth";
-import ContentCus from "../../components/Typography/ContentCus";
-import DateFormat from "../../components/DateFormat";
+import useAuth from "../../../hooks/useAuth";
+import ContentCus from "../../../components/Typography/ContentCus";
+import DateFormat from "../../../components/DateFormat";
 import axios from "axios";
 import { toast } from "react-toastify";
+
+const Image = styled("img")({
+  maxWidth: "100%",
+  maxHeight: 400,
+});
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -72,8 +76,6 @@ const BlogDetail = () => {
   const { blogId } = useParams();
   const [blog, setBlog] = useState(null);
 
- 
-
   // ----------------------------------- API GET ALL BLOG --------------------------------
   useEffect(() => {
     loadAllBlog();
@@ -106,7 +108,7 @@ const BlogDetail = () => {
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
 
-      <CustomContainer component="main" maxWidth="full" sx={{ mt: 8 }}>
+      <CustomContainer component="main" maxWidth="full" sx={{ pt: 12 }}>
         {/* <MainPost post={mainPost} /> */}
         <Container
           maxWidth="full"
@@ -127,8 +129,55 @@ const BlogDetail = () => {
               icon={<HomeIcon fontSize="small" />}
             />
             {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
-            <StyledBreadcrumb label="Tin tức" />
+            <StyledBreadcrumb
+              component={NavLink}
+              to="/blog-homepage"
+              label="Tin tức"
+            />
+            <StyledBreadcrumb label="Thông tin chi tiết" />
           </Breadcrumbs>
+        </Container>
+        <Container maxWidth="false" sx={{ pb: 3 }}>
+          <Paper
+            variant="outlined"
+            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+          >
+            <Box sx={{ flexGrow: 2, padding: 12 }}>
+              <Grid container spacing={3}>
+                <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
+                  <strong>{blog.title}</strong>
+                </Typography>
+
+                <Grid container>
+                  <Breadcrumbs separator="|" aria-label="breadcrumb">
+                    <Typography>{blog.userId}</Typography>
+                    <Typography>
+                      <DateFormat date={blog.createdAt} />
+                    </Typography>
+                    <StyledBreadcrumb
+                      component={NavLink}
+                      to="/blog-homepage"
+                      label="Tin tức"
+                    />
+                  </Breadcrumbs>
+                </Grid>
+
+                <Grid item xs={12} sm={12}>
+                  <Image
+                    src={
+                      blog.image !== undefined
+                        ? `${blog.image}`
+                        : "https://cdnimg.vietnamplus.vn/uploaded/mtpyelagtpy/2018_11_30/pet_1.jpg"
+                    }
+                    alt=""
+                  />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <Typography variant="h6">{blog.content}</Typography>
+                </Grid>
+              </Grid>
+            </Box>
+          </Paper>
         </Container>
       </CustomContainer>
 
