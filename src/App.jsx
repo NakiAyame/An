@@ -11,9 +11,9 @@ import PetTable from "./layouts/dashboard/pet/PetTables";
 import ProductTable from "./layouts/dashboard/product/ProductTables";
 import OrderTable from "./layouts/dashboard/order/OrderTable";
 import LandingPage from "./layouts/LandingPage/LandingPage";
-import ServiceList from "./layouts/dashboard/service/ServiceList";
+
 import Header from "./components/Header/Header";
-import ProductList from "./layouts/dashboard/product/ProductList";
+import ProductList from "./layouts/LandingPage/Product/ProductList";
 import BookingTable from "./layouts/dashboard/booking/BookingTable";
 import CartService from "./layouts/Cart/CartService";
 import CartProduct from "./layouts/Cart/CartProduct";
@@ -25,8 +25,9 @@ import PetUser from "./layouts/User/PetUser";
 import VerifyCode from "./layouts/common/verify/VerifyCode";
 import BlogTable from "./layouts/dashboard/blog/BlogTable";
 import CategoryTable from "./layouts/dashboard/category/CategoryTable";
-import BlogPage from "./layouts/LandingPage/BlogPage";
-import BlogDetail from "./layouts/LandingPage/BlogDetail";
+import BlogPage from "./layouts/LandingPage/Blog/BlogPage";
+import BlogDetail from "./layouts/LandingPage/Blog/BlogDetail";
+import ServiceList from "./layouts/LandingPage/Service/ServiceList";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
