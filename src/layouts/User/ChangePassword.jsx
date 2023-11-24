@@ -53,11 +53,7 @@ const ChangePassword = () => {
         );
         if (response.data.error) {
           console.error("Error changing password:", response.data.error);
-<<<<<<< HEAD
-          toast.error('sai');
-=======
           toast.error("Mật khẩu cũ không chính xác");
->>>>>>> e6d2c483e3e5bba40604dab7d7498113c317fffa
         } else {
           console.log(response.data);
           toast.success("Đổi mật khẩu thành công");
