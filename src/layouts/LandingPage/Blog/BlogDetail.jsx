@@ -37,6 +37,7 @@ import ContentCus from "../../../components/Typography/ContentCus";
 import DateFormat from "../../../components/DateFormat";
 import axios from "axios";
 import { toast } from "react-toastify";
+import BlogSlider from "../../../components/Header/SliderBlog";
 
 const Image = styled("img")({
   maxWidth: "100%",
@@ -134,51 +135,74 @@ const BlogDetail = () => {
               to="/blog-homepage"
               label="Tin tức"
             />
-            <StyledBreadcrumb label="Thông tin chi tiết" />
+            <StyledBreadcrumb label="Thông tin chi tiết bài viết" />
           </Breadcrumbs>
         </Container>
-        <Container maxWidth="false" sx={{ pb: 3 }}>
-          <Paper
-            variant="outlined"
-            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-          >
-            <Box sx={{ flexGrow: 2, padding: 12 }}>
-              <Grid container spacing={3}>
-                <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
-                  <strong>{blog.title}</strong>
-                </Typography>
-
-                <Grid container>
-                  <Breadcrumbs separator="|" aria-label="breadcrumb">
-                    <Typography>{blog.userId.fullname}</Typography>
-                    <Typography>
-                      <DateFormat date={blog.createdAt} />
+        <Grid container spacing={3} sx={{ flexGrow: 2 }}>
+          <Grid item xs={12} sm={9}>
+            <Container maxWidth="false" sx={{ pb: 3 }}>
+              <Paper
+                variant="outlined"
+                sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+              >
+                <Box sx={{ flexGrow: 2, padding: 12 }}>
+                  <Grid container spacing={3}>
+                    <Typography
+                      variant="h4"
+                      sx={{ textTransform: "uppercase" }}
+                    >
+                      <strong>{blog.title}</strong>
                     </Typography>
-                    <StyledBreadcrumb
-                      component={NavLink}
-                      to="/blog-homepage"
-                      label="Tin tức"
-                    />
-                  </Breadcrumbs>
-                </Grid>
 
+                    <Grid container>
+                      <Breadcrumbs separator="|" aria-label="breadcrumb">
+                        <Typography>{blog.userId.fullname}</Typography>
+                        <Typography>
+                          <DateFormat date={blog.createdAt} />
+                        </Typography>
+                        <StyledBreadcrumb
+                          component={NavLink}
+                          to="/blog-homepage"
+                          label="Tin tức"
+                        />
+                      </Breadcrumbs>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12}>
+                      <Image
+                        src={
+                          blog.image !== undefined
+                            ? `${blog.image}`
+                            : "https://cdnimg.vietnamplus.vn/uploaded/mtpyelagtpy/2018_11_30/pet_1.jpg"
+                        }
+                        alt=""
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <Typography variant="h6">{blog.content}</Typography>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Paper>
+            </Container>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <Container maxWidth="false" sx={{ pb: 3 }}>
+              <Paper
+                variant="outlined"
+                sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+              >
                 <Grid item xs={12} sm={12}>
-                  <Image
-                    src={
-                      blog.image !== undefined
-                        ? `${blog.image}`
-                        : "https://cdnimg.vietnamplus.vn/uploaded/mtpyelagtpy/2018_11_30/pet_1.jpg"
-                    }
-                    alt=""
-                  />
+                  <Typography variant="h5" sx={{ textTransform: "uppercase" }}>
+                    <strong>Bài viết mới</strong>
+                  </Typography>
                 </Grid>
-                <Grid item xs={12} sm={12}>
-                  <Typography variant="h6">{blog.content}</Typography>
-                </Grid>
-              </Grid>
-            </Box>
-          </Paper>
-        </Container>
+                <BlogSlider />
+              </Paper>
+            </Container>
+          </Grid>
+        </Grid>
       </CustomContainer>
 
       {/* End footer */}

@@ -35,10 +35,28 @@ const ChangePassword = () => {
 
   const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
+  // --------------------- VALIDATION -----------------------------
+  // const [validPassword, setValidPassword] = useState("");
+  // useEffect(() => {
+  //   setValidPassword(PWD_REGEX.test(oldPassword));
+  // }, [title]);
+
+  // const handleValidationOldPassword = (e) => {
+  //   setOldPassword(e.target.value);
+  // };
+
   const handleChangePassword = async () => {
-    if (newPassword !== rePassword) {
+    if (oldPassword === newPassword) {
       toast.error(
-        "Mật khẩu Mới và Xác nhận phải khớp nhau. Vui lòng nhập lại chúng. "
+        "Mật khẩu Mới và Mật khẩu cũ không được trùng nhau. Vui lòng nhập lại chúng. "
+      );
+    } else if (oldPassword === rePassword) {
+      toast.error(
+        "Nhập lại mật khẩu và  Mật khẩu cũ không được trùng nhau. Vui lòng nhập lại chúng. "
+      );
+    } else if (newPassword !== rePassword) {
+      toast.error(
+        "Mật khẩu Mới và Nhập lại mật khẩu phải khớp nhau. Vui lòng nhập lại chúng. "
       );
     } else {
       try {
