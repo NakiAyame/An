@@ -39,6 +39,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import useAuth from "../../../hooks/useAuth";
 import ContentCus from "../../../components/Typography/ContentCus";
 import DateFormat from "../../../components/DateFormat";
+import SearchIcon from "@mui/icons-material/Search";
+import TitleCus from "../../../components/Typography/TitleCus";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -104,6 +106,26 @@ export default function BlogPage() {
   const [dataEditPet, setDataEditPet] = useState({});
   const context = useAuth();
   console.log(context);
+
+  // --------------------- HOVER -----------------------------
+  const [isHovered, setIsHovered] = useState(null);
+  const [isHoveredTitle, setIsHoveredTitle] = useState(null);
+
+  const handleMouseOver = (index) => {
+    setIsHovered(index);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovered(null);
+  };
+
+  const handleMouseOverTilte = (index) => {
+    setIsHoveredTitle(index);
+  };
+
+  const handleMouseOutTilte = () => {
+    setIsHoveredTitle(null);
+  };
 
   // --------------------- OPEN MODAL  -----------------------------
   const handleCreateModal = () => {
@@ -186,8 +208,6 @@ export default function BlogPage() {
                   <Grid item xs={12} sm={6} md={4}>
                     <CardActionArea>
                       <Card
-                        component={NavLink}
-                        to={`/blog-homepage/${value._id}`}
                         sx={{
                           height: "100%",
                           display: "flex",
@@ -199,41 +219,84 @@ export default function BlogPage() {
                           avatar={
                             <Avatar
                               sx={{ bgcolor: red[500] }}
-                              aria-label="recipe"
+                              aria-label="Ảnh người đăng"
                             >
                               Admin
                             </Avatar>
                           }
-                          action={
-                            <IconButton aria-label="settings">
-                              <MoreVertIcon />
-                            </IconButton>
-                          }
                           title={
-                            value.userId !== null ? value.userId.fullname : ""
+                            <Typography variant="h5">
+                              {value.userId !== null
+                                ? value.userId.fullname
+                                : ""}
+                            </Typography>
                           }
                           subheader={<DateFormat date={value.createdAt} />}
                         />
-                        <CardMedia
-                          component="img"
-                          height="200"
-                          src={
-                            value.image !== undefined
-                              ? `${value.image}`
-                              : "https://cdnimg.vietnamplus.vn/uploaded/mtpyelagtpy/2018_11_30/pet_1.jpg"
-                          }
-                          alt="Paella dish"
-                        />
+                        <Card
+                          key={index}
+                          onMouseOver={() => handleMouseOver(index)}
+                          onMouseOut={handleMouseOut}
+                          style={{ display: "inline-block", margin: "10px" }}
+                        >
+                          <CardMedia
+                            component={NavLink}
+                            to={`/blog-homepage/${value._id}`}
+                            src={
+                              value.image !== undefined
+                                ? `${value.image}`
+                                : "https://cdnimg.vietnamplus.vn/uploaded/mtpyelagtpy/2018_11_30/pet_1.jpg"
+                            }
+                            sx={{
+                              border: "none",
+                              backgroundImage: `url(${
+                                isHovered === index
+                                  ? `${value.image}`
+                                  : `${value.image}`
+                              })`,
+                              backgroundSize: "cover",
+                              height: "200px",
+                              filter:
+                                isHovered === index
+                                  ? "brightness(50%)"
+                                  : "brightness(100%)",
+                              transition: "filter 0.3s ease-in-out",
+                            }}
+                          >
+                            {isHovered === index && (
+                              <IconButton
+                                title="Xem chi tiết"
+                                component={NavLink}
+                                to={`/blog-homepage/${value._id}`}
+                                sx={{
+                                  position: "absolute",
+                                  top: "50%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                  backgroundColor: "rgba(255, 255, 255, 0.7)",
+                                  backgroundColor: "pink",
+                                }}
+                              >
+                                <SearchIcon />
+                              </IconButton>
+                            )}
+                          </CardMedia>
+                        </Card>
+
                         <CardContent>
-                          <Typography gutterBottom variant="h6" component="h2">
+                          <Typography variant="h7" component="h1">
                             <NavLink
                               to={`/blog-homepage/${value._id}`}
                               style={{
                                 textDecoration: "none",
-                                color: "inherit",
+                                color:
+                                  isHoveredTitle === index ? "pink" : "inherit",
                               }}
+                              title={value.title}
+                              onMouseOver={() => handleMouseOverTilte(index)}
+                              onMouseOut={handleMouseOutTilte}
                             >
-                              {value.title}
+                              <TitleCus value={value} />
                             </NavLink>
                           </Typography>
                           <Typography variant="body2" color="text.secondary">

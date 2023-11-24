@@ -150,7 +150,7 @@ const BlogDetail = () => {
 
                 <Grid container>
                   <Breadcrumbs separator="|" aria-label="breadcrumb">
-                    <Typography>{blog.userId}</Typography>
+                    <Typography>{blog.userId.fullname}</Typography>
                     <Typography>
                       <DateFormat date={blog.createdAt} />
                     </Typography>
