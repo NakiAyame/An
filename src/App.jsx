@@ -31,6 +31,7 @@ import ServiceList from "./layouts/LandingPage/Service/ServiceList";
 import ProductPurchase from "./layouts/User/ProductPurchase";
 import ProductCheckout from "./layouts/User/ProductCheckout";
 import ProductDetail from "./layouts/LandingPage/Product/ProductDetail";
+import ServiceDetail from "./layouts/LandingPage/Service/ServiceDetail";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -79,6 +80,10 @@ function App() {
               path="product-homepage/:productId"
               element={<ProductDetail />}
             />
+            <Route
+              path="service-homepage/:serviceId"
+              element={<ServiceDetail />}
+            />
             <Route path="blog-homepage" element={<BlogPage />} />
             <Route path="blog-homepage/:blogId" element={<BlogDetail />} />
             <Route path="cart-service" element={<CartService />} />
@@ -87,8 +92,8 @@ function App() {
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="pet-user" element={<PetUser />} />
             <Route path="verify" element={<VerifyCode />} />
-            <Route path="product-purchase" element={<ProductPurchase />} /> 
-            <Route path="product-checkout" element={<ProductCheckout />} /> 
+            <Route path="product-purchase" element={<ProductPurchase />} />
+            <Route path="product-checkout" element={<ProductCheckout />} />
           </Route>
         </Routes>
       </BrowserRouter>

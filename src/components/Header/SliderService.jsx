@@ -20,7 +20,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 
 const BASE_URL = "http://localhost:3500";
-export default function ProductSlider({ loadProductById }) {
+export default function ServiceSlider({ loadServiceById }) {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
 
@@ -37,12 +37,12 @@ export default function ProductSlider({ loadProductById }) {
 
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
   useEffect(() => {
-    loadAllProduct();
+    loadAllService();
   }, []);
 
-  const loadAllProduct = async () => {
+  const loadAllService = async () => {
     try {
-      const loadData = await axios.get(`${BASE_URL}/product`);
+      const loadData = await axios.get(`${BASE_URL}/service`);
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
@@ -54,10 +54,10 @@ export default function ProductSlider({ loadProductById }) {
     }
   };
 
-  const hanldeClickProductName = (id) => {
+  const hanldeClickServiceName = (id) => {
     console.log(id);
-    navigate(`/product-homepage/${id}`);
-    loadProductById();
+    navigate(`/service-homepage/${id}`);
+    loadServiceById();
   };
 
   return (
@@ -69,18 +69,18 @@ export default function ProductSlider({ loadProductById }) {
               <Typography
                 variant="h6"
                 component="h1"
-                onClick={() => hanldeClickProductName(value._id)}
+                onClick={() => hanldeClickServiceName(value._id)}
               >
                 <NavLink
                   style={{
                     textDecoration: "none",
                     color: isHoveredName === index ? "pink" : "inherit",
                   }}
-                  title={value.productName}
+                  title={value.serviceName}
                   onMouseOver={() => handleMouseOverName(index)}
                   onMouseOut={handleMouseOutName}
                 >
-                  {value.productName}
+                  {value.serviceName}
                 </NavLink>
               </Typography>
               <Divider />
