@@ -146,7 +146,9 @@ export default function CartService() {
     width: '100%',
     backgroundColor: 'white',
     // color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
+    boxShadow: '0 -5px 10px #b3b3b3',
+    paddingTop: '20px'
   }
 
   return (

@@ -14,6 +14,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const bull = (
   <Box
@@ -27,6 +28,7 @@ const bull = (
 export default function CartProduct() {
   const DEFAULT_PAGE = 1;
   const DEFAULT_LIMIT = 5;
+  const navigate = useNavigate();
 
   const [data, setData] = useState([]);
   const [quantity, setQuantity] = useState(0)
@@ -36,19 +38,11 @@ export default function CartProduct() {
   const context = useAuth();
   console.log(context.auth)
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
-
   const handleProduct = () => {
     console.log(quantity)
   }
 
-  const handleLoadCartService = async () => {
+  const handleLoadCartProduct = async () => {
     if (context.auth.token !== undefined) {
       setLoged(true)
       try {
@@ -77,34 +71,13 @@ export default function CartProduct() {
   }
 
   useEffect(() => {
-    handleLoadCartService()
+    handleLoadCartProduct()
   }, []);
 
   // ----------------------------------------------------------------
 
   const handleCheckOut = async () => {
-    if (window.confirm('Bạn có muốn đặt sản phẩm này ?') == true) {
-      if (data.length === 0) {
-        alert('Bạn không có sản phẩm trong giỏ hàng')
-      } else {
-        try {
-          const checkout = await axios.get(
-            `http://localhost:3500/cartProduct/checkout`,
-            {
-              headers: { 'Authorization': context.auth.token },
-              withCredentials: true
-            }
-          )
-            .then((data) => {
-              alert('Đặt sản phẩm thành công')
-              handleLoadCartService()
-            })
-
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    }
+    navigate('/product-checkout');
   }
 
   // ----------------------------------------------------------------
@@ -145,7 +118,9 @@ export default function CartProduct() {
     width: '100%',
     backgroundColor: 'white',
     // color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
+    boxShadow: '0 -5px 10px #b3b3b3',
+    paddingTop: '20px'
   }
 
   return (

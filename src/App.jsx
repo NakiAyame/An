@@ -28,6 +28,8 @@ import CategoryTable from "./layouts/dashboard/category/CategoryTable";
 import BlogPage from "./layouts/LandingPage/Blog/BlogPage";
 import BlogDetail from "./layouts/LandingPage/Blog/BlogDetail";
 import ServiceList from "./layouts/LandingPage/Service/ServiceList";
+import ProductPurchase from "./layouts/User/ProductPurchase";
+import ProductCheckout from "./layouts/User/ProductCheckout";
 import ProductDetail from "./layouts/LandingPage/Product/ProductDetail";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
@@ -85,6 +87,8 @@ function App() {
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="pet-user" element={<PetUser />} />
             <Route path="verify" element={<VerifyCode />} />
+            <Route path="product-purchase" element={<ProductPurchase />} /> 
+            <Route path="product-checkout" element={<ProductCheckout />} /> 
           </Route>
         </Routes>
       </BrowserRouter>
