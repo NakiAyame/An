@@ -20,8 +20,8 @@ import { toast } from "react-toastify";
 
 //@material-ui/core
 import { styled } from "@mui/material/styles";
-import Footer from "../../components/Footer/Footer";
-import MainPost from "../../components/MainPost/MainPost";
+import Footer from "../../../components/Footer/Footer";
+import MainPost from "../../../components/MainPost/MainPost";
 import { NavLink } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import HomeIcon from "@mui/icons-material/Home";
@@ -36,9 +36,9 @@ import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import useAuth from "../../hooks/useAuth";
-import ContentCus from "../../components/Typography/ContentCus";
-import DateFormat from "../../components/DateFormat";
+import useAuth from "../../../hooks/useAuth";
+import ContentCus from "../../../components/Typography/ContentCus";
+import DateFormat from "../../../components/DateFormat";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;

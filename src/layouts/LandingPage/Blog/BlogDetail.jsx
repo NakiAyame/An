@@ -17,7 +17,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Footer from "../../components/Footer/Footer";
+import Footer from "../../../components/Footer/Footer";
 import { NavLink } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import HomeIcon from "@mui/icons-material/Home";
@@ -32,9 +32,9 @@ import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import useAuth from "../../hooks/useAuth";
-import ContentCus from "../../components/Typography/ContentCus";
-import DateFormat from "../../components/DateFormat";
+import useAuth from "../../../hooks/useAuth";
+import ContentCus from "../../../components/Typography/ContentCus";
+import DateFormat from "../../../components/DateFormat";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -144,7 +144,25 @@ const BlogDetail = () => {
           >
             <Box sx={{ flexGrow: 2, padding: 12 }}>
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
+                <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
+                  <strong>{blog.title}</strong>
+                </Typography>
+
+                <Grid container>
+                  <Breadcrumbs separator="|" aria-label="breadcrumb">
+                    <Typography>{blog.userId}</Typography>
+                    <Typography>
+                      <DateFormat date={blog.createdAt} />
+                    </Typography>
+                    <StyledBreadcrumb
+                      component={NavLink}
+                      to="/blog-homepage"
+                      label="Tin tức"
+                    />
+                  </Breadcrumbs>
+                </Grid>
+
+                <Grid item xs={12} sm={12}>
                   <Image
                     src={
                       blog.image !== undefined
@@ -154,14 +172,8 @@ const BlogDetail = () => {
                     alt=""
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
-                    <strong>{blog.title}</strong>
-                  </Typography>
-                  <Typography variant="h5">
-                    <strong>{blog.content}</strong>
-                  </Typography>
-                  <Typography variant="body1">{blog.createdAt}</Typography>
+                <Grid item xs={12} sm={12}>
+                  <Typography variant="h6">{blog.content}</Typography>
                 </Grid>
               </Grid>
             </Box>
