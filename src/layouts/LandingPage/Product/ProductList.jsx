@@ -34,6 +34,7 @@ import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Avatar, CardActionArea, IconButton, Tooltip } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -70,6 +71,22 @@ const mainPost = {
   imageText: "Ảnh sản phẩm",
 };
 
+const numberToVND = (number) => {
+  return number.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+};
+
+const CustomBox = styled(Box)({
+  background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
+});
+
+const CustomContainer = styled(Container)({
+  background:
+    "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
+});
+
 export default function ProductList() {
   const [data, setData] = useState([]);
 
@@ -81,21 +98,25 @@ export default function ProductList() {
 
   const context = useAuth();
 
-  const numberToVND = (number) => {
-    return number.toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    });
+  // --------------------- HOVER -----------------------------
+  const [isHovered, setIsHovered] = useState(null);
+  const [isHoveredTitle, setIsHoveredTitle] = useState(null);
+
+  const handleMouseOver = (index) => {
+    setIsHovered(index);
   };
 
-  const CustomBox = styled(Box)({
-    background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
-  });
+  const handleMouseOut = () => {
+    setIsHovered(null);
+  };
 
-  const CustomContainer = styled(Container)({
-    background:
-      "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
-  });
+  const handleMouseOverTilte = (index) => {
+    setIsHoveredTitle(index);
+  };
+
+  const handleMouseOutTilte = () => {
+    setIsHoveredTitle(null);
+  };
 
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
   useEffect(() => {
@@ -127,20 +148,6 @@ export default function ProductList() {
   };
   // ----------------------------------------------------------------
 
-  // --------------------- GET DETAIL PRODUCT BY ID -----------------------------
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState({});
-  const handleShowDetail = (productId) => {
-    console.log("Check data", productId);
-    setSelectedProduct(productId);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsModalOpen(false);
-    setSelectedProduct(null);
-  };
-
   const handleAddToCart = async (id) => {
     if (context.auth.token === undefined) {
       toast.warning("Bạn chưa đăng nhập, vui lòng đăng nhập !");
@@ -170,8 +177,19 @@ export default function ProductList() {
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
 
-      <CustomContainer component="main" maxWidth="full" sx={{ mt: 8 }}>
-        <MainPost post={mainPost} />
+      <CustomContainer component="main" maxWidth="full" sx={{ pt: 9 }}>
+        <MainPost
+          sx={{
+            bgcolor: "background.paper",
+            p: 3,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            borderEndStartRadius: "5px",
+            borderEndEndRadius: "5px",
+          }}
+          post={mainPost}
+        />
         <Container
           maxWidth="full"
           sx={{
@@ -211,33 +229,72 @@ export default function ProductList() {
                           flexDirection: "column",
                         }}
                       >
-                        <Tooltip
-                          title="Xem chi tiết"
-                          onClick={() => handleShowDetail(value)}
+                        <Card
+                          key={index}
+                          onMouseOver={() => handleMouseOver(index)}
+                          onMouseOut={handleMouseOut}
+                          style={{ display: "inline-block", margin: "10px" }}
                         >
                           <CardMedia
-                            component="div"
+                            component={NavLink}
+                            to={`/product-homepage/${value._id}`}
+                            src={
+                              value.productImage !== undefined
+                                ? `${value.productImage}`
+                                : "https://cdnimg.vietnamplus.vn/uploaded/mtpyelagtpy/2018_11_30/pet_1.jpg"
+                            }
                             sx={{
-                              // 16:9
-                              pt: "56.25%",
+                              border: "none",
+                              backgroundImage: `url(${
+                                isHovered === index
+                                  ? `${value.productImage}`
+                                  : `${value.productImage}`
+                              })`,
+                              backgroundSize: "cover",
+                              height: "200px",
+                              filter:
+                                isHovered === index
+                                  ? "brightness(50%)"
+                                  : "brightness(100%)",
+                              transition: "filter 0.3s ease-in-out",
                             }}
-                            image="https://source.unsplash.com/random?wallpapers"
-                          />
-                        </Tooltip>
+                          >
+                            {isHovered === index && (
+                              <IconButton
+                                title="Xem chi tiết"
+                                component={NavLink}
+                                to={`/product-homepage/${value._id}`}
+                                sx={{
+                                  position: "absolute",
+                                  top: "50%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                  backgroundColor: "rgba(255, 255, 255, 0.7)",
+                                  backgroundColor: "pink",
+                                }}
+                              >
+                                <SearchIcon />
+                              </IconButton>
+                            )}
+                          </CardMedia>
+                        </Card>
 
                         <CardContent sx={{ flexGrow: 1 }}>
-                          <Tooltip
-                            title="Xem chi tiết"
-                            onClick={() => handleShowDetail(value)}
-                          >
-                            <Typography
-                              gutterBottom
-                              variant="h5"
-                              component="h2"
+                          <Typography variant="h5" component="h1">
+                            <NavLink
+                              to={`/product-homepage/${value._id}`}
+                              style={{
+                                textDecoration: "none",
+                                color:
+                                  isHoveredTitle === index ? "pink" : "inherit",
+                              }}
+                              title={value.productName}
+                              onMouseOver={() => handleMouseOverTilte(index)}
+                              onMouseOut={handleMouseOutTilte}
                             >
                               {value.productName}
-                            </Typography>
-                          </Tooltip>
+                            </NavLink>
+                          </Typography>
 
                           <Box
                             display="flex"
@@ -294,11 +351,7 @@ export default function ProductList() {
           </Container>
         </Container>
       </CustomContainer>
-      <ProductDetail
-        open={isModalOpen}
-        onClose={handleCloseEditModal}
-        product={selectedProduct}
-      />
+
       {/* End footer */}
       <Footer />
     </ThemeProvider>
