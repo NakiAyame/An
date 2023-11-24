@@ -77,12 +77,12 @@ const BlogDetail = () => {
   const { blogId } = useParams();
   const [blog, setBlog] = useState(null);
 
-  // ----------------------------------- API GET ALL BLOG --------------------------------
+  // ----------------------------------- API GET ALL BLOG BY ID --------------------------------
   useEffect(() => {
-    loadAllBlog();
+    loadBlogById();
   }, []);
 
-  const loadAllBlog = async (page) => {
+  const loadBlogById = async (page) => {
     try {
       const loadData = await axios.get(`${BASE_URL}/blog/${blogId}`);
       if (loadData.error) {
@@ -198,7 +198,7 @@ const BlogDetail = () => {
                     <strong>Bài viết mới</strong>
                   </Typography>
                 </Grid>
-                <BlogSlider />
+                <BlogSlider loadBlogById={loadBlogById} />
               </Paper>
             </Container>
           </Grid>

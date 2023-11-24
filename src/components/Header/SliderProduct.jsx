@@ -20,7 +20,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 
 const BASE_URL = "http://localhost:3500";
-export default function ProductSlider() {
+export default function ProductSlider({ loadProductById }) {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
 
@@ -57,6 +57,7 @@ export default function ProductSlider() {
   const hanldeClickProductName = (id) => {
     console.log(id);
     navigate(`/product-homepage/${id}`);
+    loadProductById();
   };
 
   return (
@@ -65,7 +66,11 @@ export default function ProductSlider() {
         data.map((value, index) => {
           return (
             <Grid item xs={12} sm={12}>
-              <Typography variant="h6" component="h1">
+              <Typography
+                variant="h6"
+                component="h1"
+                onClick={() => hanldeClickProductName(value._id)}
+              >
                 <Button
                   style={{
                     textDecoration: "none",
@@ -74,7 +79,6 @@ export default function ProductSlider() {
                   title={value.productName}
                   onMouseOver={() => handleMouseOverTilte(index)}
                   onMouseOut={handleMouseOutTilte}
-                  onClick={() => hanldeClickProductName(value._id)}
                 >
                   {value.productName}
                 </Button>

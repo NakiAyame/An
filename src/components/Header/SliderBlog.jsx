@@ -8,9 +8,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 //@material-ui/core
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   Avatar,
+  Button,
   CardActionArea,
   Divider,
   IconButton,
@@ -19,8 +20,9 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 
 const BASE_URL = "http://localhost:3500";
-export default function BlogSlider() {
+export default function BlogSlider({ loadBlogById }) {
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
 
   // --------------------- HOVER -----------------------------
   const [isHoveredTitle, setIsHoveredTitle] = useState(null);
@@ -52,15 +54,24 @@ export default function BlogSlider() {
     }
   };
 
+  const hanldeClickProductName = (id) => {
+    console.log(id);
+    navigate(`/blog-homepage/${id}`);
+    loadBlogById();
+  };
+
   return (
     <Grid container spacing={1}>
       {data &&
         data.map((value, index) => {
           return (
             <Grid item xs={12} sm={12}>
-              <Typography variant="h6" component="h1">
+              <Typography
+                variant="h6"
+                component="h1"
+                onClick={() => hanldeClickProductName(value._id)}
+              >
                 <NavLink
-                  to={`/blog-homepage/${value._id}`}
                   style={{
                     textDecoration: "none",
                     color: isHoveredTitle === index ? "pink" : "inherit",
