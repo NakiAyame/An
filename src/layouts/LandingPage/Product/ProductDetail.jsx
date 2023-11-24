@@ -33,6 +33,7 @@ import useAuth from "../../../hooks/useAuth";
 import { useState } from "react";
 import { useEffect } from "react";
 import Comments from "../../../components/Comments/Comments";
+import ProductSlider from "../../../components/Header/SliderProduct";
 
 const Image = styled("img")({
   maxWidth: "100%",
@@ -75,12 +76,12 @@ const ProductDetail = () => {
   const [expanded, setExpanded] = useState(false);
   const context = useAuth();
 
-  // ----------------------------------- API GET ALL PRODUCT BY ID --------------------------------
+  // ----------------------------------- API GET PRODUCT BY ID --------------------------------
   useEffect(() => {
-    loadAllProductById();
+    loadProductById();
   }, []);
 
-  const loadAllProductById = async (page) => {
+  const loadProductById = async () => {
     try {
       const loadData = await axios.get(`${BASE_URL}/product/${productId}`);
       if (loadData.error) {
@@ -93,6 +94,7 @@ const ProductDetail = () => {
       console.log(err);
     }
   };
+
   if (!product) {
     return (
       <Backdrop
@@ -179,87 +181,110 @@ const ProductDetail = () => {
             <StyledBreadcrumb label="Thông tin chi tiết sản phẩm" />
           </Breadcrumbs>
         </Container>
-        <Container maxWidth="false" sx={{ pb: 3 }}>
-          <Paper
-            variant="outlined"
-            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-          >
-            <Grid container spacing={3} sx={{ flexGrow: 2 }}>
-              <Grid item xs={12} sm={6}>
-                <Image
-                  src={
-                    product.productImage !== undefined
-                      ? `${product.productImage}`
-                      : "https://cdnimg.vietnamplus.vn/uploaded/mtpyelagtpy/2018_11_30/pet_1.jpg"
-                  }
-                  alt=""
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="h5" sx={{ textTransform: "uppercase" }}>
-                  <strong>{product.productName}</strong>
-                </Typography>
-                <Typography variant="h6">
-                  <strong>{`${product.price} VNĐ`}</strong>
-                </Typography>
-                <Typography variant="body1">
-                  Số lượng còn:{product.quantity}
-                </Typography>
+        <Grid container spacing={3} sx={{ flexGrow: 2 }}>
+          <Grid item xs={12} sm={9}>
+            <Container maxWidth="false" sx={{ pb: 3 }}>
+              <Paper
+                variant="outlined"
+                sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+              >
+                <Grid container spacing={2} sx={{ flexGrow: 2 }}>
+                  <Grid item xs={12} sm={4}>
+                    <Image
+                      src={
+                        product.productImage !== undefined
+                          ? `${product.productImage}`
+                          : "https://previews.123rf.com/images/bybochka/bybochka1510/bybochka151000200/46365274-pet-care-flat-icon-set-pet-care-banner-background-poster-concept-flat-design-vector-illustration.jpg?fj=1"
+                      }
+                      alt=""
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={8}>
+                    <Typography
+                      variant="h5"
+                      sx={{ textTransform: "uppercase" }}
+                    >
+                      <strong>{product.productName}</strong>
+                    </Typography>
+                    <Typography variant="h6">
+                      <strong>{`${product.price} VNĐ`}</strong>
+                    </Typography>
+                    <Typography variant="body1">
+                      Số lượng còn:{product.quantity}
+                    </Typography>
 
-                <Typography variant="body1">Đặt số lượng:</Typography>
-                <Box display="flex" alignItems="center">
-                  <Button onClick={handleDecreaseClick} variant="outlined">
-                    -
-                  </Button>
-                  <Box mx={2}>{quantitySell}</Box>
-                  <Button onClick={handleIncreaseClick} variant="outlined">
-                    +
-                  </Button>
-                </Box>
-                <Button
-                  onClick={() => handleAddToCart(product._id)}
-                  variant="contained"
-                  sx={{ marginTop: "8px" }}
+                    <Typography variant="body1">Đặt số lượng:</Typography>
+                    <Box display="flex" alignItems="center">
+                      <Button onClick={handleDecreaseClick} variant="outlined">
+                        -
+                      </Button>
+                      <Box mx={2}>{quantitySell}</Box>
+                      <Button onClick={handleIncreaseClick} variant="outlined">
+                        +
+                      </Button>
+                    </Box>
+                    <Button
+                      onClick={() => handleAddToCart(product._id)}
+                      variant="contained"
+                      sx={{ marginTop: "8px" }}
+                    >
+                      Thêm vào giỏ hàng
+                    </Button>
+                  </Grid>
+                </Grid>
+                <Accordion
+                  expanded={expanded === "panel1"}
+                  onChange={handleChange("panel1")}
+                  sx={{ marginTop: "20px" }}
                 >
-                  Thêm vào giỏ hàng
-                </Button>
-              </Grid>
-            </Grid>
-            <Accordion
-              expanded={expanded === "panel1"}
-              onChange={handleChange("panel1")}
-              sx={{ marginTop: "20px" }}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                  >
+                    <Typography sx={{ width: "33%", flexShrink: 0 }}>
+                      Thông tin chi tiết sản phẩm
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>{product.description}</AccordionDetails>
+                </Accordion>
+                <Accordion
+                  expanded={expanded === "panel2"}
+                  onChange={handleChange("panel2")}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel2bh-content"
+                    id="panel2bh-header"
+                  >
+                    <Typography sx={{ width: "33%", flexShrink: 0 }}>
+                      Đánh giá sản phẩm
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Comments value={product._id} />
+                  </AccordionDetails>
+                </Accordion>
+              </Paper>
+            </Container>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <Container maxWidth="false" sx={{ pb: 3 }}>
+              <Paper
+                variant="outlined"
+                sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
               >
-                <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                  Thông tin chi tiết sản phẩm
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>{product.description}</AccordionDetails>
-            </Accordion>
-            <Accordion
-              expanded={expanded === "panel2"}
-              onChange={handleChange("panel2")}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2bh-content"
-                id="panel2bh-header"
-              >
-                <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                  Đánh giá sản phẩm
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Comments value={product._id} />
-              </AccordionDetails>
-            </Accordion>
-          </Paper>
-        </Container>
+                <Grid item xs={12} sm={12}>
+                  <Typography variant="h5" sx={{ textTransform: "uppercase" }}>
+                    <strong>Sản phẩm mới</strong>
+                  </Typography>
+                </Grid>
+                <ProductSlider />
+              </Paper>
+            </Container>
+          </Grid>
+        </Grid>
       </CustomContainer>
 
       {/* End footer */}

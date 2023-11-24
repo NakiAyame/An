@@ -241,7 +241,7 @@ export default function ProductList() {
                             src={
                               value.productImage !== undefined
                                 ? `${value.productImage}`
-                                : "https://cdnimg.vietnamplus.vn/uploaded/mtpyelagtpy/2018_11_30/pet_1.jpg"
+                                : "https://previews.123rf.com/images/bybochka/bybochka1510/bybochka151000200/46365274-pet-care-flat-icon-set-pet-care-banner-background-poster-concept-flat-design-vector-illustration.jpg?fj=1"
                             }
                             sx={{
                               border: "none",
