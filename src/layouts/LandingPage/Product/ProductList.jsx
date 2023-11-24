@@ -100,7 +100,7 @@ export default function ProductList() {
 
   // --------------------- HOVER -----------------------------
   const [isHovered, setIsHovered] = useState(null);
-  const [isHoveredTitle, setIsHoveredTitle] = useState(null);
+  const [isHoveredName, setIsHoveredName] = useState(null);
 
   const handleMouseOver = (index) => {
     setIsHovered(index);
@@ -110,12 +110,12 @@ export default function ProductList() {
     setIsHovered(null);
   };
 
-  const handleMouseOverTilte = (index) => {
-    setIsHoveredTitle(index);
+  const handleMouseOverName = (index) => {
+    setIsHoveredName(index);
   };
 
-  const handleMouseOutTilte = () => {
-    setIsHoveredTitle(null);
+  const handleMouseOutName = () => {
+    setIsHoveredName(null);
   };
 
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
@@ -286,11 +286,11 @@ export default function ProductList() {
                               style={{
                                 textDecoration: "none",
                                 color:
-                                  isHoveredTitle === index ? "pink" : "inherit",
+                                  isHoveredName === index ? "pink" : "inherit",
                               }}
                               title={value.productName}
-                              onMouseOver={() => handleMouseOverTilte(index)}
-                              onMouseOut={handleMouseOutTilte}
+                              onMouseOver={() => handleMouseOverName(index)}
+                              onMouseOut={handleMouseOutName}
                             >
                               {value.productName}
                             </NavLink>

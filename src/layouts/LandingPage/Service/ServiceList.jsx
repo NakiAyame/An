@@ -11,17 +11,16 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Pagination from "@mui/material/Pagination";
+import SearchIcon from "@mui/icons-material/Search";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useState, useEffect } from "react";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
-import ButtonCustomize from "../../../components/Button/Button";
 
 //@material-ui/core
 import { styled } from "@mui/material/styles";
-import ScrollableTabService from "../../../components/ScrollableTab/TabService";
 import TypographyCus from "../../../components/Typography/DescriptionCus";
 import Footer from "../../../components/Footer/Footer";
 import MainPost from "../../../components/MainPost/MainPost";
@@ -73,6 +72,22 @@ const mainPost = {
   imageText: "Ảnh",
 };
 
+const numberToVND = (number) => {
+  return number.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+};
+
+const CustomBox = styled(Box)({
+  background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
+});
+
+const CustomContainer = styled(Container)({
+  background:
+    "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
+});
+
 export default function ServiceList() {
   const [data, setData] = useState([]);
   const [totalServices, setTotalServices] = useState(0);
@@ -80,21 +95,25 @@ export default function ServiceList() {
   const [currentPage, setCurrentPage] = useState(1);
   const context = useAuth();
 
-  const numberToVND = (number) => {
-    return number.toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    });
+  // --------------------- HOVER -----------------------------
+  const [isHovered, setIsHovered] = useState(null);
+  const [isHoveredName, setIsHoveredName] = useState(null);
+
+  const handleMouseOver = (index) => {
+    setIsHovered(index);
   };
 
-  const CustomBox = styled(Box)({
-    background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
-  });
+  const handleMouseOut = () => {
+    setIsHovered(null);
+  };
 
-  const CustomContainer = styled(Container)({
-    background:
-      "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
-  });
+  const handleMouseOverName = (index) => {
+    setIsHoveredName(index);
+  };
+
+  const handleMouseOutName = () => {
+    setIsHoveredName(null);
+  };
 
   // ----------------------------------- API GET ALL SERVICE --------------------------------
   useEffect(() => {
@@ -265,33 +284,77 @@ export default function ServiceList() {
                           flexDirection: "column",
                         }}
                       >
-                        <Tooltip
-                          title="Xem chi tiết dịch vụ"
-                          onClick={() => handleShowDetail(value)}
+                        <Card
+                          key={index}
+                          onMouseOver={() => handleMouseOver(index)}
+                          onMouseOut={handleMouseOut}
+                          style={{ display: "inline-block", margin: "10px" }}
                         >
                           <CardMedia
-                            component="div"
+                            component={NavLink}
+                            to={`/service-homepage/${value._id}`}
+                            src={
+                              value.serviceImage !== undefined
+                                ? `${value.serviceImage}`
+                                : "https://previews.123rf.com/images/bybochka/bybochka1510/bybochka151000200/46365274-pet-care-flat-icon-set-pet-care-banner-background-poster-concept-flat-design-vector-illustration.jpg?fj=1"
+                            }
                             sx={{
-                              // 16:9
-                              pt: "56.25%",
+                              border: "none",
+                              backgroundImage: `url(${
+                                isHovered === index
+                                  ? `${value.serviceImage}`
+                                  : `${value.serviceImage}`
+                              })`,
+                              backgroundSize: "cover",
+                              height: "200px",
+                              filter:
+                                isHovered === index
+                                  ? "brightness(50%)"
+                                  : "brightness(100%)",
+                              transition: "filter 0.3s ease-in-out",
                             }}
-                            image="https://source.unsplash.com/random?wallpapers"
-                          />
-                        </Tooltip>
+                          >
+                            {isHovered === index && (
+                              <IconButton
+                                title="Xem chi tiết"
+                                component={NavLink}
+                                to={`/service-homepage/${value._id}`}
+                                sx={{
+                                  position: "absolute",
+                                  top: "50%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                  backgroundColor: "white",
+                                  backgroundColor: "pink",
+                                }}
+                              >
+                                <SearchIcon />
+                              </IconButton>
+                            )}
+                          </CardMedia>
+                        </Card>
 
                         <CardContent hover sx={{ flexGrow: 1 }}>
-                          <Tooltip
+                          <Typography
+                            variant="h5"
+                            component="h1"
                             title="Xem chi tiết dịch vụ"
-                            onClick={() => handleShowDetail(value)}
                           >
-                            <Typography
-                              gutterBottom
-                              variant="h5"
-                              component="h2"
+                            <NavLink
+                              to={`/service-homepage/${value._id}`}
+                              style={{
+                                textDecoration: "none",
+                                color:
+                                  isHoveredName === index ? "pink" : "inherit",
+                              }}
+                              title={value.serviceName}
+                              onMouseOver={() => handleMouseOverName(index)}
+                              onMouseOut={handleMouseOutName}
                             >
                               {value.serviceName}
-                            </Typography>
-                          </Tooltip>
+                            </NavLink>
+                          </Typography>
+
                           <Box
                             display="flex"
                             flexGrow={1}
