@@ -17,6 +17,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import HomeIcon from "@mui/icons-material/Home";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -136,6 +137,12 @@ export default function AccountMenu() {
             <AccountBoxIcon fontSize="small" />
           </ListItemIcon>
           Thông tin cá nhân
+        </MenuItem>
+        <MenuItem onClick={handleClose} component={NavLink} to="/product-purchase">
+          <ListItemIcon>
+            <ShoppingCartIcon fontSize="small" />
+          </ListItemIcon>
+          Đơn hàng
         </MenuItem>
         <MenuItem onClick={handleClose} component={NavLink} to="/pet-user">
           <ListItemIcon>

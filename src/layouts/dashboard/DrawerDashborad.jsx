@@ -30,8 +30,6 @@ const DrawerDashborad = () => {
   const links = [
     { text: "Dashboard", path: "/dashboard" },
     { text: "Danh sách người dùng", path: "/dashboard/user-list" },
-    { text: "Danh sách đặt hàng", path: "/dashboard/order-list" },
-    { text: "Danh sách đặt đặt vụ", path: "/dashboard/booking-list" },
   ];
 
   const links2 = [

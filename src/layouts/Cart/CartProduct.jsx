@@ -14,6 +14,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const bull = (
   <Box
@@ -27,6 +28,7 @@ const bull = (
 export default function CartProduct() {
   const DEFAULT_PAGE = 1;
   const DEFAULT_LIMIT = 5;
+  const navigate = useNavigate();
 
   const [data, setData] = useState([]);
   const [quantity, setQuantity] = useState(0)
@@ -83,28 +85,7 @@ export default function CartProduct() {
   // ----------------------------------------------------------------
 
   const handleCheckOut = async () => {
-    if (window.confirm('Bạn có muốn đặt sản phẩm này ?') == true) {
-      if (data.length === 0) {
-        alert('Bạn không có sản phẩm trong giỏ hàng')
-      } else {
-        try {
-          const checkout = await axios.get(
-            `http://localhost:3500/cartProduct/checkout`,
-            {
-              headers: { 'Authorization': context.auth.token },
-              withCredentials: true
-            }
-          )
-            .then((data) => {
-              alert('Đặt sản phẩm thành công')
-              handleLoadCartService()
-            })
-
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    }
+    navigate('/product-checkout');
   }
 
   // ----------------------------------------------------------------
