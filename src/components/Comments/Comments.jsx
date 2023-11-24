@@ -114,7 +114,7 @@ export default function Comments({ value }) {
                 </Grid>
                 <Grid justifyContent="left" item xs zeroMinWidth>
                   <Typography sx={{ margin: 0, textAlign: "left" }}>
-                    {fb.userId.fullname !== null ? fb.userId.fullname : ""}
+                    {fb.userId !== null ? fb.userId.fullname : ""}
                   </Typography>
 
                   <Box>
@@ -134,7 +134,7 @@ export default function Comments({ value }) {
           );
         })}
       {/* Paging */}
-      <Stack spacing={2} mt={2} sx={{ float: "right" }}>
+      <Stack spacing={2} mt={2} pb={2} sx={{ float: "right" }}>
         <Pagination
           count={totalPages}
           onChange={handlePageClick}
@@ -142,7 +142,7 @@ export default function Comments({ value }) {
           color="primary"
         />
       </Stack>
-      {isLoggedIn && (
+      {/* {isLoggedIn && (
         <Paper sx={{ padding: "40px 20px", mb: 1 }}>
           <Grid container wrap="nowrap" spacing={2}>
             <Grid item>
@@ -179,7 +179,7 @@ export default function Comments({ value }) {
             </Grid>
           </Grid>
         </Paper>
-      )}
+      )} */}
     </>
   );
 }

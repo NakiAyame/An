@@ -28,6 +28,7 @@ import CategoryTable from "./layouts/dashboard/category/CategoryTable";
 import BlogPage from "./layouts/LandingPage/Blog/BlogPage";
 import BlogDetail from "./layouts/LandingPage/Blog/BlogDetail";
 import ServiceList from "./layouts/LandingPage/Service/ServiceList";
+import ProductDetail from "./layouts/LandingPage/Product/ProductDetail";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -72,6 +73,10 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="service-homepage" element={<ServiceList />} />
             <Route path="product-homepage" element={<ProductList />} />
+            <Route
+              path="product-homepage/:productId"
+              element={<ProductDetail />}
+            />
             <Route path="blog-homepage" element={<BlogPage />} />
             <Route path="blog-homepage/:blogId" element={<BlogDetail />} />
             <Route path="cart-service" element={<CartService />} />
