@@ -81,7 +81,6 @@ const ModalAddSerivce = (props) => {
 
         if (imagePath) {
           console.log("Đã tải ảnh lên:", imagePath);
-          toast.success("Thêm ảnh thành công");
           handleCreateService(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");

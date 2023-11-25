@@ -68,12 +68,12 @@ const ModalAddBlog = (props) => {
 
         if (imagePath) {
           console.log("Đã tải ảnh lên:", imagePath);
-          toast.success("Thêm ảnh thành công");
           handleCreateBlog(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
         }
       } else {
+        toast.error("Vui lòng chọn ảnh trước khi tải lên!");
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
