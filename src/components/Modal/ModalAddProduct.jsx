@@ -70,6 +70,7 @@ const ModalAddProduct = (props) => {
     setQuantity(e.target.value);
   };
 
+  // --------------------- HANDLE CHANGE IMAGE -----------------------------
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
     console.log("Kiểm tra image: ", e.target.files);
@@ -90,7 +91,6 @@ const ModalAddProduct = (props) => {
 
         if (imagePath) {
           console.log("Đã tải ảnh lên:", imagePath);
-          toast.success("Thêm ảnh thành công");
           handleCreateProduct(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");

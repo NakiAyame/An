@@ -19,6 +19,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { Input } from "@mui/material";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ,\s]{3,}$/;
@@ -40,6 +41,7 @@ const ModalEditProduct = (props) => {
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [image, setImage] = useState(null);
   //   const [status, setStatus] = useState(true);
 
   //   const handleStatusChange = (event) => {
@@ -77,6 +79,40 @@ const ModalEditProduct = (props) => {
     setQuantity(e.target.value);
   };
 
+  // --------------------- HANDLE CHANGE IMAGE -----------------------------
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+    console.log("Kiểm tra image: ", e.target.files);
+  };
+
+  // --------------------- HANDLE HANLDE UPLOAD IMAGE PRODUCT -----------------------------
+  const handleUpload = async () => {
+    try {
+      if (image) {
+        const formData = new FormData();
+        formData.append("image", image);
+        const response = await axios.post(
+          `http://localhost:3500/product/upload`,
+          formData
+        );
+        console.log("Response data:", response.data.image);
+        const imagePath = response.data.image;
+
+        if (imagePath) {
+          console.log("Đã tải ảnh lên:", imagePath);
+          toast.success("Thêm ảnh thành công");
+          handleEditProduct(imagePath);
+        } else {
+          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+        }
+      } else {
+        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải ảnh lên:", error);
+    }
+  };
+
   // --------------------- HANDLE UPDATE PRODUCT -----------------------------
   useEffect(() => {
     if (open) {
@@ -85,6 +121,7 @@ const ModalEditProduct = (props) => {
       setDescription(dataEditProduct.description);
       setQuantity(dataEditProduct.quantity);
       setPrice(dataEditProduct.price);
+      setImage(dataEditProduct.productImage);
     }
   }, [dataEditProduct]);
 
@@ -106,6 +143,7 @@ const ModalEditProduct = (props) => {
           description: description,
           quantity: quantity,
           price: price,
+          // productImage: imagePath,
         });
         if (res.data.error) {
           toast.error("Lỗi Err", res.data.error);
@@ -227,6 +265,20 @@ const ModalEditProduct = (props) => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
+
+            <Input
+              type="file"
+              inputProps={{ accept: "image/*" }}
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+            />
+            {image && (
+              <img
+                src={image}
+                alt="Ảnh sản phẩm"
+                style={{ maxWidth: "100%" }}
+              />
+            )}
 
             {/* Status */}
             {/* <RadioGroup

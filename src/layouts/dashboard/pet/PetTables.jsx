@@ -67,7 +67,6 @@ export default function PetTable() {
   const [dataEditPet, setDataEditPet] = useState({});
 
   const context = useAuth();
-  console.log(context);
 
   // --------------------- OPEN MODAL  -----------------------------
   const handleCreateModal = () => {
@@ -147,8 +146,15 @@ export default function PetTable() {
       const loadData = await axios.get(
         `${BASE_URL}/pet/username?name=${keyword}&page=1`
       );
-      if (loadData.error) {
-        toast.error(loadData.error);
+      if (loadData.data.error) {
+        toast.warning(
+          "Kết quả " +
+            "[" +
+            keyword +
+            "]" +
+            " bạn vừa tìm không có! Vui lòng nhập lại. "
+        );
+        setData(loadData.data.docs);
       } else {
         setData(loadData.data.docs);
         setTotalPets(loadData.data.limit);
@@ -260,7 +266,13 @@ export default function PetTable() {
                       </TableCell>
                       <TableCell align="left">{value.petName}</TableCell>
                       <TableCell align="left">{value.rank}</TableCell>
-                      <TableCell align="left">{value.category}</TableCell>
+                      <TableCell align="left">
+                        {category.map((valueCategory, Cid) => {
+                          if (value.categoryId === valueCategory._id) {
+                            return valueCategory.feature;
+                          }
+                        })}
+                      </TableCell>
                       <TableCell align="left">
                         <Chip
                           size="small"

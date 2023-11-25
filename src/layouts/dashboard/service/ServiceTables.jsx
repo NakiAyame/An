@@ -209,8 +209,15 @@ export default function ServiceTable() {
       const loadData = await axios.get(
         `${BASE_URL}/service?service=${keyword}&page=1`
       );
-      if (loadData.error) {
-        toast.error(loadData.error);
+      if (loadData.data.error) {
+        toast.warning(
+          "Kết quả " +
+            "[" +
+            keyword +
+            "]" +
+            " bạn vừa tìm không có! Vui lòng nhập lại."
+        );
+        setData(loadData.data.docs);
       } else {
         setData(loadData.data.docs);
         setTotalServices(loadData.data.limit);
