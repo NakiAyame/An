@@ -20,6 +20,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Input } from "@mui/material";
+import YardIcon from "@mui/icons-material/Yard";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
@@ -94,9 +95,11 @@ const ModalAddProduct = (props) => {
           handleCreateProduct(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
         }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
       console.error("Lỗi khi tải ảnh lên:", error);
@@ -118,6 +121,8 @@ const ModalAddProduct = (props) => {
       toast.error(
         "Tên sản phẩm không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
+    } else if (categoryId == "") {
+      toast.error("Bạn phải chọn loại sản phẩm mình muốn");
     } else if (!validQuantity) {
       toast.error("Số lượng không được để trống và phải lớn hơn 0");
     } else if (!validPrice) {
@@ -265,6 +270,17 @@ const ModalAddProduct = (props) => {
               onChange={handleImageChange}
               style={{ marginBottom: "1rem" }}
             />
+            {/* {image === null ||
+              (!image && (
+                <Typography>Nhấn "Xem ảnh" để xem trước hình ảnh</Typography>
+              ))}
+            {image && (
+              <img
+                src={image}
+                alt="Ảnh sản phẩm"
+                style={{ maxWidth: "100%" }}
+              />
+            )} */}
 
             {/* Status */}
             {/* <RadioGroup

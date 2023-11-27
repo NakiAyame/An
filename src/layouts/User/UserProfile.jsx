@@ -228,10 +228,10 @@ export default function UserPRofile() {
                   label="Email"
                   fullWidth
                   autoComplete="shipping email"
-                  variant="standard"
                   InputProps={{
                     readOnly: true,
                   }}
+                  variant="filled"
                 />
               </Grid>
               <Grid item xs={12}>

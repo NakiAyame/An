@@ -198,28 +198,11 @@ function Header() {
               </Button>
               {/* ------------GIỚI THIỆU--------------- */}
               <Button
-                onClick={handleClick}
+                component={NavLink}
+                to="introduce-homepage"
                 sx={{ my: 2, color: "white", display: "block", color: "black" }}
               >
-                Giới thiệu
-                <Menu
-                  id="service-menu"
-                  anchorEl={serviceItem}
-                  keepMounted
-                  open={Boolean(serviceItem)}
-                  onClose={handleClose}
-                >
-                  {/* ----------- THÊM ITEM DỊCH VỤ Ở ĐÂY ------------ */}
-                  {/* ----------- NHỚ SỬA ĐƯỜNG DẪN TRONG HREF --------------- */}
-                  <MenuItem>
-                    <a
-                      style={{ textDecoration: "none", color: "black" }}
-                      href="service-homepage"
-                    >
-                      Tất cả dịch vụ
-                    </a>
-                  </MenuItem>
-                </Menu>
+                <Typography>Giới thiệu</Typography>
               </Button>
             </Box>
 
