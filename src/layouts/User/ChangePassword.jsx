@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -33,20 +33,32 @@ const ChangePassword = () => {
   const context = useAuth();
   console.log(context);
 
-  const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
+  // Bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự
+  const PWD_REGEX =
+    /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
 
   // --------------------- VALIDATION -----------------------------
-  // const [validPassword, setValidPassword] = useState("");
-  // useEffect(() => {
-  //   setValidPassword(PWD_REGEX.test(oldPassword));
-  // }, [title]);
+  const [validNewPassword, setValidNewPassword] = useState("");
+  useEffect(() => {
+    setValidNewPassword(PWD_REGEX.test(newPassword));
+  }, [newPassword]);
 
-  // const handleValidationOldPassword = (e) => {
-  //   setOldPassword(e.target.value);
-  // };
+  const handleValidationNewPassword = (e) => {
+    setNewPassword(e.target.value);
+  };
 
   const handleChangePassword = async () => {
-    if (oldPassword === newPassword) {
+    if (oldPassword === "") {
+      toast.error("Mật khẩu cũ không được để trống ");
+    } else if (newPassword === "") {
+      toast.error("Mật khẩu mới không được để trống ");
+    } else if (!validNewPassword) {
+      toast.error(
+        "Mật khẩu bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự "
+      );
+    } else if (rePassword === "") {
+      toast.error("Nhập lại mật khẩu không được để trống ");
+    } else if (oldPassword === newPassword) {
       toast.error(
         "Mật khẩu Mới và Mật khẩu cũ không được trùng nhau. Vui lòng nhập lại chúng. "
       );
@@ -75,9 +87,9 @@ const ChangePassword = () => {
         } else {
           console.log(response.data);
           toast.success("Đổi mật khẩu thành công");
-          // navigate("/sign-in");
-          // localStorage.removeItem("token");
-          // toast.success("Hãy đăng nhập lại");
+          navigate("/sign-in");
+          localStorage.removeItem("token");
+          toast.success("Hãy đăng nhập lại");
         }
       } catch (err) {
         console.error("Error changing password:", err);
@@ -115,7 +127,7 @@ const ChangePassword = () => {
                   label="Mật khẩu mới"
                   type="password"
                   value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  onChange={(e) => handleValidationNewPassword(e)}
                 />
               </Grid>
               <Grid item xs={12}>

@@ -12,7 +12,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
-import { Avatar, Container, Stack, TextField } from "@mui/joy";
+import { Avatar, Box, Container, Grid, Stack, TextField } from "@mui/joy";
 import PetsIcon from "@mui/icons-material/Pets";
 import { Breadcrumbs, Pagination } from "@mui/material";
 import ModalAddPet from "../../components/Modal/ModalAddPet";
@@ -207,7 +207,13 @@ export default function PetUser() {
                         position: "relative",
                       }}
                     >
-                      <Avatar src="https://static2-images.vnncdn.net/files/publish/2022/12/8/meo-1-1416.jpg" />
+                      <Avatar
+                        src={
+                          value.petImage !== undefined
+                            ? `${value.petImage}`
+                            : "https://static2-images.vnncdn.net/files/publish/2022/12/8/meo-1-1416.jpg"
+                        }
+                      />
                     </AspectRatio>
 
                     <AspectRatio
@@ -242,6 +248,24 @@ export default function PetUser() {
                   <Typography level="h2" sx={{ maxWidth: "40ch" }}>
                     {value.userId.fullname}
                   </Typography>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="h5" component="h1">
+                        Chiều cao
+                      </Typography>
+                      <Typography level="h4" sx={{ maxWidth: "40ch" }}>
+                        {value.height}cm
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="h5" component="h1">
+                        Cân nặng
+                      </Typography>
+                      <Typography level="h4" sx={{ maxWidth: "40ch" }}>
+                        {value.weight}kg
+                      </Typography>
+                    </Grid>
+                  </Grid>
                   <CardActions
                     orientation="vertical"
                     buttonFlex={1}
