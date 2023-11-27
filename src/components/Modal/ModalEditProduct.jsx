@@ -250,6 +250,10 @@ const ModalEditProduct = (props) => {
               margin="normal"
               value={price}
               onChange={(e) => handleValidationPrice(e)}
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="filled"
               // error={!validPrice}
               // helperText={validPrice ? "" : "Hãy nhập giá tiền sản phẩm"}
             />

@@ -24,7 +24,7 @@ import { Input } from "@mui/material";
 const PET_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
 // /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]+$/;
-
+const PET_HEIH_REGEX = /^\d*(\.\d+)?$/;
 const ModalAddPet = (props) => {
   const { open, onClose, handUpdateTable, page, data, category } = props;
 
@@ -33,6 +33,9 @@ const ModalAddPet = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
   const [status, setStatus] = useState(false);
+  const [color, setColor] = useState("");
+  const [weight, setWeight] = useState(0);
+  const [height, setHeight] = useState(0);
   const [image, setImage] = useState(null);
 
   const handleStatusChange = (event) => {
@@ -42,6 +45,8 @@ const ModalAddPet = (props) => {
 
   // --------------------- VALIDATION -----------------------------
   const [valid, setValid] = useState("");
+  const [validHeight, setValidHeight] = useState("");
+  const [validWeight, setValidWeight] = useState("");
   useEffect(() => {
     setValid(PET_NAME_REGEX.test(petName));
   }, [petName]);
@@ -49,18 +54,36 @@ const ModalAddPet = (props) => {
   const handleValidationPetName = (e) => {
     setPetName(e.target.value);
   };
+
+  useEffect(() => {
+    setValidHeight(PET_HEIH_REGEX.test(height));
+  }, [height]);
+
+  const handleValidationPetHeight = (e) => {
+    setHeight(e.target.value);
+  };
+
+  useEffect(() => {
+    setValidWeight(PET_HEIH_REGEX.test(weight));
+  }, [weight]);
+
+  const handleValidationPetWeight = (e) => {
+    setWeight(e.target.value);
+  };
+
   useEffect(() => {
     if (open) {
       setUserId(data);
     }
   }, [data]);
 
+  // --------------------- HANDLE HANLDE CHANGE IMAGE -----------------------------
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
     console.log("Kiểm tra image: ", e.target.files);
   };
 
-  // --------------------- HANDLE HANLDE UPLOAD IMAGE SERVICE -----------------------------
+  // --------------------- HANDLE HANLDE UPLOAD IMAGE PET -----------------------------
   const handleUpload = async () => {
     try {
       if (image) {
@@ -78,9 +101,11 @@ const ModalAddPet = (props) => {
           handleCreateService(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
         }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
       console.error("Lỗi khi tải ảnh lên:", error);
@@ -89,11 +114,31 @@ const ModalAddPet = (props) => {
 
   // --------------------- HANDLE CREATE PET -----------------------------
   const handleCreateService = async (petImage) => {
-    console.log(userId, petName, categoryId, rank, status, petImage);
-    if (!valid) {
+    console.log(
+      userId,
+      petName,
+      categoryId,
+      rank,
+      status,
+      color,
+      height,
+      weight,
+      petImage
+    );
+    if (height === "") {
+      toast.error("Chiều cao thú cưng không được để trống");
+    } else if (weight === "") {
+      toast.error("Cân nặng thú cưng không được để trống");
+    } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
       );
+    } else if (!validHeight) {
+      toast.error("Chiều cao thú cưng phải là số nguyên hoặc số thập phân");
+    } else if (!validWeight) {
+      toast.error("Cân nặng thú cưng phải là số nguyên hoặc số thập phân");
+    } else if (categoryId == "") {
+      toast.error("Bạn phải chọn loại thú cưng mình muốn");
     } else {
       try {
         const response = await axios.post("http://localhost:3500/pet", {
@@ -102,6 +147,9 @@ const ModalAddPet = (props) => {
           categoryId,
           rank,
           status,
+          color,
+          height,
+          weight,
           petImage,
         });
         if (response.error) {
@@ -112,8 +160,11 @@ const ModalAddPet = (props) => {
           setUserId("");
           setPetName("");
           setCategoryId("");
-          setRank();
+          setRank(0);
           setStatus(true);
+          setColor("");
+          setHeight(0);
+          setWeight(0);
           handUpdateTable();
           onClose();
         }
@@ -209,6 +260,22 @@ const ModalAddPet = (props) => {
             </FormControl>
 
             <TextField
+              fullWidth
+              label="Chiều cao"
+              margin="normal"
+              value={height}
+              onChange={(e) => handleValidationPetHeight(e)}
+            />
+
+            <TextField
+              fullWidth
+              label="Cân nặng"
+              margin="normal"
+              value={weight}
+              onChange={(e) => handleValidationPetWeight(e)}
+            />
+
+            <TextField
               required={true}
               fullWidth
               label="Cấp thú cưng ban đầu"
@@ -221,7 +288,7 @@ const ModalAddPet = (props) => {
               }}
               variant="filled"
             />
-
+            <Typography>Thêm ảnh cho pet</Typography>
             <Input
               type="file"
               inputProps={{ accept: "image/*" }}
@@ -235,6 +302,7 @@ const ModalAddPet = (props) => {
               row
               aria-label="status"
               name="status"
+              sx={{ display: "none" }}
             >
               <FormControlLabel
                 value={true}

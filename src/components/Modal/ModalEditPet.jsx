@@ -187,6 +187,7 @@ const ModalEditPet = (props) => {
               row
               aria-label="status"
               name="status"
+              sx={{ display: "none" }}
             >
               <FormControlLabel
                 value={true}
