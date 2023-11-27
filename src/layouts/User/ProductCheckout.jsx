@@ -48,29 +48,33 @@ export default function ProductCheckout() {
 
 
     const checkoutProduct = async () => {
-        alert('Phần mềm đang được Hạnh Nguyên cập nhật')
-        // try {
-        //     const loadData = await axios.get(
-        //         `http://localhost:3500/cartProduct/checkout`,
-        //         {
-        //             recipientName: recipientName,
-        //             recipientPhoneNumber: recipientPhoneNumber,
-        //             deliveryAddress: deliveryAddress
-        //         },
-        //         {
-        //             headers: { 'Authorization': context.auth.token },
-        //             withCredentials: true
-        //         }
-        //     )
-        //     .then((data) => {
-        //         console.log(data)
-        //     })
-        //     .catch((err) => {
-        //         console.log(err)
-        //     })
-        // } catch (err) {
-        //     console.log(err);
-        // }
+        // alert('Phần mềm đang được Hạnh Nguyên cập nhật')
+        console.log(recipientName + ' ' + recipientPhoneNumber + ' ' + context.auth.token)
+        try {
+            const loadData = await axios.post(
+                `http://localhost:3500/cartProduct/checkout`,
+                {
+                    recipientName: recipientName,
+                    recipientPhoneNumber: recipientPhoneNumber,
+                    deliveryAddress: deliveryAddress
+                },
+                {
+                    headers: { 'Authorization': context.auth.token },
+                    withCredentials: true
+                }
+            )
+            .then((data) => {
+                if(data.data.message === 'Checkout successful'){
+                    toast.success("Đặt hàng sản phẩm thành công");
+                    navigator('/product-purchase')
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     const handleLoadCartProduct = async () => {

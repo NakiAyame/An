@@ -234,7 +234,7 @@ export default function CartService() {
                 onClick={() => handleCheckOut()}
                 style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
               >
-                CHECK OUT
+                ĐẶT DỊCH VỤ
               </button>
           }
 

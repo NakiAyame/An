@@ -144,6 +144,12 @@ export default function AccountMenu() {
           </ListItemIcon>
           Đơn hàng
         </MenuItem>
+        <MenuItem onClick={handleClose} component={NavLink} to="/service-purchase">
+          <ListItemIcon>
+            <ShoppingCartIcon fontSize="small" />
+          </ListItemIcon>
+          Lịch đặt dịch vụ
+        </MenuItem>
         <MenuItem onClick={handleClose} component={NavLink} to="/pet-user">
           <ListItemIcon>
             <PetsIcon fontSize="small" />
