@@ -125,7 +125,9 @@ const ModalAddPet = (props) => {
       weight,
       petImage
     );
-    if (height === "") {
+    if (petName === "") {
+      toast.error("Tên thú cưng không được để trống");
+    } else if (height === "") {
       toast.error("Chiều cao thú cưng không được để trống");
     } else if (weight === "") {
       toast.error("Cân nặng thú cưng không được để trống");
@@ -295,6 +297,13 @@ const ModalAddPet = (props) => {
               onChange={handleImageChange}
               style={{ marginBottom: "1rem" }}
             />
+            {image && (
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Ảnh sản phẩm"
+                style={{ maxWidth: "100%" }}
+              />
+            )}
 
             <RadioGroup
               value={status}

@@ -19,7 +19,12 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Input } from "@mui/material";
+import { Grid, Input } from "@mui/material";
+import dayjs from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ,\s]{3,}$/;
@@ -35,19 +40,32 @@ const ModalEditProduct = (props) => {
     category,
     page,
   } = props;
-
+  const currentDate = dayjs();
   const [productName, setProductName] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [image, setImage] = useState(null);
+  const [discount, setDiscount] = useState(0);
+  const [saleStartTime, setSaleStartTime] = useState(currentDate);
+  const [saleEndTime, setSaleEndTime] = useState(dayjs());
+
   //   const [status, setStatus] = useState(true);
 
   //   const handleStatusChange = (event) => {
   //     setStatus(event.target.value);
   //     console.log(status);
   //   };
+
+  // --------------------- HANLDE CHANGE START DATE -----------------------------
+  const handleStartDateChange = (date) => {
+    setSaleStartTime(date);
+  };
+
+  const handleEndDateChange = (date) => {
+    setSaleEndTime(date);
+  };
 
   // --------------------- VALIDATION -----------------------------
   const [validProductName, setValidProductName] = useState("");
@@ -122,14 +140,23 @@ const ModalEditProduct = (props) => {
       setQuantity(dataEditProduct.quantity);
       setPrice(dataEditProduct.price);
       setImage(dataEditProduct.productImage);
+      setDiscount(dataEditProduct.discount);
+      setSaleStartTime(dataEditProduct.saleStartTime);
+      setSaleEndTime(dataEditProduct.saleEndTime);
     }
   }, [dataEditProduct]);
 
   const handleEditProduct = async (productID) => {
-    if (!validProductName) {
+    if (discount === "") {
+      toast.error("% giảm giá không được để trống");
+    } else if (!validProductName) {
       toast.error(
         "Tên sản phẩm không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
+    } else if (discount < 0) {
+      toast.error("% giảm giá không được âm ");
+    } else if (discount > 100) {
+      toast.error("% giảm giá không được lớn hơn 100");
     } else if (!validQuantity) {
       toast.error("Số lượng không được để trống");
     } else if (!validPrice) {
@@ -143,6 +170,9 @@ const ModalEditProduct = (props) => {
           description: description,
           quantity: quantity,
           price: price,
+          discount: discount,
+          saleStartTime: saleStartTime,
+          saleEndTime: saleEndTime,
           // productImage: imagePath,
         });
         if (res.data.error) {
@@ -257,6 +287,36 @@ const ModalEditProduct = (props) => {
               // error={!validPrice}
               // helperText={validPrice ? "" : "Hãy nhập giá tiền sản phẩm"}
             />
+
+            <TextField
+              required
+              fullWidth
+              label="Giảm giá(%)"
+              type="number"
+              margin="normal"
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
+            />
+
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <DateTimePicker
+                  label="Ngày bắt đầu giảm giá"
+                  value={saleStartTime}
+                  onChange={handleStartDateChange}
+                  minDate={currentDate}
+                  maxDate={currentDate}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <DateTimePicker
+                  label="Ngày kết thúc giảm giá"
+                  value={saleEndTime}
+                  onChange={handleEndDateChange}
+                />
+              </Grid>
+            </Grid>
 
             <TextField
               label="Thông tin sản phẩm"

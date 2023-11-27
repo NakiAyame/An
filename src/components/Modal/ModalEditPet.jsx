@@ -22,6 +22,7 @@ import Select from "@mui/material/Select";
 
 const PET_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
+const PET_HEIH_REGEX = /^\d*(\.\d+)?$/;
 
 const ModalEditPet = (props) => {
   const { open, onClose, dataEditPet, handUpdateEditTable, page, category } =
@@ -31,6 +32,9 @@ const ModalEditPet = (props) => {
   const [petName, setPetName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
+  const [color, setColor] = useState("");
+  const [weight, setWeight] = useState(0);
+  const [height, setHeight] = useState(0);
   const [status, setStatus] = useState(true);
 
   const handleStatusChange = (event) => {
@@ -40,12 +44,30 @@ const ModalEditPet = (props) => {
 
   // --------------------- VALIDATION -----------------------------
   const [valid, setValid] = useState("");
+  const [validHeight, setValidHeight] = useState("");
+  const [validWeight, setValidWeight] = useState("");
   useEffect(() => {
     setValid(PET_NAME_REGEX.test(petName));
   }, [petName]);
 
   const handleValidationPetName = (e) => {
     setPetName(e.target.value);
+  };
+
+  useEffect(() => {
+    setValidHeight(PET_HEIH_REGEX.test(height));
+  }, [height]);
+
+  const handleValidationPetHeight = (e) => {
+    setHeight(e.target.value);
+  };
+
+  useEffect(() => {
+    setValidWeight(PET_HEIH_REGEX.test(weight));
+  }, [weight]);
+
+  const handleValidationPetWeight = (e) => {
+    setWeight(e.target.value);
   };
 
   // --------------------- HANDLE UPDATE PET -----------------------------
@@ -56,14 +78,29 @@ const ModalEditPet = (props) => {
       setCategoryId(dataEditPet.categoryId);
       setRank(dataEditPet.rank);
       setStatus(dataEditPet.status);
+      setColor(dataEditPet.color);
+      setHeight(dataEditPet.height);
+      setWeight(dataEditPet.weight);
     }
   }, [dataEditPet]);
 
   const handleEditPet = async (petID) => {
-    if (!valid) {
+    if (petName === "") {
+      toast.error("Tên thú cưng không được để trống");
+    } else if (height === "") {
+      toast.error("Chiều cao thú cưng không được để trống");
+    } else if (weight === "") {
+      toast.error("Cân nặng thú cưng không được để trống");
+    } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
       );
+    } else if (!validHeight) {
+      toast.error("Chiều cao thú cưng phải là số nguyên hoặc số thập phân");
+    } else if (!validWeight) {
+      toast.error("Cân nặng thú cưng phải là số nguyên hoặc số thập phân");
+    } else if (categoryId == "") {
+      toast.error("Bạn phải chọn loại thú cưng mình muốn");
     } else {
       try {
         const res = await axios.patch(`http://localhost:3500/pet`, {
@@ -73,6 +110,9 @@ const ModalEditPet = (props) => {
           categoryId: categoryId,
           rank: rank,
           status: status,
+          color: color,
+          height: height,
+          weight: weight,
         });
         if (res.data.error) {
           toast.error(res.data.error);
@@ -167,6 +207,22 @@ const ModalEditPet = (props) => {
                   })}
               </Select>
             </FormControl>
+
+            <TextField
+              fullWidth
+              label="Chiều cao"
+              margin="normal"
+              value={height}
+              onChange={(e) => handleValidationPetHeight(e)}
+            />
+
+            <TextField
+              fullWidth
+              label="Cân nặng"
+              margin="normal"
+              value={weight}
+              onChange={(e) => handleValidationPetWeight(e)}
+            />
 
             <TextField
               required={true}

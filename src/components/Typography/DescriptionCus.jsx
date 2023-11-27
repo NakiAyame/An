@@ -10,7 +10,7 @@ const TypographyCus = ({ value }) => {
     description = `${description.substring(0, MAX_LENGTH)}...`;
   }
 
-  return <Typography>{description}</Typography>;
+  return <>{description}</>;
 };
 
 export default TypographyCus;

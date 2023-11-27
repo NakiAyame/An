@@ -33,6 +33,7 @@ import ModalAddProduct from "../../../components/Modal/ModalAddProduct";
 import ModalEditProduct from "../../../components/Modal/ModalEditProduct";
 import ModalComfirmProduct from "../../../components/Modal/ModalComfirmProduct";
 import DropDownService from "../../../components/DropDown/DropDownService";
+import TypographyCus from "../../../components/Typography/DescriptionCus";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -302,7 +303,10 @@ export default function ProductTable() {
                       <TableCell align="left">
                         {numberToVND(value.price)}
                       </TableCell>
-                      <TableCell align="left">{value.description}</TableCell>
+                      <TableCell align="left">
+                        <TypographyCus value={value} />
+                        {/* {value.description} */}
+                      </TableCell>
                       {/* <TableCell align="center">
                         <ButtonGroup variant="contained">
                           <ButtonCustomize
@@ -310,11 +314,11 @@ export default function ProductTable() {
                             nameButton="Cập nhật"
                           />
                           <ButtonCustomize
-                          onClick={() => handleDeleteProduct(value)}
-                          backgroundColor="red"
-                          // component={RouterLink}
-                          nameButton="Xoá"
-                        />
+                            onClick={() => handleDeleteProduct(value)}
+                            backgroundColor="red"
+                            // component={RouterLink}
+                            nameButton="Xoá"
+                          />
                         </ButtonGroup>
                       </TableCell> */}
                     </TableRow>
