@@ -50,6 +50,7 @@ const ModalEditProduct = (props) => {
   const [discount, setDiscount] = useState(0);
   const [saleStartTime, setSaleStartTime] = useState(currentDate);
   const [saleEndTime, setSaleEndTime] = useState(dayjs());
+  const [isStartDateVisible, setIsStartDateVisible] = useState(false);
 
   //   const [status, setStatus] = useState(true);
 
@@ -57,6 +58,21 @@ const ModalEditProduct = (props) => {
   //     setStatus(event.target.value);
   //     console.log(status);
   //   };
+
+  const handleDiscountChange = (event) => {
+    const { value } = event.target;
+    const numericValue = parseInt(value, 10);
+
+    setDiscount(value);
+
+    if (numericValue >= 1 && numericValue <= 100) {
+      setSaleStartTime(currentDate);
+      setIsStartDateVisible(true);
+    } else {
+      // Ngược lại, ẩn DateTimePicker
+      setIsStartDateVisible(false);
+    }
+  };
 
   // --------------------- HANLDE CHANGE START DATE -----------------------------
   const handleStartDateChange = (date) => {
@@ -295,28 +311,29 @@ const ModalEditProduct = (props) => {
               type="number"
               margin="normal"
               value={discount}
-              onChange={(e) => setDiscount(e.target.value)}
+              onChange={handleDiscountChange}
             />
+            {isStartDateVisible && (
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={6}>
+                  <DateTimePicker
+                    label="Ngày bắt đầu giảm giá"
+                    value={saleStartTime}
+                    onChange={handleStartDateChange}
+                    minDate={currentDate}
+                    maxDate={currentDate}
+                  />
+                </Grid>
 
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
-                <DateTimePicker
-                  label="Ngày bắt đầu giảm giá"
-                  value={saleStartTime}
-                  onChange={handleStartDateChange}
-                  minDate={currentDate}
-                  maxDate={currentDate}
-                />
+                <Grid item xs={12} sm={6}>
+                  <DateTimePicker
+                    label="Ngày kết thúc giảm giá"
+                    value={saleEndTime}
+                    onChange={handleEndDateChange}
+                  />
+                </Grid>
               </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <DateTimePicker
-                  label="Ngày kết thúc giảm giá"
-                  value={saleEndTime}
-                  onChange={handleEndDateChange}
-                />
-              </Grid>
-            </Grid>
+            )}
 
             <TextField
               label="Thông tin sản phẩm"
