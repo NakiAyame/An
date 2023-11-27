@@ -1,19 +1,45 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
+import * as React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Box,
+  Button,
+  Typography,
+  Modal,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  TextField,
+  Grid,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  ButtonGroup,
+  Stack,
+  Pagination
+} from "@mui/material";
+
+import { styled } from "@mui/material/styles";
+
+import CloseIcon from "@mui/icons-material/Close";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 import useAuth from '../../hooks/useAuth';
+import DateFormat from '../../components/DateFormat';
+import ButtonCustomize from "../../components/Button/Button";
 
 const bull = (
   <Box
@@ -27,49 +53,45 @@ const bull = (
 export default function ProductPurchase() {
   const DEFAULT_PAGE = 1;
   const DEFAULT_LIMIT = 5;
+  const DEFAULT_STATUS = "Chờ xác nhận"
 
   const [data, setData] = useState([]);
   const [quantity, setQuantity] = useState(0)
   const [loged, setLoged] = useState(false)
   const [total, setTotal] = useState(0)
 
+  const [orderDetail, setOrderDetail] = useState([]);
+
+  // --------------------- MODAL HANDLE -----------------------------
+
+  const [open, setOpen] = React.useState(false); 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const context = useAuth();
-  console.log(context.auth)
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
-
-  const handleProduct = () => {
-    console.log(quantity)
-  }
-
-  const handleLoadCartService = async () => {
+  const handleLoadCartProductById = async (option) => {
     if (context.auth.token !== undefined) {
       setLoged(true)
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/cartProduct/view-cart`,
+          `http://localhost:3500/order/${context.auth.id}`,
           {
             headers: { 'Authorization': context.auth.token },
             withCredentials: true
           }
-        );
-        if (loadData.error) {
-          toast.error(loadData.error);
-        } else {
-          setData(loadData.data)
-          console.log(loadData.data);
-          let totalPrice = 0;
-          for (let i = 0; i < loadData.data.length; i++) {
-            totalPrice += loadData.data[i].quantity * loadData.data[i].productId.price
-          }
-          setTotal(totalPrice);
-        }
+        )
+          .then((data) => {
+            const filterData = []
+            console.log(data.data)
+
+            for (let i = 0; i < data.data.length; i++) {
+              if(data.data[i].status === option){
+                filterData.push(data.data[i])
+              }              
+            }
+            setData(filterData)
+          })
       } catch (err) {
         console.log(err);
       }
@@ -77,82 +99,175 @@ export default function ProductPurchase() {
   }
 
   useEffect(() => {
-    handleLoadCartService()
+    handleLoadCartProductById(DEFAULT_STATUS)
   }, []);
 
   // ----------------------------------------------------------------
 
-  const handleCheckOut = async () => {
-    if (window.confirm('Bạn có muốn đặt sản phẩm này ?') == true) {
-      if (data.length === 0) {
-        alert('Bạn không có sản phẩm trong giỏ hàng')
-      } else {
-        try {
-          const checkout = await axios.get(
-            `http://localhost:3500/cartProduct/checkout`,
-            {
-              headers: { 'Authorization': context.auth.token },
-              withCredentials: true
-            }
-          )
-            .then((data) => {
-              alert('Đặt sản phẩm thành công')
-              handleLoadCartService()
-            })
-
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    }
-  }
-
   // ----------------------------------------------------------------
-  const productStyle = {
-    padding: '16px 0',
-    marginTop: '0',
-    border: '1px solid rgba(0, 0, 0, .2)'
-  }
 
-  const cartHeader = {
-    fontWeight: 'bolder',
-    fontSize: '15px'
-  }
+  const handleViewOrderDetail = async (id, option) => {
+    try {
+      console.log(id);
+      const data = await axios.get(`http://localhost:3500/orderDetail/${id}`);
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        console.log(data.data);
+        setOrderDetail(data.data)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    handleOpen();
+  };
 
-  const quantityButtonRightStyle = {
-    padding: '5px 12px',
-    borderLeft: 'none',
-    background: 'none'
-  }
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "70%",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
 
-  const quantityButtonLeftStyle = {
-    padding: '5px 12px',
-    borderRight: 'none',
-    background: 'none'
-  }
-
-  const quantityInputStyle = {
-    padding: '5px',
-    width: '20%',
-    textAlign: 'center',
-    borderRight: 'none',
-    borderLeft: 'none'
-  }
-  const checkout = {
-    position: 'fixed',
-    left: '0',
-    bottom: '0',
+  const buttonStyle = {
     width: '100%',
-    backgroundColor: 'white',
-    // color: 'white',
-    textAlign: 'center',
-    boxShadow: '0 -5px 10px #b3b3b3',
-    paddingTop: '20px'
+    padding: '16px 0',
+    marginBottom: '20px',
+    fontSize: '17px',
+    border: 'none',
+    backgroundColor: '#efeff5',
+    color: 'black',
+    cursor: 'pointer',
   }
 
   return (
     <>
       <h1 style={{ textAlign: 'center', marginTop: '100px' }}>SẢN PHẨM ĐÃ MUA</h1>
+      <Grid container>
+        <Grid item xs={4}>
+          <button className="button-status" style={buttonStyle} onClick={(e) => handleLoadCartProductById('Chờ xác nhận')}>Chờ xác nhận</button>
+        </Grid>
+        <Grid item xs={4}>
+          <button className="button-status" style={buttonStyle} onClick={(e) => handleLoadCartProductById('Đang giao hàng')}>Đang giao hàng</button>
+        </Grid>
+        <Grid item xs={4}>
+          <button className="button-status" style={buttonStyle} onClick={(e) => handleLoadCartProductById('Đã nhận hàng')}>Đã nhận hàng</button>
+        </Grid>
+      </Grid>
+
+      <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              <TableCell>STT</TableCell>
+              <TableCell align="right">Người nhận hàng</TableCell>
+              <TableCell align="right">Địa chỉ</TableCell>
+              <TableCell align="right">Ngày đặt hàng</TableCell>
+              <TableCell align="right">Tổng giá trị</TableCell>
+              <TableCell align="right">Trạng thái</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((value, index) => (
+              <TableRow
+                key={index}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                onClick={(e) => handleViewOrderDetail(value._id)}
+              >
+                <TableCell component="th" scope="row">
+                  {index + 1}
+                </TableCell>
+                <TableCell align="right">{value.recipientName}</TableCell>
+                <TableCell align="right">{value.deliveryAddress}</TableCell>
+                <TableCell align="right"><DateFormat date={value.updatedAt} /></TableCell>
+                <TableCell align="right">{value.totalPrice}</TableCell>
+                <TableCell align="right">{value.status}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+            Chi tiết đơn hàng
+          </DialogTitle>
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <DialogContent dividers>
+            <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+
+              <Table sx={{ width: '100%' }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell children>STT</TableCell>
+                    <TableCell align="left">Mã đơn hàng</TableCell>
+                    <TableCell align="left">Tên sản phẩm</TableCell>
+                    <TableCell align="left">Số lượng</TableCell>
+                    <TableCell align="left">Giá</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {orderDetail &&
+                    orderDetail.map((value, index) => {
+                      return (
+                        <TableRow
+                          key={index}
+                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {index + 1}
+                          </TableCell>
+                          <TableCell align="left">{value.orderId}</TableCell>
+                          <TableCell align="left">{value.productId !== null ? value.productId.productName : ''}</TableCell>
+                          <TableCell align="left">{value.quantity}</TableCell>
+                          <TableCell align="left">{value.productId !== null ? value.productId.price : ''}</TableCell>
+                          <TableCell align="left"></TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+
+            </Grid>
+          </DialogContent>
+          {/* 
+                    <DialogActions>
+                        <Button
+                            variant="contained"
+                            margin="normal"
+                            color="primary"
+                        // onClick={handleUpdate}
+                        >
+                            Cập nhật thông tin
+                        </Button>
+                    </DialogActions> */}
+        </Box>
+      </Modal>
     </>
   );
 }

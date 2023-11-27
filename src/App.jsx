@@ -32,6 +32,7 @@ import ProductPurchase from "./layouts/User/ProductPurchase";
 import ProductCheckout from "./layouts/User/ProductCheckout";
 import ProductDetail from "./layouts/LandingPage/Product/ProductDetail";
 import ServiceDetail from "./layouts/LandingPage/Service/ServiceDetail";
+import ServicePurchase from "./layouts/User/ServicePurchase";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -93,6 +94,7 @@ function App() {
             <Route path="pet-user" element={<PetUser />} />
             <Route path="verify" element={<VerifyCode />} />
             <Route path="product-purchase" element={<ProductPurchase />} />
+            <Route path="service-purchase" element={<ServicePurchase />} />
             <Route path="product-checkout" element={<ProductCheckout />} />
           </Route>
         </Routes>
