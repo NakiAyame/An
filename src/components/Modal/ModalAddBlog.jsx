@@ -71,6 +71,7 @@ const ModalAddBlog = (props) => {
           handleCreateBlog(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
         }
       } else {
         toast.error("Vui lòng chọn ảnh trước khi tải lên!");

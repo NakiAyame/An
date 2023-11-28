@@ -48,7 +48,9 @@ const ModalAddProduct = (props) => {
   const [validPrice, setValidPrice] = useState("");
   const [validQuantity, setValidQuantity] = useState("");
   useEffect(() => {
-    setValidProductName(SERVICE_NAME_REGEX.test(productName));
+    setValidProductName(
+      SERVICE_NAME_REGEX.test(productName) && productName.trim()
+    );
   }, [productName]);
 
   const handleValidationProductName = (e) => {

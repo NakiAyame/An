@@ -26,7 +26,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
-const SERVICE_NAME_REGEX =
+const PRODUCT_NAME_REGEX =
   /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ,\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
@@ -89,7 +89,7 @@ const ModalEditProduct = (props) => {
   const [validQuantity, setValidQuantity] = useState("");
   useEffect(() => {
     setValidProductName(
-      SERVICE_NAME_REGEX.test(productName) && productName.trim() !== ""
+      PRODUCT_NAME_REGEX.test(productName) && productName.trim()
     );
   }, [productName]);
 
@@ -138,9 +138,11 @@ const ModalEditProduct = (props) => {
           handleEditProduct(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
         }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
       console.error("Lỗi khi tải ảnh lên:", error);
@@ -163,7 +165,9 @@ const ModalEditProduct = (props) => {
   }, [dataEditProduct]);
 
   const handleEditProduct = async (productID) => {
-    if (discount === "") {
+    if (validProductName === "") {
+      toast.error("Tên sản phẩm không được để trống");
+    } else if (discount === "") {
       toast.error("% giảm giá không được để trống");
     } else if (!validProductName) {
       toast.error(
