@@ -59,6 +59,7 @@ const ModalEditProduct = (props) => {
   //     console.log(status);
   //   };
 
+  // --------------------- HANLDE CHANGE DÍCOUNT -----------------------------
   const handleDiscountChange = (event) => {
     const { value } = event.target;
     const numericValue = parseInt(value, 10);
