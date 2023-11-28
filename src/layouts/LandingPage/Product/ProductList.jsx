@@ -301,13 +301,42 @@ export default function ProductList() {
                             flexGrow={1}
                             sx={{ justifyContent: "space-between" }}
                           >
-                            <Typography
-                              gutterBottom
-                              variant="h6"
-                              component="h2"
-                            >
-                              {numberToVND(value.price)}
-                            </Typography>
+                            {value.discount !== 0 ? (
+                              <>
+                                <Typography
+                                  gutterBottom
+                                  variant="h6"
+                                  component="h2"
+                                  sx={{
+                                    textDecoration: "line-through",
+                                    marginRight: "8px",
+                                  }}
+                                >
+                                  {numberToVND(value.price)}
+                                </Typography>
+                                <Typography
+                                  gutterBottom
+                                  variant="h6"
+                                  component="h2"
+                                  sx={{ color: "red" }}
+                                >
+                                  {value.discountedPrice}
+                                </Typography>
+                              </>
+                            ) : (
+                              <Typography
+                                gutterBottom
+                                variant="h6"
+                                component="h2"
+                                sx={{
+                                  textDecoration: "line-through",
+                                  marginRight: "8px",
+                                }}
+                              >
+                                {numberToVND(value.price)}
+                              </Typography>
+                            )}
+
                             <Tooltip
                               title="Thêm vào giỏ hàng"
                               onClick={() => handleAddToCart(value._id)}

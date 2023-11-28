@@ -49,7 +49,7 @@ const ModalEditProduct = (props) => {
   const [image, setImage] = useState(null);
   const [discount, setDiscount] = useState(0);
   const [saleStartTime, setSaleStartTime] = useState(currentDate);
-  const [saleEndTime, setSaleEndTime] = useState(dayjs());
+  const [saleEndTime, setSaleEndTime] = useState(currentDate);
   const [isStartDateVisible, setIsStartDateVisible] = useState(false);
 
   //   const [status, setStatus] = useState(true);
@@ -66,10 +66,10 @@ const ModalEditProduct = (props) => {
     setDiscount(value);
 
     if (numericValue >= 1 && numericValue <= 100) {
-      setSaleStartTime(currentDate);
+      setSaleStartTime();
+      setSaleEndTime();
       setIsStartDateVisible(true);
     } else {
-      // Ngược lại, ẩn DateTimePicker
       setIsStartDateVisible(false);
     }
   };
@@ -320,8 +320,8 @@ const ModalEditProduct = (props) => {
                     label="Ngày bắt đầu giảm giá"
                     value={saleStartTime}
                     onChange={handleStartDateChange}
-                    minDate={currentDate}
-                    maxDate={currentDate}
+                    // minDate={currentDate}
+                    // maxDate={currentDate}
                   />
                 </Grid>
 
