@@ -84,9 +84,11 @@ const ModalAddSerivce = (props) => {
           handleCreateService(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
         }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
       console.error("Lỗi khi tải ảnh lên:", error);
