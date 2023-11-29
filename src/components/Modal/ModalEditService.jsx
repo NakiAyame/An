@@ -21,6 +21,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { Grid } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
@@ -120,14 +121,12 @@ const ModalEditSerivce = (props) => {
       toast.error(
         "Tên dịch vụ không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
+    } else if (categoryId == "") {
+      toast.error("Bạn phải chọn loại dịch vụ mình muốn");
     } else if (discount < 0) {
       toast.error("% giảm giá không được âm ");
     } else if (discount > 100) {
       toast.error("% giảm giá không được lớn hơn 100");
-    } else if (saleEndTime.isBefore(saleStartTime)) {
-      toast.error(
-        "Ngày bắt đầu giảm giá không được sau hoặc bằng ngày kết thúc giảm giá "
-      );
     } else if (!validPrice) {
       toast.error(
         "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
@@ -263,7 +262,7 @@ const ModalEditSerivce = (props) => {
             {isStartDateVisible && (
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
-                  <DateTimePicker
+                  <DatePicker
                     label="Ngày bắt đầu giảm giá"
                     value={saleStartTime}
                     onChange={handleStartDateChange}
@@ -273,7 +272,7 @@ const ModalEditSerivce = (props) => {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <DateTimePicker
+                  <DatePicker
                     label="Ngày kết thúc giảm giá"
                     value={saleEndTime}
                     onChange={handleEndDateChange}

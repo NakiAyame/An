@@ -36,6 +36,7 @@ import { Avatar, CardActionArea, IconButton, Tooltip } from "@mui/material";
 import DropDownService from "../../../components/DropDown/DropDownService";
 import ChoosePet from "../../../components/Modal/ModalChoosePet";
 import useAuth from "../../../hooks/useAuth";
+import dayjs from "dayjs";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -360,13 +361,46 @@ export default function ServiceList() {
                             flexGrow={1}
                             sx={{ justifyContent: "space-between" }}
                           >
-                            <Typography
-                              gutterBottom
-                              variant="h6"
-                              component="h2"
-                            >
-                              {numberToVND(value.price)}
-                            </Typography>
+                            {value.discount !== 0 &&
+                            dayjs().isAfter(value.saleStartTime) &&
+                            dayjs().isBefore(value.saleEndTime) ? (
+                              <Box
+                                display="flex"
+                                flexGrow={1}
+                                sx={{ justifyContent: "flex-start" }}
+                              >
+                                <Typography
+                                  gutterBottom
+                                  variant="h6"
+                                  component="h2"
+                                  sx={{
+                                    textDecoration: "line-through",
+                                    marginRight: "8px",
+                                    color: "gray",
+                                  }}
+                                >
+                                  {numberToVND(value.price)}
+                                </Typography>
+                                <Typography
+                                  gutterBottom
+                                  variant="h6"
+                                  component="h2"
+                                  sx={{ color: "red" }}
+                                >
+                                  {numberToVND(value.discountedPrice)}
+                                </Typography>
+                              </Box>
+                            ) : (
+                              <Typography
+                                gutterBottom
+                                variant="h6"
+                                component="h2"
+                                sx={{ color: "red" }}
+                              >
+                                {numberToVND(value.price)}
+                              </Typography>
+                            )}
+
                             <Tooltip
                               title="Thêm vào giỏ dịch vụ"
                               onClick={() => handleAddToCartClick(value)}
