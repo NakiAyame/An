@@ -25,6 +25,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const PRODUCT_NAME_REGEX =
   /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ,\s]{3,}$/;
@@ -321,7 +322,7 @@ const ModalEditProduct = (props) => {
             {isStartDateVisible && (
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
-                  <DateTimePicker
+                  <DatePicker
                     label="Ngày bắt đầu giảm giá"
                     value={saleStartTime}
                     onChange={handleStartDateChange}
@@ -331,7 +332,7 @@ const ModalEditProduct = (props) => {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <DateTimePicker
+                  <DatePicker
                     label="Ngày kết thúc giảm giá"
                     value={saleEndTime}
                     onChange={handleEndDateChange}

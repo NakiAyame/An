@@ -35,6 +35,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Avatar, CardActionArea, IconButton, Tooltip } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import dayjs from "dayjs";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -301,8 +302,14 @@ export default function ProductList() {
                             flexGrow={1}
                             sx={{ justifyContent: "space-between" }}
                           >
-                            {value.discount !== 0 ? (
-                              <>
+                            {value.discount !== 0 &&
+                            dayjs().isAfter(value.saleStartTime) &&
+                            dayjs().isBefore(value.saleEndTime) ? (
+                              <Box
+                                display="flex"
+                                flexGrow={1}
+                                sx={{ justifyContent: "flex-start" }}
+                              >
                                 <Typography
                                   gutterBottom
                                   variant="h6"
@@ -310,6 +317,7 @@ export default function ProductList() {
                                   sx={{
                                     textDecoration: "line-through",
                                     marginRight: "8px",
+                                    color: "gray",
                                   }}
                                 >
                                   {numberToVND(value.price)}
@@ -320,18 +328,15 @@ export default function ProductList() {
                                   component="h2"
                                   sx={{ color: "red" }}
                                 >
-                                  {value.discountedPrice}
+                                  {numberToVND(value.discountedPrice)}
                                 </Typography>
-                              </>
+                              </Box>
                             ) : (
                               <Typography
                                 gutterBottom
                                 variant="h6"
                                 component="h2"
-                                sx={{
-                                  textDecoration: "line-through",
-                                  marginRight: "8px",
-                                }}
+                                sx={{ color: "red" }}
                               >
                                 {numberToVND(value.price)}
                               </Typography>
