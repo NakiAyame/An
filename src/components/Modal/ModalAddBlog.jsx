@@ -23,6 +23,8 @@ import { CardMedia, Container, Input } from "@mui/material";
 
 const Title_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
+const CONTENT_REGEX =
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 
 const ModalAddBlog = (props) => {
@@ -40,12 +42,21 @@ const ModalAddBlog = (props) => {
 
   // --------------------- VALIDATION -----------------------------
   const [validTitle, setValidTitle] = useState("");
+  const [validContent, setValidContent] = useState("");
   useEffect(() => {
     setValidTitle(Title_REGEX.test(title) && title.trim() !== "");
   }, [title]);
 
   const handleValidationTitle = (e) => {
     setTitle(e.target.value);
+  };
+
+  useEffect(() => {
+    setValidContent(CONTENT_REGEX.test(content) && content.trim());
+  }, [content]);
+
+  const handleValidationContent = (e) => {
+    setContent(e.target.value);
   };
 
   const handleImageChange = (e) => {
@@ -89,6 +100,8 @@ const ModalAddBlog = (props) => {
       toast.error(
         "Tiêu đề không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
+    } else if (!validContent) {
+      toast.error("Nội dung không được để trống");
     } else {
       try {
         const response = await axios.post(
@@ -182,7 +195,7 @@ const ModalAddBlog = (props) => {
               margin="normal"
               maxRows={4}
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(e) => handleValidationContent(e)}
             />
             <Container maxWidth="sm" style={{ marginTop: "2rem" }}>
               <Input

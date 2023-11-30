@@ -31,6 +31,8 @@ const PRODUCT_NAME_REGEX =
   /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ,\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
+const DESCRIPTION_REGEX =
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
 
 const ModalEditProduct = (props) => {
   const {
@@ -47,7 +49,7 @@ const ModalEditProduct = (props) => {
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const [image, setImage] = useState(null);
+  const [productImage, setProductImage] = useState(null);
   const [discount, setDiscount] = useState(0);
   const [saleStartTime, setSaleStartTime] = useState(currentDate);
   const [saleEndTime, setSaleEndTime] = useState(currentDate);
@@ -89,6 +91,7 @@ const ModalEditProduct = (props) => {
   const [validProductName, setValidProductName] = useState("");
   const [validPrice, setValidPrice] = useState("");
   const [validQuantity, setValidQuantity] = useState("");
+  const [validDescription, setValidDescription] = useState("");
   useEffect(() => {
     setValidProductName(
       PRODUCT_NAME_REGEX.test(productName) && productName.trim()
@@ -115,18 +118,28 @@ const ModalEditProduct = (props) => {
     setQuantity(e.target.value);
   };
 
+  useEffect(() => {
+    setValidDescription(
+      DESCRIPTION_REGEX.test(description) && description.trim()
+    );
+  }, [description]);
+
+  const handleValidationDescription = (e) => {
+    setDescription(e.target.value);
+  };
+
   // --------------------- HANDLE CHANGE IMAGE -----------------------------
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    setProductImage(e.target.files[0]);
     console.log("Kiểm tra image: ", e.target.files);
   };
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PRODUCT -----------------------------
   const handleUpload = async () => {
     try {
-      if (image) {
+      if (productImage) {
         const formData = new FormData();
-        formData.append("image", image);
+        formData.append("image", productImage);
         const response = await axios.post(
           `http://localhost:3500/product/upload`,
           formData
@@ -137,7 +150,7 @@ const ModalEditProduct = (props) => {
         if (imagePath) {
           console.log("Đã tải ảnh lên:", imagePath);
           toast.success("Thêm ảnh thành công");
-          handleEditProduct(imagePath);
+          setProductImage(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
           toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
@@ -159,7 +172,7 @@ const ModalEditProduct = (props) => {
       setDescription(dataEditProduct.description);
       setQuantity(dataEditProduct.quantity);
       setPrice(dataEditProduct.price);
-      setImage(dataEditProduct.productImage);
+      setProductImage(dataEditProduct.productImage);
       setDiscount(dataEditProduct.discount);
       setSaleStartTime(dataEditProduct.saleStartTime);
       setSaleEndTime(dataEditProduct.saleEndTime);
@@ -183,6 +196,8 @@ const ModalEditProduct = (props) => {
       toast.error("Số lượng không được để trống");
     } else if (!validPrice) {
       toast.error("Giá tiền phải có ít nhất 4 chữ số và phải lớn hơn 0");
+    } else if (!validDescription) {
+      toast.error("Thông tin chi tiết không được để trống");
     } else {
       try {
         const res = await axios.patch(`http://localhost:3500/product`, {
@@ -195,7 +210,7 @@ const ModalEditProduct = (props) => {
           discount: discount,
           saleStartTime: saleStartTime,
           saleEndTime: saleEndTime,
-          // productImage: imagePath,
+          productImage: productImage,
         });
         if (res.data.error) {
           toast.error("Lỗi Err", res.data.error);
@@ -350,18 +365,18 @@ const ModalEditProduct = (props) => {
               margin="normal"
               maxRows={4}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => handleValidationDescription(e)}
             />
 
             <Input
               type="file"
               inputProps={{ accept: "image/*" }}
               onChange={handleImageChange}
-              style={{ display: "none" }}
             />
-            {image && (
+            <Button onClick={handleUpload}>Tải ảnh lên</Button>
+            {productImage && (
               <img
-                src={image}
+                src={productImage}
                 alt="Ảnh sản phẩm"
                 style={{ maxWidth: "100%" }}
               />

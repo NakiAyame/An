@@ -48,7 +48,7 @@ const ModalAddPet = (props) => {
   const [validHeight, setValidHeight] = useState("");
   const [validWeight, setValidWeight] = useState("");
   useEffect(() => {
-    setValid(PET_NAME_REGEX.test(petName));
+    setValid(PET_NAME_REGEX.test(petName) && petName.trim() !== "");
   }, [petName]);
 
   const handleValidationPetName = (e) => {
@@ -131,6 +131,10 @@ const ModalAddPet = (props) => {
       toast.error("Chiều cao thú cưng không được để trống");
     } else if (weight === "") {
       toast.error("Cân nặng thú cưng không được để trống");
+    } else if (height === 0) {
+      toast.error("Chiều cao thú cưng không được bằng 0");
+    } else if (weight === 0) {
+      toast.error("Cân nặng thú cưng không được bằng 0");
     } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"

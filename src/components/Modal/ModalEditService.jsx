@@ -19,13 +19,15 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { Grid } from "@mui/material";
+import { Grid, Input } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
+const DESCRIPTION_REGEX =
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
 
 const ModalEditSerivce = (props) => {
   const {
@@ -40,7 +42,7 @@ const ModalEditSerivce = (props) => {
   const [serviceName, setServiceName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [description, setDescription] = useState("");
-
+  const [serviceImage, setServiceImage] = useState(null);
   const [price, setPrice] = useState(0);
   const [status, setStatus] = useState(true);
   const [discount, setDiscount] = useState(0);
@@ -82,6 +84,7 @@ const ModalEditSerivce = (props) => {
   // --------------------- VALIDATION -----------------------------
   const [validServiceName, setValidServiceName] = useState("");
   const [validPrice, setValidPrice] = useState("");
+  const [validDescription, setValidDescription] = useState("");
   useEffect(() => {
     setValidServiceName(
       SERVICE_NAME_REGEX.test(serviceName) && serviceName.trim() !== ""
@@ -100,6 +103,52 @@ const ModalEditSerivce = (props) => {
     setPrice(e.target.value);
   };
 
+  useEffect(() => {
+    setValidDescription(
+      DESCRIPTION_REGEX.test(description) && description.trim()
+    );
+  }, [description]);
+
+  const handleValidationDescription = (e) => {
+    setDescription(e.target.value);
+  };
+
+  // --------------------- HANDLE CHANGE IMAGE -----------------------------
+  const handleImageChange = (e) => {
+    setServiceImage(e.target.files[0]);
+    console.log("Kiểm tra image: ", e.target.files);
+  };
+
+  // --------------------- HANDLE HANLDE UPLOAD IMAGE SERVICE -----------------------------
+  const handleUpload = async () => {
+    try {
+      if (serviceImage) {
+        const formData = new FormData();
+        formData.append("image", serviceImage);
+        const response = await axios.post(
+          `http://localhost:3500/service/upload`,
+          formData
+        );
+        console.log("Response data:", response.data.image);
+        const imagePath = response.data.image;
+
+        if (imagePath) {
+          console.log("Đã tải ảnh lên:", imagePath);
+          toast.success("Thêm ảnh thành công");
+          setServiceImage(imagePath);
+        } else {
+          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+        }
+      } else {
+        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải ảnh lên:", error);
+    }
+  };
+
   // --------------------- HANLDE UPDATE SERVICE -----------------------------
   useEffect(() => {
     if (open) {
@@ -111,6 +160,7 @@ const ModalEditSerivce = (props) => {
       setDiscount(dataEditService.discount);
       setSaleStartTime(dataEditService.saleStartTime);
       setSaleEndTime(dataEditService.saleEndTime);
+      setServiceImage(dataEditService.serviceImage);
     }
   }, [dataEditService]);
 
@@ -131,6 +181,8 @@ const ModalEditSerivce = (props) => {
       toast.error(
         "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
       );
+    } else if (!validDescription) {
+      toast.error("Thông tin chi tiết không được để trống");
     } else {
       try {
         const res = await axios.patch(`http://localhost:3500/service`, {
@@ -143,6 +195,7 @@ const ModalEditSerivce = (props) => {
           discount: discount,
           saleStartTime: saleStartTime,
           saleEndTime: saleEndTime,
+          serviceImage: serviceImage,
         });
         if (res.data.error) {
           toast.error(res.data.error);
@@ -235,7 +288,7 @@ const ModalEditSerivce = (props) => {
               margin="normal"
               maxRows={4}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => handleValidationDescription(e)}
             />
 
             <TextField
@@ -299,6 +352,19 @@ const ModalEditSerivce = (props) => {
                 label="Không hoạt động"
               />
             </RadioGroup>
+            <Input
+              type="file"
+              inputProps={{ accept: "image/*" }}
+              onChange={handleImageChange}
+            />
+            <Button onClick={handleUpload}>Tải ảnh lên</Button>
+            {serviceImage && (
+              <img
+                src={serviceImage}
+                alt="Ảnh sản phẩm"
+                style={{ maxWidth: "100%" }}
+              />
+            )}
           </form>
         </DialogContent>
         <DialogActions>
