@@ -17,6 +17,11 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { Grid } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
@@ -31,17 +36,47 @@ const ModalEditSerivce = (props) => {
     category,
     page,
   } = props;
-
+  const currentDate = dayjs();
   const [serviceName, setServiceName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [description, setDescription] = useState("");
 
   const [price, setPrice] = useState(0);
   const [status, setStatus] = useState(true);
+  const [discount, setDiscount] = useState(0);
+  const [saleStartTime, setSaleStartTime] = useState(currentDate);
+  const [saleEndTime, setSaleEndTime] = useState(currentDate);
+  const [isStartDateVisible, setIsStartDateVisible] = useState(false);
 
+  // --------------------- HANLDE CHANGE STATUS -----------------------------
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
     console.log(status);
+  };
+
+  // --------------------- HANLDE CHANGE DISCOUNT -----------------------------
+  const handleDiscountChange = (event) => {
+    const { value } = event.target;
+    const numericValue = parseInt(value, 10);
+
+    setDiscount(value);
+
+    if (numericValue >= 1 && numericValue <= 100) {
+      setSaleStartTime();
+      setSaleEndTime();
+      setIsStartDateVisible(true);
+    } else {
+      setIsStartDateVisible(false);
+    }
+  };
+
+  // --------------------- HANLDE CHANGE START DATE -----------------------------
+  const handleStartDateChange = (date) => {
+    setSaleStartTime(date);
+  };
+
+  const handleEndDateChange = (date) => {
+    setSaleEndTime(date);
   };
 
   // --------------------- VALIDATION -----------------------------
@@ -73,14 +108,25 @@ const ModalEditSerivce = (props) => {
       setDescription(dataEditService.description);
       setPrice(dataEditService.price);
       setStatus(dataEditService.status);
+      setDiscount(dataEditService.discount);
+      setSaleStartTime(dataEditService.saleStartTime);
+      setSaleEndTime(dataEditService.saleEndTime);
     }
   }, [dataEditService]);
 
   const handleEditService = async (serviceID) => {
-    if (!validServiceName) {
+    if (discount === "") {
+      toast.error("% giảm giá không được để trống");
+    } else if (!validServiceName) {
       toast.error(
         "Tên dịch vụ không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
+    } else if (categoryId == "") {
+      toast.error("Bạn phải chọn loại dịch vụ mình muốn");
+    } else if (discount < 0) {
+      toast.error("% giảm giá không được âm ");
+    } else if (discount > 100) {
+      toast.error("% giảm giá không được lớn hơn 100");
     } else if (!validPrice) {
       toast.error(
         "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
@@ -94,6 +140,9 @@ const ModalEditSerivce = (props) => {
           description: description,
           price: price,
           status: status,
+          discount: discount,
+          saleStartTime: saleStartTime,
+          saleEndTime: saleEndTime,
         });
         if (res.data.error) {
           toast.error(res.data.error);
@@ -200,6 +249,38 @@ const ModalEditSerivce = (props) => {
               // error={!validPrice}
               // helperText={validPrice ? "" : "Hãy nhập số tiền dịch vụ"}
             />
+
+            <TextField
+              required
+              fullWidth
+              label="Giảm giá(%)"
+              type="number"
+              margin="normal"
+              value={discount}
+              onChange={handleDiscountChange}
+            />
+            {isStartDateVisible && (
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={6}>
+                  <DatePicker
+                    label="Ngày bắt đầu giảm giá"
+                    value={saleStartTime}
+                    onChange={handleStartDateChange}
+                    // minDate={currentDate}
+                    // maxDate={currentDate}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <DatePicker
+                    label="Ngày kết thúc giảm giá"
+                    value={saleEndTime}
+                    onChange={handleEndDateChange}
+                  />
+                </Grid>
+              </Grid>
+            )}
+
             <RadioGroup
               value={status}
               onChange={handleStatusChange}

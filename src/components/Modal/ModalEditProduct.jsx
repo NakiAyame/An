@@ -19,9 +19,15 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Input } from "@mui/material";
+import { Grid, Input } from "@mui/material";
+import dayjs from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-const SERVICE_NAME_REGEX =
+const PRODUCT_NAME_REGEX =
   /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ,\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
@@ -35,13 +41,18 @@ const ModalEditProduct = (props) => {
     category,
     page,
   } = props;
-
+  const currentDate = dayjs();
   const [productName, setProductName] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [image, setImage] = useState(null);
+  const [discount, setDiscount] = useState(0);
+  const [saleStartTime, setSaleStartTime] = useState(currentDate);
+  const [saleEndTime, setSaleEndTime] = useState(currentDate);
+  const [isStartDateVisible, setIsStartDateVisible] = useState(false);
+
   //   const [status, setStatus] = useState(true);
 
   //   const handleStatusChange = (event) => {
@@ -49,13 +60,38 @@ const ModalEditProduct = (props) => {
   //     console.log(status);
   //   };
 
+  // --------------------- HANLDE CHANGE DÍCOUNT -----------------------------
+  const handleDiscountChange = (event) => {
+    const { value } = event.target;
+    const numericValue = parseInt(value, 10);
+
+    setDiscount(value);
+
+    if (numericValue >= 1 && numericValue <= 100) {
+      setSaleStartTime();
+      setSaleEndTime();
+      setIsStartDateVisible(true);
+    } else {
+      setIsStartDateVisible(false);
+    }
+  };
+
+  // --------------------- HANLDE CHANGE START DATE -----------------------------
+  const handleStartDateChange = (date) => {
+    setSaleStartTime(date);
+  };
+
+  const handleEndDateChange = (date) => {
+    setSaleEndTime(date);
+  };
+
   // --------------------- VALIDATION -----------------------------
   const [validProductName, setValidProductName] = useState("");
   const [validPrice, setValidPrice] = useState("");
   const [validQuantity, setValidQuantity] = useState("");
   useEffect(() => {
     setValidProductName(
-      SERVICE_NAME_REGEX.test(productName) && productName.trim() !== ""
+      PRODUCT_NAME_REGEX.test(productName) && productName.trim()
     );
   }, [productName]);
 
@@ -104,9 +140,11 @@ const ModalEditProduct = (props) => {
           handleEditProduct(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
         }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
       console.error("Lỗi khi tải ảnh lên:", error);
@@ -122,14 +160,25 @@ const ModalEditProduct = (props) => {
       setQuantity(dataEditProduct.quantity);
       setPrice(dataEditProduct.price);
       setImage(dataEditProduct.productImage);
+      setDiscount(dataEditProduct.discount);
+      setSaleStartTime(dataEditProduct.saleStartTime);
+      setSaleEndTime(dataEditProduct.saleEndTime);
     }
   }, [dataEditProduct]);
 
   const handleEditProduct = async (productID) => {
-    if (!validProductName) {
+    if (validProductName === "") {
+      toast.error("Tên sản phẩm không được để trống");
+    } else if (discount === "") {
+      toast.error("% giảm giá không được để trống");
+    } else if (!validProductName) {
       toast.error(
         "Tên sản phẩm không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
+    } else if (discount < 0) {
+      toast.error("% giảm giá không được âm ");
+    } else if (discount > 100) {
+      toast.error("% giảm giá không được lớn hơn 100");
     } else if (!validQuantity) {
       toast.error("Số lượng không được để trống");
     } else if (!validPrice) {
@@ -143,6 +192,9 @@ const ModalEditProduct = (props) => {
           description: description,
           quantity: quantity,
           price: price,
+          discount: discount,
+          saleStartTime: saleStartTime,
+          saleEndTime: saleEndTime,
           // productImage: imagePath,
         });
         if (res.data.error) {
@@ -257,6 +309,37 @@ const ModalEditProduct = (props) => {
               // error={!validPrice}
               // helperText={validPrice ? "" : "Hãy nhập giá tiền sản phẩm"}
             />
+
+            <TextField
+              required
+              fullWidth
+              label="Giảm giá(%)"
+              type="number"
+              margin="normal"
+              value={discount}
+              onChange={handleDiscountChange}
+            />
+            {isStartDateVisible && (
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={6}>
+                  <DatePicker
+                    label="Ngày bắt đầu giảm giá"
+                    value={saleStartTime}
+                    onChange={handleStartDateChange}
+                    // minDate={currentDate}
+                    // maxDate={currentDate}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <DatePicker
+                    label="Ngày kết thúc giảm giá"
+                    value={saleEndTime}
+                    onChange={handleEndDateChange}
+                  />
+                </Grid>
+              </Grid>
+            )}
 
             <TextField
               label="Thông tin sản phẩm"

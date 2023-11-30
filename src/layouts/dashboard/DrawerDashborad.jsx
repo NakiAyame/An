@@ -24,6 +24,7 @@ import SpaIcon from "@mui/icons-material/Spa";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
+import ClassIcon from "@mui/icons-material/Class";
 
 const DrawerDashborad = () => {
   const navigate = useNavigate();
@@ -146,7 +147,7 @@ const DrawerDashborad = () => {
           <ListItem key={link.text} disablePadding>
             <ListItemButton component={NavLink} to={link.path}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InventoryIcon /> : <CategoryIcon />}
+                {index % 2 === 0 ? <InventoryIcon /> : <ClassIcon />}
               </ListItemIcon>
               <ListItemText primary={link.text} />
             </ListItemButton>
@@ -157,7 +158,7 @@ const DrawerDashborad = () => {
 
       <List>
         <ListSubheader component="div" id="nested-list-subheader">
-          Blog & Thể loại
+          Tin tức & Thể loại
         </ListSubheader>
         {links5.map((link, index) => (
           <ListItem key={link.text} disablePadding>

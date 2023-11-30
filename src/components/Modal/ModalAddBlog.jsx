@@ -19,7 +19,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Container, Input } from "@mui/material";
+import { CardMedia, Container, Input } from "@mui/material";
 
 const Title_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
@@ -71,6 +71,7 @@ const ModalAddBlog = (props) => {
           handleCreateBlog(imagePath);
         } else {
           console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
         }
       } else {
         toast.error("Vui lòng chọn ảnh trước khi tải lên!");
@@ -161,7 +162,7 @@ const ModalAddBlog = (props) => {
               margin="normal"
               value={uId}
               onChange={(e) => setUserId(e.target.value)}
-              //   sx={{ display: "none" }}
+              sx={{ display: "none" }}
             />
             <TextField
               // required
@@ -190,6 +191,15 @@ const ModalAddBlog = (props) => {
                 onChange={handleImageChange}
                 style={{ marginBottom: "1rem" }}
               />
+              {image && (
+                <CardMedia
+                  component="img"
+                  image={URL.createObjectURL(image)}
+                  alt="Ảnh sản phẩm"
+                  height="200"
+                  sx={{ maxWidth: "50%" }}
+                />
+              )}
               {/* <Button
                 variant="contained"
                 color="primary"

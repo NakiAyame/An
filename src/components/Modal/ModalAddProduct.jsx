@@ -48,7 +48,9 @@ const ModalAddProduct = (props) => {
   const [validPrice, setValidPrice] = useState("");
   const [validQuantity, setValidQuantity] = useState("");
   useEffect(() => {
-    setValidProductName(SERVICE_NAME_REGEX.test(productName));
+    setValidProductName(
+      SERVICE_NAME_REGEX.test(productName) && productName.trim()
+    );
   }, [productName]);
 
   const handleValidationProductName = (e) => {
@@ -273,14 +275,14 @@ const ModalAddProduct = (props) => {
             {/* {image === null ||
               (!image && (
                 <Typography>Nhấn "Xem ảnh" để xem trước hình ảnh</Typography>
-              ))}
+              ))} */}
             {image && (
               <img
-                src={image}
+                src={URL.createObjectURL(image)}
                 alt="Ảnh sản phẩm"
                 style={{ maxWidth: "100%" }}
               />
-            )} */}
+            )}
 
             {/* Status */}
             {/* <RadioGroup
