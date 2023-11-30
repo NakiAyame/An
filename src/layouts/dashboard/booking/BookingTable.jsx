@@ -69,6 +69,7 @@ export default function BookingTable() {
     const [data, setData] = useState([]);
     const [id, setId] = useState("");
     const [orderDetail, setOrderDetail] = useState([]);
+    const [status, setStatus] = useState('');
 
     // --------------------- MODAL HANDLE -----------------------------
 
@@ -77,7 +78,7 @@ export default function BookingTable() {
     const handleClose = () => setOpen(false);
 
     // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
-    const handleViewOrderDetail = async (id, option) => {
+    const handleViewOrderDetail = async (id, option, status) => {
         try {
             console.log(id);
             const data = await axios.get(`http://localhost:3500/bookingDetail/${id}`);
@@ -86,6 +87,7 @@ export default function BookingTable() {
             } else {
                 console.log(data.data);
                 setOrderDetail(data.data)
+                setStatus(status)
             }
         } catch (err) {
             console.log(err);
@@ -261,7 +263,7 @@ export default function BookingTable() {
                                         <TableRow
                                             key={index}
                                             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                            onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID)}
+                                            onClick={(e) => handleViewOrderDetail(value._id, OPTION_VIEW_ORDER_BY_ID, value.status)}
                                         >
                                             <TableCell component="th" scope="row">
                                                 {index + 1}
@@ -322,7 +324,7 @@ export default function BookingTable() {
                         <InputLabel id="demo-select-small-label">Trạng thái</InputLabel>
                         <Select
                             label="Loại dịch vụ"
-                        // value={selectedCategory}
+                            value={'asasassasa'}
                         // onChange={handleChangeCate}
                         >
                             {statusList.map((value, index) => {

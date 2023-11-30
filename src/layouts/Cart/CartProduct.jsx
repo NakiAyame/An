@@ -60,7 +60,7 @@ export default function CartProduct() {
           console.log(loadData.data);
           let totalPrice = 0;
           for (let i = 0; i < loadData.data.length; i++) {
-            totalPrice += loadData.data[i].quantity * loadData.data[i].productId.price
+            totalPrice += 1
           }
           setTotal(totalPrice);
         }
@@ -108,8 +108,9 @@ export default function CartProduct() {
     padding: '5px',
     width: '20%',
     textAlign: 'center',
-    borderRight: 'none',
-    borderLeft: 'none'
+    // borderRight: 'none',
+    // borderLeft: 'none',
+    border: 'none'
   }
   const checkout = {
     position: 'fixed',
@@ -162,12 +163,12 @@ export default function CartProduct() {
                             {(value.productId.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                           </Grid>
                           <Grid item xs>
-                            <button style={quantityButtonLeftStyle}>-</button>
+                            {/* <button style={quantityButtonLeftStyle}>-</button> */}
                             <input type='text' style={quantityInputStyle} value={value.quantity} onChange={(e) => setQuantity(e.target.value)} />
-                            <button onClick={() => handleProduct()} style={quantityButtonRightStyle}>+</button>
+                            {/* <button onClick={() => handleProduct()} style={quantityButtonRightStyle}>+</button> */}
                           </Grid>
                           <Grid item xs style={{ color: 'red' }}>
-                            {(value.productId.price * value.quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                            {(value.quantity * (value.productId.price - (value.productId.price * value.productId.discount / 100))).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                           </Grid>
                           <Grid item xs={1}>
                             Xoá

@@ -37,7 +37,7 @@ export default function Comments({ value }) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const context = useAuth();
-  console.log("Check người dùng", context.auth.token);
+  // console.log("Check người dùng", context.auth.token);
   // ----------------------------------- API GET FEEDBACK BY ID PRODUCT --------------------------------
   useEffect(() => {
     loadAllFeedbackById(currentPage);

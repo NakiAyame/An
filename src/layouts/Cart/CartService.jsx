@@ -135,8 +135,9 @@ export default function CartService() {
     padding: '5px',
     width: '20%',
     textAlign: 'center',
-    borderRight: 'none',
-    borderLeft: 'none'
+    // borderRight: 'none',
+    // borderLeft: 'none'
+    border: 'none'
   }
 
   const checkout = {
@@ -193,9 +194,9 @@ export default function CartService() {
                             {(value.serviceId.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                           </Grid>
                           <Grid item xs>
-                            <button style={quantityButtonLeftStyle}>-</button>
+                            {/* <button style={quantityButtonLeftStyle}>-</button> */}
                             <input type='text' style={quantityInputStyle} value={value.quantity} onChange={(e) => setQuantity(e.target.value)} />
-                            <button onClick={() => handleProduct()} style={quantityButtonRightStyle}>+</button>
+                            {/* <button onClick={() => handleProduct()} style={quantityButtonRightStyle}>+</button> */}
                           </Grid>
                           <Grid item xs>
                             {(value.serviceId.price * value.quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}

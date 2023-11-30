@@ -69,7 +69,7 @@ export default function BasicTable() {
     const [data, setData] = useState([]);
     const [id, setId] = useState("");
     const [orderDetail, setOrderDetail] = useState([]);
-    const [status1, setStatus] = useState('');
+    const [status, setStatus] = useState('');
 
 
     // --------------------- MODAL HANDLE -----------------------------

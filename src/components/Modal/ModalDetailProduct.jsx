@@ -42,7 +42,8 @@ const ProductDetail = ({ open, onClose, product }) => {
   const context = useAuth();
 
   const handleIncreaseClick = () => {
-    setQuantitySell((quantitySell) => quantitySell + 1);
+    setQuantitySell(quantitySell + 1);
+    console.log(quantitySell)
   };
 
   const handleDecreaseClick = () => {
@@ -92,6 +93,7 @@ const ProductDetail = ({ open, onClose, product }) => {
             `${BASE_URL}/cartProduct/add-to-cart`,
             {
               productId: id,
+              quantity: quantitySell
             },
             {
               headers: { Authorization: context.auth.token },
@@ -161,7 +163,7 @@ const ProductDetail = ({ open, onClose, product }) => {
                 -
               </Button>
               <Box mx={2}>{quantitySell}</Box>
-              <Button onClick={handleIncreaseClick} variant="outlined">
+              <Button onClick={(e) => handleIncreaseClick()} variant="outlined">
                 +
               </Button>
             </Box>

@@ -133,6 +133,7 @@ const ProductDetail = () => {
             `${BASE_URL}/cartProduct/add-to-cart`,
             {
               productId: id,
+              quantity: quantitySell
             },
             {
               headers: { Authorization: context.auth.token },
