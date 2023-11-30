@@ -33,6 +33,7 @@ import ProductCheckout from "./layouts/User/ProductCheckout";
 import ProductDetail from "./layouts/LandingPage/Product/ProductDetail";
 import ServiceDetail from "./layouts/LandingPage/Service/ServiceDetail";
 import ServicePurchase from "./layouts/User/ServicePurchase";
+import ResetPassword from "./layouts/User/ResetPassword";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -96,6 +97,7 @@ function App() {
             <Route path="product-purchase" element={<ProductPurchase />} />
             <Route path="service-purchase" element={<ServicePurchase />} />
             <Route path="product-checkout" element={<ProductCheckout />} />
+            <Route path="reset-password" element={<ResetPassword />} />
           </Route>
         </Routes>
       </BrowserRouter>
