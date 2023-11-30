@@ -24,6 +24,8 @@ import { Input } from "@mui/material";
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
+const DESCRIPTION_REGEX =
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
 
 const ModalAddSerivce = (props) => {
   const { open, onClose, handUpdateTable, category, page } = props;
@@ -43,6 +45,7 @@ const ModalAddSerivce = (props) => {
   // --------------------- VALIDATION -----------------------------
   const [validServiceName, setValidServiceName] = useState("");
   const [validPrice, setValidPrice] = useState("");
+  const [validDescription, setValidDescription] = useState("");
   useEffect(() => {
     setValidServiceName(
       SERVICE_NAME_REGEX.test(serviceName) && serviceName.trim() !== ""
@@ -61,6 +64,17 @@ const ModalAddSerivce = (props) => {
     setPrice(e.target.value);
   };
 
+  useEffect(() => {
+    setValidDescription(
+      DESCRIPTION_REGEX.test(description) && description.trim()
+    );
+  }, [description]);
+
+  const handleValidationDescription = (e) => {
+    setDescription(e.target.value);
+  };
+
+  // --------------------- HANDLE HANLDE CHANGE IMAGE SERVICE -----------------------------
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
     console.log("Kiểm tra image: ", e.target.files);
@@ -114,6 +128,8 @@ const ModalAddSerivce = (props) => {
       toast.error("Bạn phải chọn loại dịch vụ mình muốn");
     } else if (!validPrice) {
       toast.error("Giá tiền phải có ít nhất 4 chữ số và phải lớn hơn 0");
+    } else if (!validDescription) {
+      toast.error("Thông tin chi tiết không được để trống");
     } else {
       try {
         const response = await axios.post("http://localhost:3500/service", {
@@ -222,7 +238,7 @@ const ModalAddSerivce = (props) => {
               margin="normal"
               maxRows={4}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => handleValidationDescription(e)}
             />
 
             <TextField
