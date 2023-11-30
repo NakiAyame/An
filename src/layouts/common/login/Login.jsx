@@ -193,6 +193,9 @@ const Login = () => {
                   </NavLink>
                 </Grid>
               </Grid>
+              <NavLink to="/reset-password" variant="body2">
+                {"Đặt lại mật khẩu"}
+              </NavLink>
             </Box>
           </Box>
         </Grid>
