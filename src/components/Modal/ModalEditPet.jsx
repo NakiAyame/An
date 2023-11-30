@@ -19,6 +19,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { Input } from "@mui/material";
 
 const PET_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
@@ -36,6 +37,7 @@ const ModalEditPet = (props) => {
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
   const [status, setStatus] = useState(true);
+  const [petImage, setPetImage] = useState(null);
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
@@ -70,6 +72,42 @@ const ModalEditPet = (props) => {
     setWeight(e.target.value);
   };
 
+  // --------------------- HANDLE CHANGE IMAGE -----------------------------
+  const handleImageChange = (e) => {
+    setPetImage(e.target.files[0]);
+    console.log("Kiểm tra image: ", e.target.files);
+  };
+
+  // --------------------- HANDLE HANLDE UPLOAD IMAGE PET -----------------------------
+  const handleUpload = async () => {
+    try {
+      if (petImage) {
+        const formData = new FormData();
+        formData.append("image", petImage);
+        const response = await axios.post(
+          `http://localhost:3500/pet/upload`,
+          formData
+        );
+        console.log("Response data:", response.data.image);
+        const imagePath = response.data.image;
+
+        if (imagePath) {
+          console.log("Đã tải ảnh lên:", imagePath);
+          toast.success("Thêm ảnh thành công");
+          setPetImage(imagePath);
+        } else {
+          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+        }
+      } else {
+        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải ảnh lên:", error);
+    }
+  };
+
   // --------------------- HANDLE UPDATE PET -----------------------------
   useEffect(() => {
     if (open) {
@@ -81,16 +119,33 @@ const ModalEditPet = (props) => {
       setColor(dataEditPet.color);
       setHeight(dataEditPet.height);
       setWeight(dataEditPet.weight);
+      setPetImage(dataEditPet.petImage);
     }
   }, [dataEditPet]);
 
   const handleEditPet = async (petID) => {
+    console.log(
+      "Check data truyền vào sản phẩm",
+      petName,
+      userId,
+      categoryId,
+      rank,
+      status,
+      height,
+      weight,
+      petImage,
+      status
+    );
     if (petName === "") {
       toast.error("Tên thú cưng không được để trống");
     } else if (height === "") {
       toast.error("Chiều cao thú cưng không được để trống");
     } else if (weight === "") {
       toast.error("Cân nặng thú cưng không được để trống");
+    } else if (height === 0) {
+      toast.error("Chiều cao thú cưng không được bằng 0");
+    } else if (weight === 0) {
+      toast.error("Cân nặng thú cưng không được bằng 0");
     } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
@@ -99,7 +154,7 @@ const ModalEditPet = (props) => {
       toast.error("Chiều cao thú cưng phải là số nguyên hoặc số thập phân");
     } else if (!validWeight) {
       toast.error("Cân nặng thú cưng phải là số nguyên hoặc số thập phân");
-    } else if (categoryId == "") {
+    } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại thú cưng mình muốn");
     } else {
       try {
@@ -110,9 +165,9 @@ const ModalEditPet = (props) => {
           categoryId: categoryId,
           rank: rank,
           status: status,
-          color: color,
           height: height,
           weight: weight,
+          petImage: petImage,
         });
         if (res.data.error) {
           toast.error(res.data.error);
@@ -252,6 +307,20 @@ const ModalEditPet = (props) => {
               />
               <FormControlLabel value={false} control={<Radio />} label="Ẩn" />
             </RadioGroup>
+
+            <Input
+              type="file"
+              inputProps={{ accept: "image/*" }}
+              onChange={handleImageChange}
+            />
+            <Button onClick={handleUpload}>Tải ảnh lên</Button>
+            {petImage && (
+              <img
+                src={petImage}
+                alt="Ảnh sản phẩm"
+                style={{ maxWidth: "100%" }}
+              />
+            )}
           </form>
         </DialogContent>
         <DialogActions>

@@ -26,6 +26,8 @@ const SERVICE_NAME_REGEX =
   /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
+const DESCRIPTION_REGEX =
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
 
 const ModalAddProduct = (props) => {
   const { open, onClose, handUpdateTable, category, page } = props;
@@ -47,6 +49,7 @@ const ModalAddProduct = (props) => {
   const [validProductName, setValidProductName] = useState("");
   const [validPrice, setValidPrice] = useState("");
   const [validQuantity, setValidQuantity] = useState("");
+  const [validDescription, setValidDescription] = useState("");
   useEffect(() => {
     setValidProductName(
       SERVICE_NAME_REGEX.test(productName) && productName.trim()
@@ -71,6 +74,16 @@ const ModalAddProduct = (props) => {
 
   const handleValidationQuantity = (e) => {
     setQuantity(e.target.value);
+  };
+
+  useEffect(() => {
+    setValidDescription(
+      DESCRIPTION_REGEX.test(description) && description.trim()
+    );
+  }, [description]);
+
+  const handleValidationDescription = (e) => {
+    setDescription(e.target.value);
   };
 
   // --------------------- HANDLE CHANGE IMAGE -----------------------------
@@ -129,6 +142,8 @@ const ModalAddProduct = (props) => {
       toast.error("Số lượng không được để trống và phải lớn hơn 0");
     } else if (!validPrice) {
       toast.error("Giá tiền phải có ít nhất 4 chữ số và phải lớn hơn 0");
+    } else if (!validDescription) {
+      toast.error("Thông tin chi tiết không được để trống");
     } else {
       try {
         const response = await axios.post("http://localhost:3500/product", {
@@ -263,7 +278,7 @@ const ModalAddProduct = (props) => {
               margin="normal"
               maxRows={4}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => handleValidationDescription(e)}
             />
 
             <Input
