@@ -34,6 +34,7 @@ import { jwtDecode } from "jwt-decode";
 
 const defaultTheme = createTheme();
 const Login = () => {
+  const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const navigate = useNavigate();
   const [data, setData] = useState({
     email: "",
@@ -59,33 +60,43 @@ const Login = () => {
     e.preventDefault();
     const { email, password } = data;
 
-    try {
-      const { data } = await axios.post("http://localhost:3500/login", {
-        email,
-        password,
-      })
-        .then((data) => {
-          if (data.data.error === 'Unverified') {
-            navigate('/verify', { replace: true });
-          } else {
-            // console.log(data)
-            const dataDecode = jwtDecode(data.data.token);
+    if (!email.match(validRegex)) {
+      toast.error('Vui lòng nhập đúng định dạng email')
+    } else if (password.trim() === '') {
+      toast.error('Mật khẩu không được để trống')
+    } else {
 
-            localStorage.setItem("token", data.data.token);
-
-            context.setAuth({
-              id: dataDecode.id,
-              email: dataDecode.email,
-              role: dataDecode.role,
-              token: data.data.token,
-            });
-
-            toast.success("Login successful");
-            navigate(from, { replace: true });
-          }
+      try {
+        const { data } = await axios.post("http://localhost:3500/login", {
+          email,
+          password,
         })
-    } catch (err) {
-      console.log(err);
+          .then((data) => {
+            if (data.data.error === 'Unverified') {
+              navigate('/verify', { replace: true });
+            } else {
+              // console.log(data)
+              const dataDecode = jwtDecode(data.data.token);
+
+              localStorage.setItem("token", data.data.token);
+
+              context.setAuth({
+                id: dataDecode.id,
+                email: dataDecode.email,
+                role: dataDecode.role,
+                token: data.data.token,
+              });
+
+              toast.success("Đăng nhập thành công");
+              navigate(from, { replace: true });
+            }
+          })
+          .catch((err) => {
+            toast.error("Mật khẩu không chính xác");
+          })
+      } catch (err) {
+        // toast.error("Login successful");
+      }
     }
   };
 

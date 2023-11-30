@@ -77,6 +77,7 @@ const BasicTable = () => {
     const [phone, setPhone] = useState(" ");
     const [address, setAddress] = useState(" ");
     const [id, setId] = useState(" ");
+    const [status, setStatus] = useState(" ");
 
     // --------------------- MODAL HANDLE -----------------------------
 
@@ -117,6 +118,7 @@ const BasicTable = () => {
                 setPhone(data.data.phone)
                 setAddress(data.data.address)
                 setPassWord(password)
+                setStatus(data.data.status)
             }
         } catch (err) {
             console.log(err);
@@ -140,7 +142,8 @@ const BasicTable = () => {
                 address: address,
                 phone: phone,
                 gender: gender,
-                role: role
+                role: role,
+                status: status
             });
             if (data.error) {
                 toast.error(data.error);

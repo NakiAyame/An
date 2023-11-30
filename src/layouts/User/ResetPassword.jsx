@@ -10,6 +10,7 @@ import {
     Box,
 } from "@mui/material";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
@@ -33,6 +34,7 @@ const ResetPassword = () => {
             alert('Vui lòng nhập đúng định dạng Email !')
         } else {
             setIsActive(true);
+            setCheckVerifyCode(false)
             try {
                 const response = await axios.post("http://localhost:3500/forgot-password",
                     {
@@ -70,6 +72,36 @@ const ResetPassword = () => {
                             // navigate('/sign-in', { replace: true });
                         }
 
+                    })
+            } catch (error) {
+                console.error("Error changing password:", error);
+            }
+        }
+    };
+
+    const handleConfirmNewPass = async () => {
+        if (!password.match(PWD_REGEX)) {
+            alert('Mật khẩu bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự')
+        } else if (password.trim() === '') {
+            alert('Mật khẩu không được để trống')
+        } else if (password.trim() !== rePassword.trim()) {
+            alert('Mật khẩu thứ 2 không đúng')
+        } else if (email.trim() === '') {
+            alert('Email không được để trống')
+        } else if (!email.match(validRegex)) {
+            alert('Vui lòng nhập đúng định dạng email')
+        }
+        else {
+            try {
+                const response = await axios.post("http://localhost:3500/new-password",
+                    {
+                        email: email,
+                        password: password
+                    }
+                )
+                    .then((data) => {
+                        toast.success('Đặt lại mật khẩu thành công, vui lòng đăng nhập')
+                        navigate('/sign-in')
                     })
             } catch (error) {
                 console.error("Error changing password:", error);
@@ -186,9 +218,9 @@ const ResetPassword = () => {
                                             type="button"
                                             sx={{ mt: 3, ml: 1 }}
                                             variant="contained"
-                                            onClick={handleConfirmVerifyCode}
+                                            onClick={handleConfirmNewPass}
                                         >
-                                            Xác nhận
+                                            Đổi mật khẩu
                                         </Button>
                                     </Box>
                                 </>

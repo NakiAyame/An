@@ -100,7 +100,7 @@ function App() {
               <Route path="product-purchase" element={<ProductPurchase />} />
               <Route path="service-purchase" element={<ServicePurchase />} />
               <Route path="product-checkout" element={<ProductCheckout />} />
-              <Route path="reset" element={<ResetPassword />} />
+              <Route path="reset-password" element={<ResetPassword />} />
             </Route>
           </Routes>
         </BrowserRouter>

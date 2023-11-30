@@ -35,25 +35,32 @@ const Register = () => {
     password: "",
   });
 
+  const PWD_REGEX = /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
+
   const registerUser = async (e) => {
     e.preventDefault();
     const { fullname, email, password } = data;
-    try {
-      const { data } = await axios.post("http://localhost:3500/register", {
-        fullname,
-        email,
-        password,
-        role: "customer",
-      });
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        setData({});
-        toast.success("Register successful. Welcome!");
-        navigate("/sign-in");
+
+    if (!password.match(PWD_REGEX)) {
+      toast.error('Mật khẩu bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự')
+    } else {
+      try {
+        const { data } = await axios.post("http://localhost:3500/register", {
+          fullname,
+          email,
+          password,
+          role: "customer",
+        });
+        if (data.error) {
+          toast.error(data.error);
+        } else {
+          setData({});
+          toast.success("Register successful. Welcome!");
+          navigate("/sign-in");
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   };
 
