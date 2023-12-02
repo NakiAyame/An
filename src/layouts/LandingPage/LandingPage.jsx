@@ -12,22 +12,22 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-// import SwipeableViews from "react-swipeable-views";
-// import { autoPlay } from "react-swipeable-views-utils";
-// import { Container, Grid, styled } from "@mui/material";
-// import FeaturedPost from "../../components/MainPost/FeaturePost";
+import SwipeableViews from "react-swipeable-views";
+import { autoPlay } from "react-swipeable-views-utils";
+import { Container, Grid, styled } from "@mui/material";
+import FeaturedPost from "../../components/MainPost/FeaturePost";
 
-// const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 function Home() {
-  // const CustomBox = styled(Box)({
-  //   background: "linear-gradient(to right, #ADF9F0, #FADAF7, #EEDCF1, #EBEAEB)",
-  // });
+  const CustomBox = styled(Box)({
+    background: "linear-gradient(to right, #ADF9F0, #FADAF7, #EEDCF1, #EBEAEB)",
+  });
 
-  // const CustomContainer = styled(Container)({
-  //   background:
-  //     "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
-  // });
+  const CustomContainer = styled(Container)({
+    background:
+      "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
+  });
 
   const images = [
     {
@@ -97,7 +97,7 @@ function Home() {
 
   return (
     <>
-      {/* <CustomContainer component="main" maxWidth={false} disableGutters>
+      <CustomContainer component="main" maxWidth={false} disableGutters>
         <Box sx={{ flexGrow: 1 }}>
           <AutoPlaySwipeableViews
             axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -178,7 +178,7 @@ function Home() {
         </Grid>
 
         <Footer />
-      </CustomContainer> */}
+      </CustomContainer>
     </>
   );
 }

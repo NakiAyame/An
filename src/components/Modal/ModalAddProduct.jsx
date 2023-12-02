@@ -94,6 +94,10 @@ const ModalAddProduct = (props) => {
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PRODUCT -----------------------------
   const handleUpload = async () => {
+    const maxSize = 1 * 1024 * 1024;
+    if (image > maxSize) {
+      toast.error("Ảnh có dung lượng lớn hơn 1MB");
+    }
     try {
       if (image) {
         const formData = new FormData();
