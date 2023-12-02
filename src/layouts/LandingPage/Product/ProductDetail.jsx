@@ -34,11 +34,19 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Comments from "../../../components/Comments/Comments";
 import ProductSlider from "../../../components/Header/SliderProduct";
+import dayjs from "dayjs";
 
 const Image = styled("img")({
   maxWidth: "100%",
   maxHeight: 400,
 });
+
+const numberToVND = (number) => {
+  return number.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+};
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -133,7 +141,7 @@ const ProductDetail = () => {
             `${BASE_URL}/cartProduct/add-to-cart`,
             {
               productId: id,
-              quantity: quantitySell
+              quantity: quantitySell,
             },
             {
               headers: { Authorization: context.auth.token },
@@ -207,9 +215,48 @@ const ProductDetail = () => {
                     >
                       <strong>{product.productName}</strong>
                     </Typography>
-                    <Typography variant="h6">
-                      <strong>{`${product.price} VNĐ`}</strong>
-                    </Typography>
+                    {product.discount !== 0 &&
+                    dayjs().isAfter(product.saleStartTime) &&
+                    dayjs().isBefore(product.saleEndTime) ? (
+                      <Box
+                        display="flex"
+                        flexGrow={1}
+                        sx={{ justifyContent: "flex-start" }}
+                      >
+                        <Typography
+                          gutterBottom
+                          variant="h6"
+                          component="h2"
+                          sx={{
+                            textDecoration: "line-through",
+                            marginRight: "8px",
+                            color: "gray",
+                          }}
+                        >
+                          {numberToVND(product.price)}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="h6"
+                          component="h2"
+                          sx={{ color: "red" }}
+                        >
+                          {numberToVND(
+                            product.price -
+                              (product.price * product.discount) / 100
+                          )}
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Typography
+                        gutterBottom
+                        variant="h6"
+                        component="h2"
+                        sx={{ color: "red" }}
+                      >
+                        {numberToVND(product.price)}
+                      </Typography>
+                    )}
                     <Typography variant="body1">
                       Số lượng còn:{product.quantity}
                     </Typography>
