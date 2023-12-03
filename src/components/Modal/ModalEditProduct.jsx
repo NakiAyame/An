@@ -51,8 +51,8 @@ const ModalEditProduct = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [productImage, setProductImage] = useState(null);
   const [discount, setDiscount] = useState(0);
-  const [saleStartTime, setSaleStartTime] = useState(currentDate);
-  const [saleEndTime, setSaleEndTime] = useState(currentDate);
+  const [saleStartTime, setSaleStartTime] = useState(null);
+  const [saleEndTime, setSaleEndTime] = useState(null);
   const [isStartDateVisible, setIsStartDateVisible] = useState(false);
 
   //   const [status, setStatus] = useState(true);
@@ -66,9 +66,7 @@ const ModalEditProduct = (props) => {
   const handleDiscountChange = (event) => {
     const { value } = event.target;
     const numericValue = parseInt(value, 10);
-
     setDiscount(value);
-
     if (numericValue >= 1 && numericValue <= 100) {
       setSaleStartTime();
       setSaleEndTime();
@@ -80,11 +78,29 @@ const ModalEditProduct = (props) => {
 
   // --------------------- HANLDE CHANGE START DATE -----------------------------
   const handleStartDateChange = (date) => {
-    setSaleStartTime(date);
+    // Chỉ đặt startDate nếu ngày được chọn không phải là ngày trong quá khứ
+    if (!dayjs(date).isBefore(dayjs(), "day")) {
+      toast.success("Ngày bắt đầu hợp lệ!");
+      setSaleStartTime(date);
+
+      // Nếu endDate đã được chọn và trước startDate, đặt lại endDate thành null
+      if (saleEndTime && dayjs(saleEndTime).isBefore(date)) {
+        toast.error("Ngày bắt đầu không thể sau ngày kết thúc!!");
+        setSaleEndTime(null);
+      }
+    } else {
+      toast.error("Ngày bắt đầu không thể ở quá khứ!!");
+    }
   };
 
   const handleEndDateChange = (date) => {
-    setSaleEndTime(date);
+    // Chỉ đặt endDate nếu startDate đã được chọn và ngày được chọn sau saleStartTime
+    if (saleStartTime && !dayjs(date).isBefore(saleStartTime)) {
+      toast.success("Ngày kết thúc hợp lệ!");
+      setSaleEndTime(date);
+    } else {
+      toast.error("Ngày kết thúc không thể sau ngày bắt đầu!!");
+    }
   };
 
   // --------------------- VALIDATION -----------------------------

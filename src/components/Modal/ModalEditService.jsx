@@ -27,7 +27,7 @@ const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const DESCRIPTION_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$%^&,.?\s]{1,}$/;
 
 const ModalEditSerivce = (props) => {
   const {
@@ -46,8 +46,8 @@ const ModalEditSerivce = (props) => {
   const [price, setPrice] = useState(0);
   const [status, setStatus] = useState(true);
   const [discount, setDiscount] = useState(0);
-  const [saleStartTime, setSaleStartTime] = useState(currentDate);
-  const [saleEndTime, setSaleEndTime] = useState(currentDate);
+  const [saleStartTime, setSaleStartTime] = useState(null);
+  const [saleEndTime, setSaleEndTime] = useState(null);
   const [isStartDateVisible, setIsStartDateVisible] = useState(false);
 
   // --------------------- HANLDE CHANGE STATUS -----------------------------
@@ -74,11 +74,29 @@ const ModalEditSerivce = (props) => {
 
   // --------------------- HANLDE CHANGE START DATE -----------------------------
   const handleStartDateChange = (date) => {
-    setSaleStartTime(date);
+    // Chỉ đặt startDate nếu ngày được chọn không phải là ngày trong quá khứ
+    if (!dayjs(date).isBefore(dayjs(), "day")) {
+      toast.success("Ngày bắt đầu hợp lệ!");
+      setSaleStartTime(date);
+
+      // Nếu endDate đã được chọn và trước startDate, đặt lại endDate thành null
+      if (saleEndTime && dayjs(saleEndTime).isBefore(date)) {
+        toast.error("Ngày bắt đầu không thể sau ngày kết thúc!!");
+        setSaleEndTime(null);
+      }
+    } else {
+      toast.error("Ngày bắt đầu không thể ở quá khứ!!");
+    }
   };
 
   const handleEndDateChange = (date) => {
-    setSaleEndTime(date);
+    // Chỉ đặt endDate nếu startDate đã được chọn và ngày được chọn sau saleStartTime
+    if (saleStartTime && !dayjs(date).isBefore(saleStartTime)) {
+      toast.success("Ngày kết thúc hợp lệ!");
+      setSaleEndTime(date);
+    } else {
+      toast.error("Ngày kết thúc không thể sau ngày bắt đầu!!");
+    }
   };
 
   // --------------------- VALIDATION -----------------------------
