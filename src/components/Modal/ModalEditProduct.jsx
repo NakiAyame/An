@@ -152,18 +152,18 @@ const ModalEditProduct = (props) => {
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PRODUCT -----------------------------
   const handleUpload = async () => {
-    const maxSize = 1024 * 1024;
-    if (productImage.size > maxSize) {
-      toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
-    } else {
-      try {
-        if (productImage) {
-          const formData = new FormData();
-          formData.append("image", productImage);
-          const response = await axios.post(
-            `http://localhost:3500/product/upload`,
-            formData
-          );
+    try {
+      if (productImage) {
+        const formData = new FormData();
+        formData.append("image", productImage);
+        const response = await axios.post(
+          `http://localhost:3500/product/upload`,
+          formData
+        );
+        const maxSize = 1024 * 1024;
+        if (productImage.size > maxSize) {
+          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
+        } else {
           console.log("Response data:", response.data.image);
           const imagePath = response.data.image;
 
@@ -175,13 +175,13 @@ const ModalEditProduct = (props) => {
             console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
             toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
           }
-        } else {
-          console.log("Vui lòng chọn ảnh trước khi tải lên.");
-          toast.error("Vui lòng chọn ảnh trước khi tải lên.");
         }
-      } catch (error) {
-        console.error("Lỗi khi tải ảnh lên:", error);
+      } else {
+        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
+    } catch (error) {
+      console.error("Lỗi khi tải ảnh lên:", error);
     }
   };
 
