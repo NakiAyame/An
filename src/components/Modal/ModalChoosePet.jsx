@@ -33,7 +33,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ModalAddPet from "./ModalAddPet";
 
 const ChoosePet = ({ open, onClose, service }) => {
-  console.log(service);
+  // console.log(service);
   const [data, setData] = useState([]);
 
   const [totalPets, setTotalPets] = useState(0);

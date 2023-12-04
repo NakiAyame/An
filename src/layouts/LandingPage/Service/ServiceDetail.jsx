@@ -35,11 +35,20 @@ import { useEffect } from "react";
 import Comments from "../../../components/Comments/Comments";
 import ChoosePet from "../../../components/Modal/ModalChoosePet";
 import ServiceSlider from "../../../components/Header/SliderService";
+import dayjs from "dayjs";
+import ButtonCustomize from "../../../components/Button/Button";
 
 const Image = styled("img")({
   maxWidth: "100%",
   maxHeight: 400,
 });
+
+const numberToVND = (number) => {
+  return number.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+};
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -194,17 +203,59 @@ const ServiceDetail = () => {
                     >
                       <strong>{service.serviceName}</strong>
                     </Typography>
-                    <Typography variant="h6">
-                      <strong>{`${service.price} VNĐ`}</strong>
-                    </Typography>
+                    {service.discount !== 0 &&
+                    dayjs().isAfter(service.saleStartTime) &&
+                    dayjs().isBefore(service.saleEndTime) ? (
+                      <Box
+                        display="flex"
+                        flexGrow={1}
+                        sx={{
+                          justifyContent: "flex-start",
+                        }}
+                      >
+                        <Typography
+                          gutterBottom
+                          variant="h6"
+                          component="h2"
+                          sx={{
+                            textDecoration: "line-through",
+                            marginRight: "8px",
+                            color: "gray",
+                          }}
+                        >
+                          {numberToVND(service.price)}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="h6"
+                          component="h2"
+                          sx={{ color: "red" }}
+                        >
+                          {numberToVND(
+                            service.price -
+                              (service.price * service.discount) / 100
+                          )}
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Typography
+                        gutterBottom
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: "red",
+                        }}
+                      >
+                        {numberToVND(service.price)}
+                      </Typography>
+                    )}
 
-                    <Button
+                    <ButtonCustomize
                       onClick={handleAddToCartClick}
                       variant="contained"
                       sx={{ marginTop: "8px" }}
-                    >
-                      Thêm vào giỏ hàng
-                    </Button>
+                      nameButton="Đăng kí dịch vụ"
+                    />
                   </Grid>
                 </Grid>
                 <Accordion

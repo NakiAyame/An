@@ -32,7 +32,7 @@ const PRODUCT_NAME_REGEX =
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
 const DESCRIPTION_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$%^&,.?\s]{1,}$/;
 
 const ModalEditProduct = (props) => {
   const {
@@ -152,31 +152,36 @@ const ModalEditProduct = (props) => {
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PRODUCT -----------------------------
   const handleUpload = async () => {
-    try {
-      if (productImage) {
-        const formData = new FormData();
-        formData.append("image", productImage);
-        const response = await axios.post(
-          `http://localhost:3500/product/upload`,
-          formData
-        );
-        console.log("Response data:", response.data.image);
-        const imagePath = response.data.image;
+    const maxSize = 1024 * 1024;
+    if (productImage.size > maxSize) {
+      toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
+    } else {
+      try {
+        if (productImage) {
+          const formData = new FormData();
+          formData.append("image", productImage);
+          const response = await axios.post(
+            `http://localhost:3500/product/upload`,
+            formData
+          );
+          console.log("Response data:", response.data.image);
+          const imagePath = response.data.image;
 
-        if (imagePath) {
-          console.log("Đã tải ảnh lên:", imagePath);
-          toast.success("Thêm ảnh thành công");
-          setProductImage(imagePath);
+          if (imagePath) {
+            console.log("Đã tải ảnh lên:", imagePath);
+            toast.success("Thêm ảnh thành công");
+            setProductImage(imagePath);
+          } else {
+            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          }
         } else {
-          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
-          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          console.log("Vui lòng chọn ảnh trước khi tải lên.");
+          toast.error("Vui lòng chọn ảnh trước khi tải lên.");
         }
-      } else {
-        console.log("Vui lòng chọn ảnh trước khi tải lên.");
-        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
+      } catch (error) {
+        console.error("Lỗi khi tải ảnh lên:", error);
       }
-    } catch (error) {
-      console.error("Lỗi khi tải ảnh lên:", error);
     }
   };
 
