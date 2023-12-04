@@ -19,7 +19,9 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Input } from "@mui/material";
+import { Grid, Input } from "@mui/material";
+import { ChromePicker } from "react-color";
+import ButtonCustomize from "../Button/Button";
 
 const PET_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
@@ -33,14 +35,25 @@ const ModalAddPet = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
   const [status, setStatus] = useState(false);
-  const [color, setColor] = useState("");
+  const [color, setColor] = useState("#ffffff");
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
   const [image, setImage] = useState(null);
 
+  // --------------------- HANLDE CHANGE STATUS -----------------------------
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
     console.log(status);
+  };
+
+  // --------------------- HANLDE CHANGE COLOR -----------------------------
+  const handleColorChange = (color) => {
+    setColor(color.hex);
+  };
+
+  const handleResetColor = () => {
+    // Đặt màu mặc định tại đây
+    setColor("#ffffff");
   };
 
   // --------------------- VALIDATION -----------------------------
@@ -286,6 +299,37 @@ const ModalAddPet = (props) => {
               value={weight}
               onChange={(e) => handleValidationPetWeight(e)}
             />
+
+            <Grid container spacing={3} sx={{ marginTop: "20px" }}>
+              <Grid item xs={12} sm={6}>
+                <ChromePicker color={color} onChange={handleColorChange} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <ButtonCustomize
+                  onClick={handleResetColor}
+                  variant="contained"
+                  sx={{ marginTop: "8px" }}
+                  nameButton="Đặt màu mặc định"
+                />
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={3} sx={{ marginTop: "20px" }}>
+              <Grid item xs={12} sm={6}>
+                <Typography>Màu lông bạn đã chọn:</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Box
+                  sx={{
+                    width: "150px",
+                    height: "30px",
+                    backgroundColor: color,
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                  }}
+                ></Box>
+              </Grid>
+            </Grid>
 
             <TextField
               required={true}
