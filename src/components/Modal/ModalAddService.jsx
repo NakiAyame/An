@@ -90,15 +90,20 @@ const ModalAddSerivce = (props) => {
           `http://localhost:3500/service/upload`,
           formData
         );
-        console.log("Response data:", response.data.image);
-        const imagePath = response.data.image;
-
-        if (imagePath) {
-          console.log("Đã tải ảnh lên:", imagePath);
-          handleCreateService(imagePath);
+        const maxSize = 1024 * 1024;
+        if (image.size > maxSize) {
+          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
         } else {
-          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
-          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          console.log("Response data:", response.data.image);
+          const imagePath = response.data.image;
+
+          if (imagePath) {
+            console.log("Đã tải ảnh lên:", imagePath);
+            handleCreateService(imagePath);
+          } else {
+            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          }
         }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
