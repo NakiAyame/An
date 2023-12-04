@@ -35,6 +35,7 @@ import { useEffect } from "react";
 import Comments from "../../../components/Comments/Comments";
 import ProductSlider from "../../../components/Header/SliderProduct";
 import dayjs from "dayjs";
+import ButtonCustomize from "../../../components/Button/Button";
 
 const Image = styled("img")({
   maxWidth: "100%",
@@ -262,7 +263,7 @@ const ProductDetail = () => {
                     </Typography>
 
                     <Typography variant="body1">Đặt số lượng:</Typography>
-                    <Box display="flex" alignItems="center">
+                    <Box display="flex" alignItems="center" mb={2}>
                       <Button onClick={handleDecreaseClick} variant="outlined">
                         -
                       </Button>
@@ -271,13 +272,12 @@ const ProductDetail = () => {
                         +
                       </Button>
                     </Box>
-                    <Button
+                    <ButtonCustomize
                       onClick={() => handleAddToCart(product._id)}
                       variant="contained"
                       sx={{ marginTop: "8px" }}
-                    >
-                      Thêm vào giỏ hàng
-                    </Button>
+                      nameButton="Thêm vào giỏ hàng"
+                    />
                   </Grid>
                 </Grid>
                 <Accordion

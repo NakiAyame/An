@@ -49,7 +49,7 @@ const ModalEditPet = (props) => {
   const [validHeight, setValidHeight] = useState("");
   const [validWeight, setValidWeight] = useState("");
   useEffect(() => {
-    setValid(PET_NAME_REGEX.test(petName));
+    setValid(PET_NAME_REGEX.test(petName) && petName.trim());
   }, [petName]);
 
   const handleValidationPetName = (e) => {
@@ -80,31 +80,36 @@ const ModalEditPet = (props) => {
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PET -----------------------------
   const handleUpload = async () => {
-    try {
-      if (petImage) {
-        const formData = new FormData();
-        formData.append("image", petImage);
-        const response = await axios.post(
-          `http://localhost:3500/pet/upload`,
-          formData
-        );
-        console.log("Response data:", response.data.image);
-        const imagePath = response.data.image;
+    const maxSize = 1024 * 1024;
+    if (petImage.size > maxSize) {
+      toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
+    } else {
+      try {
+        if (petImage) {
+          const formData = new FormData();
+          formData.append("image", petImage);
+          const response = await axios.post(
+            `http://localhost:3500/pet/upload`,
+            formData
+          );
+          console.log("Response data:", response.data.image);
+          const imagePath = response.data.image;
 
-        if (imagePath) {
-          console.log("Đã tải ảnh lên:", imagePath);
-          toast.success("Thêm ảnh thành công");
-          setPetImage(imagePath);
+          if (imagePath) {
+            console.log("Đã tải ảnh lên:", imagePath);
+            toast.success("Thêm ảnh thành công");
+            setPetImage(imagePath);
+          } else {
+            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          }
         } else {
-          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
-          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          console.log("Vui lòng chọn ảnh trước khi tải lên.");
+          toast.error("Vui lòng chọn ảnh trước khi tải lên.");
         }
-      } else {
-        console.log("Vui lòng chọn ảnh trước khi tải lên.");
-        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
+      } catch (error) {
+        console.error("Lỗi khi tải ảnh lên:", error);
       }
-    } catch (error) {
-      console.error("Lỗi khi tải ảnh lên:", error);
     }
   };
 

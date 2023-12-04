@@ -85,30 +85,35 @@ const ModalAddPet = (props) => {
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PET -----------------------------
   const handleUpload = async () => {
-    try {
-      if (image) {
-        const formData = new FormData();
-        formData.append("image", image);
-        const response = await axios.post(
-          `http://localhost:3500/pet/upload`,
-          formData
-        );
-        console.log("Response data:", response.data.image);
-        const imagePath = response.data.image;
+    const maxSize = 1024 * 1024;
+    if (image.size > maxSize) {
+      toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
+    } else {
+      try {
+        if (image) {
+          const formData = new FormData();
+          formData.append("image", image);
+          const response = await axios.post(
+            `http://localhost:3500/pet/upload`,
+            formData
+          );
+          console.log("Response data:", response.data.image);
+          const imagePath = response.data.image;
 
-        if (imagePath) {
-          console.log("Đã tải ảnh lên:", imagePath);
-          handleCreateService(imagePath);
+          if (imagePath) {
+            console.log("Đã tải ảnh lên:", imagePath);
+            handleCreateService(imagePath);
+          } else {
+            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          }
         } else {
-          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
-          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          console.log("Vui lòng chọn ảnh trước khi tải lên.");
+          toast.error("Vui lòng chọn ảnh trước khi tải lên.");
         }
-      } else {
-        console.log("Vui lòng chọn ảnh trước khi tải lên.");
-        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
+      } catch (error) {
+        console.error("Lỗi khi tải ảnh lên:", error);
       }
-    } catch (error) {
-      console.error("Lỗi khi tải ảnh lên:", error);
     }
   };
 
