@@ -265,6 +265,21 @@ export default function PetUser() {
                         {value.weight}kg
                       </Typography>
                     </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <Typography variant="h5" component="h1">
+                        Màu lông
+                      </Typography>
+                      <Box
+                        sx={{
+                          margin: "auto",
+                          width: "230px",
+                          height: "30px",
+                          backgroundColor: value.color,
+                          border: "1px solid #ccc",
+                          borderRadius: "4px",
+                        }}
+                      ></Box>
+                    </Grid>
                   </Grid>
                   <CardActions
                     orientation="vertical"
