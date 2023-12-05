@@ -35,7 +35,7 @@ const ModalAddPet = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
   const [status, setStatus] = useState(false);
-  const [color, setColor] = useState("#ffffff");
+  const [color, setColor] = useState("");
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
   const [image, setImage] = useState(null);
@@ -43,23 +43,14 @@ const ModalAddPet = (props) => {
   // --------------------- HANLDE CHANGE STATUS -----------------------------
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
-    console.log(status);
-  };
-
-  // --------------------- HANLDE CHANGE COLOR -----------------------------
-  const handleColorChange = (color) => {
-    setColor(color.hex);
-  };
-
-  const handleResetColor = () => {
-    // Đặt màu mặc định tại đây
-    setColor("#ffffff");
   };
 
   // --------------------- VALIDATION -----------------------------
   const [valid, setValid] = useState("");
   const [validHeight, setValidHeight] = useState("");
   const [validWeight, setValidWeight] = useState("");
+  const [validColor, setValidColor] = useState("");
+
   useEffect(() => {
     setValid(PET_NAME_REGEX.test(petName) && petName.trim() !== "");
   }, [petName]);
@@ -82,6 +73,14 @@ const ModalAddPet = (props) => {
 
   const handleValidationPetWeight = (e) => {
     setWeight(e.target.value);
+  };
+
+  useEffect(() => {
+    setValidColor(color.trim());
+  }, [color]);
+
+  const handleValidationColor = (e) => {
+    setColor(e.target.value);
   };
 
   useEffect(() => {
@@ -146,14 +145,6 @@ const ModalAddPet = (props) => {
     );
     if (petName === "") {
       toast.error("Tên thú cưng không được để trống");
-    } else if (height === "") {
-      toast.error("Chiều cao thú cưng không được để trống");
-    } else if (weight === "") {
-      toast.error("Cân nặng thú cưng không được để trống");
-    } else if (height === 0) {
-      toast.error("Chiều cao thú cưng không được bằng 0");
-    } else if (weight === 0) {
-      toast.error("Cân nặng thú cưng không được bằng 0");
     } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
@@ -265,7 +256,7 @@ const ModalAddPet = (props) => {
                 Chọn loại thú cưng
               </InputLabel>
               <Select
-                label="Loại sản phẩm"
+                label="Loại thú cưng"
                 value={categoryId}
                 onChange={handleChangePet}
               >
@@ -300,36 +291,13 @@ const ModalAddPet = (props) => {
               onChange={(e) => handleValidationPetWeight(e)}
             />
 
-            <Grid container spacing={3} sx={{ marginTop: "20px" }}>
-              <Grid item xs={12} sm={6}>
-                <ChromePicker color={color} onChange={handleColorChange} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <ButtonCustomize
-                  onClick={handleResetColor}
-                  variant="contained"
-                  sx={{ marginTop: "8px" }}
-                  nameButton="Đặt màu mặc định"
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={3} sx={{ marginTop: "20px" }}>
-              <Grid item xs={12} sm={6}>
-                <Typography>Màu lông bạn đã chọn:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Box
-                  sx={{
-                    width: "150px",
-                    height: "30px",
-                    backgroundColor: color,
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                  }}
-                ></Box>
-              </Grid>
-            </Grid>
+            <TextField
+              fullWidth
+              label="Mô tả màu lông"
+              margin="normal"
+              value={color}
+              onChange={(e) => handleValidationColor(e)}
+            />
 
             <TextField
               required={true}

@@ -135,6 +135,7 @@ const ModalEditSerivce = (props) => {
   const handleImageChange = (e) => {
     setServiceImage(e.target.files[0]);
     console.log("Kiểm tra image: ", e.target.files);
+    handleUpload();
   };
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE SERVICE -----------------------------
