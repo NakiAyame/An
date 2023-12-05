@@ -26,6 +26,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import ButtonCustomize from "../Button/Button";
 
 const PRODUCT_NAME_REGEX =
   /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ,\s]{3,}$/;
@@ -90,6 +91,7 @@ const ModalEditProduct = (props) => {
       }
     } else {
       toast.error("Ngày bắt đầu không thể ở quá khứ!!");
+      setSaleStartTime(null);
     }
   };
 
@@ -144,6 +146,23 @@ const ModalEditProduct = (props) => {
     setDescription(e.target.value);
   };
 
+  // --------------------- CHECK TIME IF TIME CHANGE OF PASSED DATE -----------------------------
+  // const updateDatesIfPassed = () => {
+  //   const currentDate = dayjs();
+
+  //   if (saleStartTime && currentDate.isAfter(saleStartTime)) {
+  //     setSaleStartTime(null);
+  //   }
+
+  //   if (saleEndTime && currentDate.isAfter(saleEndTime)) {
+  //     setSaleEndTime(null);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   updateDatesIfPassed();
+  // }, [saleStartTime, saleEndTime]);
+
   // --------------------- HANDLE CHANGE IMAGE -----------------------------
   const handleImageChange = (e) => {
     setProductImage(e.target.files[0]);
@@ -170,7 +189,9 @@ const ModalEditProduct = (props) => {
           if (imagePath) {
             console.log("Đã tải ảnh lên:", imagePath);
             toast.success("Thêm ảnh thành công");
-            setProductImage(imagePath);
+            setProductImage(
+              productImage instanceof File ? imagePath : productImage
+            );
           } else {
             console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
             toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
@@ -389,19 +410,36 @@ const ModalEditProduct = (props) => {
               onChange={(e) => handleValidationDescription(e)}
             />
 
-            <Input
-              type="file"
-              inputProps={{ accept: "image/*" }}
-              onChange={handleImageChange}
-            />
-            <Button onClick={handleUpload}>Tải ảnh lên</Button>
-            {productImage && (
-              <img
-                src={productImage}
-                alt="Ảnh sản phẩm"
-                style={{ maxWidth: "100%" }}
-              />
-            )}
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <Input
+                  type="file"
+                  inputProps={{ accept: "image/*" }}
+                  onChange={handleImageChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <ButtonCustomize
+                  onClick={handleUpload}
+                  nameButton="Tải ảnh lên"
+                  variant="contained"
+                  sx={{ marginTop: "8px" }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                {productImage && (
+                  <img
+                    src={
+                      productImage instanceof File
+                        ? URL.createObjectURL(productImage)
+                        : productImage
+                    }
+                    alt="Ảnh sản phẩm"
+                    style={{ maxWidth: "300px" }}
+                  />
+                )}
+              </Grid>
+            </Grid>
 
             {/* Status */}
             {/* <RadioGroup
@@ -421,14 +459,12 @@ const ModalEditProduct = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="contained"
-            margin="normal"
-            color="primary"
+          <ButtonCustomize
             onClick={() => handleEditProduct(dataEditProduct._id)}
-          >
-            Sửa
-          </Button>
+            nameButton="Sửa"
+            variant="contained"
+            sx={{ marginTop: "8px" }}
+          />
         </DialogActions>
       </Box>
     </Dialog>
