@@ -91,7 +91,6 @@ const ModalEditPet = (props) => {
   // --------------------- HANDLE CHANGE IMAGE -----------------------------
   const handleImageChange = (e) => {
     setPetImage(e.target.files[0]);
-    console.log("Kiểm tra image: ", e.target.files);
   };
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PET -----------------------------
@@ -114,7 +113,7 @@ const ModalEditPet = (props) => {
           if (imagePath) {
             console.log("Đã tải ảnh lên:", imagePath);
             toast.success("Thêm ảnh thành công");
-            setPetImage(imagePath);
+            setPetImage(petImage instanceof File ? imagePath : petImage);
           } else {
             console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
             toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
@@ -337,20 +336,36 @@ const ModalEditPet = (props) => {
                 label="Chưa dùng dịch vụ"
               />
             </RadioGroup>
-
-            <Input
-              type="file"
-              inputProps={{ accept: "image/*" }}
-              onChange={handleImageChange}
-            />
-            <Button onClick={handleUpload}>Tải ảnh lên</Button>
-            {petImage && (
-              <img
-                src={petImage}
-                alt="Ảnh sản phẩm"
-                style={{ maxWidth: "100%" }}
-              />
-            )}
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <Input
+                  type="file"
+                  inputProps={{ accept: "image/*" }}
+                  onChange={handleImageChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <ButtonCustomize
+                  onClick={handleUpload}
+                  nameButton="Tải ảnh lên"
+                  variant="contained"
+                  sx={{ marginTop: "8px" }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                {petImage && (
+                  <img
+                    src={
+                      petImage instanceof File
+                        ? URL.createObjectURL(petImage)
+                        : petImage
+                    }
+                    alt="Ảnh sản phẩm"
+                    style={{ maxWidth: "300px" }}
+                  />
+                )}
+              </Grid>
+            </Grid>
           </form>
         </DialogContent>
         <DialogActions>

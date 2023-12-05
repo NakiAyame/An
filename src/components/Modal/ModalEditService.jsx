@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 import { Grid, Input } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import ButtonCustomize from "../Button/Button";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
@@ -158,7 +159,9 @@ const ModalEditSerivce = (props) => {
           if (imagePath) {
             console.log("Đã tải ảnh lên:", imagePath);
             toast.success("Thêm ảnh thành công");
-            setServiceImage(imagePath);
+            setServiceImage(
+              serviceImage instanceof File ? imagePath : serviceImage
+            );
           } else {
             console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
             toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
@@ -376,31 +379,46 @@ const ModalEditSerivce = (props) => {
                 label="Không hoạt động"
               />
             </RadioGroup>
-            <Input
-              type="file"
-              inputProps={{ accept: "image/*" }}
-              onChange={handleImageChange}
-            />
-            <Button onClick={handleUpload}>Tải ảnh lên</Button>
-            {serviceImage && (
-              <img
-                src={serviceImage}
-                alt="Ảnh sản phẩm"
-                style={{ maxWidth: "100%" }}
-              />
-            )}
+
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <Input
+                  type="file"
+                  inputProps={{ accept: "image/*" }}
+                  onChange={handleImageChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <ButtonCustomize
+                  onClick={handleUpload}
+                  nameButton="Tải ảnh lên"
+                  variant="contained"
+                  sx={{ marginTop: "8px" }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                {serviceImage && (
+                  <img
+                    src={
+                      serviceImage instanceof File
+                        ? URL.createObjectURL(serviceImage)
+                        : serviceImage
+                    }
+                    alt="Ảnh sản phẩm"
+                    style={{ maxWidth: "300px" }}
+                  />
+                )}
+              </Grid>
+            </Grid>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            autoFocus
-            variant="contained"
-            margin="normal"
-            color="primary"
+          <ButtonCustomize
             onClick={() => handleEditService(dataEditService._id)}
-          >
-            Lưu thay đổi
-          </Button>
+            nameButton="Lưu thay đổi"
+            variant="contained"
+            sx={{ marginTop: "8px" }}
+          />
         </DialogActions>
       </Box>
     </Dialog>
