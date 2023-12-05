@@ -269,16 +269,9 @@ export default function PetUser() {
                       <Typography variant="h5" component="h1">
                         Màu lông
                       </Typography>
-                      <Box
-                        sx={{
-                          margin: "auto",
-                          width: "230px",
-                          height: "30px",
-                          backgroundColor: value.color,
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                        }}
-                      ></Box>
+                      <Typography level="h4" sx={{ maxWidth: "40ch" }}>
+                        {value.color}
+                      </Typography>
                     </Grid>
                   </Grid>
                   <CardActions
@@ -401,6 +394,7 @@ export default function PetUser() {
         handUpdateEditTable={loadAllPetByUserId}
         page={currentPage}
         category={category}
+        data={context.auth.id}
       />
     </React.Fragment>
   );

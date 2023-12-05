@@ -327,6 +327,7 @@ export default function PetTable() {
         dataEditPet={dataEditPet}
         handUpdateEditTable={loadAllPet}
         page={currentPage}
+        data={context.auth.id}
         category={category}
       />
     </>

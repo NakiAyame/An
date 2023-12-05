@@ -28,33 +28,30 @@ const PET_NAME_REGEX =
 const PET_HEIH_REGEX = /^\d*(\.\d+)?$/;
 
 const ModalEditPet = (props) => {
-  const { open, onClose, dataEditPet, handUpdateEditTable, page, category } =
-    props;
+  const {
+    open,
+    onClose,
+    dataEditPet,
+    handUpdateEditTable,
+    page,
+    data,
+    category,
+  } = props;
 
   const [userId, setUserId] = useState("");
   const [petName, setPetName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
-  const [color, setColor] = useState("#ffffff");
+  const [color, setColor] = useState("");
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
-  const [status, setStatus] = useState(true);
+  const [status, setStatus] = useState(false);
   const [petImage, setPetImage] = useState(null);
 
   // --------------------- HANLDE CHANGE STATUS -----------------------------
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
     console.log(status);
-  };
-
-  // --------------------- HANLDE CHANGE COLOR -----------------------------
-  const handleColorChange = (color) => {
-    setColor(color.hex);
-  };
-
-  const handleResetColor = () => {
-    // Đặt màu mặc định tại đây
-    setColor("#ffffff");
   };
 
   // --------------------- VALIDATION -----------------------------
@@ -84,6 +81,12 @@ const ModalEditPet = (props) => {
   const handleValidationPetWeight = (e) => {
     setWeight(e.target.value);
   };
+
+  useEffect(() => {
+    if (open) {
+      setUserId(data);
+    }
+  }, [data]);
 
   // --------------------- HANDLE CHANGE IMAGE -----------------------------
   const handleImageChange = (e) => {
@@ -143,28 +146,23 @@ const ModalEditPet = (props) => {
 
   const handleEditPet = async (petID) => {
     console.log(
-      "Check data truyền vào sản phẩm",
+      "Check data truyền vào của thú cưng",
       petName,
-      userId,
+      userId._id,
       categoryId,
       rank,
       status,
       height,
       weight,
       color,
-      petImage,
-      status
+      petImage
     );
     if (petName === "") {
       toast.error("Tên thú cưng không được để trống");
-    } else if (height === "") {
-      toast.error("Chiều cao thú cưng không được để trống");
-    } else if (weight === "") {
-      toast.error("Cân nặng thú cưng không được để trống");
-    } else if (height === 0) {
-      toast.error("Chiều cao thú cưng không được bằng 0");
-    } else if (weight === 0) {
-      toast.error("Cân nặng thú cưng không được bằng 0");
+    } else if (height < 0) {
+      toast.error("Chiều cao thú cưng không được âm");
+    } else if (weight < 0) {
+      toast.error("Cân nặng thú cưng không được âm");
     } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
@@ -179,7 +177,7 @@ const ModalEditPet = (props) => {
       try {
         const res = await axios.patch(`http://localhost:3500/pet`, {
           id: petID,
-          userId: userId,
+          userId: userId._id,
           petName: petName,
           categoryId: categoryId,
           rank: rank,
@@ -197,7 +195,7 @@ const ModalEditPet = (props) => {
           onClose();
         }
       } catch (err) {
-        toast.error(err.message); // xuất thông báo lỗi ra màn hình
+        toast.error(err.message);
       }
     }
   };
@@ -244,7 +242,7 @@ const ModalEditPet = (props) => {
               fullWidth
               label="Id chủ thú cưng"
               margin="normal"
-              value={userId}
+              value={data}
               sx={{ display: "none" }}
               onChange={(e) => setUserId(e.target.value)}
               // defaultValue={dataEditPet.userId.fullname}
@@ -264,7 +262,7 @@ const ModalEditPet = (props) => {
                 Chọn loại thú cưng
               </InputLabel>
               <Select
-                label="Loại sản phẩm"
+                label="Loại thú cưng"
                 value={categoryId}
                 onChange={handleChangePet}
               >
@@ -299,36 +297,13 @@ const ModalEditPet = (props) => {
               onChange={(e) => handleValidationPetWeight(e)}
             />
 
-            <Grid container spacing={3} sx={{ marginTop: "20px" }}>
-              <Grid item xs={12} sm={6}>
-                <ChromePicker color={color} onChange={handleColorChange} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <ButtonCustomize
-                  onClick={handleResetColor}
-                  variant="contained"
-                  sx={{ marginTop: "8px" }}
-                  nameButton="Đặt màu mặc định"
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={3} sx={{ marginTop: "20px" }}>
-              <Grid item xs={12} sm={6}>
-                <Typography>Màu lông bạn đã chọn:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Box
-                  sx={{
-                    width: "150px",
-                    height: "30px",
-                    backgroundColor: color,
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                  }}
-                ></Box>
-              </Grid>
-            </Grid>
+            <TextField
+              fullWidth
+              label="Mô tả màu lông"
+              margin="normal"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+            />
 
             <TextField
               required={true}
@@ -354,9 +329,13 @@ const ModalEditPet = (props) => {
               <FormControlLabel
                 value={true}
                 control={<Radio />}
-                label="Hoạt động"
+                label="Đang dùng dịch vụ"
               />
-              <FormControlLabel value={false} control={<Radio />} label="Ẩn" />
+              <FormControlLabel
+                value={false}
+                control={<Radio />}
+                label="Chưa dùng dịch vụ"
+              />
             </RadioGroup>
 
             <Input
