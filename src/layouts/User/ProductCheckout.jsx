@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 
 import useAuth from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { Toast } from 'bootstrap';
 
 const inputStyle = {
     width: '100%',
@@ -33,6 +34,7 @@ export default function ProductCheckout() {
 
     const DEFAULT_PAGE = 1;
     const DEFAULT_LIMIT = 5;
+    const PHONE_NUMBER_REGEX = /^(84|0[3|5|7|8|9])+([0-9]{8})$/;
 
     const navigate = useNavigate();
     const context = useAuth();
@@ -50,30 +52,39 @@ export default function ProductCheckout() {
     const checkoutProduct = async () => {
         // alert('Phần mềm đang được Hạnh Nguyên cập nhật')
         console.log(recipientName + ' ' + recipientPhoneNumber + ' ' + context.auth.token)
-        try {
-            const loadData = await axios.post(
-                `http://localhost:3500/cartProduct/checkout`,
-                {
-                    recipientName: recipientName,
-                    recipientPhoneNumber: recipientPhoneNumber,
-                    deliveryAddress: deliveryAddress
-                },
-                {
-                    headers: { 'Authorization': context.auth.token },
-                    withCredentials: true
-                }
-            )
-            .then((data) => {
-                if(data.data.message === 'Checkout successful'){
-                    toast.success("Đặt hàng sản phẩm thành công");
-                    navigator('/product-purchase')
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-        } catch (err) {
-            console.log(err);
+        if (recipientName.trim() === '') {
+            toast.error("Vui lòng điền người nhận")
+        } else if (deliveryAddress.trim() === '') {
+            toast.error("Vui lòng nhập địa chỉ")
+        } else if (!recipientPhoneNumber.match(PHONE_NUMBER_REGEX)) {
+            toast.error("Số điện thoại không chính xác")
+        } else {
+            try {
+                const loadData = await axios.post(
+                    `http://localhost:3500/cartProduct/checkout`,
+                    {
+                        recipientName: recipientName,
+                        recipientPhoneNumber: recipientPhoneNumber,
+                        deliveryAddress: deliveryAddress
+                    },
+                    {
+                        headers: { 'Authorization': context.auth.token },
+                        withCredentials: true
+                    }
+                )
+                    .then((data) => {
+                        if (data.data.message === 'Checkout successful') {
+                            toast.success("Đặt hàng sản phẩm thành công");
+                            navigator('/product-purchase')
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+
+            } catch (err) {
+                console.log(err);
+            }
         }
     }
 
@@ -118,7 +129,6 @@ export default function ProductCheckout() {
 
     return (
         <Box sx={{ flexGrow: 1, marginTop: '100px', marginLeft: '50px', marginRight: '50px' }}>
-            <h1>Đang Cập Nhật</h1>
             <Grid container spacing={5}>
                 <Grid item xs={7}>
                     <h6 style={{ marginTop: '30px', fontWeight: 'bolder', fontSize: '18px' }}>THÔNG TIN THANH TOÁN</h6>

@@ -48,11 +48,11 @@ export default function CartProduct() {
           withCredentials: true
         }
       )
-      .then((data) => {
-        console.log(data)
-        handleLoadCartProduct()
-      })
-      
+        .then((data) => {
+          console.log(data)
+          handleLoadCartProduct()
+        })
+
     } catch (err) {
       console.log(err);
     }
@@ -173,18 +173,19 @@ export default function CartProduct() {
                       return (
                         <Grid container spacing={2} style={productStyle}>
                           <Grid item xs={4}>
-                            {value.productId.productName}
+                            {value.productId === null ? "" : value.productId.productName}
                           </Grid>
                           <Grid item xs style={{ textAlign: 'center' }}>
-                            {(value.productId.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                            {value.productId === null ? "" : (value.productId.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                           </Grid>
                           <Grid item xs>
                             {/* <button style={quantityButtonLeftStyle}>-</button> */}
-                            <input type='text' style={quantityInputStyle} value={value.quantity} onChange={(e) => setQuantity(e.target.value)} disabled/>
+                            <input type='text' style={quantityInputStyle} value={value.quantity} onChange={(e) => setQuantity(e.target.value)} disabled />
                             {/* <button onClick={() => handleProduct()} style={quantityButtonRightStyle}>+</button> */}
                           </Grid>
-                          <Grid item xs style={{ color: 'red' }}>
-                            {(value.quantity * (value.productId.price - (value.productId.price * value.productId.discount / 100))).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                          <Grid item xs style={{display: 'flex'}}>
+                            <Typography style={{ textDecoration: "line-through" }}>{value.productId === null ? "" : value.productId.discount === 0 ? "" : value.productId.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
+                            <Typography style={{ color: 'red' }}>{value.productId === null ? "" : (value.quantity * (value.productId.price - (value.productId.price * value.productId.discount / 100))).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
                           </Grid>
                           <Grid item xs={1}>
                             <button onClick={(e) => handleDeleteOrder(value.productId._id)}>
