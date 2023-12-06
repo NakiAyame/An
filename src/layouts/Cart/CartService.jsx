@@ -155,7 +155,7 @@ export default function CartService() {
   return (
     <>
       <h1 style={{ textAlign: 'center', marginTop: '100px' }}>GIỎ HÀNG SẢN PHẨM</h1>
-      <Card sx={{ minWidth: 275 }} style={{ padding: '20px', margin: '0 50px', boxShadow: 'none' }}>
+      <Card sx={{ minWidth: 275 }} style={{ padding: '20px', margin: '0 50px 200px 50px', boxShadow: 'none' }}>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -168,9 +168,6 @@ export default function CartService() {
                 </Grid>
                 <Grid item xs>
                   GIÁ
-                </Grid>
-                <Grid item xs>
-                  SỐ LƯỢNG
                 </Grid>
                 <Grid item xs>
                   TỔNG
@@ -192,11 +189,6 @@ export default function CartService() {
                           </Grid>
                           <Grid item xs>
                             {(value.serviceId.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                          </Grid>
-                          <Grid item xs>
-                            {/* <button style={quantityButtonLeftStyle}>-</button> */}
-                            <input type='text' style={quantityInputStyle} value={value.quantity} onChange={(e) => setQuantity(e.target.value)} />
-                            {/* <button onClick={() => handleProduct()} style={quantityButtonRightStyle}>+</button> */}
                           </Grid>
                           <Grid item xs>
                             {(value.serviceId.price * value.quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
