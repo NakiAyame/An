@@ -217,7 +217,7 @@ export default function ServiceTable() {
             "]" +
             " bạn vừa tìm không có! Vui lòng nhập lại."
         );
-        setData(loadData.data.docs);
+        loadAllService(currentPage);
       } else {
         setData(loadData.data.docs);
         setTotalServices(loadData.data.limit);
