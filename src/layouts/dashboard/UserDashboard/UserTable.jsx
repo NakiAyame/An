@@ -63,6 +63,7 @@ const BasicTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const PWD_REGEX = /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
 
     const [option, setOption] = useState("");
     var count = 0;
@@ -182,17 +183,19 @@ const BasicTable = () => {
     // useEffect(() => {
     const handleCreateUser = async (event) => {
         if (fullname.trim() === "") {
-            alert("Vui lòng điền tên người dùng")
+            toast.error("Vui lòng điền tên người dùng")
         } else if (email.trim() === "") {
-            alert("Vui lòng điền Email người dùng")
+            toast.error("Vui lòng điền Email người dùng")
         } else if (!email.match(validRegex)) {
-            alert("Email không chính xác")
+            toast.error("Email không chính xác")
+        } else if (!password.match(PWD_REGEX)) {
+            toast.error(
+                "Mật khẩu bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự "
+            );
         } else if (password.trim() === "") {
-            alert("Vui lòng điền Mật khẩu người dùng")
-        } else if (confirmPass.trim() === "") {
-            alert("Vui lòng nhập lại mật khẩu người dùng")
+            toast.error("Vui lòng điền Mật khẩu người dùng")
         } else if (confirmPass.trim() !== password.trim()) {
-            alert("Mật khẩu thứ 2 không đúng")
+            toast.error("Mật khẩu thứ 2 không đúng")
         }
         else {
             try {
@@ -363,25 +366,25 @@ const BasicTable = () => {
 
                             <Grid item xs={6}>
                                 {
-                                    option === 'create' 
-                                    ? (<TextField
-                                        required
-                                        fullWidth
-                                        label="Gmail"
-                                        margin="normal"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />)
-                                    : 
-                                    (<TextField
-                                        required
-                                        fullWidth
-                                        label="Gmail"
-                                        margin="normal"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        disabled
-                                    />)
+                                    option === 'create'
+                                        ? (<TextField
+                                            required
+                                            fullWidth
+                                            label="Gmail"
+                                            margin="normal"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />)
+                                        :
+                                        (<TextField
+                                            required
+                                            fullWidth
+                                            label="Gmail"
+                                            margin="normal"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            disabled
+                                        />)
                                 }
                                 {email === "" ? <span style={errorStyle}>Vui lòng điền email</span> : ""}
                             </Grid>
