@@ -152,7 +152,7 @@ export default function ServiceList() {
   async function loadAllCategoryService() {
     try {
       const loadData = await axios.get(
-        `http://localhost:3500/category/cateName/service`
+        `http://localhost:3500/category/cateName/Dịch vụ`
       );
       if (loadData.error) {
         toast.error(loadData.error);
@@ -214,13 +214,44 @@ export default function ServiceList() {
     setSelectedService(null);
   };
 
-  const handleAddToCartClick = (serviceId) => {
+  // ----------------------------------- API GET ALL PET BY USER ID--------------------------------
+  const [dataPet, setDataPet] = useState([]);
+  useEffect(() => {
+    loadAllPetByUserId();
+  }, [context.auth.id]);
+
+  const loadAllPetByUserId = async () => {};
+
+  const handleAddToCartClick = async (serviceId) => {
     if (context.auth.token === undefined) {
       toast.warning("Bạn chưa đăng nhập, vui lòng đăng nhập !");
     } else {
-      console.log("Check data id", serviceId);
-      setSelectedService(serviceId);
-      setIsModalChoosePetOpen(true);
+      try {
+        const loadDataPet = await axios.post(
+          `http://localhost:3500/pet/booking`,
+          {
+            userId: context.auth.id,
+            serviceId: serviceId,
+          }
+        );
+        if (loadDataPet.error) {
+          toast.error(loadDataPet.error);
+        } else {
+          setTotalPages(loadDataPet.data.pages);
+          console.log("Check totalPage", totalPages);
+          // setData(loadDataPet.data.docs);
+
+          setDataPet(loadDataPet.data);
+          setIsModalChoosePetOpen(true);
+          setSelectedService(serviceId);
+
+          console.log("Kiểm tra pet của người dùng", loadDataPet.data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      // console.log("Check data id", serviceId);
+      // setSelectedService(serviceId);
     }
   };
 
@@ -450,6 +481,7 @@ export default function ServiceList() {
         open={isModalChoosePetOpen}
         onClose={handleCloseEditModal}
         service={selectedService}
+        pet={dataPet}
       />
       {/* End footer */}
       <Footer />

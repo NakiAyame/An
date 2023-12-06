@@ -32,7 +32,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import ModalAddPet from "./ModalAddPet";
 
-const ChoosePet = ({ open, onClose, service }) => {
+const ChoosePet = ({ open, onClose, service, pet }) => {
   // console.log(service);
   const [data, setData] = useState([]);
   const [dataCart, setDataCart] = useState([]);
@@ -46,13 +46,16 @@ const ChoosePet = ({ open, onClose, service }) => {
   // ----------------------------------- API GET ALL PET BY USER ID--------------------------------
   useEffect(() => {
     loadAllPetByUserId();
-    handleLoadCartService();
   }, [context.auth.id]);
 
   const loadAllPetByUserId = async () => {
     try {
-      const loadDataPet = await axios.get(
-        `http://localhost:3500/pet/userid?id=${context.auth.id}`
+      const loadDataPet = await axios.post(
+        `http://localhost:3500/pet/booking`,
+        {
+          userId: context.auth.id,
+          serviceId: service,
+        }
       );
       if (loadDataPet.error) {
         toast.error(loadDataPet.error);
@@ -60,24 +63,11 @@ const ChoosePet = ({ open, onClose, service }) => {
         setTotalPages(loadDataPet.data.pages);
         console.log("Check totalPage", totalPages);
         // setData(loadDataPet.data.docs);
-        const filterData = [];
-        console.log(loadDataPet.data.docs);
-        console.log(dataCart);
 
-        for (let i = 0; i < loadDataPet.data.docs.length; i++) {
-          for (let j = 0; j < dataCart.length; j++) {
-            if (loadDataPet.data.docs[i]._id !== dataCart[j].petId._id) {
-              filterData.push(loadDataPet.data.docs[i]);
-              console.log("1");
-            }
-          }
-        }
-        setData(filterData);
-
-        setData(loadDataPet.data.docs);
+        setData(loadDataPet.data);
 
         setTotalPets(loadDataPet.data.limit);
-        console.log("Kiểm tra pet của người dùng", loadDataPet.data.docs);
+        console.log("Kiểm tra pet của người dùng", loadDataPet.data);
       }
     } catch (err) {
       console.log(err);
@@ -163,7 +153,7 @@ const ChoosePet = ({ open, onClose, service }) => {
           .post(
             `http://localhost:3500/cartService/add-to-cart`,
             {
-              serviceId: service._id,
+              serviceId: service,
               petId: id,
             },
             {
@@ -185,8 +175,8 @@ const ChoosePet = ({ open, onClose, service }) => {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Chọn thú cưng</DialogTitle>
       <List sx={{ pt: 0 }}>
-        {data &&
-          data.map((value, index) => {
+        {pet &&
+          pet.map((value, index) => {
             return (
               <ListItem disableGutters>
                 <ListItemButton onClick={() => handleAddToCart(value._id)}>
