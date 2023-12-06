@@ -80,6 +80,7 @@ const BASE_URL = "http://localhost:3500";
 const defaultTheme = createTheme();
 
 const ServiceDetail = () => {
+  const [dataPet, setDataPet] = useState([]);
   const { serviceId } = useParams();
   const [service, setService] = useState(null);
   const [quantitySell, setQuantitySell] = useState(1);
@@ -135,13 +136,35 @@ const ServiceDetail = () => {
     setIsModalOpen(false);
     setSelectedService(null);
   };
-  const handleAddToCartClick = () => {
+
+  const handleAddToCartClick = async (serviceId) => {
     if (context.auth.token === undefined) {
-      alert("Bạn chưa đăng nhập, vui lòng đăng nhập !");
+      toast.warning("Bạn chưa đăng nhập, vui lòng đăng nhập !");
     } else {
-      console.log("Check data", service);
-      setSelectedService(service);
-      setIsModalOpen(true);
+      try {
+        const loadDataPet = await axios.post(
+          `http://localhost:3500/pet/booking`,
+          {
+            userId: context.auth.id,
+            serviceId: serviceId,
+          }
+        );
+        if (loadDataPet.error) {
+          toast.error(loadDataPet.error);
+        } else {
+          // setData(loadDataPet.data.docs);
+
+          setDataPet(loadDataPet.data);
+          setIsModalOpen(true);
+          setSelectedService(serviceId);
+
+          console.log("Kiểm tra pet của người dùng", loadDataPet.data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      // console.log("Check data id", serviceId);
+      // setSelectedService(serviceId);
     }
   };
 
@@ -251,7 +274,7 @@ const ServiceDetail = () => {
                     )}
 
                     <ButtonCustomize
-                      onClick={handleAddToCartClick}
+                      onClick={() => handleAddToCartClick(service._id)}
                       variant="contained"
                       sx={{ marginTop: "8px" }}
                       nameButton="Đăng kí dịch vụ"
@@ -318,6 +341,7 @@ const ServiceDetail = () => {
         open={isModalOpen}
         onClose={handleCloseEditModal}
         service={selectedService}
+        pet={dataPet}
       />
 
       {/* End footer */}
