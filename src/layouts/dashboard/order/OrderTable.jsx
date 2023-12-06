@@ -43,6 +43,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { async } from "q";
+
 // -------------------------------STYLE MODAL----------------------
 const style = {
     position: "absolute",
@@ -59,6 +66,13 @@ const style = {
 export default function BasicTable() {
     const DEFAULT_PAGE = 1;
     const DEFAULT_LIMIT = 10;
+    const DEFAULT_STATUS = "Chờ xác nhận"
+    const DEFAULT_FROMDATE = ""
+    const DEFAULT_TODATE = ""
+
+    const [fromDate, setFromDate] = React.useState(dayjs());
+    const [toDate, setToDate] = React.useState(dayjs());
+
     const [pages, setPages] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -98,7 +112,24 @@ export default function BasicTable() {
 
     // --------------------- HANDLE UPDATE -----------------------------
 
+    const convertDate = (date) => {
+        // Chuỗi thời gian ban đầu
+        // var timeStr = "Wed, 06 Dec 2023 21:36:23 GMT";
 
+        // Tạo một đối tượng Date từ chuỗi thời gian
+        var originalDate = new Date(date);
+
+        // Lấy thông tin ngày, tháng và năm từ đối tượng Date
+        var year = originalDate.getUTCFullYear();
+        var month = ("0" + (originalDate.getUTCMonth() + 1)).slice(-2); // Thêm số 0 ở đầu nếu cần
+        var day = ("0" + originalDate.getUTCDate()).slice(-2); // Thêm số 0 ở đầu nếu cần
+
+        // Tạo chuỗi mới với định dạng YYYY-MM-DD
+        var formattedTime = year + "-" + month + "-" + day;
+
+        return formattedTime
+
+    }
 
     // --------------------- HANDLE DELETE -----------------------------
     const handleDelete = async (id) => {
@@ -117,15 +148,22 @@ export default function BasicTable() {
     };
 
     // ----------------------------------- API GET ALL USER --------------------------------
-    async function loadAllOrder(page, limit) {
+    async function loadAllOrder(page, limit, option, startDate, endDate) {
         try {
             const loadData = await axios.get(
-                `http://localhost:3500/order?page=${page}&limit=${limit}`
+                `http://localhost:3500/order?page=${page}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`
             )
                 .then((data) => {
                     setData(data.data.docs);
                     setPages(data.data.pages);
                     console.log(data.data.docs);
+                    const filterData = []
+                    for (let i = 0; i < data.data.docs.length; i++) {
+                        if (data.data.docs[i].status === option) {
+                            filterData.push(data.data.docs[i])
+                        }
+                    }
+                    setData(filterData)
                 })
         } catch (err) {
             console.log(err);
@@ -133,7 +171,7 @@ export default function BasicTable() {
     }
 
     useEffect(() => {
-        loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT);
+        loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS, DEFAULT_FROMDATE, DEFAULT_TODATE);
     }, []);
 
     // ----------------------------------- HANDLE GET ORDER OF USER --------------------------------
@@ -148,7 +186,7 @@ export default function BasicTable() {
         if (!userId == '') {
             getAllOrderByUserId();
         } else {
-            loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT);
+            loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS);
         }
 
     }
@@ -221,25 +259,46 @@ export default function BasicTable() {
                 alignItems="center"
                 mb={3}
             >
-                <Grid item xs={6}>
-                    <TextField
-                        // required
-                        fullWidth
-                        label="Tìm kiếm chủ thú cưng theo ID"
-                        margin="normal"
-                        size="small"
-                        onChange={hanldeSearch}
+                <Grid item xs={4}>
+                    <select
+                        style={{
+                            padding: '10px 15px',
+                            borderRadius: '5px',
+                            width: '100%',
+                            height: '55px'
+                        }}
+                        onChange={(e) => setStatus(e.target.value)}>
+                        {statusList.map((value, index) => {
+                            return (
+                                <option value={value}>{value}</option>
+                            );
+                        })}
+                    </select>
+                </Grid>
+                <Grid item xs={4}>
+                    <DatePicker
+                        label="Ngày bắt đầu"
+                        defaultValue={dayjs()}
+                        onChange={(newValue) => setFromDate(convertDate(newValue))}
+                        maxDate={dayjs()}
                     />
                 </Grid>
-                <Grid item xs={6}>
-                    <ButtonCustomize
-                        onClick={handleGetOrderByUserId}
-                        variant="contained"
-                        // component={RouterLink}
-                        nameButton="Tìm kiếm"
+                <Grid item xs={4}>
+                    <DatePicker
+                        label="Ngày kết thúc"
+                        defaultValue={dayjs()}
+                        onChange={(newValue) => setToDate(convertDate(newValue))}
+                        maxDate={dayjs()}
                     />
                 </Grid>
             </Grid>
+
+            <ButtonCustomize
+                onClick={() => loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, status, fromDate, toDate)}
+                variant="contained"
+                // component={RouterLink}
+                nameButton="Tìm kiếm"
+            />
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">

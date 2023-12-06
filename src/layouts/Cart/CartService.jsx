@@ -66,7 +66,7 @@ export default function CartService() {
           console.log(loadData.data);
           let totalPrice = 0;
           for (let i = 0; i < loadData.data.length; i++) {
-            totalPrice += loadData.data[i].quantity * loadData.data[i].serviceId.price
+            totalPrice += loadData.data[i].quantity * (loadData.data[i].serviceId.price - (loadData.data[i].serviceId.price * loadData.data[i].serviceId.discount / 100))
           }
           setTotal(totalPrice);
         }
@@ -83,9 +83,9 @@ export default function CartService() {
   // ----------------------------------------------------------------
 
   const handleCheckOut = async () => {
-    if (window.confirm('Bạn có muốn đặt sản phẩm này ?') == true) {
+    if (window.confirm('Bạn có muốn sử dụng dịch vụ này ?') == true) {
       if (data.length === 0) {
-        alert('Bạn không có sản phẩm trong giỏ hàng')
+        alert('Bạn không có dịch vụ trong giỏ hàng')
       } else {
         try {
           const checkout = await axios.get(
@@ -96,7 +96,7 @@ export default function CartService() {
             }
           )
             .then((data) => {
-              alert('Đặt sản phẩm thành công')
+              alert('Đặt dịch vụ thành công')
               handleLoadCartService()
             })
 
@@ -152,9 +152,28 @@ export default function CartService() {
     paddingTop: '20px'
   }
 
+  const handleDeleteOrder = async (id) => {
+    try {
+      const loadData = await axios.delete(
+        `http://localhost:3500/cartService/remove-from-cart/${id}`,
+        {
+          headers: { 'Authorization': context.auth.token },
+          withCredentials: true
+        }
+      )
+        .then((data) => {
+          console.log(data)
+          handleLoadCartService()
+        })
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <>
-      <h1 style={{ textAlign: 'center', marginTop: '100px' }}>GIỎ HÀNG SẢN PHẨM</h1>
+      <h1 style={{ textAlign: 'center', marginTop: '100px' }}>DANH SÁCH DỊCH VỤ ĐÃ CHỌN</h1>
       <Card sx={{ minWidth: 275 }} style={{ padding: '20px', margin: '0 50px 200px 50px', boxShadow: 'none' }}>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
@@ -172,6 +191,9 @@ export default function CartService() {
                 <Grid item xs>
                   TỔNG
                 </Grid>
+                <Grid item xs>
+                  CHỨC NĂNG
+                </Grid>
               </Grid>
               {
                 loged === false
@@ -187,11 +209,17 @@ export default function CartService() {
                           <Grid item xs>
                             {value.petId.petName}
                           </Grid>
-                          <Grid item xs>
-                            {(value.serviceId.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                          <Grid item xs style={{display: 'flex'}}>
+                            <Typography style={{ textDecoration: "line-through" }}>{value.serviceId === null ? "" : value.serviceId.discount === 0 ? "" : value.serviceId.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
+                            <Typography style={{ color: 'red' }}>{value.serviceId === null ? "" : (value.quantity * (value.serviceId.price - (value.serviceId.price * value.serviceId.discount / 100))).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
                           </Grid>
-                          <Grid item xs>
-                            {(value.serviceId.price * value.quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                          <Grid item xs style={{display: 'flex'}}>
+                            <Typography style={{ color: 'red' }}>{value.serviceId === null ? "" : (value.quantity * (value.serviceId.price - (value.serviceId.price * value.serviceId.discount / 100))).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
+                          </Grid>
+                          <Grid item xs={1}>
+                            <button onClick={(e) => handleDeleteOrder(value.serviceId._id)}>
+                              Xoá
+                            </button>
                           </Grid>
                         </Grid>
                       )

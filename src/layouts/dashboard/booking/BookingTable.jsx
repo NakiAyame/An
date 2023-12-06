@@ -43,6 +43,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { async } from "q";
+
 // -------------------------------STYLE MODAL----------------------
 const style = {
     position: "absolute",
@@ -59,6 +66,13 @@ const style = {
 export default function BookingTable() {
     const DEFAULT_PAGE = 1;
     const DEFAULT_LIMIT = 10;
+    const DEFAULT_STATUS = "Chờ thanh toán"
+    const DEFAULT_FROMDATE = ""
+    const DEFAULT_TODATE = ""
+
+    const [fromDate, setFromDate] = React.useState(dayjs());
+    const [toDate, setToDate] = React.useState(dayjs());
+
     const [pages, setPages] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -70,6 +84,7 @@ export default function BookingTable() {
     const [id, setId] = useState("");
     const [orderDetail, setOrderDetail] = useState([]);
     const [status, setStatus] = useState('');
+    const [total, setTotal] = useState(0)
 
     // --------------------- MODAL HANDLE -----------------------------
 
@@ -87,7 +102,7 @@ export default function BookingTable() {
             } else {
                 console.log(data.data);
                 setOrderDetail(data.data)
-                setStatus(status)
+                // setStatus(status)
             }
         } catch (err) {
             console.log(err);
@@ -99,7 +114,29 @@ export default function BookingTable() {
 
     // --------------------- HANDLE UPDATE -----------------------------
 
+    const handleSortDate = async (date) => {
+        setFromDate(date)
+        alert(convertDate(fromDate))
+    }
 
+    const convertDate = (date) => {
+        // Chuỗi thời gian ban đầu
+        // var timeStr = "Wed, 06 Dec 2023 21:36:23 GMT";
+
+        // Tạo một đối tượng Date từ chuỗi thời gian
+        var originalDate = new Date(date);
+        
+        // Lấy thông tin ngày, tháng và năm từ đối tượng Date
+        var year = originalDate.getUTCFullYear();
+        var month = ("0" + (originalDate.getUTCMonth() + 1)).slice(-2); // Thêm số 0 ở đầu nếu cần
+        var day = ("0" + originalDate.getUTCDate()).slice(-2); // Thêm số 0 ở đầu nếu cần
+
+        // Tạo chuỗi mới với định dạng YYYY-MM-DD
+        var formattedTime = year + "-" + month + "-" + day;
+
+        return formattedTime
+
+    }
 
     // --------------------- HANDLE DELETE -----------------------------
     const handleDelete = async (id) => {
@@ -121,23 +158,35 @@ export default function BookingTable() {
     };
 
     // ----------------------------------- API GET ALL USER --------------------------------
-    async function loadAllBooking(page, limit) {
-        try {
-            const loadData = await axios.get(
-                `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc`
-            )
-                .then((data) => {
-                    setData(data.data.docs);
-                    setPages(data.data.pages);
-                    console.log(data.data.docs);
-                })
-        } catch (err) {
-            console.log(err);
-        }
+    async function loadAllBooking(page, limit, option, startDate, endDate) {
+        // if (!isValidDateFormat(startDate) || startDate === '') {
+        //     toast.error('Vui lòng nhập ngày bắt đầu')
+        // } else if (!isValidDateFormat(endDate) || endDate === '') {
+        //     toast.error('Vui lòng nhập ngày kết thúc')
+        // } else {
+            try {
+                const loadData = await axios.get(
+                    `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc&startDate=${startDate}&endDate=${endDate}`
+                )
+                    .then((data) => {
+                        setPages(data.data.pages);
+                        console.log(data.data.docs);
+                        const filterData = []
+                        for (let i = 0; i < data.data.docs.length; i++) {
+                            if (data.data.docs[i].status === option) {
+                                filterData.push(data.data.docs[i])
+                            }
+                        }
+                        setData(filterData)
+                    })
+            } catch (err) {
+                console.log(err);
+            }
+        // }
     }
 
     useEffect(() => {
-        loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT);
+        loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS, DEFAULT_FROMDATE, DEFAULT_TODATE);
     }, []);
 
     // ----------------------------------- HANDLE GET ORDER OF USER --------------------------------
@@ -180,7 +229,7 @@ export default function BookingTable() {
 
     const handlePaging = (event, value) => {
         setCurrentPage(value === undefined ? 1 : value)
-        loadAllBooking(value, DEFAULT_LIMIT);
+        loadAllBooking(value, DEFAULT_LIMIT, status, fromDate, toDate);
     }
 
     // ----------------------------------------------------------------
@@ -216,6 +265,14 @@ export default function BookingTable() {
         }
     }
 
+    function isValidDateFormat(dateStr) {
+        // Biểu thức chính quy kiểm tra định dạng "YYYY-MM-DD"
+        var regex = /^\d{4}-\d{2}-\d{2}$/;
+
+        // Kiểm tra xem chuỗi ngày có khớp với biểu thức chính quy hay không
+        return regex.test(dateStr);
+    }
+
     return (
         <>
             <Grid
@@ -225,26 +282,47 @@ export default function BookingTable() {
                 alignItems="center"
                 mb={3}
             >
-                <Grid item xs={6}>
-                    <TextField
-                        // required
-                        fullWidth
-                        label="Tìm kiếm chủ thú cưng theo ID"
-                        margin="normal"
-                        size="small"
-                        onChange={hanldeSearch}
+                <Grid item xs={4}>
+                    <select
+                        style={{
+                            padding: '10px 15px',
+                            borderRadius: '5px',
+                            width: '100%',
+                            height: '55px'
+                        }}
+                        onChange={(e) => setStatus(e.target.value)}>
+                        {statusList.map((value, index) => {
+                            return (
+                                <option value={value}>{value}</option>
+                            );
+                        })}
+                    </select>
+                </Grid>
+                <Grid item xs={4}>
+                    <DatePicker
+                        label="Ngày bắt đầu"
+                        defaultValue={dayjs()}
+                        onChange={(newValue) => setFromDate(convertDate(newValue))}
+                        maxDate={dayjs()}
                     />
                 </Grid>
-                <Grid item xs={6}>
-                    <ButtonCustomize
-                        onClick={handleGetOrderByUserId}
-                        variant="contained"
-                        // component={RouterLink}
-                        nameButton="Tìm kiếm"
+                <Grid item xs={4}>
+                    <DatePicker
+                        label="Ngày kết thúc"
+                        defaultValue={dayjs()}
+                        onChange={(newValue) => setToDate(convertDate(newValue))}
+                        maxDate={dayjs()}
                     />
                 </Grid>
             </Grid>
-            <Paper sx={{ width: "100%", overflow: "hidden" }}>
+
+            <ButtonCustomize
+                onClick={() => loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, status, fromDate, toDate)}
+                variant="contained"
+                // component={RouterLink}
+                nameButton="Tìm kiếm"
+            />
+            <Paper sx={{ width: "100%", overflow: "hidden", marginTop: '20px' }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -270,7 +348,7 @@ export default function BookingTable() {
                                             </TableCell>
                                             <TableCell align="left">{value.userId !== null ? value.userId.fullname : ""}</TableCell>
                                             <TableCell align="left"><DateFormat date={value.createdAt} /></TableCell>
-                                            <TableCell align="left">{value.totalPrice}</TableCell>
+                                            <TableCell align="left">{value.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</TableCell>
                                             <TableCell align="left">
                                                 {value.status}
                                             </TableCell>
@@ -302,7 +380,7 @@ export default function BookingTable() {
                 <hr style={{ opacity: '0.5' }} />
                 <Stack spacing={2} sx={{ float: "right" }} style={{ margin: '10px 0', justifyContent: 'center' }}>
                     <Pagination
-                        count={pages}
+                        count={data.length / DEFAULT_LIMIT}
                         page={currentPage}
                         color="primary"
                         onChange={handlePaging}

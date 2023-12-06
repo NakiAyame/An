@@ -168,7 +168,7 @@ const Register = () => {
                 type="password"
                 id="Re-password"
                 autoComplete="current-password"
-                value={data.password}
+                value={data.rePassword}
                 onChange={(e) => setData({ ...data, rePassword: e.target.value })}
               />
               <Button
