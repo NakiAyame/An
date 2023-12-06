@@ -194,7 +194,7 @@ const Login = () => {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <NavLink href="/reset-password" variant="body2">
+                  <NavLink to="/reset-password" variant="body2">
                     Quên mật khẩu?
                   </NavLink>
                 </Grid>

@@ -220,7 +220,7 @@ const BasicTable = () => {
                         }
                     })
                     .catch((err) => {
-                        alert(err.data)
+                        alert(err)
                     })
             } catch (err) {
                 console.log(err);
