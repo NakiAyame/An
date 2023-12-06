@@ -33,17 +33,21 @@ const Register = () => {
     fullname: "",
     email: "",
     password: "",
+    rePassword: ""
   });
 
   const PWD_REGEX = /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
 
   const registerUser = async (e) => {
     e.preventDefault();
-    const { fullname, email, password } = data;
+    const { fullname, email, password, rePassword } = data;
 
     if (!password.match(PWD_REGEX)) {
       toast.error('Mật khẩu bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự')
-    } else {
+    } else if(password.trim() !== rePassword.trim()) {
+      toast.error('Mật khẩu thứ 2 không đúng')
+    }
+    else {
       try {
         const { data } = await axios.post("http://localhost:3500/register", {
           fullname,
@@ -155,18 +159,18 @@ const Register = () => {
                 value={data.password}
                 onChange={(e) => setData({ ...data, password: e.target.value })}
               />
-              {/* <TextField
+              <TextField
                 margin="normal"
                 required
                 fullWidth
-                name="password"
+                name="Re-password"
                 label="Re-password"
                 type="password"
-                id="password"
+                id="Re-password"
                 autoComplete="current-password"
                 value={data.password}
-                onChange={(e) => setData({ ...data, password: e.target.value })}
-              /> */}
+                onChange={(e) => setData({ ...data, rePassword: e.target.value })}
+              />
               <Button
                 type="submit"
                 fullWidth
