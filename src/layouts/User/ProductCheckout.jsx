@@ -95,7 +95,7 @@ export default function ProductCheckout() {
                     console.log(loadData.data);
                     let totalPrice = 0;
                     for (let i = 0; i < loadData.data.length; i++) {
-                        totalPrice += loadData.data[i].quantity * (loadData.data[i].productId.price - (loadData.data[i].productId.price * loadData.data[i].productId.discount))
+                        totalPrice += loadData.data[i].quantity * (loadData.data[i].productId.price - (loadData.data[i].productId.price * loadData.data[i].productId.discount / 100))
                     }
                     setTotal(totalPrice);
                 }

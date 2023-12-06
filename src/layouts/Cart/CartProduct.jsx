@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 
 import useAuth from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { async } from 'q';
 
 const bull = (
   <Box
@@ -38,8 +39,23 @@ export default function CartProduct() {
   const context = useAuth();
   console.log(context.auth)
 
-  const handleProduct = () => {
-    console.log(quantity)
+  const handleDeleteOrder = async (id) => {
+    try {
+      const loadData = await axios.delete(
+        `http://localhost:3500/cartProduct/remove-from-cart/${id}`,
+        {
+          headers: { 'Authorization': context.auth.token },
+          withCredentials: true
+        }
+      )
+      .then((data) => {
+        console.log(data)
+        handleLoadCartProduct()
+      })
+      
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const handleLoadCartProduct = async () => {
@@ -60,7 +76,7 @@ export default function CartProduct() {
           console.log(loadData.data);
           let totalPrice = 0;
           for (let i = 0; i < loadData.data.length; i++) {
-            totalPrice += 1
+            totalPrice += loadData.data[i].quantity * (loadData.data[i].productId.price - (loadData.data[i].productId.price * loadData.data[i].productId.discount / 100))
           }
           setTotal(totalPrice);
         }
@@ -171,7 +187,9 @@ export default function CartProduct() {
                             {(value.quantity * (value.productId.price - (value.productId.price * value.productId.discount / 100))).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                           </Grid>
                           <Grid item xs={1}>
-                            Xoá
+                            <button onClick={(e) => handleDeleteOrder(value.productId._id)}>
+                              Xoá
+                            </button>
                           </Grid>
                         </Grid>
                       )

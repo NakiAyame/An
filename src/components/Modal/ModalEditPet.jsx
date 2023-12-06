@@ -20,7 +20,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Grid, Input } from "@mui/material";
-import { ChromePicker } from "react-color";
 import ButtonCustomize from "../Button/Button";
 
 const PET_NAME_REGEX =
