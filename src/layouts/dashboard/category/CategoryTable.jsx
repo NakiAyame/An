@@ -123,8 +123,8 @@ export default function CategoryTable() {
             >
               <TableRow>
                 <TableCell children>STT</TableCell>
-                <TableCell align="center">Loại</TableCell>
-                <TableCell align="center">Tên thể loại</TableCell>
+                <TableCell align="left">Loại</TableCell>
+                <TableCell align="left">Tên thể loại</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

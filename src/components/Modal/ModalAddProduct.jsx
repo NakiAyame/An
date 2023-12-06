@@ -27,7 +27,7 @@ const SERVICE_NAME_REGEX =
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
 const DESCRIPTION_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$:%^&,.?/()\s]{1,}$/;
 
 const ModalAddProduct = (props) => {
   const { open, onClose, handUpdateTable, category, page } = props;
