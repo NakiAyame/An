@@ -15,6 +15,8 @@ import DrawerDashborad from "./DrawerDashborad";
 import AccountMenu from "../../components/AccountMeun/AccountMeun";
 
 import { styled } from "@mui/material/styles";
+import { Container, Grid, Paper } from "@mui/material";
+import ChartDashBroad from "./Chart";
 
 const CustomAppBar = styled(AppBar)({
   background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
@@ -102,18 +104,9 @@ function ResponsiveDrawer(props) {
           <DrawerDashborad />
         </Drawer>
       </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
-        {/* router here */}
-        <Outlet />
-      </Box>
+
+      {/* router here */}
+      <Outlet />
     </Box>
   );
 }
