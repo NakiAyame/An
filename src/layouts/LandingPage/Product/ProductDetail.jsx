@@ -216,9 +216,10 @@ const ProductDetail = () => {
                     >
                       <strong>{product.productName}</strong>
                     </Typography>
-                    {product.discount !== 0 &&
-                    dayjs().isAfter(product.saleStartTime) &&
-                    dayjs().isBefore(product.saleEndTime) ? (
+                    {product.discount !== 0 ? (
+                      // &&
+                      // dayjs().isAfter(product.saleStartTime) &&
+                      // dayjs().isBefore(product.saleEndTime)
                       <Box
                         display="flex"
                         flexGrow={1}

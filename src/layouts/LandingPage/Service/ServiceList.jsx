@@ -361,9 +361,7 @@ export default function ServiceList() {
                             flexGrow={1}
                             sx={{ justifyContent: "space-between" }}
                           >
-                            {value.discount !== 0 &&
-                            dayjs().isAfter(value.saleStartTime) &&
-                            dayjs().isBefore(value.saleEndTime) ? (
+                            {value.discount !== 0 ? (
                               <Box
                                 display="flex"
                                 flexGrow={1}
