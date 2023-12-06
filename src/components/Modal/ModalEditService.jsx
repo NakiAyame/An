@@ -28,7 +28,7 @@ const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const DESCRIPTION_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$%^&,.?\s]{1,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$:%^&,.?/\s]{1,}$/;
 
 const ModalEditSerivce = (props) => {
   const {
@@ -136,7 +136,6 @@ const ModalEditSerivce = (props) => {
   const handleImageChange = (e) => {
     setServiceImage(e.target.files[0]);
     console.log("Kiểm tra image: ", e.target.files);
-    handleUpload();
   };
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE SERVICE -----------------------------
@@ -232,7 +231,7 @@ const ModalEditSerivce = (props) => {
           onClose();
         }
       } catch (err) {
-        toast.error(err.message); // xuất thông báo lỗi ra màn hình
+        toast.error("Bạn phải tải ảnh lên trước khi sửa dịch vụ");
       }
     }
   };
