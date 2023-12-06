@@ -35,6 +35,7 @@ import ModalAddPet from "./ModalAddPet";
 const ChoosePet = ({ open, onClose, service }) => {
   // console.log(service);
   const [data, setData] = useState([]);
+  const [dataCart, setDataCart] = useState([]);
 
   const [totalPets, setTotalPets] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -45,21 +46,57 @@ const ChoosePet = ({ open, onClose, service }) => {
   // ----------------------------------- API GET ALL PET BY USER ID--------------------------------
   useEffect(() => {
     loadAllPetByUserId();
+    handleLoadCartService();
   }, [context.auth.id]);
 
   const loadAllPetByUserId = async () => {
     try {
       const loadDataPet = await axios.get(
-        `http://localhost:3500/pet/userid?id=${context.auth.id}&limit=3`
+        `http://localhost:3500/pet/userid?id=${context.auth.id}`
       );
       if (loadDataPet.error) {
         toast.error(loadDataPet.error);
       } else {
         setTotalPages(loadDataPet.data.pages);
         console.log("Check totalPage", totalPages);
+        // setData(loadDataPet.data.docs);
+        const filterData = [];
+        console.log(loadDataPet.data.docs);
+        console.log(dataCart);
+
+        for (let i = 0; i < loadDataPet.data.docs.length; i++) {
+          for (let j = 0; j < dataCart.length; j++) {
+            if (loadDataPet.data.docs[i]._id !== dataCart[j].petId._id) {
+              filterData.push(loadDataPet.data.docs[i]);
+              console.log("1");
+            }
+          }
+        }
+        setData(filterData);
+
         setData(loadDataPet.data.docs);
+
         setTotalPets(loadDataPet.data.limit);
         console.log("Kiểm tra pet của người dùng", loadDataPet.data.docs);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleLoadCartService = async () => {
+    try {
+      const loadData = await axios.get(
+        `http://localhost:3500/cartService/view-cart`,
+        {
+          headers: { Authorization: context.auth.token },
+          withCredentials: true,
+        }
+      );
+      if (loadData.error) {
+        toast.error(loadData.error);
+      } else {
+        setDataCart(loadData.data);
       }
     } catch (err) {
       console.log(err);
@@ -154,7 +191,13 @@ const ChoosePet = ({ open, onClose, service }) => {
               <ListItem disableGutters>
                 <ListItemButton onClick={() => handleAddToCart(value._id)}>
                   <ListItemAvatar>
-                    <Avatar src="https://static2-images.vnncdn.net/files/publish/2022/12/8/meo-1-1416.jpg"></Avatar>
+                    <Avatar
+                      src={
+                        value.petImage !== undefined
+                          ? `${value.petImage}`
+                          : "https://static2-images.vnncdn.net/files/publish/2022/12/8/meo-1-1416.jpg"
+                      }
+                    ></Avatar>
                   </ListItemAvatar>
                   <ListItemText primary={value.petName} />
                 </ListItemButton>

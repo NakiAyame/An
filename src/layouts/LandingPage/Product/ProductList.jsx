@@ -302,9 +302,10 @@ export default function ProductList() {
                             flexGrow={1}
                             sx={{ justifyContent: "space-between" }}
                           >
-                            {value.discount !== 0 &&
-                            dayjs().isAfter(value.saleStartTime) &&
-                            dayjs().isBefore(value.saleEndTime) ? (
+                            {value.discount !== 0 ? (
+                              // &&
+                              // dayjs().isAfter(value.saleStartTime) &&
+                              // dayjs().isBefore(value.saleEndTime)
                               <Box
                                 display="flex"
                                 flexGrow={1}
@@ -341,16 +342,19 @@ export default function ProductList() {
                                 {numberToVND(value.price)}
                               </Typography>
                             )}
-
-                            <Tooltip
-                              title="Thêm vào giỏ hàng"
-                              onClick={() => handleAddToCart(value._id)}
-                              sx={{ backgroundColor: "pink" }}
-                            >
-                              <IconButton>
-                                <AddShoppingCartIcon />
-                              </IconButton>
-                            </Tooltip>
+                            {value.quantity !== 0 ? (
+                              <Tooltip
+                                title="Thêm vào giỏ hàng"
+                                onClick={() => handleAddToCart(value._id)}
+                                sx={{ backgroundColor: "pink" }}
+                              >
+                                <IconButton>
+                                  <AddShoppingCartIcon />
+                                </IconButton>
+                              </Tooltip>
+                            ) : (
+                              <Typography>HẾT HÀNG</Typography>
+                            )}
                           </Box>
                           <Typography>
                             SỐ LƯỢNG CÒN: {value.quantity}
