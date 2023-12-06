@@ -35,6 +35,7 @@ import ModalAddPet from "./ModalAddPet";
 const ChoosePet = ({ open, onClose, service }) => {
   // console.log(service);
   const [data, setData] = useState([]);
+  const [dataCart, setDataCart] = useState([]);
 
   const [totalPets, setTotalPets] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -57,9 +58,30 @@ const ChoosePet = ({ open, onClose, service }) => {
       } else {
         setTotalPages(loadDataPet.data.pages);
         console.log("Check totalPage", totalPages);
+
         setData(loadDataPet.data.docs);
+
         setTotalPets(loadDataPet.data.limit);
         console.log("Kiểm tra pet của người dùng", loadDataPet.data.docs);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleLoadCartService = async () => {
+    try {
+      const loadData = await axios.get(
+        `http://localhost:3500/cartService/view-cart`,
+        {
+          headers: { Authorization: context.auth.token },
+          withCredentials: true,
+        }
+      );
+      if (loadData.error) {
+        toast.error(loadData.error);
+      } else {
+        setDataCart(loadData.data);
       }
     } catch (err) {
       console.log(err);
