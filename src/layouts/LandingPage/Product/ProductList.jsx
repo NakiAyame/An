@@ -159,6 +159,7 @@ export default function ProductList() {
             `${BASE_URL}/cartProduct/add-to-cart`,
             {
               productId: id,
+              quantity: 1,
             },
             {
               headers: { Authorization: context.auth.token },
