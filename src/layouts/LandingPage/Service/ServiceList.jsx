@@ -218,7 +218,7 @@ export default function ServiceList() {
     if (context.auth.token === undefined) {
       toast.warning("Bạn chưa đăng nhập, vui lòng đăng nhập !");
     } else {
-      console.log("Check data", serviceId);
+      console.log("Check data id", serviceId);
       setSelectedService(serviceId);
       setIsModalChoosePetOpen(true);
     }
@@ -401,7 +401,7 @@ export default function ServiceList() {
 
                             <Tooltip
                               title="Thêm vào giỏ dịch vụ"
-                              onClick={() => handleAddToCartClick(value)}
+                              onClick={() => handleAddToCartClick(value._id)}
                               sx={{ backgroundColor: "pink" }}
                             >
                               <IconButton>
