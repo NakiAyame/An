@@ -29,7 +29,7 @@ import ClassIcon from "@mui/icons-material/Class";
 const DrawerDashborad = () => {
   const navigate = useNavigate();
   const links = [
-    { text: "Dashboard", path: "/dashboard" },
+    { text: "Dashboard", path: "/dashboard/dashboard-list" },
     { text: "Danh sách người dùng", path: "/dashboard/user-list" },
   ];
 

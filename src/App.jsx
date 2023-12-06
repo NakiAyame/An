@@ -36,6 +36,7 @@ import ServicePurchase from "./layouts/User/ServicePurchase";
 import ResetPassword from "./layouts/User/ResetPassword";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import DashboardList from "./layouts/dashboard/DashboardList";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -53,6 +54,10 @@ function App() {
           <Routes>
             <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
               <Route path="/dashboard" element={<Dashboard />}>
+                <Route
+                  path="/dashboard/dashboard-list"
+                  element={<DashboardList />}
+                />
                 <Route path="/dashboard/user-list" element={<BasicTable />} />
                 <Route path="/dashboard/order-list" element={<OrderTable />} />
                 <Route
