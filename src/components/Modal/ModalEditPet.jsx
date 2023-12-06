@@ -194,7 +194,7 @@ const ModalEditPet = (props) => {
         }
       } catch (err) {
         // toast.error(err.message);
-        toast.error("Bạn phải tải ảnh lên trước khi sửa dịch vụ");
+        toast.error("Bạn phải tải ảnh lên trước khi sửa thú cưng");
       }
     }
   };

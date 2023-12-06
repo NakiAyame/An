@@ -270,6 +270,7 @@ export default function ServiceList() {
             justifyContent: "space-between",
             borderEndStartRadius: "5px",
             borderEndEndRadius: "5px",
+            alignItems: "center",
           }}
         >
           <Box>

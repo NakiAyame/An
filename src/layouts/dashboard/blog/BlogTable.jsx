@@ -144,10 +144,10 @@ export default function BlogTable() {
             >
               <TableRow>
                 <TableCell children>STT</TableCell>
-                <TableCell align="center">Tiêu đề</TableCell>
-                <TableCell align="center">Nội dung</TableCell>
-                <TableCell align="center">Người đăng</TableCell>
-                <TableCell align="center">Image</TableCell>
+                <TableCell align="left">Tiêu đề</TableCell>
+                <TableCell align="left">Nội dung</TableCell>
+                <TableCell align="left">Người đăng</TableCell>
+                {/* <TableCell align="center">Image</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -167,17 +167,17 @@ export default function BlogTable() {
                       <TableCell align="left">
                         <ContentCus value={value} />
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">
                         {value.userId !== null ? value.userId.fullname : ""}
                       </TableCell>
-                      <TableCell align="center">
+                      {/* <TableCell align="center">
                         <img
                           src={`${value.image}`}
                           alt={value.image}
                           height="100px"
                           width="150px"
                         />
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   );
                 })}

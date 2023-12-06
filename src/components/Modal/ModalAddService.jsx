@@ -25,7 +25,7 @@ const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const DESCRIPTION_REGEX =
-  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
+  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$:%^&,.?/()\s]{1,}$/;
 
 const ModalAddSerivce = (props) => {
   const { open, onClose, handUpdateTable, category, page } = props;
@@ -261,6 +261,13 @@ const ModalAddSerivce = (props) => {
               onChange={handleImageChange}
               style={{ marginBottom: "1rem" }}
             />
+            {image && (
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Ảnh sản phẩm"
+                style={{ maxWidth: "100%" }}
+              />
+            )}
             <RadioGroup
               value={status}
               onChange={handleStatusChange}

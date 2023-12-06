@@ -36,6 +36,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Avatar, CardActionArea, IconButton, Tooltip } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import dayjs from "dayjs";
+import DropDownService from "../../../components/DropDown/DropDownService";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -175,6 +176,57 @@ export default function ProductList() {
     }
   };
 
+  // --------------------- GET ALL CATEGORY PRODUCT -----------------------------
+  const [category, setCategory] = useState([]);
+  async function loadAllCategoryProduct() {
+    try {
+      const loadDataCategoryProduct = await axios.get(
+        `http://localhost:3500/category?categoryName=Sản phẩm`
+      );
+      if (loadDataCategoryProduct.error) {
+        toast.error(loadDataCategoryProduct.error);
+      } else {
+        setCategory(loadDataCategoryProduct.data.docs);
+        console.log(loadDataCategoryProduct.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    loadAllCategoryProduct();
+  }, []);
+
+  // --------------------- GET ALL PRODUCT BY CATEGORY ID PRODUCT -----------------------------
+  async function hanldeClickCategory(cateId) {
+    console.log("Check data cate ID", cateId);
+    if (cateId == undefined || cateId == "") {
+      loadAllProduct(currentPage);
+    } else {
+      try {
+        const loadData = await axios.get(
+          `http://localhost:3500/product?page=1&categoryId=${cateId}`
+        );
+        if (loadData.error) {
+          toast.error(loadData.error);
+        } else {
+          console.log("Check loaddata", loadData.data);
+          setTotalPages(loadData.data.pages);
+          // console.log("Check totalPage", totalPages);
+          setData(loadData.data.docs);
+          setTotalProducts(loadData.data.limit);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  useEffect(() => {
+    hanldeClickCategory();
+  }, []);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -198,22 +250,32 @@ export default function ProductList() {
             bgcolor: "background.paper",
             p: 3,
             display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
+            justifyContent: "space-between",
             borderEndStartRadius: "5px",
             borderEndEndRadius: "5px",
+            alignItems: "center",
           }}
         >
-          <Breadcrumbs maxItems={2} aria-label="breadcrumb">
-            <StyledBreadcrumb
-              component={NavLink}
-              to="/"
-              label="Trang chủ"
-              icon={<HomeIcon fontSize="small" />}
+          <Box>
+            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+              <StyledBreadcrumb
+                component={NavLink}
+                to="/"
+                label="Trang chủ"
+                icon={<HomeIcon fontSize="small" />}
+              />
+              {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
+              <StyledBreadcrumb label="Sản phẩm" />
+            </Breadcrumbs>
+          </Box>
+
+          <Box>
+            <DropDownService
+              category={category}
+              cateName="Loại dịch vụ"
+              handUpdateEditTable={hanldeClickCategory}
             />
-            {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
-            <StyledBreadcrumb label="Sản phẩm" />
-          </Breadcrumbs>
+          </Box>
         </Container>
 
         <Container sx={{ py: 8 }}>
