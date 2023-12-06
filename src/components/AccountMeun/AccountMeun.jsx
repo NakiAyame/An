@@ -18,6 +18,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import HomeIcon from "@mui/icons-material/Home";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -138,15 +139,23 @@ export default function AccountMenu() {
           </ListItemIcon>
           Thông tin cá nhân
         </MenuItem>
-        <MenuItem onClick={handleClose} component={NavLink} to="/product-purchase">
+        <MenuItem
+          onClick={handleClose}
+          component={NavLink}
+          to="/product-purchase"
+        >
           <ListItemIcon>
             <ShoppingCartIcon fontSize="small" />
           </ListItemIcon>
           Đơn hàng
         </MenuItem>
-        <MenuItem onClick={handleClose} component={NavLink} to="/service-purchase">
+        <MenuItem
+          onClick={handleClose}
+          component={NavLink}
+          to="/service-purchase"
+        >
           <ListItemIcon>
-            <ShoppingCartIcon fontSize="small" />
+            <ShoppingBagIcon fontSize="small" />
           </ListItemIcon>
           Lịch đặt dịch vụ
         </MenuItem>
