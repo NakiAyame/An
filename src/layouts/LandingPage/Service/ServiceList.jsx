@@ -32,7 +32,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { Avatar, CardActionArea, IconButton, Tooltip } from "@mui/material";
+import {
+  Avatar,
+  CardActionArea,
+  IconButton,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import DropDownService from "../../../components/DropDown/DropDownService";
 import ChoosePet from "../../../components/Modal/ModalChoosePet";
 import useAuth from "../../../hooks/useAuth";
@@ -139,12 +145,6 @@ export default function ServiceList() {
     } catch (err) {
       console.log(err);
     }
-  };
-
-  // --------------------- Click paging -----------------------------
-  const handlePageClick = (event, value) => {
-    setCurrentPage(value);
-    // loadAllService(+event.selected + 1);
   };
 
   // --------------------- GET ALL CATEGORY SERVICE -----------------------------
@@ -255,6 +255,59 @@ export default function ServiceList() {
     }
   };
 
+  // --------------------- Hanlde Search -----------------------------
+  const [keyword, setKeyword] = useState("");
+
+  // --------------------- Click paging -----------------------------
+  const handlePageClick = (event, value) => {
+    setCurrentPage(value);
+    if (!keyword) {
+      loadAllService(value);
+    } else {
+      searchServiceByName();
+    }
+    // loadAllService(+event.selected + 1);
+  };
+
+  const handleKeywordChange = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleSearchClick = async () => {
+    if (keyword === "") {
+      toast.warning("Hãy nhập kết quả bạn cần tìm");
+      loadAllService(currentPage);
+    } else {
+      searchServiceByName();
+    }
+  };
+
+  // ----------------------------------- GET ALL SERVICE BY SERVICE NAME --------------------------------
+  const searchServiceByName = async () => {
+    try {
+      const loadData = await axios.get(
+        `${BASE_URL}/service?service=${keyword}&page=1`
+      );
+      if (loadData.data.error) {
+        toast.warning(
+          "Kết quả " +
+            "[" +
+            keyword +
+            "]" +
+            " bạn vừa tìm không có! Vui lòng nhập lại."
+        );
+        loadAllService(currentPage);
+      } else {
+        setData(loadData.data.docs);
+        setTotalServices(loadData.data.limit);
+        setTotalPages(loadData.data.pages);
+        console.log(loadData.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -288,6 +341,25 @@ export default function ServiceList() {
                 label="Dịch vụ"
               />
             </Breadcrumbs>
+          </Box>
+
+          <Box>
+            <TextField
+              fullWidth
+              label="Tìm kiếm"
+              margin="normal"
+              size="small"
+              value={keyword}
+              onChange={handleKeywordChange}
+              // sx={{ position: "fixed" }}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleSearchClick}>
+                    <SearchIcon />
+                  </IconButton>
+                ),
+              }}
+            />
           </Box>
           <Box
             sx={{
@@ -417,7 +489,10 @@ export default function ServiceList() {
                                   component="h2"
                                   sx={{ color: "red" }}
                                 >
-                                  {numberToVND(value.discountedPrice)}
+                                  {numberToVND(
+                                    value.price -
+                                      (value.price * value.discount) / 100
+                                  )}
                                 </Typography>
                               </Box>
                             ) : (

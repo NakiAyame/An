@@ -34,6 +34,7 @@ import ModalEditProduct from "../../../components/Modal/ModalEditProduct";
 import ModalComfirmProduct from "../../../components/Modal/ModalComfirmProduct";
 import DropDownService from "../../../components/DropDown/DropDownService";
 import TypographyCus from "../../../components/Typography/DescriptionCus";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -215,7 +216,7 @@ export default function ProductTable() {
             "]" +
             " bạn vừa tìm không có! Vui lòng nhập lại. "
         );
-        setData(loadData.data.docs);
+        loadAllProduct(currentPage);
       } else {
         setData(loadData.data.docs);
         setTotalProducts(loadData.data.limit);
@@ -267,6 +268,7 @@ export default function ProductTable() {
             color="white"
             // component={RouterLink}
             nameButton="Thêm mới"
+            startIcon={<AddCircleOutlineIcon />}
           />
         </Grid>
       </Grid>

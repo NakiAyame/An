@@ -33,7 +33,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { Avatar, CardActionArea, IconButton, Tooltip } from "@mui/material";
+import {
+  Avatar,
+  CardActionArea,
+  IconButton,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import dayjs from "dayjs";
 import DropDownService from "../../../components/DropDown/DropDownService";
@@ -227,6 +233,48 @@ export default function ProductList() {
     hanldeClickCategory();
   }, []);
 
+  // --------------------- Hanlde Search -----------------------------
+  const [keyword, setKeyword] = useState("");
+
+  const handleKeywordChange = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleSearchClick = async () => {
+    if (keyword === "") {
+      toast.warning("Hãy nhập kết quả bạn cần tìm");
+      loadAllProduct(currentPage);
+    } else {
+      searchProductByName();
+    }
+  };
+
+  // ----------------------------------- GET ALL PRODUCTS BY PRODUCT NAME --------------------------------
+  const searchProductByName = async () => {
+    try {
+      const loadData = await axios.get(
+        `${BASE_URL}/product?product=${keyword}&page=1`
+      );
+      if (loadData.data.error) {
+        toast.warning(
+          "Kết quả " +
+            "[" +
+            keyword +
+            "]" +
+            " bạn vừa tìm không có! Vui lòng nhập lại. "
+        );
+        loadAllProduct(currentPage);
+      } else {
+        setData(loadData.data.docs);
+        setTotalProducts(loadData.data.limit);
+        setTotalPages(loadData.data.pages);
+        console.log(loadData.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -267,6 +315,25 @@ export default function ProductList() {
               {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
               <StyledBreadcrumb label="Sản phẩm" />
             </Breadcrumbs>
+          </Box>
+
+          <Box>
+            <TextField
+              fullWidth
+              label="Tìm kiếm"
+              margin="normal"
+              size="small"
+              value={keyword}
+              onChange={handleKeywordChange}
+              // sx={{ position: "fixed" }}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleSearchClick}>
+                    <SearchIcon />
+                  </IconButton>
+                ),
+              }}
+            />
           </Box>
 
           <Box>
@@ -392,7 +459,10 @@ export default function ProductList() {
                                   component="h2"
                                   sx={{ color: "red" }}
                                 >
-                                  {numberToVND(value.discountedPrice)}
+                                  {numberToVND(
+                                    value.price -
+                                      (value.price * value.discount) / 100
+                                  )}
                                 </Typography>
                               </Box>
                             ) : (
