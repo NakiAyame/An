@@ -268,7 +268,8 @@ const ModalEditProduct = (props) => {
           onClose();
         }
       } catch (err) {
-        toast.error(err.message);
+        // toast.error(err.message);
+        toast.error("Bạn phải tải ảnh lên trước khi sửa dịch vụ");
       }
     }
   };

@@ -116,7 +116,7 @@ export default function ServiceTable() {
   async function loadAllCategoryService() {
     try {
       const loadData = await axios.get(
-        `http://localhost:3500/category?categoryName=service`
+        `http://localhost:3500/category?categoryName=Dịch vụ`
       );
       if (loadData.error) {
         toast.error(loadData.error);
@@ -136,12 +136,12 @@ export default function ServiceTable() {
   // --------------------- GET ALL SERVICE BY CATEGORY ID SERVICE -----------------------------
   async function hanldeClickCategory(cateId) {
     console.log("Check data cate ID", cateId, order);
-    if (cateId == undefined || cateId == "" || order == "") {
-      loadAllService(currentPage);
+    if (cateId === null) {
+      loadAllService();
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/service?page=1&categoryId=${cateId}&sortPrice=${order}`
+          `http://localhost:3500/service?page=1&categoryId=${cateId}`
         );
         if (loadData.error) {
           toast.error(loadData.error);
