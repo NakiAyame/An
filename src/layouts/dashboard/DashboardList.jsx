@@ -26,16 +26,8 @@ export default function DashboardList() {
   const drawerWidth = 240;
 
   return (
-    <React.Fragment>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
+    <>
+      <React.Fragment>
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           <Grid container spacing={3}>
             {/* Chart */}
@@ -72,7 +64,7 @@ export default function DashboardList() {
             </Grid>
           </Grid>
         </Container>
-      </Box>
-    </React.Fragment>
+      </React.Fragment>
+    </>
   );
 }
