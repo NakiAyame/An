@@ -203,9 +203,9 @@ const ServiceDetail = () => {
                     >
                       <strong>{service.serviceName}</strong>
                     </Typography>
-                    {service.discount !== 0 &&
-                    dayjs().isAfter(service.saleStartTime) &&
-                    dayjs().isBefore(service.saleEndTime) ? (
+                    {service.discount !== 0 ? (
+                      // && dayjs().isAfter(service.saleStartTime) &&
+                      // dayjs().isBefore(service.saleEndTime)
                       <Box
                         display="flex"
                         flexGrow={1}

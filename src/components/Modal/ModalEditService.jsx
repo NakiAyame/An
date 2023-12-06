@@ -57,48 +57,48 @@ const ModalEditSerivce = (props) => {
     console.log(status);
   };
 
-  // --------------------- HANLDE CHANGE DISCOUNT -----------------------------
-  const handleDiscountChange = (event) => {
-    const { value } = event.target;
-    const numericValue = parseInt(value, 10);
+  // // --------------------- HANLDE CHANGE DISCOUNT -----------------------------
+  // const handleDiscountChange = (event) => {
+  //   const { value } = event.target;
+  //   const numericValue = parseInt(value, 10);
 
-    setDiscount(value);
+  //   setDiscount(value);
 
-    if (numericValue >= 1 && numericValue <= 100) {
-      setSaleStartTime();
-      setSaleEndTime();
-      setIsStartDateVisible(true);
-    } else {
-      setIsStartDateVisible(false);
-    }
-  };
+  //   if (numericValue >= 1 && numericValue <= 100) {
+  //     setSaleStartTime();
+  //     setSaleEndTime();
+  //     setIsStartDateVisible(true);
+  //   } else {
+  //     setIsStartDateVisible(false);
+  //   }
+  // };
 
-  // --------------------- HANLDE CHANGE START DATE -----------------------------
-  const handleStartDateChange = (date) => {
-    // Chỉ đặt startDate nếu ngày được chọn không phải là ngày trong quá khứ
-    if (!dayjs(date).isBefore(dayjs(), "day")) {
-      toast.success("Ngày bắt đầu hợp lệ!");
-      setSaleStartTime(date);
+  // // --------------------- HANLDE CHANGE START DATE -----------------------------
+  // const handleStartDateChange = (date) => {
+  //   // Chỉ đặt startDate nếu ngày được chọn không phải là ngày trong quá khứ
+  //   if (!dayjs(date).isBefore(dayjs(), "day")) {
+  //     toast.success("Ngày bắt đầu hợp lệ!");
+  //     setSaleStartTime(date);
 
-      // Nếu endDate đã được chọn và trước startDate, đặt lại endDate thành null
-      if (saleEndTime && dayjs(saleEndTime).isBefore(date)) {
-        toast.error("Ngày bắt đầu không thể sau ngày kết thúc!!");
-        setSaleEndTime(null);
-      }
-    } else {
-      toast.error("Ngày bắt đầu không thể ở quá khứ!!");
-    }
-  };
+  //     // Nếu endDate đã được chọn và trước startDate, đặt lại endDate thành null
+  //     if (saleEndTime && dayjs(saleEndTime).isBefore(date)) {
+  //       toast.error("Ngày bắt đầu không thể sau ngày kết thúc!!");
+  //       setSaleEndTime(null);
+  //     }
+  //   } else {
+  //     toast.error("Ngày bắt đầu không thể ở quá khứ!!");
+  //   }
+  // };
 
-  const handleEndDateChange = (date) => {
-    // Chỉ đặt endDate nếu startDate đã được chọn và ngày được chọn sau saleStartTime
-    if (saleStartTime && !dayjs(date).isBefore(saleStartTime)) {
-      toast.success("Ngày kết thúc hợp lệ!");
-      setSaleEndTime(date);
-    } else {
-      toast.error("Ngày kết thúc không thể sau ngày bắt đầu!!");
-    }
-  };
+  // const handleEndDateChange = (date) => {
+  //   // Chỉ đặt endDate nếu startDate đã được chọn và ngày được chọn sau saleStartTime
+  //   if (saleStartTime && !dayjs(date).isBefore(saleStartTime)) {
+  //     toast.success("Ngày kết thúc hợp lệ!");
+  //     setSaleEndTime(date);
+  //   } else {
+  //     toast.error("Ngày kết thúc không thể sau ngày bắt đầu!!");
+  //   }
+  // };
 
   // --------------------- VALIDATION -----------------------------
   const [validServiceName, setValidServiceName] = useState("");
@@ -328,6 +328,7 @@ const ModalEditSerivce = (props) => {
               InputProps={{
                 readOnly: true,
               }}
+              variant="filled"
               onChange={(e) => handleValidationPrice(e)}
               // error={!validPrice}
               // helperText={validPrice ? "" : "Hãy nhập số tiền dịch vụ"}
@@ -340,9 +341,10 @@ const ModalEditSerivce = (props) => {
               type="number"
               margin="normal"
               value={discount}
-              onChange={handleDiscountChange}
+              onChange={(e) => setDiscount(e.target.value)}
+              // onChange={handleDiscountChange}
             />
-            {isStartDateVisible && (
+            {/* {isStartDateVisible && (
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                   <DatePicker
@@ -362,7 +364,7 @@ const ModalEditSerivce = (props) => {
                   />
                 </Grid>
               </Grid>
-            )}
+            )} */}
 
             <RadioGroup
               value={status}
