@@ -34,6 +34,7 @@ import ModalEditProduct from "../../../components/Modal/ModalEditProduct";
 import ModalComfirmProduct from "../../../components/Modal/ModalComfirmProduct";
 import DropDownService from "../../../components/DropDown/DropDownService";
 import TypographyCus from "../../../components/Typography/DescriptionCus";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -139,7 +140,7 @@ export default function ProductTable() {
   async function loadAllCategoryProduct() {
     try {
       const loadDataCategoryProduct = await axios.get(
-        `http://localhost:3500/category?categoryName=product`
+        `http://localhost:3500/category?categoryName=Sản phẩm`
       );
       if (loadDataCategoryProduct.error) {
         toast.error(loadDataCategoryProduct.error);
@@ -215,7 +216,7 @@ export default function ProductTable() {
             "]" +
             " bạn vừa tìm không có! Vui lòng nhập lại. "
         );
-        setData(loadData.data.docs);
+        loadAllProduct(currentPage);
       } else {
         setData(loadData.data.docs);
         setTotalProducts(loadData.data.limit);
@@ -267,6 +268,7 @@ export default function ProductTable() {
             color="white"
             // component={RouterLink}
             nameButton="Thêm mới"
+            startIcon={<AddCircleOutlineIcon />}
           />
         </Grid>
       </Grid>
@@ -280,6 +282,7 @@ export default function ProductTable() {
                 <TableCell align="left">Tên sản phẩm</TableCell>
                 <TableCell align="left">Số lượng</TableCell>
                 <TableCell align="left">Giá tiền</TableCell>
+                <TableCell align="left">Loại dịch vụ</TableCell>
                 <TableCell align="left">Thông tin sản phẩm</TableCell>
                 {/* <TableCell align="center">Chức năng</TableCell> */}
               </TableRow>
@@ -302,6 +305,13 @@ export default function ProductTable() {
                       <TableCell align="left">{value.quantity}</TableCell>
                       <TableCell align="left">
                         {numberToVND(value.price)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {category.map((valueCategory, Cid) => {
+                          if (value.categoryId === valueCategory._id) {
+                            return valueCategory.feature;
+                          }
+                        })}
                       </TableCell>
                       <TableCell align="left">
                         <TypographyCus value={value} />

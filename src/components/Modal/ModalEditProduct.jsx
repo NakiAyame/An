@@ -36,11 +36,11 @@ const formatDate = (dateTime) => {
 };
 
 const PRODUCT_NAME_REGEX =
-  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ,\s]{3,}$/;
+  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$:%^&,.?/()-\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
 const DESCRIPTION_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$%^&,.?\s]{1,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$:%^&,.?/()-\s]{1,}$/;
 
 const ModalEditProduct = (props) => {
   const {
@@ -233,9 +233,7 @@ const ModalEditProduct = (props) => {
     } else if (discount === "") {
       toast.error("% giảm giá không được để trống");
     } else if (!validProductName) {
-      toast.error(
-        "Tên sản phẩm không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
-      );
+      toast.error("Tên sản phẩm phải có ít nhất 3 kí tự");
     } else if (discount < 0) {
       toast.error("% giảm giá không được âm ");
     } else if (discount > 100) {
@@ -269,7 +267,7 @@ const ModalEditProduct = (props) => {
         }
       } catch (err) {
         // toast.error(err.message);
-        toast.error("Bạn phải tải ảnh lên trước khi sửa dịch vụ");
+        toast.error("Bạn phải tải ảnh lên trước khi sửa sản phẩm");
       }
     }
   };

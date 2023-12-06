@@ -37,6 +37,8 @@ import { toast } from "react-toastify";
 import ModalAddPet from "../../../components/Modal/ModalAddPet";
 import ModalEditPet from "../../../components/Modal/ModalEditPet";
 import useAuth from "../../../hooks/useAuth";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import DropDownService from "../../../components/DropDown/DropDownService";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -154,7 +156,7 @@ export default function PetTable() {
             "]" +
             " bạn vừa tìm không có! Vui lòng nhập lại. "
         );
-        setData(loadData.data.docs);
+        loadAllPet(currentPage);
       } else {
         setData(loadData.data.docs);
         setTotalPets(loadData.data.limit);
@@ -171,7 +173,7 @@ export default function PetTable() {
   async function loadAllCategoryPet() {
     try {
       const loadDataCategoryPet = await axios.get(
-        `http://localhost:3500/category?categoryName=animal`
+        `http://localhost:3500/category?categoryName=Thú cưng`
       );
       if (loadDataCategoryPet.error) {
         toast.error(loadDataCategoryPet.error);
@@ -186,6 +188,35 @@ export default function PetTable() {
 
   useEffect(() => {
     loadAllCategoryPet();
+  }, []);
+
+  // --------------------- GET ALL PRODUCT BY CATEGORY ID PRODUCT -----------------------------
+  async function hanldeClickCategory(cateId) {
+    console.log("Check data cate ID", cateId);
+    if (cateId == undefined || cateId == "") {
+      loadAllPet(currentPage);
+    } else {
+      try {
+        const loadData = await axios.get(
+          `http://localhost:3500/pet?page=1&categoryId=${cateId}`
+        );
+        if (loadData.error) {
+          toast.error(loadData.error);
+        } else {
+          console.log("Check loaddata", loadData.data);
+          setTotalPages(loadData.data.pages);
+          // console.log("Check totalPage", totalPages);
+          setData(loadData.data.docs);
+          setTotalPets(loadData.data.limit);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  useEffect(() => {
+    hanldeClickCategory();
   }, []);
 
   return (
@@ -218,12 +249,21 @@ export default function PetTable() {
           </Grid>
 
           <Grid item>
+            <DropDownService
+              category={category}
+              cateName="Loại thú cưng"
+              handUpdateEditTable={hanldeClickCategory}
+            />
+          </Grid>
+
+          <Grid item>
             <ButtonCustomize
               onClick={handleCreateModal}
               color="white"
               // component={RouterLink}
               nameButton="Thêm mới"
               // sx={{ position: "fixed" }}
+              startIcon={<AddCircleOutlineIcon />}
             />
           </Grid>
         </Grid>
