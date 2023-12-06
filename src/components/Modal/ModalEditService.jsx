@@ -325,6 +325,9 @@ const ModalEditSerivce = (props) => {
               type="number"
               margin="normal"
               value={price}
+              InputProps={{
+                readOnly: true,
+              }}
               onChange={(e) => handleValidationPrice(e)}
               // error={!validPrice}
               // helperText={validPrice ? "" : "Hãy nhập số tiền dịch vụ"}
