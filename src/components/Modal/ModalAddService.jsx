@@ -25,7 +25,7 @@ const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const DESCRIPTION_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
+  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
 
 const ModalAddSerivce = (props) => {
   const { open, onClose, handUpdateTable, category, page } = props;
@@ -90,15 +90,20 @@ const ModalAddSerivce = (props) => {
           `http://localhost:3500/service/upload`,
           formData
         );
-        console.log("Response data:", response.data.image);
-        const imagePath = response.data.image;
-
-        if (imagePath) {
-          console.log("Đã tải ảnh lên:", imagePath);
-          handleCreateService(imagePath);
+        const maxSize = 1024 * 1024;
+        if (image.size > maxSize) {
+          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
         } else {
-          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
-          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          console.log("Response data:", response.data.image);
+          const imagePath = response.data.image;
+
+          if (imagePath) {
+            console.log("Đã tải ảnh lên:", imagePath);
+            handleCreateService(imagePath);
+          } else {
+            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          }
         }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");

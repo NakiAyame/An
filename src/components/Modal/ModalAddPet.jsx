@@ -19,7 +19,9 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Input } from "@mui/material";
+import { Grid, Input } from "@mui/material";
+import { ChromePicker } from "react-color";
+import ButtonCustomize from "../Button/Button";
 
 const PET_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
@@ -38,15 +40,17 @@ const ModalAddPet = (props) => {
   const [height, setHeight] = useState(0);
   const [image, setImage] = useState(null);
 
+  // --------------------- HANLDE CHANGE STATUS -----------------------------
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
-    console.log(status);
   };
 
   // --------------------- VALIDATION -----------------------------
   const [valid, setValid] = useState("");
   const [validHeight, setValidHeight] = useState("");
   const [validWeight, setValidWeight] = useState("");
+  const [validColor, setValidColor] = useState("");
+
   useEffect(() => {
     setValid(PET_NAME_REGEX.test(petName) && petName.trim() !== "");
   }, [petName]);
@@ -72,6 +76,14 @@ const ModalAddPet = (props) => {
   };
 
   useEffect(() => {
+    setValidColor(color.trim());
+  }, [color]);
+
+  const handleValidationColor = (e) => {
+    setColor(e.target.value);
+  };
+
+  useEffect(() => {
     if (open) {
       setUserId(data);
     }
@@ -85,6 +97,8 @@ const ModalAddPet = (props) => {
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PET -----------------------------
   const handleUpload = async () => {
+    const maxSize = 1024 * 1024;
+
     try {
       if (image) {
         const formData = new FormData();
@@ -93,15 +107,19 @@ const ModalAddPet = (props) => {
           `http://localhost:3500/pet/upload`,
           formData
         );
-        console.log("Response data:", response.data.image);
-        const imagePath = response.data.image;
-
-        if (imagePath) {
-          console.log("Đã tải ảnh lên:", imagePath);
-          handleCreateService(imagePath);
+        if (image.size > maxSize) {
+          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
         } else {
-          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
-          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          console.log("Response data:", response.data.image);
+          const imagePath = response.data.image;
+
+          if (imagePath) {
+            console.log("Đã tải ảnh lên:", imagePath);
+            handleCreateService(imagePath);
+          } else {
+            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          }
         }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
@@ -127,14 +145,6 @@ const ModalAddPet = (props) => {
     );
     if (petName === "") {
       toast.error("Tên thú cưng không được để trống");
-    } else if (height === "") {
-      toast.error("Chiều cao thú cưng không được để trống");
-    } else if (weight === "") {
-      toast.error("Cân nặng thú cưng không được để trống");
-    } else if (height === 0) {
-      toast.error("Chiều cao thú cưng không được bằng 0");
-    } else if (weight === 0) {
-      toast.error("Cân nặng thú cưng không được bằng 0");
     } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
@@ -246,7 +256,7 @@ const ModalAddPet = (props) => {
                 Chọn loại thú cưng
               </InputLabel>
               <Select
-                label="Loại sản phẩm"
+                label="Loại thú cưng"
                 value={categoryId}
                 onChange={handleChangePet}
               >
@@ -279,6 +289,14 @@ const ModalAddPet = (props) => {
               margin="normal"
               value={weight}
               onChange={(e) => handleValidationPetWeight(e)}
+            />
+
+            <TextField
+              fullWidth
+              label="Mô tả màu lông"
+              margin="normal"
+              value={color}
+              onChange={(e) => handleValidationColor(e)}
             />
 
             <TextField

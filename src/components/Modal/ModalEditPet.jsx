@@ -19,15 +19,24 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Input } from "@mui/material";
+import { Grid, Input } from "@mui/material";
+import { ChromePicker } from "react-color";
+import ButtonCustomize from "../Button/Button";
 
 const PET_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
 const PET_HEIH_REGEX = /^\d*(\.\d+)?$/;
 
 const ModalEditPet = (props) => {
-  const { open, onClose, dataEditPet, handUpdateEditTable, page, category } =
-    props;
+  const {
+    open,
+    onClose,
+    dataEditPet,
+    handUpdateEditTable,
+    page,
+    data,
+    category,
+  } = props;
 
   const [userId, setUserId] = useState("");
   const [petName, setPetName] = useState("");
@@ -36,9 +45,10 @@ const ModalEditPet = (props) => {
   const [color, setColor] = useState("");
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
-  const [status, setStatus] = useState(true);
+  const [status, setStatus] = useState(false);
   const [petImage, setPetImage] = useState(null);
 
+  // --------------------- HANLDE CHANGE STATUS -----------------------------
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
     console.log(status);
@@ -49,7 +59,7 @@ const ModalEditPet = (props) => {
   const [validHeight, setValidHeight] = useState("");
   const [validWeight, setValidWeight] = useState("");
   useEffect(() => {
-    setValid(PET_NAME_REGEX.test(petName));
+    setValid(PET_NAME_REGEX.test(petName) && petName.trim());
   }, [petName]);
 
   const handleValidationPetName = (e) => {
@@ -72,10 +82,15 @@ const ModalEditPet = (props) => {
     setWeight(e.target.value);
   };
 
+  useEffect(() => {
+    if (open) {
+      setUserId(data);
+    }
+  }, [data]);
+
   // --------------------- HANDLE CHANGE IMAGE -----------------------------
   const handleImageChange = (e) => {
     setPetImage(e.target.files[0]);
-    console.log("Kiểm tra image: ", e.target.files);
   };
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PET -----------------------------
@@ -88,16 +103,21 @@ const ModalEditPet = (props) => {
           `http://localhost:3500/pet/upload`,
           formData
         );
-        console.log("Response data:", response.data.image);
-        const imagePath = response.data.image;
-
-        if (imagePath) {
-          console.log("Đã tải ảnh lên:", imagePath);
-          toast.success("Thêm ảnh thành công");
-          setPetImage(imagePath);
+        const maxSize = 1024 * 1024;
+        if (petImage.size > maxSize) {
+          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
         } else {
-          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
-          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          console.log("Response data:", response.data.image);
+          const imagePath = response.data.image;
+
+          if (imagePath) {
+            console.log("Đã tải ảnh lên:", imagePath);
+            toast.success("Thêm ảnh thành công");
+            setPetImage(petImage instanceof File ? imagePath : petImage);
+          } else {
+            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          }
         }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
@@ -125,27 +145,23 @@ const ModalEditPet = (props) => {
 
   const handleEditPet = async (petID) => {
     console.log(
-      "Check data truyền vào sản phẩm",
+      "Check data truyền vào của thú cưng",
       petName,
-      userId,
+      userId._id,
       categoryId,
       rank,
       status,
       height,
       weight,
-      petImage,
-      status
+      color,
+      petImage
     );
     if (petName === "") {
       toast.error("Tên thú cưng không được để trống");
-    } else if (height === "") {
-      toast.error("Chiều cao thú cưng không được để trống");
-    } else if (weight === "") {
-      toast.error("Cân nặng thú cưng không được để trống");
-    } else if (height === 0) {
-      toast.error("Chiều cao thú cưng không được bằng 0");
-    } else if (weight === 0) {
-      toast.error("Cân nặng thú cưng không được bằng 0");
+    } else if (height < 0) {
+      toast.error("Chiều cao thú cưng không được âm");
+    } else if (weight < 0) {
+      toast.error("Cân nặng thú cưng không được âm");
     } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
@@ -160,13 +176,14 @@ const ModalEditPet = (props) => {
       try {
         const res = await axios.patch(`http://localhost:3500/pet`, {
           id: petID,
-          userId: userId,
+          userId: userId._id,
           petName: petName,
           categoryId: categoryId,
           rank: rank,
           status: status,
           height: height,
           weight: weight,
+          color: color,
           petImage: petImage,
         });
         if (res.data.error) {
@@ -177,7 +194,7 @@ const ModalEditPet = (props) => {
           onClose();
         }
       } catch (err) {
-        toast.error(err.message); // xuất thông báo lỗi ra màn hình
+        toast.error(err.message);
       }
     }
   };
@@ -224,7 +241,7 @@ const ModalEditPet = (props) => {
               fullWidth
               label="Id chủ thú cưng"
               margin="normal"
-              value={userId}
+              value={data}
               sx={{ display: "none" }}
               onChange={(e) => setUserId(e.target.value)}
               // defaultValue={dataEditPet.userId.fullname}
@@ -244,7 +261,7 @@ const ModalEditPet = (props) => {
                 Chọn loại thú cưng
               </InputLabel>
               <Select
-                label="Loại sản phẩm"
+                label="Loại thú cưng"
                 value={categoryId}
                 onChange={handleChangePet}
               >
@@ -280,6 +297,14 @@ const ModalEditPet = (props) => {
             />
 
             <TextField
+              fullWidth
+              label="Mô tả màu lông"
+              margin="normal"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+            />
+
+            <TextField
               required={true}
               fullWidth
               label="Cấp thú cưng ban đầu"
@@ -303,24 +328,44 @@ const ModalEditPet = (props) => {
               <FormControlLabel
                 value={true}
                 control={<Radio />}
-                label="Hoạt động"
+                label="Đang dùng dịch vụ"
               />
-              <FormControlLabel value={false} control={<Radio />} label="Ẩn" />
+              <FormControlLabel
+                value={false}
+                control={<Radio />}
+                label="Chưa dùng dịch vụ"
+              />
             </RadioGroup>
-
-            <Input
-              type="file"
-              inputProps={{ accept: "image/*" }}
-              onChange={handleImageChange}
-            />
-            <Button onClick={handleUpload}>Tải ảnh lên</Button>
-            {petImage && (
-              <img
-                src={petImage}
-                alt="Ảnh sản phẩm"
-                style={{ maxWidth: "100%" }}
-              />
-            )}
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <Input
+                  type="file"
+                  inputProps={{ accept: "image/*" }}
+                  onChange={handleImageChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <ButtonCustomize
+                  onClick={handleUpload}
+                  nameButton="Tải ảnh lên"
+                  variant="contained"
+                  sx={{ marginTop: "8px" }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                {petImage && (
+                  <img
+                    src={
+                      petImage instanceof File
+                        ? URL.createObjectURL(petImage)
+                        : petImage
+                    }
+                    alt="Ảnh sản phẩm"
+                    style={{ maxWidth: "300px" }}
+                  />
+                )}
+              </Grid>
+            </Grid>
           </form>
         </DialogContent>
         <DialogActions>

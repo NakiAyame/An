@@ -265,6 +265,14 @@ export default function PetUser() {
                         {value.weight}kg
                       </Typography>
                     </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <Typography variant="h5" component="h1">
+                        Màu lông
+                      </Typography>
+                      <Typography level="h4" sx={{ maxWidth: "40ch" }}>
+                        {value.color}
+                      </Typography>
+                    </Grid>
                   </Grid>
                   <CardActions
                     orientation="vertical"
@@ -386,6 +394,7 @@ export default function PetUser() {
         handUpdateEditTable={loadAllPetByUserId}
         page={currentPage}
         category={category}
+        data={context.auth.id}
       />
     </React.Fragment>
   );

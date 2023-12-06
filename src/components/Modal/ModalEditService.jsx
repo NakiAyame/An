@@ -22,12 +22,13 @@ import dayjs from "dayjs";
 import { Grid, Input } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import ButtonCustomize from "../Button/Button";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const DESCRIPTION_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$%^&,.?\s]{1,}$/;
 
 const ModalEditSerivce = (props) => {
   const {
@@ -46,8 +47,8 @@ const ModalEditSerivce = (props) => {
   const [price, setPrice] = useState(0);
   const [status, setStatus] = useState(true);
   const [discount, setDiscount] = useState(0);
-  const [saleStartTime, setSaleStartTime] = useState(currentDate);
-  const [saleEndTime, setSaleEndTime] = useState(currentDate);
+  const [saleStartTime, setSaleStartTime] = useState(null);
+  const [saleEndTime, setSaleEndTime] = useState(null);
   const [isStartDateVisible, setIsStartDateVisible] = useState(false);
 
   // --------------------- HANLDE CHANGE STATUS -----------------------------
@@ -74,11 +75,29 @@ const ModalEditSerivce = (props) => {
 
   // --------------------- HANLDE CHANGE START DATE -----------------------------
   const handleStartDateChange = (date) => {
-    setSaleStartTime(date);
+    // Chỉ đặt startDate nếu ngày được chọn không phải là ngày trong quá khứ
+    if (!dayjs(date).isBefore(dayjs(), "day")) {
+      toast.success("Ngày bắt đầu hợp lệ!");
+      setSaleStartTime(date);
+
+      // Nếu endDate đã được chọn và trước startDate, đặt lại endDate thành null
+      if (saleEndTime && dayjs(saleEndTime).isBefore(date)) {
+        toast.error("Ngày bắt đầu không thể sau ngày kết thúc!!");
+        setSaleEndTime(null);
+      }
+    } else {
+      toast.error("Ngày bắt đầu không thể ở quá khứ!!");
+    }
   };
 
   const handleEndDateChange = (date) => {
-    setSaleEndTime(date);
+    // Chỉ đặt endDate nếu startDate đã được chọn và ngày được chọn sau saleStartTime
+    if (saleStartTime && !dayjs(date).isBefore(saleStartTime)) {
+      toast.success("Ngày kết thúc hợp lệ!");
+      setSaleEndTime(date);
+    } else {
+      toast.error("Ngày kết thúc không thể sau ngày bắt đầu!!");
+    }
   };
 
   // --------------------- VALIDATION -----------------------------
@@ -117,6 +136,7 @@ const ModalEditSerivce = (props) => {
   const handleImageChange = (e) => {
     setServiceImage(e.target.files[0]);
     console.log("Kiểm tra image: ", e.target.files);
+    handleUpload();
   };
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE SERVICE -----------------------------
@@ -129,16 +149,23 @@ const ModalEditSerivce = (props) => {
           `http://localhost:3500/service/upload`,
           formData
         );
-        console.log("Response data:", response.data.image);
-        const imagePath = response.data.image;
-
-        if (imagePath) {
-          console.log("Đã tải ảnh lên:", imagePath);
-          toast.success("Thêm ảnh thành công");
-          setServiceImage(imagePath);
+        const maxSize = 1024 * 1024;
+        if (serviceImage.size > maxSize) {
+          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
         } else {
-          console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
-          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          console.log("Response data:", response.data.image);
+          const imagePath = response.data.image;
+
+          if (imagePath) {
+            console.log("Đã tải ảnh lên:", imagePath);
+            toast.success("Thêm ảnh thành công");
+            setServiceImage(
+              serviceImage instanceof File ? imagePath : serviceImage
+            );
+          } else {
+            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          }
         }
       } else {
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
@@ -352,31 +379,46 @@ const ModalEditSerivce = (props) => {
                 label="Không hoạt động"
               />
             </RadioGroup>
-            <Input
-              type="file"
-              inputProps={{ accept: "image/*" }}
-              onChange={handleImageChange}
-            />
-            <Button onClick={handleUpload}>Tải ảnh lên</Button>
-            {serviceImage && (
-              <img
-                src={serviceImage}
-                alt="Ảnh sản phẩm"
-                style={{ maxWidth: "100%" }}
-              />
-            )}
+
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <Input
+                  type="file"
+                  inputProps={{ accept: "image/*" }}
+                  onChange={handleImageChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <ButtonCustomize
+                  onClick={handleUpload}
+                  nameButton="Tải ảnh lên"
+                  variant="contained"
+                  sx={{ marginTop: "8px" }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                {serviceImage && (
+                  <img
+                    src={
+                      serviceImage instanceof File
+                        ? URL.createObjectURL(serviceImage)
+                        : serviceImage
+                    }
+                    alt="Ảnh sản phẩm"
+                    style={{ maxWidth: "300px" }}
+                  />
+                )}
+              </Grid>
+            </Grid>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            autoFocus
-            variant="contained"
-            margin="normal"
-            color="primary"
+          <ButtonCustomize
             onClick={() => handleEditService(dataEditService._id)}
-          >
-            Lưu thay đổi
-          </Button>
+            nameButton="Lưu thay đổi"
+            variant="contained"
+            sx={{ marginTop: "8px" }}
+          />
         </DialogActions>
       </Box>
     </Dialog>
