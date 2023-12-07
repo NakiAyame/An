@@ -91,10 +91,9 @@ const Login = () => {
               navigate(from, { replace: true });
             }
           })
-          // .catch((err) => {
-          //   console.log(err)
-          //   toast.error("23 Mật khẩu không chính xác");
-          // })
+          .catch((err) => {
+            toast.error("Mật khẩu không chính xác");
+          })
       } catch (err) {
         // console.log(err)
       }
