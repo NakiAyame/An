@@ -26,7 +26,7 @@ import {
   Radio,
   ButtonGroup,
   Stack,
-  Pagination
+  Pagination,
 } from "@mui/material";
 
 import { styled } from "@mui/material/styles";
@@ -37,15 +37,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import useAuth from '../../hooks/useAuth';
-import DateFormat from '../../components/DateFormat';
+import useAuth from "../../hooks/useAuth";
+import DateFormat from "../../components/DateFormat";
 import ButtonCustomize from "../../components/Button/Button";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const bull = (
   <Box
     component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
+    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
   >
     •
   </Box>
@@ -54,13 +54,19 @@ const bull = (
 export default function ProductPurchase() {
   const DEFAULT_PAGE = 1;
   const DEFAULT_LIMIT = 5;
-  const DEFAULT_STATUS = "Chờ xác nhận"
+  const DEFAULT_STATUS = "Chờ xác nhận";
 
   const [data, setData] = useState([]);
+<<<<<<< HEAD
   const [quantity, setQuantity] = useState(0)
   const [loged, setLoged] = useState(false)
   const [total, setTotal] = useState(0)
   const [status, setStatus] = useState('');
+=======
+  const [quantity, setQuantity] = useState(0);
+  const [loged, setLoged] = useState(false);
+  const [total, setTotal] = useState(0);
+>>>>>>> 62c8be5c4c5f3084ebf17770d9d8be52e38986bf
 
   const [orderDetail, setOrderDetail] = useState([]);
 
@@ -75,8 +81,9 @@ export default function ProductPurchase() {
 
   const handleLoadCartProductById = async (option) => {
     if (context.auth.token !== undefined) {
-      setLoged(true)
+      setLoged(true);
       try {
+<<<<<<< HEAD
         setStatus(option)
         const loadData = await axios.get(
           `http://localhost:3500/order/${context.auth.id}`,
@@ -95,15 +102,32 @@ export default function ProductPurchase() {
               }
             }
             setData(filterData)
+=======
+        const loadData = await axios
+          .get(`http://localhost:3500/order/${context.auth.id}`, {
+            headers: { Authorization: context.auth.token },
+            withCredentials: true,
+>>>>>>> 62c8be5c4c5f3084ebf17770d9d8be52e38986bf
           })
+          .then((data) => {
+            const filterData = [];
+            console.log(data.data.docs);
+
+            for (let i = 0; i < data.data.docs.length; i++) {
+              if (data.data.docs[i].status === option) {
+                filterData.push(data.data.docs[i]);
+              }
+            }
+            setData(filterData);
+          });
       } catch (err) {
         console.log(err);
       }
     }
-  }
+  };
 
   useEffect(() => {
-    handleLoadCartProductById(DEFAULT_STATUS)
+    handleLoadCartProductById(DEFAULT_STATUS);
   }, []);
 
   // ----------------------------------------------------------------
@@ -124,7 +148,7 @@ export default function ProductPurchase() {
         toast.error(data.error);
       } else {
         console.log(data.data);
-        setOrderDetail(data.data)
+        setOrderDetail(data.data);
       }
     } catch (err) {
       console.log(err);
@@ -145,28 +169,48 @@ export default function ProductPurchase() {
   };
 
   const buttonStyle = {
-    width: '100%',
-    padding: '16px 0',
-    marginBottom: '20px',
-    fontSize: '17px',
-    border: 'none',
-    backgroundColor: '#efeff5',
-    color: 'black',
-    cursor: 'pointer',
-  }
+    width: "100%",
+    padding: "16px 0",
+    marginBottom: "20px",
+    fontSize: "17px",
+    border: "none",
+    backgroundColor: "#efeff5",
+    color: "black",
+    cursor: "pointer",
+  };
 
   return (
     <>
-      <h1 style={{ textAlign: 'center', marginTop: '100px' }}>SẢN PHẨM ĐÃ MUA</h1>
+      <h1 style={{ textAlign: "center", marginTop: "100px" }}>
+        SẢN PHẨM ĐÃ MUA
+      </h1>
       <Grid container>
         <Grid item xs={4}>
-          <button className="button-status" style={buttonStyle} onClick={(e) => handleLoadCartProductById('Chờ xác nhận')}>Chờ xác nhận</button>
+          <button
+            className="button-status"
+            style={buttonStyle}
+            onClick={(e) => handleLoadCartProductById("Chờ xác nhận")}
+          >
+            Chờ xác nhận
+          </button>
         </Grid>
         <Grid item xs={4}>
-          <button className="button-status" style={buttonStyle} onClick={(e) => handleLoadCartProductById('Đang giao hàng')}>Đang giao hàng</button>
+          <button
+            className="button-status"
+            style={buttonStyle}
+            onClick={(e) => handleLoadCartProductById("Đang giao hàng")}
+          >
+            Đang giao hàng
+          </button>
         </Grid>
         <Grid item xs={4}>
-          <button className="button-status" style={buttonStyle} onClick={(e) => handleLoadCartProductById('Đã nhận hàng')}>Đã nhận hàng</button>
+          <button
+            className="button-status"
+            style={buttonStyle}
+            onClick={(e) => handleLoadCartProductById("Đã nhận hàng")}
+          >
+            Đã nhận hàng
+          </button>
         </Grid>
       </Grid>
 
@@ -186,7 +230,7 @@ export default function ProductPurchase() {
             {data.map((value, index) => (
               <TableRow
                 key={index}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 onClick={(e) => handleViewOrderDetail(value._id)}
               >
                 <TableCell component="th" scope="row">
@@ -194,7 +238,9 @@ export default function ProductPurchase() {
                 </TableCell>
                 <TableCell align="right">{value.recipientName}</TableCell>
                 <TableCell align="right">{value.deliveryAddress}</TableCell>
-                <TableCell align="right"><DateFormat date={value.updatedAt} /></TableCell>
+                <TableCell align="right">
+                  <DateFormat date={value.updatedAt} />
+                </TableCell>
                 <TableCell align="right">{value.totalPrice}</TableCell>
                 <TableCell align="right">{value.status}</TableCell>
               </TableRow>
@@ -230,8 +276,7 @@ export default function ProductPurchase() {
               rowSpacing={1}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             >
-
-              <Table sx={{ width: '100%' }} aria-label="simple table">
+              <Table sx={{ width: "100%" }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
                     <TableCell children>STT</TableCell>
@@ -247,14 +292,21 @@ export default function ProductPurchase() {
                       return (
                         <TableRow
                           key={index}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
                         >
                           <TableCell component="th" scope="row">
                             {index + 1}
                           </TableCell>
                           <TableCell align="left">{value.orderId}</TableCell>
-                          <TableCell align="left">{value.productId !== null ? value.productId.productName : ''}</TableCell>
+                          <TableCell align="left">
+                            {value.productId !== null
+                              ? value.productId.productName
+                              : ""}
+                          </TableCell>
                           <TableCell align="left">{value.quantity}</TableCell>
+<<<<<<< HEAD
                           <TableCell align="left">{value.productId !== null ? value.productId.price : ''}</TableCell>
                           <TableCell align="left">
                             {
@@ -272,12 +324,19 @@ export default function ProductPurchase() {
                             }
 
                           </TableCell>
+=======
+                          <TableCell align="left">
+                            {value.productId !== null
+                              ? value.productId.price
+                              : ""}
+                          </TableCell>
+                          <TableCell align="left"></TableCell>
+>>>>>>> 62c8be5c4c5f3084ebf17770d9d8be52e38986bf
                         </TableRow>
                       );
                     })}
                 </TableBody>
               </Table>
-
             </Grid>
           </DialogContent>
           {/* 

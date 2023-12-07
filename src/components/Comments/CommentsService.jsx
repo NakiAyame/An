@@ -114,7 +114,7 @@ export default function CommentService({ value }) {
                 </Grid>
                 <Grid justifyContent="left" item xs zeroMinWidth>
                   <Typography sx={{ margin: 0, textAlign: "left" }}>
-                    {fb.userId.fullname !== null ? fb.userId.fullname : ""}
+                    {fb.userId !== null ? fb.userId.fullname : ""}
                   </Typography>
 
                   <Box>

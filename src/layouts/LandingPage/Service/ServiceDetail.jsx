@@ -32,11 +32,11 @@ import { toast } from "react-toastify";
 import useAuth from "../../../hooks/useAuth";
 import { useState } from "react";
 import { useEffect } from "react";
-import Comments from "../../../components/Comments/Comments";
 import ChoosePet from "../../../components/Modal/ModalChoosePet";
 import ServiceSlider from "../../../components/Header/SliderService";
 import dayjs from "dayjs";
 import ButtonCustomize from "../../../components/Button/Button";
+import CommentService from "../../../components/Comments/CommentsService";
 
 const Image = styled("img")({
   maxWidth: "100%",
@@ -202,7 +202,7 @@ const ServiceDetail = () => {
           </Breadcrumbs>
         </Container>
         <Grid container spacing={3} sx={{ flexGrow: 2 }}>
-          <Grid item xs={12} sm={9}>
+          <Grid item xs={12} sm={8}>
             <Container maxWidth="false" sx={{ pb: 3 }}>
               <Paper
                 variant="outlined"
@@ -311,14 +311,14 @@ const ServiceDetail = () => {
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Comments value={service._id} />
+                    <CommentService value={service._id} />
                   </AccordionDetails>
                 </Accordion>
               </Paper>
             </Container>
           </Grid>
 
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={4}>
             <Container maxWidth="false" sx={{ pb: 3 }}>
               <Paper
                 variant="outlined"
@@ -326,7 +326,7 @@ const ServiceDetail = () => {
               >
                 <Grid item xs={12} sm={12}>
                   <Typography variant="h5" sx={{ textTransform: "uppercase" }}>
-                    <strong>Sản phẩm mới</strong>
+                    <strong>Dịch vụ mới</strong>
                   </Typography>
                 </Grid>
                 <ServiceSlider loadServiceById={loadServiceById} />

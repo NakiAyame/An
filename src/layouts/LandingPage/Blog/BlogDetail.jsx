@@ -139,7 +139,7 @@ const BlogDetail = () => {
           </Breadcrumbs>
         </Container>
         <Grid container spacing={3} sx={{ flexGrow: 2 }}>
-          <Grid item xs={12} sm={9}>
+          <Grid item xs={12} sm={8}>
             <Container maxWidth="false" sx={{ pb: 3 }}>
               <Paper
                 variant="outlined"
@@ -189,7 +189,7 @@ const BlogDetail = () => {
             </Container>
           </Grid>
 
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={4}>
             <Container maxWidth="false" sx={{ pb: 3 }}>
               <Paper
                 variant="outlined"
