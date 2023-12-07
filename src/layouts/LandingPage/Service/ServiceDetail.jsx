@@ -32,11 +32,11 @@ import { toast } from "react-toastify";
 import useAuth from "../../../hooks/useAuth";
 import { useState } from "react";
 import { useEffect } from "react";
-import Comments from "../../../components/Comments/Comments";
 import ChoosePet from "../../../components/Modal/ModalChoosePet";
 import ServiceSlider from "../../../components/Header/SliderService";
 import dayjs from "dayjs";
 import ButtonCustomize from "../../../components/Button/Button";
+import CommentService from "../../../components/Comments/CommentsService";
 
 const Image = styled("img")({
   maxWidth: "100%",
@@ -311,7 +311,7 @@ const ServiceDetail = () => {
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Comments value={service._id} />
+                    <CommentService value={service._id} />
                   </AccordionDetails>
                 </Accordion>
               </Paper>
