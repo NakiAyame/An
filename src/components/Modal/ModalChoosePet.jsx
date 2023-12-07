@@ -125,7 +125,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
   async function loadAllCategoryPet() {
     try {
       const loadDataCategoryPet = await axios.get(
-        `http://localhost:3500/category?categoryName=animal`
+        `http://localhost:3500/category?categoryName=Thú cưng`
       );
       if (loadDataCategoryPet.error) {
         toast.error(loadDataCategoryPet.error);
