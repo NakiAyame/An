@@ -15,6 +15,7 @@ import {
   CardActionArea,
   Divider,
   IconButton,
+  ListItemAvatar,
   Tooltip,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -65,26 +66,39 @@ export default function ProductSlider({ loadProductById }) {
       {data &&
         data.map((value, index) => {
           return (
-            <Grid item xs={12} sm={12}>
-              <Typography
-                variant="h6"
-                component="h1"
-                onClick={() => hanldeClickProductName(value._id)}
-              >
-                <NavLink
-                  style={{
-                    textDecoration: "none",
-                    color: isHoveredName === index ? "pink" : "inherit",
-                  }}
-                  title={value.productName}
-                  onMouseOver={() => handleMouseOverName(index)}
-                  onMouseOut={handleMouseOutName}
+            <>
+              <Grid item xs={12} sm={2}>
+                <ListItemAvatar>
+                  <Avatar
+                    src={
+                      value.productImage !== undefined
+                        ? `${value.productImage}`
+                        : "https://static2-images.vnncdn.net/files/publish/2022/12/8/meo-1-1416.jpg"
+                    }
+                  ></Avatar>
+                </ListItemAvatar>
+              </Grid>
+              <Grid item xs={12} sm={10}>
+                <Typography
+                  variant="h6"
+                  component="h1"
+                  onClick={() => hanldeClickProductName(value._id)}
                 >
-                  {value.productName}
-                </NavLink>
-              </Typography>
-              <Divider />
-            </Grid>
+                  <NavLink
+                    style={{
+                      textDecoration: "none",
+                      color: isHoveredName === index ? "pink" : "inherit",
+                    }}
+                    title={value.productName}
+                    onMouseOver={() => handleMouseOverName(index)}
+                    onMouseOut={handleMouseOutName}
+                  >
+                    {value.productName}
+                  </NavLink>
+                </Typography>
+                <Divider />
+              </Grid>
+            </>
           );
         })}
     </Grid>
