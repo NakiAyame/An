@@ -150,6 +150,7 @@ export default function BasicTable() {
     // ----------------------------------- API GET ALL USER --------------------------------
     async function loadAllOrder(page, limit, option) {
         try {
+            setStatus(option)
             const loadData = await axios.get(
                 `http://localhost:3500/order?page=${page}&limit=${limit}`
             )
@@ -241,7 +242,7 @@ export default function BasicTable() {
                     toast.error(loadData.error);
                 } else {
                     console.log(loadData.data);
-                    loadAllOrder();
+                    loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, status);
                     handleClose();
                 }
             } catch (err) {
@@ -268,6 +269,7 @@ export default function BasicTable() {
                             height: '55px'
                         }}
                         onChange={(e) => loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, e.target.value)}>
+                        <option value={status} disabled selected>{status}</option>
                         {statusList.map((value, index) => {
                             return (
                                 <option value={value}>{value}</option>

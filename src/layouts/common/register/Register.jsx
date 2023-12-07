@@ -59,7 +59,7 @@ const Register = () => {
           toast.error(data.error);
         } else {
           setData({});
-          toast.success("Register successful. Welcome!");
+          toast.success("Tạo tài khoản thành công");
           navigate("/sign-in");
         }
       } catch (err) {

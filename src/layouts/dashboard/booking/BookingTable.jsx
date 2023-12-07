@@ -165,6 +165,7 @@ export default function BookingTable() {
         //     toast.error('Vui lòng nhập ngày kết thúc')
         // } else {
         try {
+            setStatus(option)
             const loadData = await axios.get(
                 `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc`
             )
@@ -256,7 +257,7 @@ export default function BookingTable() {
                     toast.error(loadData.error);
                 } else {
                     console.log(loadData.data);
-                    loadAllBooking();
+                    loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, status);
                     handleClose()
                 }
             } catch (err) {
@@ -426,9 +427,13 @@ export default function BookingTable() {
                             height: '55px'
                         }}
                         onChange={(e) => hanldeClickChangeStatus(e.target.value, orderDetail[0].bookingId)}>
+                        <option value={status} disabled selected>{status}</option>
                         {statusList.map((value, index) => {
                             return (
-                                <option value={value}>{value}</option>
+                                <>
+
+                                    <option value={value}>{value}</option>
+                                </>
                             );
                         })}
                     </select>
