@@ -91,6 +91,7 @@ export default function Comments({ value }) {
           setStar(0);
           loadAllFeedbackById(currentPage);
           console.log("Check dữ diệu đánh giá", data);
+          context.auth.feedback = false
         });
     } catch (err) {
       console.log(err);
@@ -142,7 +143,11 @@ export default function Comments({ value }) {
           color="primary"
         />
       </Stack>
-      {/* {isLoggedIn && (
+
+      {
+      isLoggedIn && 
+      context.auth.feedback === true ?
+      (
         <Paper sx={{ padding: "40px 20px", mb: 1 }}>
           <Grid container wrap="nowrap" spacing={2}>
             <Grid item>
@@ -179,7 +184,7 @@ export default function Comments({ value }) {
             </Grid>
           </Grid>
         </Paper>
-      )} */}
+      ) : ''}
     </>
   );
 }

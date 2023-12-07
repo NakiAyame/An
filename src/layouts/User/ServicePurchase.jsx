@@ -40,6 +40,7 @@ import { toast } from "react-toastify";
 import useAuth from '../../hooks/useAuth';
 import DateFormat from '../../components/DateFormat';
 import ButtonCustomize from "../../components/Button/Button";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const bull = (
     <Box
@@ -61,6 +62,7 @@ export default function ServicePurchase() {
     const [total, setTotal] = useState(0)
     const [pages, setPages] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [status, setStatus] = useState('');
 
     const [orderDetail, setOrderDetail] = useState([]);
 
@@ -71,11 +73,13 @@ export default function ServicePurchase() {
     const handleClose = () => setOpen(false);
 
     const context = useAuth();
+    const navigate = useNavigate();
 
     const handleLoadCartServiceById = async (option) => {
         if (context.auth.token !== undefined) {
             setLoged(true)
             try {
+                setStatus(option)
                 const loadData = await axios.get(
                     `http://localhost:3500/booking/${context.auth.id}`,
                     {
@@ -87,10 +91,10 @@ export default function ServicePurchase() {
                         const filterData = []
                         console.log(data.data)
 
-                        for (let i = 0; i < data.data.length; i++) {
-                          if(data.data[i].status === option){
-                            filterData.push(data.data[i])
-                          }              
+                        for (let i = 0; i < data.data.docs.length; i++) {
+                            if (data.data.docs[i].status === option) {
+                                filterData.push(data.data.docs[i])
+                            }
                         }
                         setData(filterData)
                     })
@@ -128,6 +132,11 @@ export default function ServicePurchase() {
         }
         handleOpen();
     };
+
+    const handleFeedBack = () => {
+        context.auth.feedback = true
+        console.log(context.auth)
+    }
 
     const style = {
         position: "absolute",
@@ -269,7 +278,21 @@ export default function ServicePurchase() {
                                                     <TableCell align="left">{value.serviceId !== null ? value.serviceId.serviceName : ''}</TableCell>
                                                     <TableCell align="left">{value.quantity}</TableCell>
                                                     <TableCell align="left">{value.serviceId !== null ? value.serviceId.price : ''}</TableCell>
-                                                    <TableCell align="left"></TableCell>
+                                                    <TableCell align="left">
+                                                        {
+                                                            status === 'Hoàn thành'
+                                                                ? (
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        margin="normal"
+                                                                        color="primary"
+                                                                        onClick={() => handleFeedBack(value.serviceId._id)}
+                                                                    >
+                                                                        Đánh giá
+                                                                    </Button>
+                                                                ) : ''
+                                                        }
+                                                    </TableCell>
                                                 </TableRow>
                                             );
                                         })}

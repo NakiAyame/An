@@ -125,7 +125,7 @@ export default function BookingTable() {
 
         // Tạo một đối tượng Date từ chuỗi thời gian
         var originalDate = new Date(date);
-        
+
         // Lấy thông tin ngày, tháng và năm từ đối tượng Date
         var year = originalDate.getUTCFullYear();
         var month = ("0" + (originalDate.getUTCMonth() + 1)).slice(-2); // Thêm số 0 ở đầu nếu cần
@@ -158,35 +158,35 @@ export default function BookingTable() {
     };
 
     // ----------------------------------- API GET ALL USER --------------------------------
-    async function loadAllBooking(page, limit, option, startDate, endDate) {
+    async function loadAllBooking(page, limit, option) {
         // if (!isValidDateFormat(startDate) || startDate === '') {
         //     toast.error('Vui lòng nhập ngày bắt đầu')
         // } else if (!isValidDateFormat(endDate) || endDate === '') {
         //     toast.error('Vui lòng nhập ngày kết thúc')
         // } else {
-            try {
-                const loadData = await axios.get(
-                    `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc&startDate=${startDate}&endDate=${endDate}`
-                )
-                    .then((data) => {
-                        setPages(data.data.pages);
-                        console.log(data.data.docs);
-                        const filterData = []
-                        for (let i = 0; i < data.data.docs.length; i++) {
-                            if (data.data.docs[i].status === option) {
-                                filterData.push(data.data.docs[i])
-                            }
+        try {
+            const loadData = await axios.get(
+                `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc`
+            )
+                .then((data) => {
+                    setPages(data.data.pages);
+                    console.log(data.data.docs);
+                    const filterData = []
+                    for (let i = 0; i < data.data.docs.length; i++) {
+                        if (data.data.docs[i].status === option) {
+                            filterData.push(data.data.docs[i])
                         }
-                        setData(filterData)
-                    })
-            } catch (err) {
-                console.log(err);
-            }
+                    }
+                    setData(filterData)
+                })
+        } catch (err) {
+            console.log(err);
+        }
         // }
     }
 
     useEffect(() => {
-        loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS, DEFAULT_FROMDATE, DEFAULT_TODATE);
+        loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS);
     }, []);
 
     // ----------------------------------- HANDLE GET ORDER OF USER --------------------------------
@@ -290,7 +290,7 @@ export default function BookingTable() {
                             width: '100%',
                             height: '55px'
                         }}
-                        onChange={(e) => setStatus(e.target.value)}>
+                        onChange={(e) => loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, e.target.value)}>
                         {statusList.map((value, index) => {
                             return (
                                 <option value={value}>{value}</option>
@@ -298,7 +298,7 @@ export default function BookingTable() {
                         })}
                     </select>
                 </Grid>
-                <Grid item xs={4}>
+                {/* <Grid item xs={4}>
                     <DatePicker
                         label="Ngày bắt đầu"
                         defaultValue={dayjs()}
@@ -313,15 +313,15 @@ export default function BookingTable() {
                         onChange={(newValue) => setToDate(convertDate(newValue))}
                         maxDate={dayjs()}
                     />
-                </Grid>
+                </Grid> */}
             </Grid>
 
-            <ButtonCustomize
-                onClick={() => loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, status, fromDate, toDate)}
+            {/* <ButtonCustomize
+                onClick={() => loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, status)}
                 variant="contained"
                 // component={RouterLink}
                 nameButton="Tìm kiếm"
-            />
+            /> */}
             <Paper sx={{ width: "100%", overflow: "hidden", marginTop: '20px' }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
@@ -398,7 +398,7 @@ export default function BookingTable() {
                     <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
                         {option === "view" ? "Chi tiết đơn hàng" : "Đang cập nhật ......"}
                     </DialogTitle>
-                    <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+                    {/* <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
                         <InputLabel id="demo-select-small-label">Trạng thái</InputLabel>
                         <Select
                             label="Loại dịch vụ"
@@ -417,7 +417,21 @@ export default function BookingTable() {
                                 );
                             })}
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
+                    <select
+                        style={{
+                            padding: '10px 15px',
+                            borderRadius: '5px',
+                            width: '100%',
+                            height: '55px'
+                        }}
+                        onChange={(e) => hanldeClickChangeStatus(e.target.value, orderDetail[0].bookingId)}>
+                        {statusList.map((value, index) => {
+                            return (
+                                <option value={value}>{value}</option>
+                            );
+                        })}
+                    </select>
                     <IconButton
                         aria-label="close"
                         onClick={handleClose}

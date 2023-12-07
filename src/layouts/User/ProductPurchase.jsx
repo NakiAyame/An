@@ -40,6 +40,7 @@ import { toast } from "react-toastify";
 import useAuth from '../../hooks/useAuth';
 import DateFormat from '../../components/DateFormat';
 import ButtonCustomize from "../../components/Button/Button";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const bull = (
   <Box
@@ -59,21 +60,24 @@ export default function ProductPurchase() {
   const [quantity, setQuantity] = useState(0)
   const [loged, setLoged] = useState(false)
   const [total, setTotal] = useState(0)
+  const [status, setStatus] = useState('');
 
   const [orderDetail, setOrderDetail] = useState([]);
 
   // --------------------- MODAL HANDLE -----------------------------
 
-  const [open, setOpen] = React.useState(false); 
+  const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const context = useAuth();
+  const navigate = useNavigate();
 
   const handleLoadCartProductById = async (option) => {
     if (context.auth.token !== undefined) {
       setLoged(true)
       try {
+        setStatus(option)
         const loadData = await axios.get(
           `http://localhost:3500/order/${context.auth.id}`,
           {
@@ -85,10 +89,10 @@ export default function ProductPurchase() {
             const filterData = []
             console.log(data.data)
 
-            for (let i = 0; i < data.data.length; i++) {
-              if(data.data[i].status === option){
-                filterData.push(data.data[i])
-              }              
+            for (let i = 0; i < data.data.docs.length; i++) {
+              if (data.data.docs[i].status === option) {
+                filterData.push(data.data.docs[i])
+              }
             }
             setData(filterData)
           })
@@ -103,6 +107,12 @@ export default function ProductPurchase() {
   }, []);
 
   // ----------------------------------------------------------------
+
+  const handleFeedBack = (id) => {
+    context.auth.feedback = true
+    navigate(`/product-homepage/${id}`)
+    console.log(context.auth)
+  }
 
   // ----------------------------------------------------------------
 
@@ -246,7 +256,22 @@ export default function ProductPurchase() {
                           <TableCell align="left">{value.productId !== null ? value.productId.productName : ''}</TableCell>
                           <TableCell align="left">{value.quantity}</TableCell>
                           <TableCell align="left">{value.productId !== null ? value.productId.price : ''}</TableCell>
-                          <TableCell align="left"></TableCell>
+                          <TableCell align="left">
+                            {
+                              status === 'Đã nhận hàng'
+                                ? (
+                                  <Button
+                                    variant="contained"
+                                    margin="normal"
+                                    color="primary"
+                                    onClick={() => handleFeedBack(value.productId._id)}
+                                  >
+                                    Đánh giá
+                                  </Button>
+                                ) : ''
+                            }
+
+                          </TableCell>
                         </TableRow>
                       );
                     })}

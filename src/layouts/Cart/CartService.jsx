@@ -199,7 +199,7 @@ export default function CartService() {
                 loged === false
                   ? <h3 style={{ textAlign: 'center' }}>VUI LÒNG ĐĂNG NHẬP</h3>
                   : data.length === 0
-                    ? <h3 style={{ textAlign: 'center' }}>KHÔNG CÓ SẢN PHẨM TRONG GIỎ HÀNG</h3>
+                    ? <h3 style={{ textAlign: 'center' }}>BẠN CHƯA ĐẶT DỊCH VỤ NÀO</h3>
                     : data.map((value, index) => {
                       return (
                         <Grid container spacing={2} style={{ padding: '10px 0' }}>
@@ -216,7 +216,7 @@ export default function CartService() {
                           <Grid item xs style={{display: 'flex'}}>
                             <Typography style={{ color: 'red' }}>{value.serviceId === null ? "" : (value.quantity * (value.serviceId.price - (value.serviceId.price * value.serviceId.discount / 100))).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
                           </Grid>
-                          <Grid item xs={1}>
+                          <Grid item xs>
                             <button onClick={(e) => handleDeleteOrder(value.serviceId._id)}>
                               Xoá
                             </button>

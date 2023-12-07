@@ -148,10 +148,10 @@ export default function BasicTable() {
     };
 
     // ----------------------------------- API GET ALL USER --------------------------------
-    async function loadAllOrder(page, limit, option, startDate, endDate) {
+    async function loadAllOrder(page, limit, option) {
         try {
             const loadData = await axios.get(
-                `http://localhost:3500/order?page=${page}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`
+                `http://localhost:3500/order?page=${page}&limit=${limit}`
             )
                 .then((data) => {
                     setData(data.data.docs);
@@ -171,7 +171,7 @@ export default function BasicTable() {
     }
 
     useEffect(() => {
-        loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS, DEFAULT_FROMDATE, DEFAULT_TODATE);
+        loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS);
     }, []);
 
     // ----------------------------------- HANDLE GET ORDER OF USER --------------------------------
@@ -267,7 +267,7 @@ export default function BasicTable() {
                             width: '100%',
                             height: '55px'
                         }}
-                        onChange={(e) => setStatus(e.target.value)}>
+                        onChange={(e) => loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, e.target.value)}>
                         {statusList.map((value, index) => {
                             return (
                                 <option value={value}>{value}</option>
@@ -275,7 +275,7 @@ export default function BasicTable() {
                         })}
                     </select>
                 </Grid>
-                <Grid item xs={4}>
+                {/* <Grid item xs={4}>
                     <DatePicker
                         label="Ngày bắt đầu"
                         defaultValue={dayjs()}
@@ -290,16 +290,16 @@ export default function BasicTable() {
                         onChange={(newValue) => setToDate(convertDate(newValue))}
                         maxDate={dayjs()}
                     />
-                </Grid>
+                </Grid> */}
             </Grid>
 
-            <ButtonCustomize
-                onClick={() => loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, status, fromDate, toDate)}
+            {/* <ButtonCustomize
+                onClick={() => loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, status)}
                 variant="contained"
                 // component={RouterLink}
                 nameButton="Tìm kiếm"
-            />
-            <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            /> */}
+            <Paper sx={{ width: "100%", overflow: "hidden", marginTop: '20px' }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -368,7 +368,7 @@ export default function BasicTable() {
                     <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
                         {option === "view" ? "Chi tiết đơn hàng" : "Đang cập nhật ......"}
                     </DialogTitle>
-                    <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+                    {/* <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
                         <InputLabel id="demo-select-small-label">Trạng thái</InputLabel>
                         <Select
                             label="Loại dịch vụ"
@@ -387,7 +387,21 @@ export default function BasicTable() {
                                 );
                             })}
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
+                    <select
+                        style={{
+                            padding: '10px 15px',
+                            borderRadius: '5px',
+                            width: '100%',
+                            height: '55px'
+                        }}
+                        onChange={(e) => hanldeClickChangeStatus(e.target.value, orderDetail[0].orderId)}>
+                        {statusList.map((value, index) => {
+                            return (
+                                <option value={value}>{value}</option>
+                            );
+                        })}
+                    </select>
                     <IconButton
                         aria-label="close"
                         onClick={handleClose}
