@@ -274,7 +274,7 @@ export default function ServiceList() {
   };
 
   const handleSearchClick = async () => {
-    if (keyword === "") {
+    if (keyword.trim() === "") {
       toast.warning("Hãy nhập kết quả bạn cần tìm");
       loadAllService(currentPage);
     } else {
@@ -286,7 +286,7 @@ export default function ServiceList() {
   const searchServiceByName = async () => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/service?service=${keyword}&page=1`
+        `${BASE_URL}/service?service=${keyword.trim()}&page=1`
       );
       if (loadData.data.error) {
         toast.warning(
