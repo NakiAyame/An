@@ -282,6 +282,8 @@ export default function PetTable() {
                 <TableCell align="left">Chủ thú cưng</TableCell>
                 <TableCell align="left">Tên thú cưng</TableCell>
                 <TableCell align="left">Cấp thú cưng</TableCell>
+                <TableCell align="left">Cân nặng</TableCell>
+                <TableCell align="left">Chiều cao</TableCell>
                 <TableCell align="left">Loại thú cưng</TableCell>
                 <TableCell align="left">Trạng thái</TableCell>
                 {/* <TableCell align="center">Chức năng</TableCell> */}
@@ -306,6 +308,8 @@ export default function PetTable() {
                       </TableCell>
                       <TableCell align="left">{value.petName}</TableCell>
                       <TableCell align="left">{value.rank}</TableCell>
+                      <TableCell align="left">{value.weight}kg</TableCell>
+                      <TableCell align="left">{value.height}cm</TableCell>
                       <TableCell align="left">
                         {category.map((valueCategory, Cid) => {
                           if (value.categoryId === valueCategory._id) {
@@ -317,11 +321,7 @@ export default function PetTable() {
                         <Chip
                           size="small"
                           variant="outlined"
-                          label={
-                            value.status
-                              ? "Sức khoẻ tốt"
-                              : "Sức khoẻ xấu"
-                          }
+                          label={value.status ? "Sức khoẻ tốt" : "Sức khoẻ xấu"}
                           color={statusColor}
                         />
                       </TableCell>

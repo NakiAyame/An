@@ -71,7 +71,7 @@ export default function PetUser() {
     console.log("Kiểm tra page", page);
     try {
       const loadDataPet = await axios.get(
-        `http://localhost:3500/pet/userid?id=${context.auth.id}&limit=3&page=${page}`
+        `http://localhost:3500/pet/userid?id=${context.auth.id}&limit=2&page=${page}`
       );
       if (loadDataPet.error) {
         toast.error(loadDataPet.error);

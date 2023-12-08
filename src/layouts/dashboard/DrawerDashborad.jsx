@@ -45,10 +45,10 @@ const DrawerDashborad = () => {
 
   const links3 = [
     { text: "Danh sách thú cưng", path: "/dashboard/pet-list" },
-    {
-      text: "Lịch sử thanh toán thú cưng",
-      path: "/dashboard/history-pet-list",
-    },
+    // {
+    //   text: "Lịch sử thanh toán thú cưng",
+    //   path: "/dashboard/history-pet-list",
+    // },
   ];
 
   const links4 = [
@@ -86,23 +86,27 @@ const DrawerDashborad = () => {
     <>
       <Toolbar />
       <Divider />
-      <List>
-        <ListSubheader component="div" id="nested-list-subheader">
-          Dashboard
-        </ListSubheader>
-        {context.auth.role !== 'staff' ?
-        links.map((link, index) => (
-          <ListItem key={link.text} disablePadding>
-            <ListItemButton component={NavLink} to={link.path}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <DashboardIcon /> : <PersonIcon />}
-              </ListItemIcon>
-              <ListItemText primary={link.text} />
-            </ListItemButton>
-          </ListItem>
-        )) : ''
-        }
-      </List>
+
+      {context.auth.role !== "staff" ? (
+        <List>
+          <ListSubheader component="div" id="nested-list-subheader">
+            Dashboard
+          </ListSubheader>
+          {links.map((link, index) => (
+            <ListItem key={link.text} disablePadding>
+              <ListItemButton component={NavLink} to={link.path}>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <DashboardIcon /> : <PersonIcon />}
+                </ListItemIcon>
+                <ListItemText primary={link.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        ""
+      )}
+
       <Divider />
 
       <List>

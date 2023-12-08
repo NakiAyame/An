@@ -127,7 +127,7 @@ export default function AccountMenu() {
         ) : (
           ""
         )}
-        { context.auth.role === "staff" ? (
+        {context.auth.role === "staff" ? (
           <MenuItem
             onClick={handleClose}
             component={NavLink}
@@ -184,12 +184,12 @@ export default function AccountMenu() {
           Thú cưng của tôi
         </MenuItem>
 
-        <MenuItem onClick={handleClose}>
+        {/* <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Cài đặt
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
