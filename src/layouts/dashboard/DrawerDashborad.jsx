@@ -25,8 +25,10 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import ClassIcon from "@mui/icons-material/Class";
+import useAuth from "../../hooks/useAuth";
 
 const DrawerDashborad = () => {
+  const context = useAuth();
   const navigate = useNavigate();
   const links = [
     { text: "Dashboard", path: "/dashboard/dashboard-list" },
@@ -88,7 +90,8 @@ const DrawerDashborad = () => {
         <ListSubheader component="div" id="nested-list-subheader">
           Dashboard
         </ListSubheader>
-        {links.map((link, index) => (
+        {context.auth.role !== 'staff' ?
+        links.map((link, index) => (
           <ListItem key={link.text} disablePadding>
             <ListItemButton component={NavLink} to={link.path}>
               <ListItemIcon>
@@ -97,7 +100,8 @@ const DrawerDashborad = () => {
               <ListItemText primary={link.text} />
             </ListItemButton>
           </ListItem>
-        ))}
+        )) : ''
+        }
       </List>
       <Divider />
 
@@ -172,12 +176,6 @@ const DrawerDashborad = () => {
         ))}
       </List>
       <Divider />
-
-      <List>
-        <ListItemButton onClick={() => handleLogout()}>
-          Đăng xuất
-        </ListItemButton>
-      </List>
     </>
   );
 };
