@@ -63,7 +63,7 @@ export default function ServiceTable() {
   const loadAllService = async (page, order) => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/service?page=${page}&sortPrice=${order}`
+        `${BASE_URL}/service/manage?page=${page}&sortPrice=${order}`
       );
       if (loadData.error) {
         toast.error(loadData.error);
