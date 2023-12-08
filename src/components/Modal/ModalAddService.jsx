@@ -17,13 +17,13 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Input } from "@mui/material";
+import { Input, Typography } from "@mui/material";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
-const DESCRIPTION_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9@#$:%^&,.?/()-\s]{1,}$/;
+// const DESCRIPTION_REGEX =
+// /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9@#$:%^&,.?"/+=!()-\s]{1,}$/;
 
 const ModalAddSerivce = (props) => {
   const { open, onClose, handUpdateTable, category, page } = props;
@@ -43,7 +43,7 @@ const ModalAddSerivce = (props) => {
   // --------------------- VALIDATION -----------------------------
   const [validServiceName, setValidServiceName] = useState("");
   const [validPrice, setValidPrice] = useState("");
-  const [validDescription, setValidDescription] = useState("");
+  // const [validDescription, setValidDescription] = useState("");
   useEffect(() => {
     setValidServiceName(
       SERVICE_NAME_REGEX.test(serviceName) && serviceName.trim() !== ""
@@ -62,15 +62,15 @@ const ModalAddSerivce = (props) => {
     setPrice(e.target.value);
   };
 
-  useEffect(() => {
-    setValidDescription(
-      DESCRIPTION_REGEX.test(description) && description.trim()
-    );
-  }, [description]);
+  // useEffect(() => {
+  //   setValidDescription(
+  //     DESCRIPTION_REGEX.test(description) && description.trim()
+  //   );
+  // }, [description]);
 
-  const handleValidationDescription = (e) => {
-    setDescription(e.target.value);
-  };
+  // const handleValidationDescription = (e) => {
+  //   setDescription(e.target.value);
+  // };
 
   // --------------------- HANDLE HANLDE CHANGE IMAGE SERVICE -----------------------------
   const handleImageChange = (e) => {
@@ -133,14 +133,12 @@ const ModalAddSerivce = (props) => {
       toast.error("Giá tiền phải lớn hơn 0. Vui lòng nhập lại!");
     } else if (!validServiceName) {
       toast.error(
-        "Tên dịch vụ không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
+        "Tên dịch vụ không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
     } else if (categoryId === "") {
       toast.error("Vui lòng chọn loại dịch vụ");
     } else if (!validPrice) {
       toast.error("Giá tiền phải có ít nhất 4 chữ số. Vui lòng nhập lại!");
-    } else if (!validDescription) {
-      toast.error("Thông tin chi tiết không được để trống");
     } else {
       try {
         const response = await axios.post("http://localhost:3500/service", {
@@ -249,7 +247,7 @@ const ModalAddSerivce = (props) => {
               margin="normal"
               maxRows={4}
               value={description}
-              onChange={(e) => handleValidationDescription(e)}
+              onChange={(e) => setDescription(e.target.value)}
             />
 
             <TextField
@@ -261,6 +259,7 @@ const ModalAddSerivce = (props) => {
               value={price}
               onChange={(e) => handleValidationPrice(e)}
             />
+            <Typography>Ảnh dịch vụ </Typography>
             <Input
               type="file"
               inputProps={{ accept: "image/*" }}

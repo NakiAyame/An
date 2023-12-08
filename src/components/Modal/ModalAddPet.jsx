@@ -146,7 +146,7 @@ const ModalAddPet = (props) => {
       toast.error("Tên thú cưng không được để trống");
     } else if (!valid) {
       toast.error(
-        "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
+        "Tên thú cưng không được nhập kí tự đặc biệt và phải có ít nhất 2 kí tự"
       );
     } else if (!validHeight) {
       toast.error("Chiều cao thú cưng phải là số nguyên hoặc số thập phân");
@@ -311,7 +311,7 @@ const ModalAddPet = (props) => {
               }}
               variant="filled"
             />
-            <Typography>Thêm ảnh cho pet</Typography>
+            <Typography>Ảnh cho pet</Typography>
             <Input
               type="file"
               inputProps={{ accept: "image/*" }}
