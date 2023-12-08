@@ -38,6 +38,7 @@ import ButtonCustomize from "../../../components/Button/Button";
 //React
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -66,6 +67,7 @@ const BasicTable = () => {
     const PWD_REGEX = /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
 
     const [option, setOption] = useState("");
+    const context = useAuth();
     var count = 0;
 
     const [data, setData] = useState([]);
@@ -265,251 +267,258 @@ const BasicTable = () => {
     }
 
     return (
-        <>
-            <ButtonCustomize
-                onClick={handleCreate}
-                variant="contained"
-                // component={RouterLink}
-                nameButton="Thêm mới"
-                width="15%"
-            />
+        context.auth.role === 'staff'
+            ?
+            <>
+                <h1>BẠN KHÔNG CÓ QUYỀN SỬ DỤNG CHỨC NĂNG NÀY</h1>
+            </>
+            :
+            <>
+                <ButtonCustomize
+                    onClick={handleCreate}
+                    variant="contained"
+                    // component={RouterLink}
+                    nameButton="Thêm mới"
+                    width="15%"
+                />
 
-            <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "20px" }}>
-                <TableContainer sx={{ maxHeight: 550 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell children>STT</TableCell>
-                                <TableCell align="right">Họ và tên</TableCell>
-                                <TableCell align="right">Số điện thoại</TableCell>
-                                <TableCell align="right">Giới tính</TableCell>
-                                <TableCell align="right">Email</TableCell>
-                                <TableCell align="right">Trạng thái</TableCell>
-                                <TableCell align="right">Địa chỉ</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {data &&
-                                data.map((value, index) => {
-                                    return (
-                                        <TableRow
-                                            key={index}
-                                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                            onClick={(e) => handleLoadUserbId(value._id, value.password)}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                {index + 1}
-                                            </TableCell>
-                                            <TableCell align="right">{value.fullname}</TableCell>
-                                            <TableCell align="right">{value.phone}</TableCell>
-                                            <TableCell align="right">
-                                                {(value.gender == true ? "Nam" : "Nữ")}
-                                            </TableCell>
-                                            <TableCell align="right">{value.email}</TableCell>
-                                            <TableCell align="right">{value.status}</TableCell>
-                                            <TableCell align="right">{value.address}</TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <hr style={{ opacity: '0.5' }} />
-                <Stack spacing={2} sx={{ float: "right" }} style={{ margin: '10px 0', justifyContent: 'center' }}>
-                    <Pagination
-                        count={pages}
-                        page={currentPage}
-                        onChange={handlePaging}
-                        color="primary"
-                    />
-                </Stack>
-            </Paper>
+                <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "20px" }}>
+                    <TableContainer sx={{ maxHeight: 550 }}>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell children>STT</TableCell>
+                                    <TableCell align="right">Họ và tên</TableCell>
+                                    <TableCell align="right">Số điện thoại</TableCell>
+                                    <TableCell align="right">Giới tính</TableCell>
+                                    <TableCell align="right">Email</TableCell>
+                                    <TableCell align="right">Trạng thái</TableCell>
+                                    <TableCell align="right">Địa chỉ</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {data &&
+                                    data.map((value, index) => {
+                                        return (
+                                            <TableRow
+                                                key={index}
+                                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                onClick={(e) => handleLoadUserbId(value._id, value.password)}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    {index + 1}
+                                                </TableCell>
+                                                <TableCell align="right">{value.fullname}</TableCell>
+                                                <TableCell align="right">{value.phone}</TableCell>
+                                                <TableCell align="right">
+                                                    {(value.gender == true ? "Nam" : "Nữ")}
+                                                </TableCell>
+                                                <TableCell align="right">{value.email}</TableCell>
+                                                <TableCell align="right">{value.status}</TableCell>
+                                                <TableCell align="right">{value.address}</TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <hr style={{ opacity: '0.5' }} />
+                    <Stack spacing={2} sx={{ float: "right" }} style={{ margin: '10px 0', justifyContent: 'center' }}>
+                        <Pagination
+                            count={pages}
+                            page={currentPage}
+                            onChange={handlePaging}
+                            color="primary"
+                        />
+                    </Stack>
+                </Paper>
 
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={style}>
-                    <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                        {option === "create" ? "Thêm nhân viên" : "Cập nhật thông tin"}
-                    </DialogTitle>
-                    <IconButton
-                        aria-label="close"
-                        onClick={handleClose}
-                        sx={{
-                            position: "absolute",
-                            right: 8,
-                            top: 8,
-                        }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                    <DialogContent dividers>
-                        <Grid
-                            container
-                            rowSpacing={1}
-                            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                            {option === "create" ? "Thêm nhân viên" : "Cập nhật thông tin"}
+                        </DialogTitle>
+                        <IconButton
+                            aria-label="close"
+                            onClick={handleClose}
+                            sx={{
+                                position: "absolute",
+                                right: 8,
+                                top: 8,
+                            }}
                         >
-                            <Grid item xs={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    label="Họ và tên"
-                                    margin="normal"
-                                    value={fullname}
-                                    onChange={(e) => setFullName(e.target.value)}
-                                />
-                                {fullname === "" ? <span style={errorStyle}>Vui lòng điền Họ và tên</span> : ""}
-                            </Grid>
-
-                            <Grid item xs={6}>
-                                {
-                                    option === 'create'
-                                        ? (<TextField
-                                            required
-                                            fullWidth
-                                            label="Gmail"
-                                            margin="normal"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                        />)
-                                        :
-                                        (<TextField
-                                            required
-                                            fullWidth
-                                            label="Gmail"
-                                            margin="normal"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            disabled
-                                        />)
-                                }
-                                {email === "" ? <span style={errorStyle}>Vui lòng điền email</span> : ""}
-                            </Grid>
-                            {option === "create" ? (
-                                <>
-                                    <Grid item xs={6}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            label="Mật khẩu"
-                                            margin="normal"
-                                            // value={serviceName}
-                                            onChange={(e) => setPassWord(e.target.value)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            label="Nhập lại mật khẩu"
-                                            margin="normal"
-                                            // value={serviceName}
-                                            onChange={(e) => setConfirmPass(e.target.value)}
-                                        />
-                                    </Grid>
-                                </>
-                            ) : (
-                                ""
-                            )}
-
-                            <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Số điện thoại"
-                                    margin="normal"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                />
-                                {/* {phone === "" ? <span style={errorStyle}>Vui lòng điền số điện thoại</span> : ""} */}
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Địa chỉ"
-                                    margin="normal"
-                                    value={address}
-                                    onChange={(e) => setAddress(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Chức vụ</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select-required"
-                                        value={role}
-                                        label="Role"
-                                        onChange={handleRoleChange}
-                                    >
-                                        <MenuItem value="admin">Admin</MenuItem>
-                                        <MenuItem value="customer">Customer</MenuItem>
-                                        {/* <MenuItem value={30}>Thirty</MenuItem> */}
-                                    </Select>
-                                </FormControl>
-                                {role === "" ? <span style={errorStyle}>Vui lòng chọn role</span> : ""}
-                            </Grid>
-                            <Grid paddingLeft="50px" item xs={6}>
-                                <RadioGroup
-                                    value={gender}
-                                    onChange={handleGenderChange}
-                                    row
-                                    aria-label="Giới tính"
-                                    name="gender"
-                                // label="Giới tính"
-                                >
-                                    <FormControlLabel
-                                        value={true}
-                                        control={<Radio />}
-                                        label="Nam"
-                                    />
-                                    <FormControlLabel
-                                        value={false}
-                                        control={<Radio />}
-                                        label="Nữ"
-                                    />
-                                </RadioGroup>
-                                {gender === "" ? <span style={errorStyle}>Vui lòng chọn giới tính</span> : ""}
-                            </Grid>
-                        </Grid>
-                    </DialogContent>
-                    <DialogActions>
-                        {option === "create" ? (
-                            <Button
-                                variant="contained"
-                                margin="normal"
-                                color="primary"
-                                onClick={handleCreateUser}
+                            <CloseIcon />
+                        </IconButton>
+                        <DialogContent dividers>
+                            <Grid
+                                container
+                                rowSpacing={1}
+                                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                             >
-                                Thêm nhân viên
-                            </Button>
-                        ) : (
-                            <div>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        label="Họ và tên"
+                                        margin="normal"
+                                        value={fullname}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                    />
+                                    {fullname === "" ? <span style={errorStyle}>Vui lòng điền Họ và tên</span> : ""}
+                                </Grid>
+
+                                <Grid item xs={6}>
+                                    {
+                                        option === 'create'
+                                            ? (<TextField
+                                                required
+                                                fullWidth
+                                                label="Gmail"
+                                                margin="normal"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                            />)
+                                            :
+                                            (<TextField
+                                                required
+                                                fullWidth
+                                                label="Gmail"
+                                                margin="normal"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                disabled
+                                            />)
+                                    }
+                                    {email === "" ? <span style={errorStyle}>Vui lòng điền email</span> : ""}
+                                </Grid>
+                                {option === "create" ? (
+                                    <>
+                                        <Grid item xs={6}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                label="Mật khẩu"
+                                                margin="normal"
+                                                // value={serviceName}
+                                                onChange={(e) => setPassWord(e.target.value)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                label="Nhập lại mật khẩu"
+                                                margin="normal"
+                                                // value={serviceName}
+                                                onChange={(e) => setConfirmPass(e.target.value)}
+                                            />
+                                        </Grid>
+                                    </>
+                                ) : (
+                                    ""
+                                )}
+
+                                <Grid item xs={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Số điện thoại"
+                                        margin="normal"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                    />
+                                    {/* {phone === "" ? <span style={errorStyle}>Vui lòng điền số điện thoại</span> : ""} */}
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Địa chỉ"
+                                        margin="normal"
+                                        value={address}
+                                        onChange={(e) => setAddress(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Chức vụ</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select-required"
+                                            value={role}
+                                            label="Role"
+                                            onChange={handleRoleChange}
+                                        >
+                                            <MenuItem value="admin">Admin</MenuItem>
+                                            <MenuItem value="customer">Customer</MenuItem>
+                                            <MenuItem value="staff">Staff</MenuItem>
+                                            {/* <MenuItem value={30}>Thirty</MenuItem> */}
+                                        </Select>
+                                    </FormControl>
+                                    {role === "" ? <span style={errorStyle}>Vui lòng chọn role</span> : ""}
+                                </Grid>
+                                <Grid paddingLeft="50px" item xs={6}>
+                                    <RadioGroup
+                                        value={gender}
+                                        onChange={handleGenderChange}
+                                        row
+                                        aria-label="Giới tính"
+                                        name="gender"
+                                    // label="Giới tính"
+                                    >
+                                        <FormControlLabel
+                                            value={true}
+                                            control={<Radio />}
+                                            label="Nam"
+                                        />
+                                        <FormControlLabel
+                                            value={false}
+                                            control={<Radio />}
+                                            label="Nữ"
+                                        />
+                                    </RadioGroup>
+                                    {gender === "" ? <span style={errorStyle}>Vui lòng chọn giới tính</span> : ""}
+                                </Grid>
+                            </Grid>
+                        </DialogContent>
+                        <DialogActions>
+                            {option === "create" ? (
                                 <Button
                                     variant="contained"
                                     margin="normal"
                                     color="primary"
-                                    onClick={handleUpdate}
+                                    onClick={handleCreateUser}
                                 >
-                                    Cập nhật thông tin
+                                    Thêm nhân viên
                                 </Button>
-                                <Button
-                                    variant="contained"
-                                    margin="normal"
-                                    style={{ backgroundColor: 'red', marginLeft: '20px' }}
-                                    onClick={(e) => handleDelete(id)}
-                                >
-                                    Xoá
-                                </Button>
-                            </div>
+                            ) : (
+                                <div>
+                                    <Button
+                                        variant="contained"
+                                        margin="normal"
+                                        color="primary"
+                                        onClick={handleUpdate}
+                                    >
+                                        Cập nhật thông tin
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        margin="normal"
+                                        style={{ backgroundColor: 'red', marginLeft: '20px' }}
+                                        onClick={(e) => handleDelete(id)}
+                                    >
+                                        Xoá
+                                    </Button>
+                                </div>
 
-                        )}
-                    </DialogActions>
-                </Box>
-            </Modal>
-        </>
+                            )}
+                        </DialogActions>
+                    </Box>
+                </Modal>
+            </>
     );
 }
 

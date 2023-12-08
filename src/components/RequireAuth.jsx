@@ -5,18 +5,16 @@ const RequireAuth = ({ allowedRoles }) => {
     const context = useAuth();
     const location = useLocation();
 
-    console.log(allowedRoles)
+    var count = 0;
+
+    allowedRoles.map((value) => {
+        if(context.auth?.role === value) count++
+    })
 
     return (
-        // <p>{context.auth.role} - {allowedRoles}</p>
-        context.auth?.role == allowedRoles
+        count === 1
             ? <Outlet />
             : <Navigate to="/sign-in" state={{ from: location }} replace />
-        // auth?.roles?.find(role => allowedRoles?.includes(role))
-        //     ? <Outlet />
-        //     : auth?.user
-        //         ? <Navigate to="/unauthorized" state={{ from: location }} replace />
-        //         : <Navigate to="/login" state={{ from: location }} replace />
     );
 }
 

@@ -44,6 +44,7 @@ const ROLES = {
   User: 2001,
   CUSTOMER: "customer",
   ADMIN: "admin",
+  STAFF: "staff",
 };
 
 function App() {
@@ -52,7 +53,7 @@ function App() {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <BrowserRouter>
           <Routes>
-            <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.STAFF]}/>}>
               <Route path="/dashboard" element={<Dashboard />}>
                 <Route
                   path="/dashboard/dashboard-list"
@@ -80,6 +81,7 @@ function App() {
                 <Route path="/dashboard/blog-list" element={<BlogTable />} />
               </Route>
             </Route>
+            
             <Route path="/sign-up" element={<Register />} />
             <Route path="/sign-in" element={<Login />} />
             <Route path="/" element={<Header />}>
