@@ -134,7 +134,7 @@ export default function PetTable() {
   };
 
   const handleSearchClick = async () => {
-    if (keyword === "") {
+    if (keyword.trim() === "") {
       toast.warning("Hãy nhập kết quả bạn cần tìm");
       loadAllPet(currentPage);
     } else {
@@ -146,7 +146,7 @@ export default function PetTable() {
   const searchPetById = async () => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/pet/username?name=${keyword}&page=1`
+        `${BASE_URL}/pet/username?name=${keyword.trim()}&page=1`
       );
       if (loadData.data.error) {
         toast.warning(
