@@ -319,8 +319,8 @@ export default function PetTable() {
                           variant="outlined"
                           label={
                             value.status
-                              ? "Đang dùng dịch vụ"
-                              : "Chưa dùng dịch vụ"
+                              ? "Sức khoẻ tốt"
+                              : "Sức khoẻ xấu"
                           }
                           color={statusColor}
                         />

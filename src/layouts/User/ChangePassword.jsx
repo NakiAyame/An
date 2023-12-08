@@ -7,6 +7,7 @@ import {
   Grid,
   Paper,
   Box,
+  Breadcrumbs,
 } from "@mui/material";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -16,6 +17,30 @@ import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { styled } from "@mui/material/styles";
 import Footer from "../../components/Footer/Footer";
+import { NavLink } from "react-router-dom";
+import Chip from "@mui/material/Chip";
+import HomeIcon from "@mui/icons-material/Home";
+import { emphasize } from "@mui/material/styles";
+
+const StyledBreadcrumb = styled(Chip)(({ theme }) => {
+  const backgroundColor =
+    theme.palette.mode === "light"
+      ? theme.palette.grey[100]
+      : theme.palette.grey[800];
+  return {
+    backgroundColor,
+    height: theme.spacing(3),
+    color: theme.palette.text.primary,
+    fontWeight: theme.typography.fontWeightRegular,
+    "&:hover, &:focus": {
+      backgroundColor: emphasize(backgroundColor, 0.06),
+    },
+    "&:active": {
+      boxShadow: theme.shadows[1],
+      backgroundColor: emphasize(backgroundColor, 0.12),
+    },
+  };
+});
 
 const CustomContainer = styled(Container)({
   background:
@@ -100,7 +125,35 @@ const ChangePassword = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <CustomContainer component="main" maxWidth="false" sx={{ pt: 16, pb: 4 }}>
+      <CustomContainer component="main" maxWidth="false" sx={{ pt: 10, pb: 4 }}>
+        <Box
+          maxWidth="full"
+          sx={{
+            bgcolor: "background.paper",
+            p: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            borderRadius: "5px",
+            alignItems: "center",
+          }}
+        >
+          <Box>
+            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+              <StyledBreadcrumb
+                component={NavLink}
+                to="/"
+                label="Trang chủ"
+                icon={<HomeIcon fontSize="small" />}
+              />
+              {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
+              <StyledBreadcrumb
+                component={NavLink}
+                to="/change-password"
+                label="Đổi mật khẩu"
+              />
+            </Breadcrumbs>
+          </Box>
+        </Box>
         <Container maxWidth="sm">
           <Paper
             variant="outlined"

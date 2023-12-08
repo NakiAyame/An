@@ -318,7 +318,7 @@ export default function ServiceList() {
           maxWidth="full"
           sx={{
             bgcolor: "background.paper",
-            p: 3,
+            p: 2,
             display: "flex",
             justifyContent: "space-between",
             borderEndStartRadius: "5px",

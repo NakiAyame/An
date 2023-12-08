@@ -20,10 +20,35 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Radio, RadioGroup } from "@mui/material";
+import { Breadcrumbs, Radio, RadioGroup } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Footer from "../../components/Footer/Footer";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import Chip from "@mui/material/Chip";
+import HomeIcon from "@mui/icons-material/Home";
+import { emphasize } from "@mui/material/styles";
+
+const StyledBreadcrumb = styled(Chip)(({ theme }) => {
+  const backgroundColor =
+    theme.palette.mode === "light"
+      ? theme.palette.grey[100]
+      : theme.palette.grey[800];
+  return {
+    backgroundColor,
+    height: theme.spacing(3),
+    color: theme.palette.text.primary,
+    fontWeight: theme.typography.fontWeightRegular,
+    "&:hover, &:focus": {
+      backgroundColor: emphasize(backgroundColor, 0.06),
+    },
+    "&:active": {
+      boxShadow: theme.shadows[1],
+      backgroundColor: emphasize(backgroundColor, 0.12),
+    },
+  };
+});
 
 const CustomContainer = styled(Container)({
   background:
@@ -40,7 +65,7 @@ export default function UserPRofile() {
   const [password, setPassWord] = useState("");
   const [gender, setGender] = useState(false);
   const [role, setRole] = useState("");
-
+  const navigate = useNavigate();
   const FULL_NAME_REGEX =
     /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
   const PHONE_NUMBER_REGEX = /^(0[3|5|7|8|9])+([0-9]{8})$/;
@@ -128,7 +153,8 @@ export default function UserPRofile() {
         } else {
           console.log(data);
           handleGetUserById();
-          toast.success("Cập nhật thành công");
+          toast.success("Cập nhật thông tin thành công");
+          navigate("/");
         }
       } catch (err) {
         console.log(err);
@@ -148,9 +174,37 @@ export default function UserPRofile() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <CustomContainer component="main" maxWidth="false" sx={{ pt: 13, pb: 4 }}>
+      <CustomContainer component="main" maxWidth="false" sx={{ pt: 10, pb: 4 }}>
         <CssBaseline />
-        <Container maxWidth="sm">
+        <Box
+          maxWidth="full"
+          sx={{
+            bgcolor: "background.paper",
+            p: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            borderRadius: "5px",
+            alignItems: "center",
+          }}
+        >
+          <Box>
+            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+              <StyledBreadcrumb
+                component={NavLink}
+                to="/"
+                label="Trang chủ"
+                icon={<HomeIcon fontSize="small" />}
+              />
+              {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
+              <StyledBreadcrumb
+                component={NavLink}
+                to="/user-profile"
+                label="Thông tin cá nhân"
+              />
+            </Breadcrumbs>
+          </Box>
+        </Box>
+        <Container maxWidth="lg">
           <Paper
             variant="outlined"
             sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
