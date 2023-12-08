@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -22,10 +20,10 @@ import Select from "@mui/material/Select";
 import { Input } from "@mui/material";
 
 const SERVICE_NAME_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const DESCRIPTION_REGEX =
-  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$:%^&,.?/()\s]{1,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9@#$:%^&,.?/()-\s]{1,}$/;
 
 const ModalAddSerivce = (props) => {
   const { open, onClose, handUpdateTable, category, page } = props;
@@ -92,7 +90,7 @@ const ModalAddSerivce = (props) => {
         );
         const maxSize = 1024 * 1024;
         if (image.size > maxSize) {
-          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
+          toast.error("Ảnh có dung lượng lớn hơn 1MB. Vui lòng chọn ảnh khác!");
         } else {
           console.log("Response data:", response.data.image);
           const imagePath = response.data.image;
@@ -110,7 +108,7 @@ const ModalAddSerivce = (props) => {
         toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
-      console.error("Lỗi khi tải ảnh lên:", error);
+      console.error("Lỗi khi tải ảnh lên:", error.message);
     }
   };
 
@@ -125,14 +123,22 @@ const ModalAddSerivce = (props) => {
       status,
       serviceImage
     );
-    if (!validServiceName) {
+    if (serviceName.trim() === "") {
+      toast.error("Vui lòng nhập tên dịch vụ");
+    } else if (description.trim() === "") {
+      toast.error("Vui lòng nhập thông tin của dịch vụ");
+    } else if (price === "") {
+      toast.error("Vui lòng nhập giá tiền dịch vụ");
+    } else if (price < 0) {
+      toast.error("Giá tiền phải lớn hơn 0. Vui lòng nhập lại!");
+    } else if (!validServiceName) {
       toast.error(
         "Tên dịch vụ không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    } else if (categoryId == "") {
-      toast.error("Bạn phải chọn loại dịch vụ mình muốn");
+    } else if (categoryId === "") {
+      toast.error("Vui lòng chọn loại dịch vụ");
     } else if (!validPrice) {
-      toast.error("Giá tiền phải có ít nhất 4 chữ số và phải lớn hơn 0");
+      toast.error("Giá tiền phải có ít nhất 4 chữ số. Vui lòng nhập lại!");
     } else if (!validDescription) {
       toast.error("Thông tin chi tiết không được để trống");
     } else {
