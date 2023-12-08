@@ -22,6 +22,7 @@ import StarHalfIcon from "@mui/icons-material/StarHalf";
 import StarIcon from "@mui/icons-material/Star";
 import NavigationIcon from "@mui/icons-material/Navigation";
 import useAuth from "../../hooks/useAuth";
+import DateFormat from "../DateFormat";
 
 const imgLink =
   "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260";
@@ -91,7 +92,7 @@ export default function Comments({ value }) {
           setStar(0);
           loadAllFeedbackById(currentPage);
           console.log("Check dữ diệu đánh giá", data);
-          context.auth.feedback = false
+          context.auth.feedback = false;
         });
     } catch (err) {
       console.log(err);
@@ -130,6 +131,11 @@ export default function Comments({ value }) {
                     <p sx={{ textAlign: "left" }}>{fb.comment}</p>
                   </Box>
                 </Grid>
+                <Grid item>
+                  <DateFormat
+                    date={fb.createdAt !== undefined ? fb.createdAt : ""}
+                  />
+                </Grid>
               </Grid>
             </Paper>
           );
@@ -144,10 +150,7 @@ export default function Comments({ value }) {
         />
       </Stack>
 
-      {
-      isLoggedIn && 
-      context.auth.feedback === true ?
-      (
+      {isLoggedIn && context.auth.feedback === true ? (
         <Paper sx={{ padding: "40px 20px", mb: 1 }}>
           <Grid container wrap="nowrap" spacing={2}>
             <Grid item>
@@ -184,7 +187,9 @@ export default function Comments({ value }) {
             </Grid>
           </Grid>
         </Paper>
-      ) : ''}
+      ) : (
+        ""
+      )}
     </>
   );
 }

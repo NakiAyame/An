@@ -34,12 +34,11 @@ import { useNavigate } from "react-router-dom";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
-import ModalAddPet from "../../../components/Modal/ModalAddPet";
-import ModalEditPet from "../../../components/Modal/ModalEditPet";
 import ContentCus from "../../../components/Typography/ContentCus";
 import ModalAddBlog from "../../../components/Modal/ModalAddBlog";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import useAuth from "../../../hooks/useAuth";
+import ModalEditBlog from "../../../components/Modal/ModalEditBlog";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -203,13 +202,14 @@ export default function BlogTable() {
         uId={context.auth.id}
       />
       {/* Modal update */}
-      {/* <ModalEditPet
+      <ModalEditBlog
         open={openEditModal}
         onClose={handleCloseModal}
         dataEditPet={dataEditPet}
         handUpdateEditTable={loadAllBlog}
         page={currentPage}
-      /> */}
+        uId={context.auth.id}
+      />
     </>
   );
 }
