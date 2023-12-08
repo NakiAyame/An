@@ -22,9 +22,9 @@ import Select from "@mui/material/Select";
 import { CardMedia, Container, Input } from "@mui/material";
 
 const Title_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\s]{3,}$/;
 const CONTENT_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$%^&,.?\s]{1,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$:%^&,.?/()-\s]{1,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 
 const ModalAddBlog = (props) => {
@@ -68,7 +68,7 @@ const ModalAddBlog = (props) => {
   const handleUpload = async () => {
     const maxSize = 1024 * 1024;
     if (image.size > maxSize) {
-      toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
+      toast.error("Ảnh có dung lượng lớn hơn 1MB. Vui lòng chọn ảnh khác!");
     } else {
       try {
         if (image) {

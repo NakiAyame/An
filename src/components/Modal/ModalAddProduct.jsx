@@ -23,11 +23,11 @@ import { Input } from "@mui/material";
 import YardIcon from "@mui/icons-material/Yard";
 
 const SERVICE_NAME_REGEX =
-  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$:%^&,.?/()-\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
 const DESCRIPTION_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\!@#$:%^&,.?/()\s]{1,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$:%^&,.?/()-\s]{1,}$/;
 
 const ModalAddProduct = (props) => {
   const { open, onClose, handUpdateTable, category, page } = props;
@@ -104,7 +104,7 @@ const ModalAddProduct = (props) => {
         );
         const maxSize = 1024 * 1024;
         if (image.size > maxSize) {
-          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
+          toast.error("Ảnh có dung lượng lớn hơn 1MB. Vui lòng chọn ảnh khác!");
         } else {
           console.log("Response data:", response.data.image);
           const imagePath = response.data.image;
