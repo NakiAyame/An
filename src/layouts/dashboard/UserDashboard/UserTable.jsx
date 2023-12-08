@@ -504,14 +504,14 @@ const BasicTable = () => {
                                     >
                                         Cập nhật thông tin
                                     </Button>
-                                    <Button
+                                    {/* <Button
                                         variant="contained"
                                         margin="normal"
                                         style={{ backgroundColor: 'red', marginLeft: '20px' }}
                                         onClick={(e) => handleDelete(id)}
                                     >
                                         Xoá
-                                    </Button>
+                                    </Button> */}
                                 </div>
 
                             )}
