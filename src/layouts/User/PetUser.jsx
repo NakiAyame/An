@@ -138,15 +138,17 @@ export default function PetUser() {
 
   return (
     <React.Fragment>
-      <CustomContainer component="main" maxWidth="false" sx={{ pt: 13, pb: 4 }}>
-        <Container
+      <CustomContainer component="main" maxWidth="false" sx={{ pt: 10, pb: 4 }}>
+        <Box
           maxWidth="full"
           sx={{
-            p: 3,
+            bgcolor: "white",
+            p: 2,
             display: "flex",
-            flexDirection: "row",
+            justifyContent: "space-between",
+            borderEndStartRadius: "5px",
+            borderEndEndRadius: "5px",
             alignItems: "center",
-            borderRadius: "16px",
           }}
         >
           <Breadcrumbs maxItems={2} aria-label="breadcrumb">
@@ -159,7 +161,7 @@ export default function PetUser() {
             {/* <StyledBreadcrumb component="a" href="#" label="Catalog" /> */}
             <StyledBreadcrumb label="Thông tin thú cưng" />
           </Breadcrumbs>
-        </Container>
+        </Box>
 
         <Container
           component="main"
@@ -168,6 +170,7 @@ export default function PetUser() {
         >
           {data &&
             data.map((value, index) => {
+              const statusColor = value.status ? "primary" : "error";
               return (
                 <Card
                   onClick={() => handleUpdatePet(value)}
@@ -272,6 +275,14 @@ export default function PetUser() {
                       <Typography level="h4" sx={{ maxWidth: "40ch" }}>
                         {value.color}
                       </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <Chip
+                        size="small"
+                        variant="outlined"
+                        label={value.status ? "Sức khoẻ tốt" : "Sức khoẻ xấu"}
+                        color={statusColor}
+                      />
                     </Grid>
                   </Grid>
                   <CardActions

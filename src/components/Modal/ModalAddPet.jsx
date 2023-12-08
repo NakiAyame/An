@@ -33,7 +33,7 @@ const ModalAddPet = (props) => {
   const [petName, setPetName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(true);
   const [color, setColor] = useState("");
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
@@ -332,17 +332,16 @@ const ModalAddPet = (props) => {
               row
               aria-label="status"
               name="status"
-              sx={{ display: "none" }}
             >
               <FormControlLabel
                 value={true}
                 control={<Radio />}
-                label="Đang dùng dịch vụ"
+                label="Sức khoẻ tốt"
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
-                label="Chưa dùng dịch vụ"
+                label="Sức khoẻ xấu"
               />
             </RadioGroup>
           </form>
