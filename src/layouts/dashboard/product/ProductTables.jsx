@@ -194,7 +194,7 @@ export default function ProductTable() {
   };
 
   const handleSearchClick = async () => {
-    if (keyword === "") {
+    if (keyword.trim() === "") {
       toast.warning("Hãy nhập kết quả bạn cần tìm");
       loadAllProduct(currentPage);
     } else {
@@ -206,7 +206,7 @@ export default function ProductTable() {
   const searchProductByName = async () => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/product?product=${keyword}&page=1`
+        `${BASE_URL}/product?product=${keyword.trim()}&page=1`
       );
       if (loadData.data.error) {
         toast.warning(
