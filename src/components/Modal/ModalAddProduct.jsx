@@ -285,7 +285,7 @@ const ModalAddProduct = (props) => {
               value={description}
               onChange={(e) => handleValidationDescription(e)}
             />
-
+            <Typography>Ảnh dịch vụ</Typography>
             <Input
               type="file"
               inputProps={{ accept: "image/*" }}

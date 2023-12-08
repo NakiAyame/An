@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
@@ -19,16 +19,16 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { Grid, Input } from "@mui/material";
+import { Grid, Input, Typography } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ButtonCustomize from "../Button/Button";
 
 const SERVICE_NAME_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{3,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
-const DESCRIPTION_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$:%^&,.?/()\s]{1,}$/;
+// const DESCRIPTION_REGEX =
+//   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9@#$:%^&,.?/()\s]{1,}$/;
 
 const ModalEditSerivce = (props) => {
   const {
@@ -122,15 +122,15 @@ const ModalEditSerivce = (props) => {
     setPrice(e.target.value);
   };
 
-  useEffect(() => {
-    setValidDescription(
-      DESCRIPTION_REGEX.test(description) && description.trim()
-    );
-  }, [description]);
+  // useEffect(() => {
+  //   setValidDescription(
+  //     DESCRIPTION_REGEX.test(description) && description.trim()
+  //   );
+  // }, [description]);
 
-  const handleValidationDescription = (e) => {
-    setDescription(e.target.value);
-  };
+  // const handleValidationDescription = (e) => {
+  //   setDescription(e.target.value);
+  // };
 
   // --------------------- HANDLE CHANGE IMAGE -----------------------------
   const handleImageChange = (e) => {
@@ -150,7 +150,7 @@ const ModalEditSerivce = (props) => {
         );
         const maxSize = 1024 * 1024;
         if (serviceImage.size > maxSize) {
-          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
+          toast.error("Ảnh có dung lượng lớn hơn 1MB. Vui lòng chọn ảnh khác!");
         } else {
           console.log("Response data:", response.data.image);
           const imagePath = response.data.image;
@@ -191,13 +191,21 @@ const ModalEditSerivce = (props) => {
   }, [dataEditService]);
 
   const handleEditService = async (serviceID) => {
-    if (discount === "") {
-      toast.error("% giảm giá không được để trống");
+    if (serviceName.trim() === "") {
+      toast.error("Vui lòng nhập tên dịch vụ");
+    } else if (description.trim() === "") {
+      toast.error("Vui lòng nhập thông tin của dịch vụ");
+    } else if (price === "") {
+      toast.error("Vui lòng nhập giá tiền dịch vụ");
+    } else if (price < 0) {
+      toast.error("Giá tiền phải lớn hơn 0. Vui lòng nhập lại!");
+    } else if (discount === "") {
+      toast.error("% giảm giá không được để trống. Vui lòng nhập lại!");
     } else if (!validServiceName) {
       toast.error(
-        "Tên dịch vụ không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
+        "Tên dịch vụ không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    } else if (categoryId == "") {
+    } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại dịch vụ mình muốn");
     } else if (discount < 0) {
       toast.error("% giảm giá không được âm ");
@@ -207,8 +215,6 @@ const ModalEditSerivce = (props) => {
       toast.error(
         "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
       );
-    } else if (!validDescription) {
-      toast.error("Thông tin chi tiết không được để trống");
     } else {
       try {
         const res = await axios.patch(`http://localhost:3500/service`, {
@@ -231,7 +237,7 @@ const ModalEditSerivce = (props) => {
           onClose();
         }
       } catch (err) {
-        toast.error("Bạn phải tải ảnh lên trước khi sửa dịch vụ");
+        toast.error(err.message);
       }
     }
   };
@@ -314,7 +320,7 @@ const ModalEditSerivce = (props) => {
               margin="normal"
               maxRows={4}
               value={description}
-              onChange={(e) => handleValidationDescription(e)}
+              onChange={(e) => setDescription(e.target.value)}
             />
 
             <TextField
@@ -384,6 +390,7 @@ const ModalEditSerivce = (props) => {
               />
             </RadioGroup>
 
+            <Typography>Ảnh dịch vụ</Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <Input
@@ -392,6 +399,7 @@ const ModalEditSerivce = (props) => {
                   onChange={handleImageChange}
                 />
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <ButtonCustomize
                   onClick={handleUpload}
