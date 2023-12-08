@@ -323,17 +323,16 @@ const ModalEditPet = (props) => {
               row
               aria-label="status"
               name="status"
-              sx={{ display: "none" }}
             >
               <FormControlLabel
                 value={true}
                 control={<Radio />}
-                label="Đang dùng dịch vụ"
+                label="Sức khoẻ tốt"
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
-                label="Chưa dùng dịch vụ"
+                label="Sức khoẻ xấu"
               />
             </RadioGroup>
             <Grid container spacing={3}>

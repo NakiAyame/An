@@ -130,7 +130,7 @@ export default function ServiceList() {
   const loadAllService = async (page) => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/service?page=${page}&limit=9`
+        `${BASE_URL}/service?page=${page}&limit=9&status=true`
       );
       if (loadData.error) {
         toast.error(loadData.error);
@@ -274,7 +274,7 @@ export default function ServiceList() {
   };
 
   const handleSearchClick = async () => {
-    if (keyword === "") {
+    if (keyword.trim() === "") {
       toast.warning("Hãy nhập kết quả bạn cần tìm");
       loadAllService(currentPage);
     } else {
@@ -286,7 +286,7 @@ export default function ServiceList() {
   const searchServiceByName = async () => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/service?service=${keyword}&page=1`
+        `${BASE_URL}/service?service=${keyword.trim()}&page=1`
       );
       if (loadData.data.error) {
         toast.warning(
@@ -318,7 +318,7 @@ export default function ServiceList() {
           maxWidth="full"
           sx={{
             bgcolor: "background.paper",
-            p: 3,
+            p: 2,
             display: "flex",
             justifyContent: "space-between",
             borderEndStartRadius: "5px",

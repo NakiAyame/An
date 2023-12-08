@@ -175,8 +175,8 @@ export default function ProductList() {
           )
           .then((data) => {
             toast.success("Thêm sản phẩm vào giỏ hàng thành công");
-            context.auth.success = 'Ok'
-            console.log(context.auth)
+            context.auth.success = "Ok";
+            console.log(context.auth);
           });
       } catch (err) {
         console.log(err);
@@ -243,7 +243,7 @@ export default function ProductList() {
   };
 
   const handleSearchClick = async () => {
-    if (keyword === "") {
+    if (keyword.trim() === "") {
       toast.warning("Hãy nhập kết quả bạn cần tìm");
       loadAllProduct(currentPage);
     } else {
@@ -255,7 +255,7 @@ export default function ProductList() {
   const searchProductByName = async () => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/product?product=${keyword}&page=1`
+        `${BASE_URL}/product?product=${keyword.trim()}&page=1`
       );
       if (loadData.data.error) {
         toast.warning(
@@ -298,7 +298,7 @@ export default function ProductList() {
           maxWidth="full"
           sx={{
             bgcolor: "background.paper",
-            p: 3,
+            p: 2,
             display: "flex",
             justifyContent: "space-between",
             borderEndStartRadius: "5px",

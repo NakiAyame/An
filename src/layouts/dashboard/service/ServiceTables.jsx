@@ -63,7 +63,7 @@ export default function ServiceTable() {
   const loadAllService = async (page, order) => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/service?page=${page}&sortPrice=${order}`
+        `${BASE_URL}/service/manage?page=${page}&sortPrice=${order}`
       );
       if (loadData.error) {
         toast.error(loadData.error);
@@ -141,7 +141,7 @@ export default function ServiceTable() {
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/service?page=1&categoryId=${cateId}`
+          `http://localhost:3500/service/manage?page=1&categoryId=${cateId}`
         );
         if (loadData.error) {
           toast.error(loadData.error);
@@ -195,7 +195,7 @@ export default function ServiceTable() {
   };
 
   const handleSearchClick = async () => {
-    if (keyword === "") {
+    if (keyword.trim() === "") {
       toast.warning("Hãy nhập kết quả bạn cần tìm");
       loadAllService(currentPage);
     } else {
@@ -207,7 +207,7 @@ export default function ServiceTable() {
   const searchServiceByName = async () => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/service?service=${keyword}&page=1`
+        `${BASE_URL}/service/manage?service=${keyword.trim()}&page=1`
       );
       if (loadData.data.error) {
         toast.warning(

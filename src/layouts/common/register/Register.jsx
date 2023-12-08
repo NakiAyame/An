@@ -33,29 +33,31 @@ const Register = () => {
     fullname: "",
     email: "",
     password: "",
-    passwordConfirm: ""
+    passwordConfirm: "",
   });
 
-  const PWD_REGEX = /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
+  const PWD_REGEX =
+    /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
 
   const registerUser = async (e) => {
     e.preventDefault();
     const { fullname, email, password, passwordConfirm } = data;
     try {
-      const { data } = await axios.post("http://localhost:3500/register", {
-        fullname,
-        email,
-        password,
-        passwordConfirm,
-        role: "customer",
-      })
+      const { data } = await axios
+        .post("http://localhost:3500/register", {
+          fullname,
+          email,
+          password,
+          passwordConfirm,
+          role: "customer",
+        })
         .then((data) => {
           toast.success("Tạo tài khoản thành công");
           navigate("/sign-in");
         })
         .catch((error) => {
           toast.error(error.response.data.error);
-        })
+        });
     } catch (err) {
       console.log(err);
     }
@@ -158,12 +160,14 @@ const Register = () => {
                 required
                 fullWidth
                 name="Re-password"
-                label="Re-password"
+                label="Nhập lại mật khẩu"
                 type="password"
                 id="Re-password"
                 autoComplete="current-password"
                 value={data.passwordConfirm}
-                onChange={(e) => setData({ ...data, passwordConfirm: e.target.value })}
+                onChange={(e) =>
+                  setData({ ...data, passwordConfirm: e.target.value })
+                }
               />
               <Button
                 type="submit"
@@ -176,8 +180,8 @@ const Register = () => {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <NavLink to="#" variant="body2">
-                    Quên mật khẩu
+                  <NavLink to="/reset-password" variant="body2">
+                    Quên mật khẩu?
                   </NavLink>
                 </Grid>
                 <Grid item>
