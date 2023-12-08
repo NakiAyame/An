@@ -113,11 +113,25 @@ export default function AccountMenu() {
           </ListItemIcon>
           Trang chủ
         </MenuItem>
-        {context.auth.role === "admin" || context.auth.role === "staff" ? (
+        {context.auth.role === "admin" ? (
           <MenuItem
             onClick={handleClose}
             component={NavLink}
             to="/dashboard/dashboard-list"
+          >
+            <ListItemIcon>
+              <DashboardIcon fontSize="small" />
+            </ListItemIcon>
+            Bảng điều khiển
+          </MenuItem>
+        ) : (
+          ""
+        )}
+        { context.auth.role === "staff" ? (
+          <MenuItem
+            onClick={handleClose}
+            component={NavLink}
+            to="/dashboard/service-list"
           >
             <ListItemIcon>
               <DashboardIcon fontSize="small" />
