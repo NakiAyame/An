@@ -175,6 +175,8 @@ export default function ProductList() {
           )
           .then((data) => {
             toast.success("Thêm sản phẩm vào giỏ hàng thành công");
+            context.auth.success = 'Ok'
+            console.log(context.auth)
           });
       } catch (err) {
         console.log(err);

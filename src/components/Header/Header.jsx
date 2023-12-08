@@ -112,7 +112,7 @@ function Header() {
   useEffect(() => {
     handleLoadCartProduct()
     handleLoadCartService()
-  });
+  },[context.auth]);
 
   const reddot = {
     backgroundColor: 'red',

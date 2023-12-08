@@ -33,39 +33,33 @@ const Register = () => {
     fullname: "",
     email: "",
     password: "",
-    rePassword: ""
+    passwordConfirm: ""
   });
 
   const PWD_REGEX = /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
 
   const registerUser = async (e) => {
     e.preventDefault();
-    const { fullname, email, password, rePassword } = data;
-
-    if (!password.match(PWD_REGEX)) {
-      toast.error('Mật khẩu bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự')
-    } else if(password.trim() !== rePassword.trim()) {
-      toast.error('Mật khẩu thứ 2 không đúng')
-    }
-    else {
-      try {
-        const { data } = await axios.post("http://localhost:3500/register", {
-          fullname,
-          email,
-          password,
-          role: "customer",
-        });
-        if (data.error) {
-          toast.error(data.error);
-        } else {
-          setData({});
+    const { fullname, email, password, passwordConfirm } = data;
+    try {
+      const { data } = await axios.post("http://localhost:3500/register", {
+        fullname,
+        email,
+        password,
+        passwordConfirm,
+        role: "customer",
+      })
+        .then((data) => {
           toast.success("Tạo tài khoản thành công");
           navigate("/sign-in");
-        }
-      } catch (err) {
-        console.log(err);
-      }
+        })
+        .catch((error) => {
+          toast.error(error.response.data.error);
+        })
+    } catch (err) {
+      console.log(err);
     }
+    // }
   };
 
   const handleSubmit = (event) => {
@@ -168,8 +162,8 @@ const Register = () => {
                 type="password"
                 id="Re-password"
                 autoComplete="current-password"
-                value={data.rePassword}
-                onChange={(e) => setData({ ...data, rePassword: e.target.value })}
+                value={data.passwordConfirm}
+                onChange={(e) => setData({ ...data, passwordConfirm: e.target.value })}
               />
               <Button
                 type="submit"

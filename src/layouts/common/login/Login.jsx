@@ -59,44 +59,36 @@ const Login = () => {
   const loginUser = async (e) => {
     e.preventDefault();
     const { email, password } = data;
+    try {
+      const { data } = await axios.post("http://localhost:3500/login", {
+        email,
+        password,
+      })
+        .then((data) => {
+          if (data.data.error === 'Unverified') {
+            navigate('/verify', { replace: true });
+          } else {
+            console.log(data)
+            const dataDecode = jwtDecode(data.data.token);
 
-    if (!email.match(validRegex)) {
-      toast.error('Vui lòng nhập đúng định dạng email')
-    } else if (password.trim() === '') {
-      toast.error('Mật khẩu không được để trống')
-    } else {
+            localStorage.setItem("token", data.data.token);
 
-      try {
-        const { data } = await axios.post("http://localhost:3500/login", {
-          email,
-          password,
+            context.setAuth({
+              id: dataDecode.id,
+              email: dataDecode.email,
+              role: dataDecode.role,
+              token: data.data.token,
+            });
+
+            toast.success("Đăng nhập thành công");
+            navigate(from, { replace: true });
+          }
         })
-          .then((data) => {
-            if (data.data.error === 'Unverified') {
-              navigate('/verify', { replace: true });
-            } else {
-              // console.log(data)
-              const dataDecode = jwtDecode(data.data.token);
-
-              localStorage.setItem("token", data.data.token);
-
-              context.setAuth({
-                id: dataDecode.id,
-                email: dataDecode.email,
-                role: dataDecode.role,
-                token: data.data.token,
-              });
-
-              toast.success("Đăng nhập thành công");
-              navigate(from, { replace: true });
-            }
-          })
-          .catch((err) => {
-            toast.error("Mật khẩu không chính xác");
-          })
-      } catch (err) {
-        // console.log(err)
-      }
+        .catch((error) => {
+          toast.error(error.response.data.error);
+        })
+    } catch (err) {
+      // console.log(err)
     }
   };
 
