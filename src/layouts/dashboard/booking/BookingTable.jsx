@@ -38,6 +38,7 @@ import DateFormat from "../../../components/DateFormat";
 //React
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -75,6 +76,8 @@ export default function BookingTable() {
 
     const [pages, setPages] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+
+    const context = useAuth()
 
     const OPTION_VIEW_ORDER_BY_ID = 'view'
 
@@ -170,7 +173,6 @@ export default function BookingTable() {
                 `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc`
             )
                 .then((data) => {
-                    setPages(data.data.pages);
                     console.log(data.data.docs);
                     const filterData = []
                     for (let i = 0; i < data.data.docs.length; i++) {
@@ -179,6 +181,7 @@ export default function BookingTable() {
                         }
                     }
                     setData(filterData)
+                    setPages(filterData / DEFAULT_LIMIT);
                 })
         } catch (err) {
             console.log(err);
@@ -266,12 +269,23 @@ export default function BookingTable() {
         }
     }
 
-    function isValidDateFormat(dateStr) {
-        // Biểu thức chính quy kiểm tra định dạng "YYYY-MM-DD"
-        var regex = /^\d{4}-\d{2}-\d{2}$/;
+    const handleDeleteOrder = async (id, bookingId, option, status) => {
+        try {
+            const loadData = await axios.delete(
+                `http://localhost:3500/bookingDetail/${id}`,
+                {
+                    headers: { 'Authorization': context.auth.token },
+                    withCredentials: true
+                }
+            )
+                .then((data) => {
+                    console.log(data)
+                    handleViewOrderDetail(bookingId, option)
+                })
 
-        // Kiểm tra xem chuỗi ngày có khớp với biểu thức chính quy hay không
-        return regex.test(dateStr);
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return (
@@ -299,30 +313,7 @@ export default function BookingTable() {
                         })}
                     </select>
                 </Grid>
-                {/* <Grid item xs={4}>
-                    <DatePicker
-                        label="Ngày bắt đầu"
-                        defaultValue={dayjs()}
-                        onChange={(newValue) => setFromDate(convertDate(newValue))}
-                        maxDate={dayjs()}
-                    />
-                </Grid>
-                <Grid item xs={4}>
-                    <DatePicker
-                        label="Ngày kết thúc"
-                        defaultValue={dayjs()}
-                        onChange={(newValue) => setToDate(convertDate(newValue))}
-                        maxDate={dayjs()}
-                    />
-                </Grid> */}
             </Grid>
-
-            {/* <ButtonCustomize
-                onClick={() => loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, status)}
-                variant="contained"
-                // component={RouterLink}
-                nameButton="Tìm kiếm"
-            /> */}
             <Paper sx={{ width: "100%", overflow: "hidden", marginTop: '20px' }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
@@ -381,7 +372,7 @@ export default function BookingTable() {
                 <hr style={{ opacity: '0.5' }} />
                 <Stack spacing={2} sx={{ float: "right" }} style={{ margin: '10px 0', justifyContent: 'center' }}>
                     <Pagination
-                        count={data.length / DEFAULT_LIMIT}
+                        count={pages === 1 || pages < 1 ? 1 : pages}
                         page={currentPage}
                         color="primary"
                         onChange={handlePaging}
@@ -480,7 +471,27 @@ export default function BookingTable() {
                                                     <TableCell align="left">{value.serviceId !== null ? value.serviceId.serviceName : ''}</TableCell>
                                                     <TableCell align="left">{value.quantity}</TableCell>
                                                     <TableCell align="left">{value.serviceId !== null ? value.serviceId.price : ''}</TableCell>
-                                                    <TableCell align="left"></TableCell>
+                                                    <TableCell align="left">
+                                                        {
+                                                            status === 'Chờ thanh toán'
+                                                                ? (
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        margin="normal"
+                                                                        color="primary"
+                                                                        onClick={
+                                                                            (e) => handleDeleteOrder(
+                                                                                value._id,
+                                                                                value.bookingId,
+                                                                                OPTION_VIEW_ORDER_BY_ID,
+                                                                                status
+                                                                            )}
+                                                                    >
+                                                                        Xoá
+                                                                    </Button>
+                                                                ) : ''
+                                                        }
+                                                    </TableCell>
                                                 </TableRow>
                                             );
                                         })}
@@ -489,7 +500,7 @@ export default function BookingTable() {
 
                         </Grid>
                     </DialogContent>
-                    <DialogActions>
+                    {/* <DialogActions>
                         <Button
                             variant="contained"
                             margin="normal"
@@ -498,7 +509,7 @@ export default function BookingTable() {
                         >
                             Cập nhật thông tin
                         </Button>
-                    </DialogActions>
+                    </DialogActions> */}
                 </Box>
             </Modal>
         </>

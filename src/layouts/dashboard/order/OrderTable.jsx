@@ -38,6 +38,7 @@ import DateFormat from "../../../components/DateFormat";
 //React
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -75,6 +76,8 @@ export default function BasicTable() {
 
     const [pages, setPages] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+
+    const context = useAuth()
 
     const OPTION_VIEW_ORDER_BY_ID = 'view'
 
@@ -156,7 +159,6 @@ export default function BasicTable() {
             )
                 .then((data) => {
                     setData(data.data.docs);
-                    setPages(data.data.pages);
                     console.log(data.data.docs);
                     const filterData = []
                     for (let i = 0; i < data.data.docs.length; i++) {
@@ -165,6 +167,7 @@ export default function BasicTable() {
                         }
                     }
                     setData(filterData)
+                    setPages(filterData.length / DEFAULT_LIMIT);
                 })
         } catch (err) {
             console.log(err);
@@ -248,6 +251,25 @@ export default function BasicTable() {
             } catch (err) {
                 console.log(err);
             }
+        }
+    }
+
+    const handleDeleteOrder = async (id, orderId, option) => {
+        try {
+            const loadData = await axios.delete(
+                `http://localhost:3500/orderDetail/${id}`,
+                {
+                    headers: { 'Authorization': context.auth.token },
+                    withCredentials: true
+                }
+            )
+                .then((data) => {
+                    console.log(data)
+                    handleViewOrderDetail(orderId, option)
+                })
+
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -352,7 +374,7 @@ export default function BasicTable() {
                 <hr style={{ opacity: '0.5' }} />
                 <Stack spacing={2} sx={{ float: "right" }} style={{ margin: '10px 0', justifyContent: 'center' }}>
                     <Pagination
-                        count={pages}
+                        count={pages === 1 || pages < 1 ? 1 : pages}
                         page={currentPage}
                         color="primary"
                         onChange={handlePaging}
@@ -447,7 +469,26 @@ export default function BasicTable() {
                                                     <TableCell align="left">{value.productId !== null ? value.productId.productName : ''}</TableCell>
                                                     <TableCell align="left">{value.quantity}</TableCell>
                                                     <TableCell align="left">{value.productId !== null ? value.productId.price : ''}</TableCell>
-                                                    <TableCell align="left"></TableCell>
+                                                    <TableCell align="left">
+                                                        {
+                                                            status === 'Chờ xác nhận'
+                                                                ? (
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        margin="normal"
+                                                                        color="primary"
+                                                                        onClick={
+                                                                            (e) => handleDeleteOrder(
+                                                                                value._id,
+                                                                                value.orderId,
+                                                                                OPTION_VIEW_ORDER_BY_ID
+                                                                            )}
+                                                                    >
+                                                                        Xoá
+                                                                    </Button>
+                                                                ) : ''
+                                                        }
+                                                    </TableCell>
                                                 </TableRow>
                                             );
                                         })}
