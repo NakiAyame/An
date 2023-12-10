@@ -36,7 +36,7 @@ const formatDate = (dateTime) => {
 };
 
 const PRODUCT_NAME_REGEX =
-  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\!@#$:%^&,.?/()-\s]{3,}$/;
+  /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ&-\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
 const DESCRIPTION_REGEX =
@@ -59,8 +59,8 @@ const ModalEditProduct = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [productImage, setProductImage] = useState(null);
   const [discount, setDiscount] = useState(0);
-  const [saleStartTime, setSaleStartTime] = useState(dayjs("2022-04-17T15:30"));
-  const [saleEndTime, setSaleEndTime] = useState(dayjs("2022-04-17T15:30"));
+  const [saleStartTime, setSaleStartTime] = useState(null);
+  const [saleEndTime, setSaleEndTime] = useState(null);
   const [isStartDateVisible, setIsStartDateVisible] = useState(false);
 
   //   const [status, setStatus] = useState(true);
@@ -70,32 +70,39 @@ const ModalEditProduct = (props) => {
   //     console.log(status);
   //   };
 
-  // --------------------- HANLDE CHANGE DÍCOUNT -----------------------------
-  // const handleDiscountChange = (event) => {
-  //   const { value } = event.target;
-  //   const numericValue = parseInt(value, 10);
-  //   setDiscount(value);
-  //   if (numericValue >= 1 && numericValue <= 100) {
-  //     setSaleStartTime();
-  //     setSaleEndTime();
-  //   } else {
-  //   }
-  // };
-
-  // --------------------- HANLDE CHANGE START DATE -----------------------------
-  const handleStartDateChange = (date) => {
-    if (dayjs().isAfter(dayjs(date))) {
-      toast.error("Ngày bắt đầu không thể ở quá khứ!!");
+  // // --------------------- HANLDE CHANGE DISCOUNT -----------------------------
+  const handleDiscountChange = (event) => {
+    const newDiscount = parseInt(event.target.value, 10);
+    if (newDiscount >= 1 && newDiscount <= 100) {
+      setDiscount(newDiscount);
       setSaleStartTime(dayjs());
+      setSaleEndTime(dayjs());
+    } else {
+      setDiscount(newDiscount);
+      setSaleStartTime(null);
+      setSaleEndTime(null);
+    }
+
+    // if (numericValue >= 1 && numericValue <= 100) {
+    //   setIsStartDateVisible(true);
+    // } else {
+    //   setIsStartDateVisible(false);
+    // }
+  };
+
+  // // --------------------- HANLDE CHANGE START DATE -----------------------------
+  const handleStartDateChange = (date) => {
+    // setSaleStartTime(date);
+    if (saleEndTime && dayjs(saleEndTime).isBefore(date)) {
+      toast.error("Ngày bắt đầu không thể sau ngày kết thúc!!");
+    } else if (dayjs().isAfter(dayjs(date))) {
+      toast.error("Ngày bắt đầu không thể ở quá khứ!!");
 
       // const currentDate = dayjs();
 
       // if (saleStartTime && currentDate.isAfter(saleStartTime)) {
       //   setSaleStartTime(null);
       // }
-    } else if (saleEndTime && dayjs(saleEndTime).isBefore(date)) {
-      toast.error("Ngày bắt đầu không thể sau ngày kết thúc!!");
-      setSaleEndTime(null);
     } else {
       toast.success("Ngày bắt đầu hợp lệ!");
       setSaleStartTime(date);
@@ -103,7 +110,7 @@ const ModalEditProduct = (props) => {
   };
 
   const handleEndDateChange = (date) => {
-    if (saleStartTime && !dayjs(date).isBefore(saleStartTime)) {
+    if (!dayjs(date).isBefore(saleStartTime)) {
       toast.success("Ngày kết thúc hợp lệ!");
       setSaleEndTime(date);
     } else {
@@ -233,11 +240,25 @@ const ModalEditProduct = (props) => {
     } else if (discount === "") {
       toast.error("% giảm giá không được để trống");
     } else if (!validProductName) {
-      toast.error("Tên sản phẩm phải có ít nhất 3 kí tự");
+      toast.error(
+        "Tên sản phẩm không được nhập số, phải có ít nhất 3 kí tự và chỉ được nhập kí tự đặc biệt là & hoặc -"
+      );
     } else if (discount < 0) {
       toast.error("% giảm giá không được âm ");
     } else if (discount > 100) {
       toast.error("% giảm giá không được lớn hơn 100");
+    } else if (dayjs(saleEndTime).isSame(dayjs(saleStartTime))) {
+      toast.error(
+        "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
+      );
+      setSaleStartTime(dayjs().toDate());
+    } else if (dayjs(saleEndTime).isBefore(dayjs(saleStartTime))) {
+      toast.error(
+        "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
+      );
+    } else if (dayjs().isAfter(dayjs(saleStartTime))) {
+      toast.error("Ngày bắt đầu không thể ở quá khứ! Vui lòng nhập lại.");
+      setSaleStartTime(dayjs().toDate());
     } else if (!validQuantity) {
       toast.error("Số lượng không được để trống");
     } else if (!validPrice) {
@@ -379,44 +400,31 @@ const ModalEditProduct = (props) => {
               type="number"
               margin="normal"
               value={discount}
-              onChange={(e) => setDiscount(e.target.value)}
+              // onChange={(e) => setDiscount(e.target.value)}
+              onChange={handleDiscountChange}
             />
 
-            {/* <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
-                <DateTimePicker
-                  label="Ngày bắt đầu giảm giá"
-                  defaultValue={saleStartTime}
-                  // value={saleStartTime}
-                  onChange={handleStartDateChange}
-                  // renderInput={(props) => (
-                  //   <TextField
-                  //     {...props}
-                  //     value={formatDate(saleStartTime)}
-                  //     fullWidth
-                  //   />
-                  // )}
-                  // minDate={currentDate}
-                  // maxDate={currentDate}
-                />
-              </Grid>
+            {discount >= 1 && discount <= 100 && (
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={6}>
+                  <DateTimePicker
+                    label="Ngày bắt đầu giảm giá"
+                    value={dayjs(saleStartTime)}
+                    onChange={handleStartDateChange}
+                    minDate={dayjs()}
+                    // maxDate={currentDate}
+                  />
+                </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <DateTimePicker
-                  label="Ngày kết thúc giảm giá"
-                  defaultValue={saleEndTime}
-                  // value={saleEndTime}
-                  onChange={handleEndDateChange}
-                  // renderInput={(props) => (
-                  //   <TextField
-                  //     {...props}
-                  //     value={formatDate(saleEndTime)}
-                  //     fullWidth
-                  //   />
-                  // )}
-                />
+                <Grid item xs={12} sm={6}>
+                  <DateTimePicker
+                    label="Ngày kết thúc giảm giá"
+                    value={dayjs(saleEndTime)}
+                    onChange={handleEndDateChange}
+                  />
+                </Grid>
               </Grid>
-            </Grid> */}
+            )}
 
             <TextField
               label="Thông tin sản phẩm"

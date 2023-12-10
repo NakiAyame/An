@@ -38,7 +38,7 @@ const DrawerDashborad = () => {
   const links2 = [
     { text: "Danh sách dịch vụ", path: "/dashboard/service-list" },
     {
-      text: "Lịch sử thanh toán dịch vụ",
+      text: "Lịch đăng kí dịch vụ",
       path: "/dashboard/booking-list",
     },
   ];
@@ -54,7 +54,7 @@ const DrawerDashborad = () => {
   const links4 = [
     { text: "Danh sách sản phẩm", path: "/dashboard/product-list" },
     {
-      text: "Lịch sử thanh toán sản phẩm",
+      text: "Đơn hàng",
       path: "/dashboard/order-list",
     },
   ];

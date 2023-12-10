@@ -434,10 +434,11 @@ export default function ProductList() {
                             flexGrow={1}
                             sx={{ justifyContent: "space-between" }}
                           >
-                            {value.discount !== 0 ? (
-                              // &&
-                              // dayjs().isAfter(value.saleStartTime) &&
-                              // dayjs().isBefore(value.saleEndTime)
+                            {value.discount !== 0 &&
+                            dayjs().isBetween(
+                              dayjs(value.saleStartTime),
+                              dayjs(value.saleEndTime)
+                            ) ? (
                               <Box
                                 display="flex"
                                 flexGrow={1}

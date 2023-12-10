@@ -162,7 +162,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
             }
           )
           .then((data) => {
-            alert("Thêm sản phẩm vào giỏ hàng thành công");
+            toast.success("Thêm dịch vụ vào giỏ hàng thành công");
             onClose();
           });
       } catch (err) {

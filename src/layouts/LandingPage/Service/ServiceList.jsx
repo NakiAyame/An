@@ -465,7 +465,8 @@ export default function ServiceList() {
                             flexGrow={1}
                             sx={{ justifyContent: "space-between" }}
                           >
-                            {value.discount !== 0 ? (
+                            {value.discount !== 0 &&
+                            dayjs().isBetween(dayjs(value.saleStartTime), dayjs(value.saleEndTime)) ? (
                               <Box
                                 display="flex"
                                 flexGrow={1}

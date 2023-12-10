@@ -25,7 +25,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ButtonCustomize from "../Button/Button";
 
 const SERVICE_NAME_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\s]{3,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ&-\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 // const DESCRIPTION_REGEX =
 //   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9@#$:%^&,.?/()\s]{1,}$/;
@@ -58,47 +58,43 @@ const ModalEditSerivce = (props) => {
   };
 
   // // --------------------- HANLDE CHANGE DISCOUNT -----------------------------
-  // const handleDiscountChange = (event) => {
-  //   const { value } = event.target;
-  //   const numericValue = parseInt(value, 10);
+  const handleDiscountChange = (event) => {
+    const newDiscount = parseInt(event.target.value, 10);
 
-  //   setDiscount(value);
-
-  //   if (numericValue >= 1 && numericValue <= 100) {
-  //     setSaleStartTime();
-  //     setSaleEndTime();
-  //     setIsStartDateVisible(true);
-  //   } else {
-  //     setIsStartDateVisible(false);
-  //   }
-  // };
+    if (newDiscount >= 1 && newDiscount <= 100) {
+      setDiscount(newDiscount);
+      setSaleStartTime(dayjs());
+      setSaleEndTime(dayjs());
+    } else {
+      setDiscount(newDiscount);
+      setSaleStartTime(null);
+      setSaleEndTime(null);
+    }
+  };
 
   // // --------------------- HANLDE CHANGE START DATE -----------------------------
-  // const handleStartDateChange = (date) => {
-  //   // Chỉ đặt startDate nếu ngày được chọn không phải là ngày trong quá khứ
-  //   if (!dayjs(date).isBefore(dayjs(), "day")) {
-  //     toast.success("Ngày bắt đầu hợp lệ!");
-  //     setSaleStartTime(date);
+  const handleStartDateChange = (date) => {
+    if (date === null) {
+      setSaleStartTime(dayjs());
+    } else {
+      setSaleStartTime(date);
+    }
+  };
 
-  //     // Nếu endDate đã được chọn và trước startDate, đặt lại endDate thành null
-  //     if (saleEndTime && dayjs(saleEndTime).isBefore(date)) {
-  //       toast.error("Ngày bắt đầu không thể sau ngày kết thúc!!");
-  //       setSaleEndTime(null);
-  //     }
-  //   } else {
-  //     toast.error("Ngày bắt đầu không thể ở quá khứ!!");
-  //   }
-  // };
+  const handleEndDateChange = (date) => {
+    if (date === null) {
+      setSaleEndTime(dayjs());
+    } else {
+      setSaleEndTime(date);
+    }
 
-  // const handleEndDateChange = (date) => {
-  //   // Chỉ đặt endDate nếu startDate đã được chọn và ngày được chọn sau saleStartTime
-  //   if (saleStartTime && !dayjs(date).isBefore(saleStartTime)) {
-  //     toast.success("Ngày kết thúc hợp lệ!");
-  //     setSaleEndTime(date);
-  //   } else {
-  //     toast.error("Ngày kết thúc không thể sau ngày bắt đầu!!");
-  //   }
-  // };
+    // if (!dayjs(date).isBefore(saleStartTime)) {
+    //   toast.success("Ngày kết thúc hợp lệ!");
+    //   setSaleEndTime(date);
+    // } else {
+    //   toast.error("Ngày kết thúc không thể sau ngày bắt đầu!!");
+    // }
+  };
 
   // --------------------- VALIDATION -----------------------------
   const [validServiceName, setValidServiceName] = useState("");
@@ -203,7 +199,7 @@ const ModalEditSerivce = (props) => {
       toast.error("% giảm giá không được để trống. Vui lòng nhập lại!");
     } else if (!validServiceName) {
       toast.error(
-        "Tên dịch vụ không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
+        "Tên dịch vụ không được nhập số, phải có ít nhất 3 kí tự và chỉ được nhập kí tự đặc biệt là & hoặc -"
       );
     } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại dịch vụ mình muốn");
@@ -211,6 +207,18 @@ const ModalEditSerivce = (props) => {
       toast.error("% giảm giá không được âm ");
     } else if (discount > 100) {
       toast.error("% giảm giá không được lớn hơn 100");
+    } else if (dayjs(saleEndTime).isSame(dayjs(saleStartTime))) {
+      toast.error(
+        "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
+      );
+      setSaleStartTime(dayjs().toDate());
+    } else if (dayjs(saleEndTime).isBefore(dayjs(saleStartTime))) {
+      toast.error(
+        "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
+      );
+    } else if (dayjs().isAfter(dayjs(saleStartTime))) {
+      toast.error("Ngày bắt đầu không thể ở quá khứ! Vui lòng nhập lại.");
+      setSaleStartTime(dayjs().toDate());
     } else if (!validPrice) {
       toast.error(
         "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
@@ -346,30 +354,31 @@ const ModalEditSerivce = (props) => {
               type="number"
               margin="normal"
               value={discount}
-              onChange={(e) => setDiscount(e.target.value)}
-              // onChange={handleDiscountChange}
+              // onChange={(e) => setDiscount(e.target.value)}
+              onChange={handleDiscountChange}
             />
-            {/* {isStartDateVisible && (
+
+            {discount >= 1 && discount <= 100 && (
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
-                  <DatePicker
+                  <DateTimePicker
                     label="Ngày bắt đầu giảm giá"
-                    value={saleStartTime}
+                    value={dayjs(saleStartTime)}
                     onChange={handleStartDateChange}
-                    // minDate={currentDate}
+                    minDate={dayjs()}
                     // maxDate={currentDate}
                   />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <DatePicker
+                  <DateTimePicker
                     label="Ngày kết thúc giảm giá"
-                    value={saleEndTime}
+                    value={dayjs(saleEndTime)}
                     onChange={handleEndDateChange}
                   />
                 </Grid>
               </Grid>
-            )} */}
+            )}
 
             <RadioGroup
               value={status}
