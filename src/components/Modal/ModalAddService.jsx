@@ -20,7 +20,7 @@ import Select from "@mui/material/Select";
 import { Input, Typography } from "@mui/material";
 
 const SERVICE_NAME_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\s]{3,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ&-\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 // const DESCRIPTION_REGEX =
 // /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9@#$:%^&,.?"/+=!()-\s]{1,}$/;
@@ -133,7 +133,7 @@ const ModalAddSerivce = (props) => {
       toast.error("Giá tiền phải lớn hơn 0. Vui lòng nhập lại!");
     } else if (!validServiceName) {
       toast.error(
-        "Tên dịch vụ không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
+        "Tên dịch vụ không được nhập số, phải có ít nhất 3 kí tự và chỉ được nhập kí tự đặc biệt là & hoặc -"
       );
     } else if (categoryId === "") {
       toast.error("Vui lòng chọn loại dịch vụ");

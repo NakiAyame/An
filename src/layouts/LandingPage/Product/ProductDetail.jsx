@@ -114,8 +114,12 @@ const ProductDetail = () => {
     );
   }
 
-  const handleIncreaseClick = () => {
-    setQuantitySell((quantitySell) => quantitySell + 1);
+  const handleIncreaseClick = (max) => {
+    if (quantitySell >= max) {
+      toast.error("Quá giới hạn số lượng");
+    } else {
+      setQuantitySell((quantitySell) => quantitySell + 1);
+    }
   };
 
   const handleDecreaseClick = () => {
@@ -216,10 +220,11 @@ const ProductDetail = () => {
                     >
                       <strong>{product.productName}</strong>
                     </Typography>
-                    {product.discount !== 0 ? (
-                      // &&
-                      // dayjs().isAfter(product.saleStartTime) &&
-                      // dayjs().isBefore(product.saleEndTime)
+                    {product.discount !== 0 &&
+                    dayjs().isBetween(
+                      dayjs(product.saleStartTime),
+                      dayjs(product.saleEndTime)
+                    ) ? (
                       <Box
                         display="flex"
                         flexGrow={1}
@@ -269,7 +274,10 @@ const ProductDetail = () => {
                         -
                       </Button>
                       <Box mx={2}>{quantitySell}</Box>
-                      <Button onClick={handleIncreaseClick} variant="outlined">
+                      <Button
+                        onClick={() => handleIncreaseClick(product.quantity)}
+                        variant="outlined"
+                      >
                         +
                       </Button>
                     </Box>
