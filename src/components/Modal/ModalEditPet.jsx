@@ -335,6 +335,7 @@ const ModalEditPet = (props) => {
                 label="Sức khoẻ xấu"
               />
             </RadioGroup>
+            <Typography>Ảnh thú cưng</Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <Input

@@ -18,6 +18,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Input, Typography } from "@mui/material";
+import ButtonCustomize from "../Button/Button";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ&-\s]{3,}$/;
@@ -295,14 +296,12 @@ const ModalAddSerivce = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="contained"
-            margin="normal"
-            color="primary"
+          <ButtonCustomize
             onClick={handleUpload}
-          >
-            Tạo dịch vụ
-          </Button>
+            nameButton="Tạo dịch vụ"
+            variant="contained"
+            sx={{ marginTop: "8px" }}
+          />
         </DialogActions>
       </Box>
     </Dialog>

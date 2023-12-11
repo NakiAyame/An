@@ -21,6 +21,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Input } from "@mui/material";
 import YardIcon from "@mui/icons-material/Yard";
+import ButtonCustomize from "../Button/Button";
 
 const SERVICE_NAME_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ&-\s]{3,}$/;
@@ -51,9 +52,7 @@ const ModalAddProduct = (props) => {
   const [validQuantity, setValidQuantity] = useState("");
   const [validDescription, setValidDescription] = useState("");
   useEffect(() => {
-    setValidProductName(
-      SERVICE_NAME_REGEX.test(productName) && productName.trim()
-    );
+    setValidProductName(SERVICE_NAME_REGEX.test(productName.trim()));
   }, [productName]);
 
   const handleValidationProductName = (e) => {
@@ -77,9 +76,7 @@ const ModalAddProduct = (props) => {
   };
 
   useEffect(() => {
-    setValidDescription(
-      DESCRIPTION_REGEX.test(description) && description.trim()
-    );
+    setValidDescription(DESCRIPTION_REGEX.test(description.trim()));
   }, [description]);
 
   const handleValidationDescription = (e) => {
@@ -137,11 +134,15 @@ const ModalAddProduct = (props) => {
       description,
       productImage
     );
-    if (!validProductName) {
+    if (productName.trim() === "") {
+      toast.error("Vui lòng nhập tên sản phẩm");
+    } else if (description.trim() === "") {
+      toast.error("Vui lòng nhập thông tin của sản phẩm");
+    } else if (!validProductName) {
       toast.error(
         "Tên sản phẩm không được nhập số, phải có ít nhất 3 kí tự và chỉ được nhập kí tự đặc biệt là & hoặc - "
       );
-    } else if (categoryId == "") {
+    } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại sản phẩm mình muốn");
     } else if (!validQuantity) {
       toast.error("Số lượng không được để trống và phải lớn hơn 0");
@@ -163,7 +164,7 @@ const ModalAddProduct = (props) => {
           toast.error(response.error);
         } else {
           console.log("Thành công!!", response);
-          toast.success("Thêm mới sản phẩm thành công!");
+          toast.success("Thêm mới sản phẩm thành công");
           setProductName("");
           setCategoryId("");
           setQuantity();
@@ -285,7 +286,7 @@ const ModalAddProduct = (props) => {
               value={description}
               onChange={(e) => handleValidationDescription(e)}
             />
-            <Typography>Ảnh dịch vụ</Typography>
+            <Typography>Ảnh sản phẩm</Typography>
             <Input
               type="file"
               inputProps={{ accept: "image/*" }}
@@ -322,14 +323,12 @@ const ModalAddProduct = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="contained"
-            margin="normal"
-            color="primary"
+          <ButtonCustomize
             onClick={handleUpload}
-          >
-            Thêm
-          </Button>
+            nameButton="Thêm"
+            variant="contained"
+            sx={{ marginTop: "8px" }}
+          />
         </DialogActions>
       </Box>
     </Dialog>
