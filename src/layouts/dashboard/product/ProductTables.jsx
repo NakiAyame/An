@@ -114,7 +114,9 @@ export default function ProductTable() {
 
   const loadAllProduct = async (page) => {
     try {
-      const loadData = await axios.get(`${BASE_URL}/product?page=${page}`);
+      const loadData = await axios.get(
+        `${BASE_URL}/product/manage?page=${page}`
+      );
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
@@ -165,7 +167,7 @@ export default function ProductTable() {
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/product?page=1&categoryId=${cateId}`
+          `http://localhost:3500/product/manage?page=1&categoryId=${cateId}`
         );
         if (loadData.error) {
           toast.error(loadData.error);
@@ -206,7 +208,7 @@ export default function ProductTable() {
   const searchProductByName = async () => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/product?product=${keyword.trim()}&page=1`
+        `${BASE_URL}/product/manage?product=${keyword.trim()}&page=1`
       );
       if (loadData.data.error) {
         toast.warning(
