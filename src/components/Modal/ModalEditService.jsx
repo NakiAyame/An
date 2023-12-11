@@ -197,10 +197,6 @@ const ModalEditSerivce = (props) => {
       toast.error("Giá tiền phải lớn hơn 0. Vui lòng nhập lại!");
     } else if (discount === "") {
       toast.error("% giảm giá không được để trống. Vui lòng nhập lại!");
-    } else if (!validServiceName) {
-      toast.error(
-        "Tên dịch vụ không được nhập số, phải có ít nhất 3 kí tự và chỉ được nhập kí tự đặc biệt là & hoặc -"
-      );
     } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại dịch vụ mình muốn");
     } else if (discount < 0) {
