@@ -20,6 +20,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { CardMedia, Container, Input } from "@mui/material";
+import ButtonCustomize from "../Button/Button";
 
 const Title_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\s]{3,}$/;
@@ -44,7 +45,7 @@ const ModalAddBlog = (props) => {
   const [validTitle, setValidTitle] = useState("");
   const [validContent, setValidContent] = useState("");
   useEffect(() => {
-    setValidTitle(Title_REGEX.test(title) && title.trim() !== "");
+    setValidTitle(Title_REGEX.test(title.trim()));
   }, [title]);
 
   const handleValidationTitle = (e) => {
@@ -52,7 +53,7 @@ const ModalAddBlog = (props) => {
   };
 
   useEffect(() => {
-    setValidContent(CONTENT_REGEX.test(content) && content.trim());
+    setValidContent(CONTENT_REGEX.test(content.trim()));
   }, [content]);
 
   const handleValidationContent = (e) => {
@@ -67,17 +68,18 @@ const ModalAddBlog = (props) => {
   // --------------------- HANDLE HANLDE UPLOAD IMAGE BLOG -----------------------------
   const handleUpload = async () => {
     const maxSize = 1024 * 1024;
-    if (image.size > maxSize) {
-      toast.error("Ảnh có dung lượng lớn hơn 1MB. Vui lòng chọn ảnh khác!");
-    } else {
-      try {
-        if (image) {
-          const formData = new FormData();
-          formData.append("image", image);
-          const response = await axios.post(
-            `http://localhost:3500/blog/upload`,
-            formData
-          );
+    try {
+      if (image) {
+        const formData = new FormData();
+        formData.append("image", image);
+        const response = await axios.post(
+          `http://localhost:3500/blog/upload`,
+          formData
+        );
+
+        if (image.size > maxSize) {
+          toast.error("Ảnh có dung lượng lớn hơn 1MB. Vui lòng chọn ảnh khác!");
+        } else {
           console.log("Response data:", response.data.docs.image);
           const imagePath = response.data.docs.image;
 
@@ -88,24 +90,26 @@ const ModalAddBlog = (props) => {
             console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
             toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
           }
-        } else {
-          toast.error("Vui lòng chọn ảnh trước khi tải lên!");
-          console.log("Vui lòng chọn ảnh trước khi tải lên.");
         }
-      } catch (error) {
-        console.error("Lỗi khi tải ảnh lên:", error);
+      } else {
+        toast.error("Vui lòng chọn ảnh trước khi tải lên!");
+        console.log("Vui lòng chọn ảnh trước khi tải lên.");
       }
+    } catch (error) {
+      console.error("Lỗi khi tải ảnh lên:", error);
     }
   };
 
   // --------------------- HANDLE CREATE BLOG -----------------------------
   const handleCreateBlog = async (imageUrl) => {
     console.log("Check data truyền vào", title, content, userId, imageUrl);
-    if (!validTitle) {
+    if (title.trim() === "") {
+      toast.error("Tiêu dề không được để trống");
+    } else if (!validTitle) {
       toast.error(
         "Tiêu đề không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    } else if (!validContent) {
+    } else if (content.trim() === "") {
       toast.error("Nội dung không được để trống");
     } else {
       try {
@@ -203,6 +207,7 @@ const ModalAddBlog = (props) => {
               onChange={(e) => handleValidationContent(e)}
             />
             <Container maxWidth="sm" style={{ marginTop: "2rem" }}>
+              <Typography>Ảnh tin tức</Typography>
               <Input
                 type="file"
                 inputProps={{ accept: "image/*" }}
@@ -229,14 +234,12 @@ const ModalAddBlog = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="contained"
-            margin="normal"
-            color="primary"
+          <ButtonCustomize
             onClick={handleUpload}
-          >
-            Tạo
-          </Button>
+            nameButton="Tạo"
+            variant="contained"
+            sx={{ marginTop: "8px" }}
+          />
         </DialogActions>
       </Box>
     </Dialog>

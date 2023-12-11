@@ -437,7 +437,7 @@ const ModalEditProduct = (props) => {
               value={description}
               onChange={(e) => handleValidationDescription(e)}
             />
-
+            <Typography>Ảnh sản phẩm</Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <Input

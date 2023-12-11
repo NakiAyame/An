@@ -51,7 +51,7 @@ const ModalAddPet = (props) => {
   const [validColor, setValidColor] = useState("");
 
   useEffect(() => {
-    setValid(PET_NAME_REGEX.test(petName) && petName.trim() !== "");
+    setValid(PET_NAME_REGEX.test(petName.trim()));
   }, [petName]);
 
   const handleValidationPetName = (e) => {
@@ -142,7 +142,7 @@ const ModalAddPet = (props) => {
       weight,
       petImage
     );
-    if (petName === "") {
+    if (petName.trim() === "") {
       toast.error("Tên thú cưng không được để trống");
     } else if (!valid) {
       toast.error(
@@ -152,7 +152,7 @@ const ModalAddPet = (props) => {
       toast.error("Chiều cao thú cưng phải là số nguyên hoặc số thập phân");
     } else if (!validWeight) {
       toast.error("Cân nặng thú cưng phải là số nguyên hoặc số thập phân");
-    } else if (categoryId == "") {
+    } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại thú cưng mình muốn");
     } else {
       try {
@@ -311,7 +311,7 @@ const ModalAddPet = (props) => {
               }}
               variant="filled"
             />
-            <Typography>Ảnh cho pet</Typography>
+            <Typography>Ảnh thú cưng</Typography>
             <Input
               type="file"
               inputProps={{ accept: "image/*" }}
@@ -347,14 +347,12 @@ const ModalAddPet = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="contained"
-            margin="normal"
-            color="primary"
+          <ButtonCustomize
             onClick={handleUpload}
-          >
-            Thêm thú cưng
-          </Button>
+            nameButton="Thêm thú cưng"
+            variant="contained"
+            sx={{ marginTop: "8px" }}
+          />
         </DialogActions>
       </Box>
     </Dialog>

@@ -204,6 +204,7 @@ const ModalEditBlog = (props) => {
               onChange={(e) => handleValidationContent(e)}
             />
             <Container maxWidth="sm" style={{ marginTop: "2rem" }}>
+              <Typography>Ảnh tin tức</Typography>
               <Input
                 type="file"
                 inputProps={{ accept: "image/*" }}
