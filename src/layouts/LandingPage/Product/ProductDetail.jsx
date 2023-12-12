@@ -300,7 +300,7 @@ const ProductDetail = () => {
                     id="panel1bh-header"
                   >
                     <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                      Thông tin chi tiết sản phẩm
+                      <strong>Thông tin chi tiết sản phẩm</strong>
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>{product.description}</AccordionDetails>
@@ -315,7 +315,7 @@ const ProductDetail = () => {
                     id="panel2bh-header"
                   >
                     <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                      Đánh giá sản phẩm
+                      <strong> Đánh giá sản phẩm</strong>
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>

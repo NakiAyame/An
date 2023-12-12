@@ -294,7 +294,7 @@ const ServiceDetail = () => {
                     id="panel1bh-header"
                   >
                     <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                      Thông tin chi tiết dịch vụ
+                      <strong>Thông tin chi tiết dịch vụ</strong>
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>{service.description}</AccordionDetails>
@@ -309,7 +309,7 @@ const ServiceDetail = () => {
                     id="panel2bh-header"
                   >
                     <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                      Xem đánh giá địch vụ
+                    <strong> Xem đánh giá địch vụ</strong>
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
