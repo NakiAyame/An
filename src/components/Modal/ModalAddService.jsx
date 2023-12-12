@@ -164,9 +164,8 @@ const ModalAddSerivce = (props) => {
           onClose();
         }
       } catch (error) {
-        console.error(error);
-        console.log("Error creating service.");
-        toast.error(error.message);
+        console.log(error);
+        toast.error(error.response.data.error);
       }
     }
   };

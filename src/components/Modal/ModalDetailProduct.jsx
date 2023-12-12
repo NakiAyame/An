@@ -29,6 +29,7 @@ import TypographyCus from "../Typography/DescriptionCus";
 import Comments from "../Comments/Comments";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Image = styled("img")({
   maxWidth: "100%",
@@ -43,7 +44,7 @@ const ProductDetail = ({ open, onClose, product }) => {
 
   const handleIncreaseClick = () => {
     setQuantitySell(quantitySell + 1);
-    console.log(quantitySell)
+    console.log(quantitySell);
   };
 
   const handleDecreaseClick = () => {
@@ -93,7 +94,7 @@ const ProductDetail = ({ open, onClose, product }) => {
             `${BASE_URL}/cartProduct/add-to-cart`,
             {
               productId: id,
-              quantity: quantitySell
+              quantity: quantitySell,
             },
             {
               headers: { Authorization: context.auth.token },
@@ -101,10 +102,11 @@ const ProductDetail = ({ open, onClose, product }) => {
             }
           )
           .then((data) => {
-            alert("Thêm sản phẩm vào giỏ hàng thành công");
+            toast.success("Thêm sản phẩm vào giỏ hàng thành công");
           });
       } catch (err) {
         console.log(err);
+        toast.error(err.response.data.error);
       }
     }
   };
