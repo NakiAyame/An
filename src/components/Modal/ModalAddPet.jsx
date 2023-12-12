@@ -276,7 +276,7 @@ const ModalAddPet = (props) => {
 
             <TextField
               fullWidth
-              label="Chiều cao"
+              label="Chiều cao (cm)"
               margin="normal"
               value={height}
               onChange={(e) => handleValidationPetHeight(e)}
@@ -284,7 +284,7 @@ const ModalAddPet = (props) => {
 
             <TextField
               fullWidth
-              label="Cân nặng"
+              label="Cân nặng (kg)"
               margin="normal"
               value={weight}
               onChange={(e) => handleValidationPetWeight(e)}

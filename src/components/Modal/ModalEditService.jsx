@@ -46,7 +46,7 @@ const ModalEditSerivce = (props) => {
   const [serviceImage, setServiceImage] = useState(null);
   const [price, setPrice] = useState(0);
   const [status, setStatus] = useState(true);
-  const [discount, setDiscount] = useState(0);
+  const [discount, setDiscount] = useState();
   const [saleStartTime, setSaleStartTime] = useState(null);
   const [saleEndTime, setSaleEndTime] = useState(null);
   const [isStartDateVisible, setIsStartDateVisible] = useState(false);
@@ -87,13 +87,6 @@ const ModalEditSerivce = (props) => {
     } else {
       setSaleEndTime(date);
     }
-
-    // if (!dayjs(date).isBefore(saleStartTime)) {
-    //   toast.success("Ngày kết thúc hợp lệ!");
-    //   setSaleEndTime(date);
-    // } else {
-    //   toast.error("Ngày kết thúc không thể sau ngày bắt đầu!!");
-    // }
   };
 
   // --------------------- VALIDATION -----------------------------
@@ -199,6 +192,10 @@ const ModalEditSerivce = (props) => {
       toast.error("% giảm giá không được để trống. Vui lòng nhập lại!");
     } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại dịch vụ mình muốn");
+    } else if (discount === "") {
+      toast.error("Giảm giá không được để trống");
+      setSaleStartTime(null);
+      setSaleEndTime(null);
     } else if (discount < 0) {
       toast.error("% giảm giá không được âm ");
     } else if (discount > 100) {
@@ -207,14 +204,13 @@ const ModalEditSerivce = (props) => {
       toast.error(
         "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
       );
-      setSaleStartTime(dayjs().toDate());
     } else if (dayjs(saleEndTime).isBefore(dayjs(saleStartTime))) {
       toast.error(
         "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
       );
     } else if (dayjs().isAfter(dayjs(saleStartTime))) {
       toast.error("Ngày bắt đầu không thể ở quá khứ! Vui lòng nhập lại.");
-      setSaleStartTime(dayjs().toDate());
+      // setSaleStartTime(dayjs().toDate());
     } else if (!validPrice) {
       toast.error(
         "Giá tiền phải có ít nhất 4 chữ số và số đầu tiên không phải số 0"
@@ -241,7 +237,8 @@ const ModalEditSerivce = (props) => {
           onClose();
         }
       } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data.error);
+        console.log(err.response.data.error);
       }
     }
   };
@@ -371,6 +368,7 @@ const ModalEditSerivce = (props) => {
                     label="Ngày kết thúc giảm giá"
                     value={dayjs(saleEndTime)}
                     onChange={handleEndDateChange}
+                    minDate={dayjs()}
                   />
                 </Grid>
               </Grid>

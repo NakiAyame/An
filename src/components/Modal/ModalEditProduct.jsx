@@ -73,6 +73,7 @@ const ModalEditProduct = (props) => {
   // // --------------------- HANLDE CHANGE DISCOUNT -----------------------------
   const handleDiscountChange = (event) => {
     const newDiscount = parseInt(event.target.value, 10);
+
     if (newDiscount >= 1 && newDiscount <= 100) {
       setDiscount(newDiscount);
       setSaleStartTime(dayjs());
@@ -82,39 +83,22 @@ const ModalEditProduct = (props) => {
       setSaleStartTime(null);
       setSaleEndTime(null);
     }
-
-    // if (numericValue >= 1 && numericValue <= 100) {
-    //   setIsStartDateVisible(true);
-    // } else {
-    //   setIsStartDateVisible(false);
-    // }
   };
 
   // // --------------------- HANLDE CHANGE START DATE -----------------------------
   const handleStartDateChange = (date) => {
-    // setSaleStartTime(date);
-    if (saleEndTime && dayjs(saleEndTime).isBefore(date)) {
-      toast.error("Ngày bắt đầu không thể sau ngày kết thúc!!");
-    } else if (dayjs().isAfter(dayjs(date))) {
-      toast.error("Ngày bắt đầu không thể ở quá khứ!!");
-
-      // const currentDate = dayjs();
-
-      // if (saleStartTime && currentDate.isAfter(saleStartTime)) {
-      //   setSaleStartTime(null);
-      // }
+    if (date === null) {
+      setSaleStartTime(dayjs());
     } else {
-      toast.success("Ngày bắt đầu hợp lệ!");
       setSaleStartTime(date);
     }
   };
 
   const handleEndDateChange = (date) => {
-    if (!dayjs(date).isBefore(saleStartTime)) {
-      toast.success("Ngày kết thúc hợp lệ!");
-      setSaleEndTime(date);
+    if (date === null) {
+      setSaleEndTime(dayjs());
     } else {
-      toast.error("Ngày kết thúc không thể sau ngày bắt đầu!!");
+      setSaleEndTime(date);
     }
   };
 
@@ -288,7 +272,7 @@ const ModalEditProduct = (props) => {
         }
       } catch (err) {
         // toast.error(err.message);
-        toast.error("Bạn phải tải ảnh lên trước khi sửa sản phẩm");
+        toast.error(err.response.data.error);
       }
     }
   };
