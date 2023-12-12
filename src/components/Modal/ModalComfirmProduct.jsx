@@ -29,7 +29,7 @@ const ModalComfirmProduct = (props) => {
         onClose();
       }
     } catch (err) {
-      toast.error(err.message); // xuất thông báo lỗi ra màn hình
+      toast.error(err.response.data.error);
     }
   };
 

@@ -133,7 +133,7 @@ const ModalEditBlog = (props) => {
       } catch (error) {
         console.error(error);
         console.log("Error creating service.");
-        toast.error(error.message);
+        toast.error(error.response.data.error);
       }
     }
   };

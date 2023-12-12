@@ -71,6 +71,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
       }
     } catch (err) {
       console.log(err);
+      toast.error(err.response.data.error);
     }
   };
 
@@ -90,6 +91,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
       }
     } catch (err) {
       console.log(err);
+      toast.error(err.response.data.error);
     }
   };
 
@@ -135,6 +137,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
       }
     } catch (err) {
       console.log(err);
+      toast.error(err.response.data.error);
     }
   }
 
@@ -167,6 +170,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
           });
       } catch (err) {
         console.log(err);
+        toast.error(err.response.data.error);
       }
     }
   };

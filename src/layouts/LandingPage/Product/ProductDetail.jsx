@@ -154,10 +154,11 @@ const ProductDetail = () => {
             }
           )
           .then((data) => {
-            alert("Thêm sản phẩm vào giỏ hàng thành công");
+            toast.success("Thêm sản phẩm vào giỏ hàng thành công");
           });
       } catch (err) {
         console.log(err);
+        toast.error(err.response.data.error);
       }
     }
   };

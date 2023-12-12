@@ -184,13 +184,8 @@ const ModalAddPet = (props) => {
           onClose();
         }
       } catch (error) {
-        console.error(error);
-        console.log("Error creating service.");
-        if (!error.status) {
-          toast.error("Lỗi ");
-        } else if (error.status === 500) {
-          toast.error("Không được để trống");
-        }
+        console.log(error);
+        toast.error(error.response.data.error);
       }
     }
   };
