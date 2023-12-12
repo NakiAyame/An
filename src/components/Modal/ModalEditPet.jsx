@@ -194,7 +194,7 @@ const ModalEditPet = (props) => {
         }
       } catch (err) {
         // toast.error(err.message);
-        toast.error("Bạn phải tải ảnh lên trước khi sửa thú cưng");
+        toast.error(err.response.data.error);
       }
     }
   };
@@ -282,7 +282,7 @@ const ModalEditPet = (props) => {
 
             <TextField
               fullWidth
-              label="Chiều cao"
+              label="Chiều cao (cm)"
               margin="normal"
               value={height}
               onChange={(e) => handleValidationPetHeight(e)}
@@ -290,7 +290,7 @@ const ModalEditPet = (props) => {
 
             <TextField
               fullWidth
-              label="Cân nặng"
+              label="Cân nặng (kg)"
               margin="normal"
               value={weight}
               onChange={(e) => handleValidationPetWeight(e)}
