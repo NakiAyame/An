@@ -66,7 +66,7 @@ export default function BlogTable() {
   // --------------------- MODAL HANDLE -----------------------------
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [dataEditPet, setDataEditPet] = useState({});
+  const [dataEditBlog, setDataEditBlog] = useState({});
   const context = useAuth();
   console.log(context);
 
@@ -77,7 +77,7 @@ export default function BlogTable() {
 
   const handleUpdatePet = (pet) => {
     console.log("Check data", pet);
-    setDataEditPet(pet);
+    setDataEditBlog(pet);
     setOpenEditModal(true);
   };
 
@@ -205,8 +205,8 @@ export default function BlogTable() {
       <ModalEditBlog
         open={openEditModal}
         onClose={handleCloseModal}
-        dataEditPet={dataEditPet}
-        handUpdateEditTable={loadAllBlog}
+        dataEditBlog={dataEditBlog}
+        handUpdateTable={loadAllBlog}
         page={currentPage}
         uId={context.auth.id}
       />

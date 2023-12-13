@@ -24,7 +24,7 @@ import YardIcon from "@mui/icons-material/Yard";
 import ButtonCustomize from "../Button/Button";
 
 const SERVICE_NAME_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ&-\s]{3,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9&-\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 const QUANTITY_REGEX = /^[0-9]{1,}$/;
 const DESCRIPTION_REGEX =
@@ -140,7 +140,7 @@ const ModalAddProduct = (props) => {
       toast.error("Vui lòng nhập thông tin của sản phẩm");
     } else if (!validProductName) {
       toast.error(
-        "Tên sản phẩm không được nhập số, phải có ít nhất 3 kí tự và chỉ được nhập kí tự đặc biệt là & hoặc - "
+        "Tên sản phẩm phải có ít nhất 3 kí tự và chỉ được nhập kí tự đặc biệt là & hoặc - "
       );
     } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại sản phẩm mình muốn");

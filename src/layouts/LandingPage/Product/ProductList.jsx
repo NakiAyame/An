@@ -341,7 +341,7 @@ export default function ProductList() {
           <Box>
             <DropDownService
               category={category}
-              cateName="Loại dịch vụ"
+              cateName="Loại sản phẩm"
               handUpdateEditTable={hanldeClickCategory}
             />
           </Box>
