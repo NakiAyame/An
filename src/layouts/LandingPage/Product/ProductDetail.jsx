@@ -23,9 +23,9 @@ import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
+import MuiAccordion from "@mui/material/Accordion";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
+import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { Description } from "@mui/icons-material";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -36,6 +36,43 @@ import Comments from "../../../components/Comments/Comments";
 import ProductSlider from "../../../components/Header/SliderProduct";
 import dayjs from "dayjs";
 import ButtonCustomize from "../../../components/Button/Button";
+import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
+
+const Accordion = styled((props) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  "&:not(:last-child)": {
+    borderBottom: 0,
+  },
+  "&:before": {
+    display: "none",
+  },
+}));
+
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: "0.9rem" }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === "dark"
+      ? "rgba(255, 255, 255, .05)"
+      : "rgba(0, 0, 0, .03)",
+  flexDirection: "row-reverse",
+  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+    transform: "rotate(90deg)",
+  },
+  "& .MuiAccordionSummary-content": {
+    marginLeft: theme.spacing(1),
+  },
+}));
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: "1px solid rgba(0, 0, 0, .125)",
+}));
 
 const Image = styled("img")({
   maxWidth: "100%",
@@ -82,7 +119,7 @@ const ProductDetail = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [quantitySell, setQuantitySell] = useState(1);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState("panel1");
   const context = useAuth();
 
   // ----------------------------------- API GET PRODUCT BY ID --------------------------------
@@ -229,7 +266,10 @@ const ProductDetail = () => {
                       <Box
                         display="flex"
                         flexGrow={1}
-                        sx={{ justifyContent: "flex-start" }}
+                        sx={{
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                        }}
                       >
                         <Typography
                           gutterBottom
@@ -253,6 +293,24 @@ const ProductDetail = () => {
                             product.price -
                               (product.price * product.discount) / 100
                           )}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="h6"
+                          component="h2"
+                          sx={{
+                            color: "#fff",
+                            backgroundColor: "#ee4d2d",
+                            marginLeft: "10px",
+                            fontSize: ".75rem",
+                            borderRadius: "2px",
+                            padding: "2px 4px",
+                            fontWeight: "600",
+                            whiteSpace: "nowrap",
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          {product.discount}% Giảm
                         </Typography>
                       </Box>
                     ) : (
