@@ -24,17 +24,14 @@ import { useNavigate, useLocation, NavLink } from "react-router-dom";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
-import { styled } from "@mui/material/styles";
-import { useContext } from "react";
 
-import AuthContext from "../../../context/AuthProvider";
 import useAuth from "../../../hooks/useAuth";
 
 import { jwtDecode } from "jwt-decode";
 
 const defaultTheme = createTheme();
 const Login = () => {
-  const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  // const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const navigate = useNavigate();
   const [data, setData] = useState({
     email: "",
@@ -44,10 +41,6 @@ const Login = () => {
   const context = useAuth();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-
-  const CustomGrid = styled(Grid)({
-    background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
-  });
 
   React.useEffect(() => {
     let token = localStorage.getItem("token");

@@ -1,7 +1,5 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,24 +15,19 @@ import { useState, useEffect } from "react";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
-import ButtonCustomize from "../../../components/Button/Button";
 
 //@material-ui/core
 import { styled } from "@mui/material/styles";
-import ScrollableTabService from "../../../components/ScrollableTab/TabService";
-import ProductDetail from "../../../components/Modal/ModalDetailProduct";
 import Footer from "../../../components/Footer/Footer";
 import MainPost from "../../../components/MainPost/MainPost";
 import useAuth from "../../../hooks/useAuth";
 import { NavLink } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import {
-  Avatar,
   CardActionArea,
   IconButton,
   TextField,
@@ -64,7 +57,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   };
 });
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+// const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -86,10 +79,6 @@ const numberToVND = (number) => {
   });
 };
 
-const CustomBox = styled(Box)({
-  background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
-});
-
 const CustomContainer = styled(Container)({
   background:
     "linear-gradient(to bottom, #F4BEB2, #F4BEB2, #ECDAD6, #E5E6E7, #73A1CC)",
@@ -101,8 +90,6 @@ export default function ProductList() {
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const [loged, setLoged] = useState(false);
 
   const context = useAuth();
 
@@ -175,7 +162,7 @@ export default function ProductList() {
           )
           .then((data) => {
             toast.success("Thêm sản phẩm vào giỏ hàng thành công");
-            context.auth.success = "Ok";
+            context.handleLoadCartProduct()
             console.log(context.auth);
           });
       } catch (err) {

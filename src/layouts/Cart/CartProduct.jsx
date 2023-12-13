@@ -1,12 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
 import { useEffect, useState } from "react";
@@ -15,20 +10,11 @@ import { toast } from "react-toastify";
 
 import useAuth from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { async } from 'q';
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
 
 export default function CartProduct() {
-  const DEFAULT_PAGE = 1;
-  const DEFAULT_LIMIT = 5;
+  // const DEFAULT_PAGE = 1;
+  // const DEFAULT_LIMIT = 5;
   const navigate = useNavigate();
 
   const [data, setData] = useState([]);
@@ -41,7 +27,7 @@ export default function CartProduct() {
 
   const handleDeleteOrder = async (id) => {
     try {
-      const loadData = await axios.delete(
+      await axios.delete(
         `http://localhost:3500/cartProduct/remove-from-cart/${id}`,
         {
           headers: { 'Authorization': context.auth.token },
@@ -49,8 +35,8 @@ export default function CartProduct() {
         }
       )
         .then((data) => {
-          console.log(data)
           handleLoadCartProduct()
+          context.handleLoadCartProduct()
         })
 
     } catch (err) {
@@ -103,22 +89,22 @@ export default function CartProduct() {
     border: '1px solid rgba(0, 0, 0, .2)'
   }
 
-  const cartHeader = {
-    fontWeight: 'bolder',
-    fontSize: '15px'
-  }
+  // const cartHeader = {
+  //   fontWeight: 'bolder',
+  //   fontSize: '15px'
+  // }
 
-  const quantityButtonRightStyle = {
-    padding: '5px 12px',
-    borderLeft: 'none',
-    background: 'none'
-  }
+  // const quantityButtonRightStyle = {
+  //   padding: '5px 12px',
+  //   borderLeft: 'none',
+  //   background: 'none'
+  // }
 
-  const quantityButtonLeftStyle = {
-    padding: '5px 12px',
-    borderRight: 'none',
-    background: 'none'
-  }
+  // const quantityButtonLeftStyle = {
+  //   padding: '5px 12px',
+  //   borderRight: 'none',
+  //   background: 'none'
+  // }
 
   const quantityInputStyle = {
     padding: '5px',
