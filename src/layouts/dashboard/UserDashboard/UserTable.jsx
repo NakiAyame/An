@@ -9,7 +9,6 @@ import {
     Paper,
     Box,
     Button,
-    Typography,
     Modal,
     DialogTitle,
     DialogContent,
@@ -24,20 +23,16 @@ import {
     RadioGroup,
     FormControlLabel,
     Radio,
-    ButtonGroup,
     Stack,
     Pagination
 } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid';
 
 import CloseIcon from "@mui/icons-material/Close";
-import { styled } from "@mui/material/styles";
 
 import ButtonCustomize from "../../../components/Button/Button";
 
 //React
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 // Axios
 import axios from "axios";
@@ -68,7 +63,6 @@ const BasicTable = () => {
 
     const [option, setOption] = useState("");
     const context = useAuth();
-    var count = 0;
 
     const [data, setData] = useState([]);
     const [role, setRole] = useState(" ");
@@ -162,24 +156,24 @@ const BasicTable = () => {
     }
 
     // --------------------- HANDLE DELETE -----------------------------
-    const handleDelete = async (id) => {
-        if (window.confirm(`Bạn có muốn xoá không ?`) == true) {
-            try {
-                console.log(id);
-                const data = await axios.delete(`http://localhost:3500/user/${id}`);
-                if (data.error) {
-                    toast.error(data.error);
-                } else {
-                    console.log(data);
-                    toast.success("Delete successfully");
-                    loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
-                    handleClose()
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    };
+    // const handleDelete = async (id) => {
+    //     if (window.confirm(`Bạn có muốn xoá không ?`) == true) {
+    //         try {
+    //             console.log(id);
+    //             const data = await axios.delete(`http://localhost:3500/user/${id}`);
+    //             if (data.error) {
+    //                 toast.error(data.error);
+    //             } else {
+    //                 console.log(data);
+    //                 toast.success("Delete successfully");
+    //                 loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+    //                 handleClose()
+    //             }
+    //         } catch (err) {
+    //             console.log(err);
+    //         }
+    //     }
+    // };
 
     // --------------------- HANDLE CREATE USER -----------------------------
     // useEffect(() => {
@@ -293,7 +287,7 @@ const BasicTable = () => {
                                     <TableCell align="right">Giới tính</TableCell>
                                     <TableCell align="right">Email</TableCell>
                                     <TableCell align="right">Trạng thái</TableCell>
-                                    <TableCell align="right">Địa chỉ</TableCell>
+                                    <TableCell align="right">Veify Code</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -311,11 +305,11 @@ const BasicTable = () => {
                                                 <TableCell align="right">{value.fullname}</TableCell>
                                                 <TableCell align="right">{value.phone}</TableCell>
                                                 <TableCell align="right">
-                                                    {(value.gender == true ? "Nam" : "Nữ")}
+                                                    {(value.gender === true ? "Nam" : "Nữ")}
                                                 </TableCell>
                                                 <TableCell align="right">{value.email}</TableCell>
                                                 <TableCell align="right">{value.status}</TableCell>
-                                                <TableCell align="right">{value.address}</TableCell>
+                                                <TableCell align="right">{value.verifyCode}</TableCell>
                                             </TableRow>
                                         );
                                     })}

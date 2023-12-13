@@ -5,8 +5,6 @@ import {
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Link,
   Paper,
   Box,
@@ -36,21 +34,20 @@ const Register = () => {
     passwordConfirm: "",
   });
 
-  const PWD_REGEX =
-    /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
+  // const PWD_REGEX =
+  //   /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
 
   const registerUser = async (e) => {
     e.preventDefault();
     const { fullname, email, password, passwordConfirm } = data;
     try {
-      const { data } = await axios
-        .post("http://localhost:3500/register", {
-          fullname,
-          email,
-          password,
-          passwordConfirm,
-          role: "customer",
-        })
+      await axios.post("http://localhost:3500/register", {
+        fullname,
+        email,
+        password,
+        passwordConfirm,
+        role: "customer",
+      })
         .then((data) => {
           toast.success("Tạo tài khoản thành công");
           navigate("/sign-in");

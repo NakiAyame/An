@@ -66,6 +66,7 @@ const Login = () => {
       })
         .then((data) => {
           if (data.data.error === 'Unverified') {
+            localStorage.setItem("verify-email", email);
             navigate('/verify', { replace: true });
           } else {
             console.log(data)
