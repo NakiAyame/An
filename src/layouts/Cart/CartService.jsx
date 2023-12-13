@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 import useAuth from '../../hooks/useAuth';
 import dayjs from "dayjs";
+import { useNavigate } from 'react-router-dom';
 
 export default function CartService() {
   // const DEFAULT_PAGE = 1;
@@ -21,7 +22,7 @@ export default function CartService() {
   const [total, setTotal] = useState(0)
 
   const context = useAuth();
-  console.log(context.auth)
+  const navigate = useNavigate();
 
   const handleLoadCartService = async () => {
     if (context.auth.token != undefined) {
@@ -69,8 +70,11 @@ export default function CartService() {
         alert('Bạn không có dịch vụ trong giỏ hàng')
       } else {
         try {
-          await axios.get(
+          await axios.post(
             `http://localhost:3500/cartService/checkout`,
+            {
+              totalPrice: total
+            },
             {
               headers: { 'Authorization': context.auth.token },
               withCredentials: true
@@ -78,7 +82,9 @@ export default function CartService() {
           )
             .then((data) => {
               alert('Đặt dịch vụ thành công')
-              handleLoadCartService()
+              context.handleLoadCartService()
+              navigate('/service-purchase')
+
             })
 
         } catch (err) {

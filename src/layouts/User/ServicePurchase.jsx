@@ -41,6 +41,7 @@ import useAuth from '../../hooks/useAuth';
 import DateFormat from '../../components/DateFormat';
 import ButtonCustomize from "../../components/Button/Button";
 import { NavLink, useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 const bull = (
     <Box
@@ -166,6 +167,13 @@ export default function ServicePurchase() {
         'Chờ thanh toán', 'Thanh toán sau', 'Chờ xử lý dịch vụ', 'Hoàn thành', 'Huỷ'
     ]
 
+    const numberToVND = (number) => {
+        return number.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        });
+    };
+
     return (
         <>
             <h1 style={{ textAlign: 'center', marginTop: '100px' }}>DỊCH VỤ ĐÃ ĐẶT</h1>
@@ -205,7 +213,7 @@ export default function ServicePurchase() {
                                             </TableCell>
                                             <TableCell align="left">{value.userId !== null ? value.userId.fullname : ""}</TableCell>
                                             <TableCell align="left"><DateFormat date={value.createdAt} /></TableCell>
-                                            <TableCell align="left">{value.totalPrice}</TableCell>
+                                            <TableCell align="left">{numberToVND(value.totalPrice)}</TableCell>
                                             <TableCell align="left">
                                                 {value.status}
                                             </TableCell>
@@ -278,7 +286,42 @@ export default function ServicePurchase() {
                                                     <TableCell align="left">{value.petId !== null ? value.petId.petName : ''}</TableCell>
                                                     <TableCell align="left">{value.serviceId !== null ? value.serviceId.serviceName : ''}</TableCell>
                                                     <TableCell align="left">{value.quantity}</TableCell>
-                                                    <TableCell align="left">{value.serviceId !== null ? value.serviceId.price : ''}</TableCell>
+                                                    <TableCell align="left">
+                                                        {
+                                                            value.serviceId.discount !== 0
+                                                                &&
+                                                                dayjs().isBetween(dayjs(value.serviceId.saleStartTime), dayjs(value.serviceId.saleEndTime))
+                                                                ?
+                                                                (
+                                                                    <>
+                                                                        <Typography style={{ textDecoration: "line-through" }}>
+                                                                            {
+                                                                                value.serviceId === null ? ""
+                                                                                    : value.serviceId.discount === 0 ? ""
+                                                                                        : numberToVND(value.serviceId.price)
+                                                                            }
+                                                                        </Typography>
+                                                                        <Typography style={{ color: 'red' }}>
+                                                                            {
+                                                                                value.serviceId === null ? ""
+                                                                                    :
+                                                                                    numberToVND((value.quantity * (value.serviceId.price - (value.serviceId.price * value.serviceId.discount / 100))))
+                                                                            }
+                                                                        </Typography>
+                                                                    </>
+                                                                )
+                                                                :
+                                                                (
+                                                                    <Typography>
+                                                                        {
+                                                                            value.serviceId === null ? ""
+                                                                                : numberToVND(value.serviceId.price)
+                                                                        }
+                                                                    </Typography>
+
+                                                                )
+                                                        }
+                                                    </TableCell>
                                                     <TableCell align="left">
                                                         {
                                                             status === 'Hoàn thành'

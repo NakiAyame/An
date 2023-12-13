@@ -13,23 +13,9 @@ import {
   Modal,
   DialogTitle,
   DialogContent,
-  DialogActions,
   IconButton,
-  TextField,
   Grid,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  ButtonGroup,
-  Stack,
-  Pagination
 } from "@mui/material";
-
-import { styled } from "@mui/material/styles";
 
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -39,27 +25,15 @@ import { toast } from "react-toastify";
 
 import useAuth from '../../hooks/useAuth';
 import DateFormat from '../../components/DateFormat';
-import ButtonCustomize from "../../components/Button/Button";
-import { NavLink, useNavigate } from "react-router-dom";
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 export default function ProductPurchase() {
-  const DEFAULT_PAGE = 1;
-  const DEFAULT_LIMIT = 5;
+  // const DEFAULT_PAGE = 1;
+  // const DEFAULT_LIMIT = 5;
   const DEFAULT_STATUS = "Chờ xác nhận"
 
   const [data, setData] = useState([]);
-  const [quantity, setQuantity] = useState(0)
-  const [loged, setLoged] = useState(false)
-  const [total, setTotal] = useState(0)
   const [status, setStatus] = useState('');
 
   const [orderDetail, setOrderDetail] = useState([]);
@@ -75,7 +49,6 @@ export default function ProductPurchase() {
 
   const handleLoadCartProductById = async (option) => {
     if (context.auth.token !== undefined) {
-      setLoged(true)
       try {
         setStatus(option)
         const loadData = await axios.get(
@@ -155,6 +128,13 @@ export default function ProductPurchase() {
     cursor: 'pointer',
   }
 
+  const numberToVND = (number) => {
+    return number.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
+
   return (
     <>
       <h1 style={{ textAlign: 'center', marginTop: '100px' }}>SẢN PHẨM ĐÃ MUA</h1>
@@ -195,7 +175,7 @@ export default function ProductPurchase() {
                 <TableCell align="right">{value.recipientName}</TableCell>
                 <TableCell align="right">{value.deliveryAddress}</TableCell>
                 <TableCell align="right"><DateFormat date={value.updatedAt} /></TableCell>
-                <TableCell align="right">{value.totalPrice}</TableCell>
+                <TableCell align="right">{numberToVND(value.totalPrice)}</TableCell>
                 <TableCell align="right">{value.status}</TableCell>
               </TableRow>
             ))}
@@ -255,7 +235,43 @@ export default function ProductPurchase() {
                           <TableCell align="left">{value.orderId}</TableCell>
                           <TableCell align="left">{value.productId !== null ? value.productId.productName : ''}</TableCell>
                           <TableCell align="left">{value.quantity}</TableCell>
-                          <TableCell align="left">{value.productId !== null ? value.productId.price : ''}</TableCell>
+                          <TableCell align="left">
+                            {
+                              value.productId.discount !== 0
+                                &&
+                                dayjs().isBetween(dayjs(value.productId.saleStartTime), dayjs(value.productId.saleEndTime))
+                                ?
+                                (
+                                  <>
+                                    <Typography style={{ textDecoration: "line-through" }}>
+                                      {
+                                        value.productId === null ? ""
+                                          : value.productId.discount === 0 ? ""
+                                            : numberToVND(value.productId.price)
+                                      }
+                                    </Typography>
+                                    <Typography style={{ color: 'red' }}>
+                                      {
+                                        value.productId === null ? ""
+                                          :
+                                          numberToVND((value.quantity * (value.productId.price - (value.productId.price * value.productId.discount / 100))))
+                                      }
+                                    </Typography>
+                                  </>
+                                )
+                                :
+                                (
+                                  <Typography>
+                                    {
+                                      value.productId === null ? ""
+                                        : value.productId.discount === 0 ? ""
+                                          : numberToVND(value.productId.price)
+                                    }
+                                  </Typography>
+
+                                )
+                            }
+                          </TableCell>
                           <TableCell align="left">
                             {
                               status === 'Đã nhận hàng'
