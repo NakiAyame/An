@@ -25,7 +25,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ButtonCustomize from "../Button/Button";
 
 const SERVICE_NAME_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ&-\s]{3,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9&-\s]{3,}$/;
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 // const DESCRIPTION_REGEX =
 //   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9@#$:%^&,.?/()\s]{1,}$/;
@@ -182,6 +182,10 @@ const ModalEditSerivce = (props) => {
   const handleEditService = async (serviceID) => {
     if (serviceName.trim() === "") {
       toast.error("Vui lòng nhập tên dịch vụ");
+    } else if (!validServiceName) {
+      toast.error(
+        "Tên dịch vụ phải có ít nhất 3 kí tự và chỉ được nhập kí tự đặc biệt là & hoặc -"
+      );
     } else if (description.trim() === "") {
       toast.error("Vui lòng nhập thông tin của dịch vụ");
     } else if (price === "") {

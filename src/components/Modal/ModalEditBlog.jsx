@@ -19,7 +19,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { CardMedia, Container, Input } from "@mui/material";
+import { CardMedia, Container, Grid, Input } from "@mui/material";
+import ButtonCustomize from "../Button/Button";
 
 const Title_REGEX =
   /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\s]{3,}$/;
@@ -28,7 +29,7 @@ const CONTENT_REGEX =
 const PRICE_REGEX = /^[1-9]{1}\d{3,}$/;
 
 const ModalEditBlog = (props) => {
-  const { open, onClose, handUpdateTable, page, uId } = props;
+  const { open, onClose, handUpdateTable, page, uId, dataEditBlog } = props;
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -66,20 +67,21 @@ const ModalEditBlog = (props) => {
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE BLOG -----------------------------
   const handleUpload = async () => {
+    const maxSize = 1024 * 1024;
     try {
       if (image) {
         const formData = new FormData();
         formData.append("image", image);
         const response = await axios.post(
-          `http://localhost:3500/pet/upload`,
+          `http://localhost:3500/blog/upload`,
           formData
         );
-        const maxSize = 1024 * 1024;
+
         if (image.size > maxSize) {
-          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
+          toast.error("Ảnh có dung lượng lớn hơn 1MB. Vui lòng chọn ảnh khác!");
         } else {
-          console.log("Response data:", response.data.image);
-          const imagePath = response.data.image;
+          console.log("Response data:", response.data.docs.image);
+          const imagePath = response.data.docs.image;
 
           if (imagePath) {
             console.log("Đã tải ảnh lên:", imagePath);
@@ -91,8 +93,8 @@ const ModalEditBlog = (props) => {
           }
         }
       } else {
+        toast.error("Vui lòng chọn ảnh trước khi tải lên!");
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
-        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
       console.error("Lỗi khi tải ảnh lên:", error);
@@ -100,8 +102,17 @@ const ModalEditBlog = (props) => {
   };
 
   // --------------------- HANDLE UPDATE BLOG -----------------------------
-  const handleCreateBlog = async (imageUrl) => {
-    console.log("Check data truyền vào", title, content, userId, imageUrl);
+  useEffect(() => {
+    if (open) {
+      setUserId(dataEditBlog.userId);
+      setTitle(dataEditBlog.title);
+      setContent(dataEditBlog.content);
+      setImage(dataEditBlog.image);
+    }
+  }, [dataEditBlog]);
+
+  const handleEditBlog = async (blogId) => {
+    console.log("Check data truyền vào blog", title, content, userId, image);
     if (!validTitle) {
       toast.error(
         "Tiêu đề không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
@@ -110,30 +121,22 @@ const ModalEditBlog = (props) => {
       toast.error("Nội dung không được để trống");
     } else {
       try {
-        const response = await axios.post(
-          "http://localhost:3500/blog/create-blog",
-          {
-            title,
-            content,
-            userId: uId,
-            imageUrl: imageUrl,
-          }
-        );
-        if (response.error) {
-          toast.error(response.error);
+        const res = await axios.patch(`http://localhost:3500/blog/${blogId}`, {
+          id: blogId,
+          title: content,
+          content: content,
+          image: image,
+        });
+        if (res.data.error) {
+          toast.error(res.data.error);
         } else {
-          console.log("Thành công!!", response);
-          toast.success("Thêm mới dịch vụ thành công!");
-          setTitle("");
-          setContent("");
-          setImage("");
+          toast.success("Sửa thông tin thành công");
           handUpdateTable(page);
           onClose();
         }
-      } catch (error) {
-        console.error(error);
-        console.log("Error creating service.");
-        toast.error(error.response.data.error);
+      } catch (err) {
+        // toast.error(err.message);
+        toast.error(err.message);
       }
     }
   };
@@ -175,15 +178,6 @@ const ModalEditBlog = (props) => {
         <DialogContent dividers>
           <form>
             <TextField
-              required
-              fullWidth
-              label="Id chủ thú cưng"
-              margin="normal"
-              value={uId}
-              onChange={(e) => setUserId(e.target.value)}
-              sx={{ display: "none" }}
-            />
-            <TextField
               // required
               fullWidth
               label="Tiêu đề"
@@ -205,40 +199,47 @@ const ModalEditBlog = (props) => {
             />
             <Container maxWidth="sm" style={{ marginTop: "2rem" }}>
               <Typography>Ảnh tin tức</Typography>
-              <Input
-                type="file"
-                inputProps={{ accept: "image/*" }}
-                onChange={handleImageChange}
-                style={{ marginBottom: "1rem" }}
-              />
-              {image && (
-                <CardMedia
-                  component="img"
-                  image={URL.createObjectURL(image)}
-                  alt="Ảnh sản phẩm"
-                  height="200"
-                  sx={{ maxWidth: "50%" }}
-                />
-              )}
-              {/* <Button
-                variant="contained"
-                color="primary"
-                onClick={handleUpload}
-              >
-                Tải lên
-              </Button> */}
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={6}>
+                  <Input
+                    type="file"
+                    inputProps={{ accept: "image/*" }}
+                    onChange={handleImageChange}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <ButtonCustomize
+                    onClick={handleUpload}
+                    nameButton="Tải ảnh lên"
+                    variant="contained"
+                    sx={{ marginTop: "8px" }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  {image && (
+                    <img
+                      src={
+                        image instanceof File
+                          ? URL.createObjectURL(image)
+                          : image
+                      }
+                      alt="Ảnh tin tức"
+                      style={{ maxWidth: "300px" }}
+                    />
+                  )}
+                </Grid>
+              </Grid>
             </Container>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
+          <ButtonCustomize
+            onClick={() => handleEditBlog(dataEditBlog._id)}
+            nameButton="Lưu thay đổi"
             variant="contained"
-            margin="normal"
-            color="primary"
-            onClick={handleUpload}
-          >
-            Tạo
-          </Button>
+            sx={{ marginTop: "8px" }}
+          />
         </DialogActions>
       </Box>
     </Dialog>
