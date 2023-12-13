@@ -125,7 +125,7 @@ const ModalEditBlog = (props) => {
       try {
         const res = await axios.patch(`http://localhost:3500/blog/${blogId}`, {
           id: blogId,
-          title: content,
+          title: title,
           content: content,
           image: image,
         });
