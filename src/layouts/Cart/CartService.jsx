@@ -9,6 +9,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import useAuth from '../../hooks/useAuth';
+import dayjs from "dayjs";
 
 export default function CartService() {
   // const DEFAULT_PAGE = 1;
@@ -40,7 +41,13 @@ export default function CartService() {
           console.log(loadData.data);
           let totalPrice = 0;
           for (let i = 0; i < loadData.data.length; i++) {
-            totalPrice += loadData.data[i].quantity * (loadData.data[i].serviceId.price - (loadData.data[i].serviceId.price * loadData.data[i].serviceId.discount / 100))
+            if (loadData.data[i].serviceId.discount !== 0
+              &&
+              dayjs().isBetween(dayjs(loadData.data[i].serviceId.saleStartTime), dayjs(loadData.data[i].serviceId.saleEndTime))) {
+              totalPrice += loadData.data[i].quantity * (loadData.data[i].serviceId.price - (loadData.data[i].serviceId.price * loadData.data[i].serviceId.discount / 100))
+            } else {
+              totalPrice += loadData.data[i].quantity * loadData.data[i].serviceId.price
+            }
           }
           setTotal(totalPrice);
         }
@@ -145,6 +152,13 @@ export default function CartService() {
     }
   }
 
+  const numberToVND = (number) => {
+    return number.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
+
   return (
     <>
       <h1 style={{ textAlign: 'center', marginTop: '100px' }}>DANH SÁCH DỊCH VỤ ĐÃ CHỌN</h1>
@@ -183,15 +197,71 @@ export default function CartService() {
                           <Grid item xs>
                             {value.petId.petName}
                           </Grid>
-                          <Grid item xs style={{ display: 'flex' }}>
-                            <Typography style={{ textDecoration: "line-through" }}>{value.serviceId === null ? "" : value.serviceId.discount === 0 ? "" : value.serviceId.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
-                            <Typography style={{ color: 'red' }}>{value.serviceId === null ? "" : (value.quantity * (value.serviceId.price - (value.serviceId.price * value.serviceId.discount / 100))).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
-                          </Grid>
-                          <Grid item xs style={{ display: 'flex' }}>
-                            <Typography style={{ color: 'red' }}>{value.serviceId === null ? "" : (value.quantity * (value.serviceId.price - (value.serviceId.price * value.serviceId.discount / 100))).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
-                          </Grid>
+
+                          {
+                            value.serviceId.discount !== 0
+                              &&
+                              dayjs().isBetween(dayjs(value.serviceId.saleStartTime), dayjs(value.serviceId.saleEndTime))
+                              ?
+                              (
+                                <>
+                                  <Grid item xs style={{ display: 'flex' }}>
+                                    <Typography style={{ textDecoration: "line-through" }}>
+                                      {
+                                        value.serviceId === null ? ""
+                                          : value.serviceId.discount === 0 ? ""
+                                            : numberToVND(value.serviceId.price)
+                                      }
+                                    </Typography>
+                                    <Typography style={{ color: 'red' }}>
+                                      {
+                                        value.serviceId === null ? ""
+                                          :
+                                          numberToVND((value.quantity * (value.serviceId.price - (value.serviceId.price * value.serviceId.discount / 100))))
+                                      }
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs style={{ display: 'flex' }}>
+                                    <Typography style={{ color: 'red' }}>
+                                      {
+                                        value.serviceId === null ? ""
+                                          :
+                                          numberToVND((value.quantity * (value.serviceId.price - (value.serviceId.price * value.serviceId.discount / 100))))
+                                      }
+                                    </Typography>
+                                  </Grid>
+                                </>
+                              )
+                              :
+                              (
+                                <>
+                                  <Grid item xs style={{ display: 'flex' }}>
+                                    <Typography style={{ color: 'red' }}>
+                                      {
+                                        value.serviceId === null ? ""
+                                          :
+                                          numberToVND(value.quantity * value.serviceId.price)
+                                      }
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs style={{ display: 'flex' }}>
+                                    <Typography style={{ color: 'red' }}>
+                                      {
+                                        value.serviceId === null ? ""
+                                          :
+                                          numberToVND(value.quantity * value.serviceId.price)
+                                      }
+                                    </Typography>
+                                  </Grid>
+                                </>
+                              )
+                          }
+
                           <Grid item xs>
-                            <button onClick={(e) => handleDeleteOrder(value.serviceId._id)}>
+                            <button
+                              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                              onClick={(e) => handleDeleteOrder(value.serviceId._id)}
+                            >
                               Xoá
                             </button>
                           </Grid>
@@ -208,7 +278,7 @@ export default function CartService() {
               TẤT CẢ
             </Grid>
             <Grid item xs>
-              {total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+              {numberToVND(total)}
             </Grid>
           </Grid>
           <p>Phí vận chuyển được tính khi thanh toán</p>

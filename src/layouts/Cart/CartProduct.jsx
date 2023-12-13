@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 import useAuth from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import dayjs from "dayjs";
 
 
 export default function CartProduct() {
@@ -62,7 +63,13 @@ export default function CartProduct() {
           console.log(loadData.data);
           let totalPrice = 0;
           for (let i = 0; i < loadData.data.length; i++) {
-            totalPrice += loadData.data[i].quantity * (loadData.data[i].productId.price - (loadData.data[i].productId.price * loadData.data[i].productId.discount / 100))
+            if (loadData.data[i].productId.discount !== 0
+              &&
+              dayjs().isBetween(dayjs(loadData.data[i].productId.saleStartTime), dayjs(loadData.data[i].productId.saleEndTime))) {
+              totalPrice += loadData.data[i].quantity * (loadData.data[i].productId.price - (loadData.data[i].productId.price * loadData.data[i].productId.discount / 100))
+            } else {
+              totalPrice += loadData.data[i].quantity * loadData.data[i].productId.price
+            }
           }
           setTotal(totalPrice);
         }
@@ -126,6 +133,13 @@ export default function CartProduct() {
     paddingTop: '20px'
   }
 
+  const numberToVND = (number) => {
+    return number.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
+
   return (
     <>
       <h1 style={{ textAlign: 'center', marginTop: '100px' }}>GIỎ HÀNG SẢN PHẨM</h1>
@@ -162,19 +176,55 @@ export default function CartProduct() {
                             {value.productId === null ? "" : value.productId.productName}
                           </Grid>
                           <Grid item xs style={{ textAlign: 'center' }}>
-                            {value.productId === null ? "" : (value.productId.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                            {value.productId === null ? "" : numberToVND(value.productId.price)}
                           </Grid>
                           <Grid item xs>
                             {/* <button style={quantityButtonLeftStyle}>-</button> */}
                             <input type='text' style={quantityInputStyle} value={value.quantity} onChange={(e) => setQuantity(e.target.value)} disabled />
                             {/* <button onClick={() => handleProduct()} style={quantityButtonRightStyle}>+</button> */}
                           </Grid>
-                          <Grid item xs style={{display: 'flex'}}>
-                            <Typography style={{ textDecoration: "line-through" }}>{value.productId === null ? "" : value.productId.discount === 0 ? "" : value.productId.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
-                            <Typography style={{ color: 'red' }}>{value.productId === null ? "" : (value.quantity * (value.productId.price - (value.productId.price * value.productId.discount / 100))).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Typography>
+                          <Grid item xs style={{ display: 'flex' }}>
+                            {
+                              value.productId.discount !== 0
+                                &&
+                                dayjs().isBetween(dayjs(value.productId.saleStartTime), dayjs(value.productId.saleEndTime))
+                                ?
+                                (
+                                  <>
+                                    <Typography style={{ textDecoration: "line-through" }}>
+                                      {
+                                        value.productId === null ? ""
+                                          : value.productId.discount === 0 ? ""
+                                            : numberToVND(value.productId.price)
+                                      }
+                                    </Typography>
+                                    <Typography style={{ color: 'red' }}>
+                                      {
+                                        value.productId === null ? ""
+                                          :
+                                          numberToVND((value.quantity * (value.productId.price - (value.productId.price * value.productId.discount / 100))))
+                                      }
+                                    </Typography>
+                                  </>
+                                )
+                                :
+                                (
+                                  <Typography>
+                                    {
+                                      value.productId === null ? ""
+                                        : value.productId.discount === 0 ? ""
+                                          : numberToVND(value.productId.price)
+                                    }
+                                  </Typography>
+
+                                )
+                            }
                           </Grid>
                           <Grid item xs={1}>
-                            <button onClick={(e) => handleDeleteOrder(value.productId._id)}>
+                            <button
+                              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                              onClick={(e) => handleDeleteOrder(value.productId._id)}
+                            >
                               Xoá
                             </button>
                           </Grid>
@@ -191,7 +241,7 @@ export default function CartProduct() {
               TẤT CẢ
             </Grid>
             <Grid item xs>
-              {total.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+              {numberToVND(total)}
             </Grid>
           </Grid>
           <p>Phí vận chuyển được tính khi thanh toán</p>
