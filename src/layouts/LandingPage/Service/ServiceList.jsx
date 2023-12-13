@@ -393,7 +393,11 @@ export default function ServiceList() {
                           key={index}
                           onMouseOver={() => handleMouseOver(index)}
                           onMouseOut={handleMouseOut}
-                          style={{ display: "inline-block", margin: "10px" }}
+                          style={{
+                            display: "inline-block",
+                            margin: "10px",
+                            position: "relative",
+                          }}
                         >
                           <CardMedia
                             component={NavLink}
@@ -419,6 +423,41 @@ export default function ServiceList() {
                               transition: "filter 0.3s ease-in-out",
                             }}
                           >
+                            {value.discount !== 0 &&
+                            dayjs().isBetween(
+                              dayjs(value.saleStartTime),
+                              dayjs(value.saleEndTime)
+                            ) ? (
+                              <Card
+                                style={{
+                                  position: "absolute",
+                                  top: "0px",
+                                  right: "0px",
+                                  fontSize: "18px",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Typography
+                                  variant="h6"
+                                  component="h2"
+                                  sx={{
+                                    color: "#fff",
+                                    backgroundColor: "#ee4d2d",
+                                    fontSize: "1rem",
+                                    borderRadius: "2px",
+                                    padding: "2px 4px",
+                                    fontWeight: "800",
+                                    whiteSpace: "nowrap",
+                                    textTransform: "uppercase",
+                                  }}
+                                >
+                                  {value.discount}%
+                                </Typography>
+                              </Card>
+                            ) : (
+                              ""
+                            )}
+
                             {isHovered === index && (
                               <IconButton
                                 title="Xem chi tiết"
@@ -500,24 +539,6 @@ export default function ServiceList() {
                                     value.price -
                                       (value.price * value.discount) / 100
                                   )}
-                                </Typography>
-                                <Typography
-                                  gutterBottom
-                                  variant="h6"
-                                  component="h2"
-                                  sx={{
-                                    color: "#fff",
-                                    backgroundColor: "#ee4d2d",
-                                    marginLeft: "10px",
-                                    fontSize: ".75rem",
-                                    borderRadius: "2px",
-                                    padding: "2px 4px",
-                                    fontWeight: "600",
-                                    whiteSpace: "nowrap",
-                                    textTransform: "uppercase",
-                                  }}
-                                >
-                                  {value.discount}% Giảm
                                 </Typography>
                               </Box>
                             ) : (
