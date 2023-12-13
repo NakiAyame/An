@@ -429,7 +429,10 @@ export default function ProductList() {
                               <Box
                                 display="flex"
                                 flexGrow={1}
-                                sx={{ justifyContent: "flex-start" }}
+                                sx={{
+                                  justifyContent: "flex-start",
+                                  alignItems: "center",
+                                }}
                               >
                                 <Typography
                                   gutterBottom
@@ -453,6 +456,24 @@ export default function ProductList() {
                                     value.price -
                                       (value.price * value.discount) / 100
                                   )}
+                                </Typography>
+                                <Typography
+                                  gutterBottom
+                                  variant="h6"
+                                  component="h2"
+                                  sx={{
+                                    color: "#fff",
+                                    backgroundColor: "#ee4d2d",
+                                    marginLeft: "10px",
+                                    fontSize: ".75rem",
+                                    borderRadius: "2px",
+                                    padding: "2px 4px",
+                                    fontWeight: "600",
+                                    whiteSpace: "nowrap",
+                                    textTransform: "uppercase",
+                                  }}
+                                >
+                                  {value.discount}% Giảm
                                 </Typography>
                               </Box>
                             ) : (

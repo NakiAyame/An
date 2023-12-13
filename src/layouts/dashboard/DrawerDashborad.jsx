@@ -31,7 +31,7 @@ const DrawerDashborad = () => {
   const context = useAuth();
   const navigate = useNavigate();
   const links = [
-    { text: "Dashboard", path: "/dashboard/dashboard-list" },
+    { text: "Doanh thu", path: "/dashboard/dashboard-list" },
     { text: "Danh sách người dùng", path: "/dashboard/user-list" },
   ];
 
@@ -61,10 +61,10 @@ const DrawerDashborad = () => {
 
   const links5 = [
     { text: "Danh sách tin tức", path: "/dashboard/blog-list" },
-    {
-      text: "Danh sách thể loại",
-      path: "/dashboard/category-list",
-    },
+    // {
+    //   text: "Danh sách thể loại",
+    //   path: "/dashboard/category-list",
+    // },
   ];
 
   const handleLogout = async () => {
@@ -90,7 +90,7 @@ const DrawerDashborad = () => {
       {context.auth.role !== "staff" ? (
         <List>
           <ListSubheader component="div" id="nested-list-subheader">
-            Dashboard
+            Quản lý
           </ListSubheader>
           {links.map((link, index) => (
             <ListItem key={link.text} disablePadding>

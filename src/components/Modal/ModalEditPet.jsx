@@ -186,7 +186,8 @@ const ModalEditPet = (props) => {
           petImage: petImage,
         });
         if (res.data.error) {
-          toast.error(res.data.error);
+          console.log(res.data.error);
+          toast.error("Bạn chưa tải ảnh lên. Hãy nhấn tải ảnh");
         } else {
           toast.success("Sửa thông tin thú cưng thành công");
           handUpdateEditTable(page);
@@ -194,7 +195,11 @@ const ModalEditPet = (props) => {
         }
       } catch (err) {
         // toast.error(err.message);
-        toast.error(err.response.data.error);
+        if (err.response.data.error) {
+          toast.error(err.response.data.error);
+        } else {
+          toast.error("Bạn chưa tải ảnh lên. Hãy nhấn tải ảnh");
+        }
       }
     }
   };
