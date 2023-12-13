@@ -242,8 +242,11 @@ const ModalEditSerivce = (props) => {
           onClose();
         }
       } catch (err) {
-        toast.error(err.response.data.error);
-        console.log(err);
+        if (err.response.data.error) {
+          toast.error(err.response.data.error);
+        } else {
+          toast.error("Bạn chưa tải ảnh lên. Hãy nhấn tải ảnh");
+        }
       }
     }
   };
