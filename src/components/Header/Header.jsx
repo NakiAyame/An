@@ -272,32 +272,37 @@ function Header() {
                   textAlign: "center",
                 }}
               >
-                <Tooltip
-                  title="Giỏ hàng dịch vụ"
-                  style={{ position: "relative" }}
-                >
-                  <NavLink to="cart-service">
-                    <IconButton size="small" sx={{ ml: 2 }}>
-                      <ShoppingBagIcon
-                        sx={{ width: 32, height: 32 }}
-                      ></ShoppingBagIcon>
-                    </IconButton>
-                  </NavLink>
-                  <div style={reddot}>{serviceNumber}</div>
-                </Tooltip>
-                <Tooltip
-                  title="Giỏ hàng sản phẩm"
-                  style={{ position: "relative" }}
-                >
-                  <NavLink to="cart-product">
-                    <IconButton size="small" sx={{ ml: 2 }}>
-                      <ShoppingCartIcon
-                        sx={{ width: 32, height: 32 }}
-                      ></ShoppingCartIcon>
-                    </IconButton>
-                  </NavLink>
-                  <div style={reddot}>{productNumber}</div>
-                </Tooltip>
+                {isLoggedIn && (
+                  <Tooltip
+                    title="Giỏ hàng dịch vụ"
+                    style={{ position: "relative" }}
+                  >
+                    <NavLink to="cart-service">
+                      <IconButton size="small" sx={{ ml: 2 }}>
+                        <ShoppingBagIcon
+                          sx={{ width: 32, height: 32 }}
+                        ></ShoppingBagIcon>
+                      </IconButton>
+                    </NavLink>
+                    <div style={reddot}>{serviceNumber}</div>
+                  </Tooltip>
+                )}
+
+                {isLoggedIn && (
+                  <Tooltip
+                    title="Giỏ hàng sản phẩm"
+                    style={{ position: "relative" }}
+                  >
+                    <NavLink to="cart-product">
+                      <IconButton size="small" sx={{ ml: 2 }}>
+                        <ShoppingCartIcon
+                          sx={{ width: 32, height: 32 }}
+                        ></ShoppingCartIcon>
+                      </IconButton>
+                    </NavLink>
+                    <div style={reddot}>{productNumber}</div>
+                  </Tooltip>
+                )}
               </Box>
               <Box
                 sx={{
@@ -307,21 +312,21 @@ function Header() {
                 }}
               >
                 {!isLoggedIn && (
-                  <Tooltip title="Đăng nhập">
-                    <NavLink to="/sign-in">
-                      <IconButton size="small" sx={{ ml: 2 }}>
-                        <LoginIcon sx={{ width: 32, height: 32 }}></LoginIcon>
-                      </IconButton>
-                    </NavLink>
-                  </Tooltip>
-                )}
-                {!isLoggedIn && (
                   <Tooltip title="Đăng kí">
                     <NavLink to="/sign-up">
                       <IconButton size="small" sx={{ ml: 2 }}>
                         <AppRegistrationIcon
                           sx={{ width: 32, height: 32 }}
                         ></AppRegistrationIcon>
+                      </IconButton>
+                    </NavLink>
+                  </Tooltip>
+                )}
+                {!isLoggedIn && (
+                  <Tooltip title="Đăng nhập">
+                    <NavLink to="/sign-in">
+                      <IconButton size="small" sx={{ ml: 2 }}>
+                        <LoginIcon sx={{ width: 32, height: 32 }}></LoginIcon>
                       </IconButton>
                     </NavLink>
                   </Tooltip>
