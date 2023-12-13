@@ -76,40 +76,42 @@ function Header() {
   const [productNumber, setProductNumber] = useState(0);
   const [serviceNumber, setServiceNumber] = useState(0);
 
-  const handleLoadCartProduct = async () => {
-    try {
-      const loadData = await axios
-        .get(`http://localhost:3500/cartProduct/view-cart`, {
-          headers: { Authorization: context.auth.token },
-          withCredentials: true,
-        })
-        .then((data) => {
-          setProductNumber(data.data.length);
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleLoadCartProduct = async () => {
+  //   try {
+  //     const loadData = await axios
+  //       .get(`http://localhost:3500/cartProduct/view-cart`, {
+  //         headers: { Authorization: context.auth.token },
+  //         withCredentials: true,
+  //       })
+  //       .then((data) => {
+  //         setProductNumber(data.data.length);
+  //         context.auth.productNumber = data.data.length
+  //       });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-  const handleLoadCartService = async () => {
-    try {
-      const loadData = await axios
-        .get(`http://localhost:3500/cartService/view-cart`, {
-          headers: { Authorization: context.auth.token },
-          withCredentials: true,
-        })
-        .then((data) => {
-          setServiceNumber(data.data.length);
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleLoadCartService = async () => {
+  //   try {
+  //     const loadData = await axios
+  //       .get(`http://localhost:3500/cartService/view-cart`, {
+  //         headers: { Authorization: context.auth.token },
+  //         withCredentials: true,
+  //       })
+  //       .then((data) => {
+  //         setServiceNumber(data.data.length);
+  //         context.auth.serviceNumber = data.data.length
+  //       });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-  useEffect(() => {
-    handleLoadCartProduct();
-    handleLoadCartService();
-  }, [context.auth]);
+  // useEffect(() => {
+  //   handleLoadCartProduct();
+  //   handleLoadCartService();
+  // }, [context.auth]);
 
   const reddot = {
     backgroundColor: "red",
@@ -284,7 +286,7 @@ function Header() {
                         ></ShoppingBagIcon>
                       </IconButton>
                     </NavLink>
-                    <div style={reddot}>{serviceNumber}</div>
+                    <div style={reddot}>{context.serviceNumber}</div>
                   </Tooltip>
                 )}
 
@@ -300,7 +302,7 @@ function Header() {
                         ></ShoppingCartIcon>
                       </IconButton>
                     </NavLink>
-                    <div style={reddot}>{productNumber}</div>
+                    <div style={reddot}>{context.productNumber}</div>
                   </Tooltip>
                 )}
               </Box>

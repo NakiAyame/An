@@ -148,7 +148,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
   // --------------------------------ADD SERVICE TO CART------------------------------
   const handleAddToCart = async (id) => {
     if (
-      window.confirm("Bạn có muốn cho thú cưng sử dụng dịch vụ này không ?") ==
+      window.confirm("Bạn có muốn cho thú cưng sử dụng dịch vụ này không ?") ===
       true
     ) {
       try {
@@ -166,6 +166,8 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
           )
           .then((data) => {
             toast.success("Thêm dịch vụ vào giỏ hàng thành công");
+            context.handleLoadCartService()
+            console.log(context)
             onClose();
           });
       } catch (err) {
