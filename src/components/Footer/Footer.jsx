@@ -42,13 +42,9 @@ const Footer = () => {
             </Typography>
             <LinkWrapper>
               <li>
-                <FooterLink href="#">Facebook</FooterLink>
-              </li>
-              <li>
-                <FooterLink href="#">Instagram</FooterLink>
-              </li>
-              <li>
-                <FooterLink href="#">Twitter</FooterLink>
+                <FooterLink href="https://www.facebook.com/honghanh0404">
+                  Facebook
+                </FooterLink>
               </li>
             </LinkWrapper>
           </Grid>
@@ -58,13 +54,7 @@ const Footer = () => {
             </Typography>
             <LinkWrapper>
               <li>
-                <FooterLink href="#">Giới thiệu</FooterLink>
-              </li>
-              <li>
-                <FooterLink href="#">Điều khoản sử dụng</FooterLink>
-              </li>
-              <li>
-                <FooterLink href="#">Bảo mật thông tin</FooterLink>
+                <FooterLink to="#">Giới thiệu</FooterLink>
               </li>
             </LinkWrapper>
           </Grid>
@@ -74,13 +64,9 @@ const Footer = () => {
             </Typography>
             <LinkWrapper>
               <li>
-                <FooterLink href="#">Trung tâm trợ giúp</FooterLink>
-              </li>
-              <li>
-                <FooterLink href="#">Liên hệ hỗ trợ</FooterLink>
-              </li>
-              <li>
-                <FooterLink href="#">Hỏi đáp</FooterLink>
+                <FooterLink href="#">
+                  Số điện thoại liên hệ: 0969176706
+                </FooterLink>
               </li>
             </LinkWrapper>
           </Grid>
