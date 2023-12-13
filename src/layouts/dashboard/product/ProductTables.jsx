@@ -8,23 +8,18 @@ import {
   TableRow,
   Paper,
   Pagination,
-  ButtonGroup,
   Grid,
 } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import Chip from "@mui/material/Chip";
 import SearchIcon from "@mui/icons-material/Search";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
-
-import CloseIcon from "@mui/icons-material/Close";
-import { styled } from "@mui/material/styles";
 
 import ButtonCustomize from "../../../components/Button/Button";
 
 //React
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -37,17 +32,17 @@ import TypographyCus from "../../../components/Typography/DescriptionCus";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 // -------------------------------STYLE MODAL----------------------
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "70%",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: "70%",
+//   bgcolor: "background.paper",
+//   border: "2px solid #000",
+//   boxShadow: 24,
+//   p: 4,
+// };
 
 // -------------------------------API SERVER----------------------
 const BASE_URL = "http://localhost:3500";
@@ -55,7 +50,7 @@ const BASE_URL = "http://localhost:3500";
 export default function ProductTable() {
   const [data, setData] = useState([]);
 
-  const [totalProducts, setTotalProducts] = useState(0);
+  // const [totalProducts, setTotalProducts] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -84,11 +79,11 @@ export default function ProductTable() {
     setOpenEditModal(true);
   };
 
-  const handleDeleteProduct = (product) => {
-    setOpenComfirmModal(true);
-    setDataDeteleProduct(product);
-    console.log(product);
-  };
+  // const handleDeleteProduct = (product) => {
+  //   setOpenComfirmModal(true);
+  //   setDataDeteleProduct(product);
+  //   console.log(product);
+  // };
 
   // --------------------- CLOSE MODAL  -----------------------------
   const handleCloseModal = () => {
@@ -98,14 +93,14 @@ export default function ProductTable() {
   };
 
   // --------------------- HANLDE PRODUCTS LIST UPDATE AFTER DELETE PRODUCT  -----------------------------
-  const handUpdateDeleteTable = (product) => {
-    console.log("Check data sevice:", product);
-    const newData = [...data];
-    const productIndex = newData.findIndex((value) => value._id === product);
-    newData.splice(productIndex, 1);
-    console.log("Check list delete", newData);
-    setData(newData);
-  };
+  // const handUpdateDeleteTable = (product) => {
+  //   console.log("Check data sevice:", product);
+  //   const newData = [...data];
+  //   const productIndex = newData.findIndex((value) => value._id === product);
+  //   newData.splice(productIndex, 1);
+  //   console.log("Check list delete", newData);
+  //   setData(newData);
+  // };
 
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
   useEffect(() => {
@@ -123,7 +118,7 @@ export default function ProductTable() {
         setTotalPages(loadData.data.pages);
         console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
-        setTotalProducts(loadData.data.limit);
+        // setTotalProducts(loadData.data.limit);
         console.log(loadData.data);
       }
     } catch (err) {
@@ -162,7 +157,7 @@ export default function ProductTable() {
   // --------------------- GET ALL PRODUCT BY CATEGORY ID PRODUCT -----------------------------
   async function hanldeClickCategory(cateId) {
     console.log("Check data cate ID", cateId);
-    if (cateId == undefined || cateId == "") {
+    if (cateId === undefined || cateId === "") {
       loadAllProduct(currentPage);
     } else {
       try {
@@ -176,7 +171,7 @@ export default function ProductTable() {
           setTotalPages(loadData.data.pages);
           // console.log("Check totalPage", totalPages);
           setData(loadData.data.docs);
-          setTotalProducts(loadData.data.limit);
+          // setTotalProducts(loadData.data.limit);
         }
       } catch (err) {
         console.log(err);
@@ -221,7 +216,7 @@ export default function ProductTable() {
         loadAllProduct(currentPage);
       } else {
         setData(loadData.data.docs);
-        setTotalProducts(loadData.data.limit);
+        // setTotalProducts(loadData.data.limit);
         setTotalPages(loadData.data.pages);
         console.log(loadData.data);
       }

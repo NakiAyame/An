@@ -10,44 +10,38 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function VerifyCode() {
     const navigate = useNavigate();
-    const [email, setEmail] = useState("");
+    // const [email, setEmail] = useState("");
     const [verifyCode, setVerifyCode] = useState("");
+    const verifyEmail = localStorage.getItem('verify-email');
 
-    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    // const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
     const handleConfirmVerifyCode = async () => {
-        if (!email.match(validRegex)) {
-            alert('Vui lòng nhập đúng định dạng Email !')
-        } else {
-            try {
-                const response = await axios.post("http://localhost:3500/verify",
-                    {
-                        email: email,
-                        code: verifyCode
-                    }
-                )
-                    .then((data) => {
-                        if (data.data.error === 'Fail') {
-                            alert('Mã xác nhận không chính xác')
-                        } else if (data.data === 'User Not Exists!') {
-                            alert('Địa chỉ Email không tồn tại')
-                        } else {
-                            alert('Xác nhận tài khoản thành công, vui lòng đăng nhập');
-                            navigate('/sign-in', { replace: true });
-                        }
-
-                    })
-            } catch (error) {
-                console.error("Error changing password:", error);
-            }
+        try {
+            await axios.post("http://localhost:3500/verify",
+                {
+                    email: verifyEmail,
+                    code: verifyCode
+                }
+            )
+                .then((data) => {
+                    toast.success('Xác thực thành công, Vui lòng đăng nhập.');
+                    navigate('/sign-in', { replace: true });
+                })
+                .catch((error) => {
+                    toast.error(error.response.data.error);
+                })
+        } catch (error) {
+            console.error("Error changing password:", error);
         }
     };
 
     return (
-        <Container component="main" maxWidth="sm" sx={{ mb: 4 }} style={{marginTop: '100px'}}>
+        <Container component="main" maxWidth="sm" sx={{ mb: 4 }} style={{ marginTop: '100px' }}>
             <Paper
                 variant="outlined"
                 sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
@@ -63,10 +57,10 @@ export default function VerifyCode() {
                         <TextField
                             variant="outlined"
                             fullWidth
-                            label="Vui lòng nhập email"
                             type="text"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={verifyEmail}
+                            // onChange={(e) => setEmail(e.target.value)}
+                            disabled
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -94,5 +88,3 @@ export default function VerifyCode() {
         </Container>
     );
 };
-
-// export default VerifyCode;
