@@ -27,12 +27,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import { emphasize } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import {
-  CardActionArea,
-  IconButton,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { CardActionArea, IconButton, TextField, Tooltip } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import dayjs from "dayjs";
 import DropDownService from "../../../components/DropDown/DropDownService";
@@ -162,7 +157,7 @@ export default function ProductList() {
           )
           .then((data) => {
             toast.success("Thêm sản phẩm vào giỏ hàng thành công");
-            context.handleLoadCartProduct()
+            context.handleLoadCartProduct();
             console.log(context.auth);
           });
       } catch (err) {
@@ -347,6 +342,7 @@ export default function ProductList() {
                           height: "100%",
                           display: "flex",
                           flexDirection: "column",
+                          position: "relative",
                         }}
                       >
                         <Card
@@ -379,6 +375,40 @@ export default function ProductList() {
                               transition: "filter 0.3s ease-in-out",
                             }}
                           >
+                            {value.discount !== 0 &&
+                            dayjs().isBetween(
+                              dayjs(value.saleStartTime),
+                              dayjs(value.saleEndTime)
+                            ) ? (
+                              <Card
+                                style={{
+                                  position: "absolute",
+                                  top: "0px",
+                                  right: "0px",
+                                  fontSize: "18px",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Typography
+                                  variant="h6"
+                                  component="h2"
+                                  sx={{
+                                    color: "#fff",
+                                    backgroundColor: "#ee4d2d",
+                                    fontSize: "1rem",
+                                    borderRadius: "2px",
+                                    padding: "2px 4px",
+                                    fontWeight: "800",
+                                    whiteSpace: "nowrap",
+                                    textTransform: "uppercase",
+                                  }}
+                                >
+                                  {value.discount}%
+                                </Typography>
+                              </Card>
+                            ) : (
+                              ""
+                            )}
                             {isHovered === index && (
                               <IconButton
                                 title="Xem chi tiết"
@@ -457,24 +487,7 @@ export default function ProductList() {
                                       (value.price * value.discount) / 100
                                   )}
                                 </Typography>
-                                <Typography
-                                  gutterBottom
-                                  variant="h6"
-                                  component="h2"
-                                  sx={{
-                                    color: "#fff",
-                                    backgroundColor: "#ee4d2d",
-                                    marginLeft: "10px",
-                                    fontSize: ".75rem",
-                                    borderRadius: "2px",
-                                    padding: "2px 4px",
-                                    fontWeight: "600",
-                                    whiteSpace: "nowrap",
-                                    textTransform: "uppercase",
-                                  }}
-                                >
-                                  {value.discount}% Giảm
-                                </Typography>
+                                
                               </Box>
                             ) : (
                               <Typography
