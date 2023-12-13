@@ -67,7 +67,6 @@ const ModalEditBlog = (props) => {
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE BLOG -----------------------------
   const handleUpload = async () => {
-    const maxSize = 1024 * 1024;
     try {
       if (image) {
         const formData = new FormData();
@@ -76,11 +75,11 @@ const ModalEditBlog = (props) => {
           `http://localhost:3500/blog/upload`,
           formData
         );
-
+        const maxSize = 1024 * 1024;
         if (image.size > maxSize) {
-          toast.error("Ảnh có dung lượng lớn hơn 1MB. Vui lòng chọn ảnh khác!");
+          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
         } else {
-          console.log("Response data:", response.data.docs.image);
+          console.log("Hình ảnh:", response.data.docs.image);
           const imagePath = response.data.docs.image;
 
           if (imagePath) {
@@ -93,8 +92,8 @@ const ModalEditBlog = (props) => {
           }
         }
       } else {
-        toast.error("Vui lòng chọn ảnh trước khi tải lên!");
         console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
       console.error("Lỗi khi tải ảnh lên:", error);
@@ -130,7 +129,8 @@ const ModalEditBlog = (props) => {
           image: image,
         });
         if (res.data.error) {
-          toast.error(res.data.error);
+          console.log(res.data.error);
+          toast.error("Bạn chưa tải ảnh lên. Hãy nhấn tải ảnh");
         } else {
           toast.success("Sửa thông tin thành công");
           handUpdateTable(page);
@@ -139,6 +139,7 @@ const ModalEditBlog = (props) => {
       } catch (err) {
         // toast.error(err.message);
         toast.error(err.message);
+        console.log(err.message);
       }
     }
   };
