@@ -234,7 +234,8 @@ const ModalEditSerivce = (props) => {
           serviceImage: serviceImage,
         });
         if (res.data.error) {
-          toast.error(res.data.error);
+          console.log(res.data.error);
+          toast.error("Bạn chưa tải ảnh lên. Hãy nhấn tải ảnh");
         } else {
           toast.success("Sửa dịch vụ thành công");
           handUpdateEditTable(page);
@@ -242,7 +243,7 @@ const ModalEditSerivce = (props) => {
         }
       } catch (err) {
         toast.error(err.response.data.error);
-        console.log(err.response.data.error);
+        console.log(err);
       }
     }
   };
