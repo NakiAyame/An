@@ -1,12 +1,5 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
 import { useEffect, useState } from "react";
@@ -16,6 +9,7 @@ import { toast } from "react-toastify";
 import useAuth from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from 'bootstrap';
+import dayjs from "dayjs";
 
 const inputStyle = {
     width: '100%',
@@ -32,15 +26,15 @@ const tagPStyle = {
 
 export default function ProductCheckout() {
 
-    const DEFAULT_PAGE = 1;
-    const DEFAULT_LIMIT = 5;
+    // const DEFAULT_PAGE = 1;
+    // const DEFAULT_LIMIT = 5;
     const PHONE_NUMBER_REGEX = /^(84|0[3|5|7|8|9])+([0-9]{8})$/;
 
     const navigate = useNavigate();
     const context = useAuth();
 
     const [data, setData] = useState([]);
-    const [quantity, setQuantity] = useState(0)
+    // const [quantity, setQuantity] = useState(0)
     const [loged, setLoged] = useState(false)
     const [total, setTotal] = useState(0)
 
@@ -75,7 +69,8 @@ export default function ProductCheckout() {
                     .then((data) => {
                         if (data.data.message === 'Checkout successful') {
                             toast.success("Đặt hàng sản phẩm thành công");
-                            navigator('/product-purchase')
+                            context.handleLoadCartProduct()
+                            navigate('/product-purchase')
                         }
                     })
                     .catch((err) => {
@@ -106,7 +101,13 @@ export default function ProductCheckout() {
                     console.log(loadData.data);
                     let totalPrice = 0;
                     for (let i = 0; i < loadData.data.length; i++) {
-                        totalPrice += loadData.data[i].quantity * (loadData.data[i].productId.price - (loadData.data[i].productId.price * loadData.data[i].productId.discount / 100))
+                        if (loadData.data[i].productId.discount !== 0
+                            &&
+                            dayjs().isBetween(dayjs(loadData.data[i].productId.saleStartTime), dayjs(loadData.data[i].productId.saleEndTime))) {
+                            totalPrice += loadData.data[i].quantity * (loadData.data[i].productId.price - (loadData.data[i].productId.price * loadData.data[i].productId.discount / 100))
+                        } else {
+                            totalPrice += loadData.data[i].quantity * loadData.data[i].productId.price
+                        }
                     }
                     setTotal(totalPrice);
                 }
@@ -162,7 +163,7 @@ export default function ProductCheckout() {
                 </Grid>
                 <Grid item xs={5}>
                     <h6 style={{ marginTop: '30px', fontWeight: 'bolder', fontSize: '18px' }}>ĐƠN HÀNG CỦA BẠN</h6>
-                    <p>Mã giỏ hàng: <span></span></p>
+                    {/* <p>Mã giỏ hàng: <span></span></p> */}
 
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
