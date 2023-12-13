@@ -26,6 +26,7 @@ import { useEffect } from "react";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 
 const CustomAppBar = styled(AppBar)({
   background: "linear-gradient(to right, #ADD8E6, #FFFF99, #FFC0CB)",
@@ -72,58 +73,54 @@ function Header() {
   }, []);
 
   const context = useAuth();
-  const [productNumber, setProductNumber] = useState(0)
-  const [serviceNumber, setServiceNumber] = useState(0)
+  const [productNumber, setProductNumber] = useState(0);
+  const [serviceNumber, setServiceNumber] = useState(0);
 
   const handleLoadCartProduct = async () => {
     try {
-      const loadData = await axios.get(
-        `http://localhost:3500/cartProduct/view-cart`,
-        {
-          headers: { 'Authorization': context.auth.token },
-          withCredentials: true
-        }
-      )
-        .then((data) => {
-          setProductNumber(data.data.length)
+      const loadData = await axios
+        .get(`http://localhost:3500/cartProduct/view-cart`, {
+          headers: { Authorization: context.auth.token },
+          withCredentials: true,
         })
+        .then((data) => {
+          setProductNumber(data.data.length);
+        });
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const handleLoadCartService = async () => {
     try {
-      const loadData = await axios.get(
-        `http://localhost:3500/cartService/view-cart`,
-        {
-          headers: { 'Authorization': context.auth.token },
-          withCredentials: true
-        }
-      )
-        .then((data) => {
-          setServiceNumber(data.data.length)
+      const loadData = await axios
+        .get(`http://localhost:3500/cartService/view-cart`, {
+          headers: { Authorization: context.auth.token },
+          withCredentials: true,
         })
+        .then((data) => {
+          setServiceNumber(data.data.length);
+        });
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   useEffect(() => {
-    handleLoadCartProduct()
-    handleLoadCartService()
-  },[context.auth]);
+    handleLoadCartProduct();
+    handleLoadCartService();
+  }, [context.auth]);
 
   const reddot = {
-    backgroundColor: 'red',
-    position: 'absolute',
-    width: '20px',
-    height: '20px',
-    top: '0',
-    right: '0',
-    borderRadius: '50%',
-    fontSize: '15px'
-  }
+    backgroundColor: "red",
+    position: "absolute",
+    width: "20px",
+    height: "20px",
+    top: "0",
+    right: "0",
+    borderRadius: "50%",
+    fontSize: "15px",
+  };
 
   return (
     <>
@@ -275,7 +272,10 @@ function Header() {
                   textAlign: "center",
                 }}
               >
-                <Tooltip title="Giỏ hàng dịch vụ" style={{ position: 'relative' }}>
+                <Tooltip
+                  title="Giỏ hàng dịch vụ"
+                  style={{ position: "relative" }}
+                >
                   <NavLink to="cart-service">
                     <IconButton size="small" sx={{ ml: 2 }}>
                       <ShoppingBagIcon
@@ -283,11 +283,12 @@ function Header() {
                       ></ShoppingBagIcon>
                     </IconButton>
                   </NavLink>
-                  <div style={reddot}>
-                    {serviceNumber}
-                  </div>
+                  <div style={reddot}>{serviceNumber}</div>
                 </Tooltip>
-                <Tooltip title="Giỏ hàng sản phẩm" style={{ position: 'relative' }}>
+                <Tooltip
+                  title="Giỏ hàng sản phẩm"
+                  style={{ position: "relative" }}
+                >
                   <NavLink to="cart-product">
                     <IconButton size="small" sx={{ ml: 2 }}>
                       <ShoppingCartIcon
@@ -295,9 +296,7 @@ function Header() {
                       ></ShoppingCartIcon>
                     </IconButton>
                   </NavLink>
-                  <div style={reddot}>
-                    {productNumber}
-                  </div>
+                  <div style={reddot}>{productNumber}</div>
                 </Tooltip>
               </Box>
               <Box
@@ -312,6 +311,17 @@ function Header() {
                     <NavLink to="/sign-in">
                       <IconButton size="small" sx={{ ml: 2 }}>
                         <LoginIcon sx={{ width: 32, height: 32 }}></LoginIcon>
+                      </IconButton>
+                    </NavLink>
+                  </Tooltip>
+                )}
+                {!isLoggedIn && (
+                  <Tooltip title="Đăng kí">
+                    <NavLink to="/sign-up">
+                      <IconButton size="small" sx={{ ml: 2 }}>
+                        <AppRegistrationIcon
+                          sx={{ width: 32, height: 32 }}
+                        ></AppRegistrationIcon>
                       </IconButton>
                     </NavLink>
                   </Tooltip>

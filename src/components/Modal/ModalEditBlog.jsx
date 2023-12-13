@@ -113,11 +113,13 @@ const ModalEditBlog = (props) => {
 
   const handleEditBlog = async (blogId) => {
     console.log("Check data truyền vào blog", title, content, userId, image);
-    if (!validTitle) {
+    if (title.trim() === "") {
+      toast.error("Tiêu dề không được để trống");
+    } else if (!validTitle) {
       toast.error(
         "Tiêu đề không được nhập số, kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    } else if (!validContent) {
+    } else if (content.trim() === "") {
       toast.error("Nội dung không được để trống");
     } else {
       try {
