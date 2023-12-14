@@ -219,8 +219,10 @@ const ModalEditProduct = (props) => {
   }, [dataEditProduct]);
 
   const handleEditProduct = async (productID) => {
-    if (validProductName === "") {
-      toast.error("Tên sản phẩm không được để trống");
+    if (productName.trim() === "") {
+      toast.error("Vui lòng nhập tên sản phẩm");
+    } else if (description.trim() === "") {
+      toast.error("Vui lòng nhập thông tin của sản phẩm");
     } else if (discount === "") {
       toast.error("% giảm giá không được để trống");
     } else if (!validProductName) {
@@ -231,6 +233,24 @@ const ModalEditProduct = (props) => {
       toast.error("% giảm giá không được âm ");
     } else if (discount > 100) {
       toast.error("% giảm giá không được lớn hơn 100");
+    } else if (
+      discount > 0 &&
+      discount < 101 &&
+      (!dayjs(saleStartTime).isValid() ||
+        !dayjs(saleStartTime).hour() ||
+        !dayjs(saleStartTime).minute())
+    ) {
+      toast.error("Ngày bắt đầu không thể bỏ trống");
+      setSaleStartTime(dayjs());
+    } else if (
+      discount > 0 &&
+      discount < 101 &&
+      (!dayjs(saleEndTime).isValid() ||
+        !dayjs(saleEndTime).hour() ||
+        !dayjs(saleEndTime).minute())
+    ) {
+      toast.error("Ngày kết thúc không thể bỏ trống");
+      setSaleEndTime(dayjs());
     } else if (dayjs(saleEndTime).isSame(dayjs(saleStartTime))) {
       toast.error(
         "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
@@ -242,7 +262,6 @@ const ModalEditProduct = (props) => {
       );
     } else if (dayjs().isAfter(dayjs(saleStartTime))) {
       toast.error("Ngày bắt đầu không thể ở quá khứ! Vui lòng nhập lại.");
-      setSaleStartTime(dayjs().toDate());
     } else if (!validQuantity) {
       toast.error("Số lượng không được để trống");
     } else if (!validPrice) {
@@ -266,6 +285,12 @@ const ModalEditProduct = (props) => {
         if (res.data.error) {
           toast.error("Lỗi Err", res.data.error);
         } else {
+          console.log(
+            "kiểm tra dữ liệu chỉnh sửa",
+            discount,
+            saleStartTime,
+            saleEndTime
+          );
           toast.success("Sửa thông tin sản phẩm thành công");
           handUpdateEditTable(page);
           onClose();
@@ -400,6 +425,7 @@ const ModalEditProduct = (props) => {
                     value={dayjs(saleStartTime)}
                     onChange={handleStartDateChange}
                     minDate={dayjs()}
+                    views={["year", "day", "hours", "minutes", "seconds"]}
                     // maxDate={currentDate}
                   />
                 </Grid>
@@ -409,6 +435,7 @@ const ModalEditProduct = (props) => {
                     label="Ngày kết thúc giảm giá"
                     value={dayjs(saleEndTime)}
                     onChange={handleEndDateChange}
+                    views={["year", "day", "hours", "minutes", "seconds"]}
                   />
                 </Grid>
               </Grid>

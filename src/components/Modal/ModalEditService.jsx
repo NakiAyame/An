@@ -204,6 +204,24 @@ const ModalEditSerivce = (props) => {
       toast.error("% giảm giá không được âm ");
     } else if (discount > 100) {
       toast.error("% giảm giá không được lớn hơn 100");
+    } else if (
+      discount > 0 &&
+      discount < 101 &&
+      (!dayjs(saleStartTime).isValid() ||
+        !dayjs(saleStartTime).hour() ||
+        !dayjs(saleStartTime).minute())
+    ) {
+      toast.error("Ngày bắt đầu không thể bỏ trống");
+      setSaleStartTime(dayjs());
+    } else if (
+      discount > 0 &&
+      discount < 101 &&
+      (!dayjs(saleEndTime).isValid() ||
+        !dayjs(saleEndTime).hour() ||
+        !dayjs(saleEndTime).minute())
+    ) {
+      toast.error("Ngày kết thúc không thể bỏ trống");
+      setSaleEndTime(dayjs());
     } else if (dayjs(saleEndTime).isSame(dayjs(saleStartTime))) {
       toast.error(
         "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
@@ -367,6 +385,7 @@ const ModalEditSerivce = (props) => {
                     value={dayjs(saleStartTime)}
                     onChange={handleStartDateChange}
                     minDate={dayjs()}
+                    views={["year", "day", "hours", "minutes", "seconds"]}
                     // maxDate={currentDate}
                   />
                 </Grid>
@@ -377,6 +396,7 @@ const ModalEditSerivce = (props) => {
                     value={dayjs(saleEndTime)}
                     onChange={handleEndDateChange}
                     minDate={dayjs()}
+                    views={["year", "day", "hours", "minutes", "seconds"]}
                   />
                 </Grid>
               </Grid>
