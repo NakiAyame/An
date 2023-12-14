@@ -50,7 +50,7 @@ const style = {
 export default function BookingTable() {
   const DEFAULT_PAGE = 1;
   const DEFAULT_LIMIT = 10;
-  const DEFAULT_STATUS = "Chờ thanh toán";
+  const DEFAULT_STATUS = "Chờ xác nhận";
   // const DEFAULT_FROMDATE = "";
   // const DEFAULT_TODATE = "";
 
@@ -172,7 +172,7 @@ export default function BookingTable() {
             }
           }
           setData(filterData);
-          setPages(filterData / DEFAULT_LIMIT);
+          setPages(filterData.length / DEFAULT_LIMIT);
         });
     } catch (err) {
       console.log(err);
@@ -182,43 +182,43 @@ export default function BookingTable() {
 
   // ----------------------------------- API GET ALL USER --------------------------------
   async function loadAllBooking(page, limit, option, startDate, endDate) {
-    // if (dayjs(endDate).isSame(dayjs(startDate))) {
-    //   toast.error(
-    //     "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
-    //   );
-    // } else if (dayjs(endDate).isBefore(dayjs(startDate))) {
-    //   toast.error(
-    //     "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
-    //   );
-    // } else {
-    console.log("Check ngày", startDate, endDate);
-    try {
-      setStatus(option);
-      const loadData = await axios
-        .get(
-          `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc&startDate=${convertDate(startDate) !== "NaN-aN-aN"
-            ? convertDate(startDate)
-            : ""
-          }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
-          }`
-        )
-        .then((data) => {
-          console.log(data.data.docs);
-          const filterData = [];
+    if (dayjs(endDate).isSame(dayjs(startDate))) {
+      toast.error(
+        "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
+      );
+    } else if (dayjs(endDate).isBefore(dayjs(startDate))) {
+      toast.error(
+        "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
+      );
+    } else {
+      console.log("Check ngày", startDate, endDate);
+      try {
+        setStatus(option);
+        const loadData = await axios
+          .get(
+            `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc&startDate=${convertDate(startDate) !== "NaN-aN-aN"
+              ? convertDate(startDate)
+              : ""
+            }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
+            }`
+          )
+          .then((data) => {
+            console.log(data.data.docs);
+            const filterData = [];
 
-          for (let i = 0; i < data.data.docs.length; i++) {
-            if (data.data.docs[i].status === option) {
-              filterData.push(data.data.docs[i]);
+            for (let i = 0; i < data.data.docs.length; i++) {
+              if (data.data.docs[i].status === option) {
+                filterData.push(data.data.docs[i]);
+              }
             }
-          }
-          console.log(filterData);
-          setData(filterData);
-          setPages(filterData / DEFAULT_LIMIT);
-        });
-    } catch (err) {
-      console.log(err);
+            console.log(filterData);
+            setData(filterData);
+            setPages(filterData / DEFAULT_LIMIT);
+          });
+      } catch (err) {
+        console.log(err);
+      }
     }
-    // }
   }
 
   useEffect(() => {
@@ -262,7 +262,7 @@ export default function BookingTable() {
 
   // ---------------------------------------------------------------
 
-  const handlePaging = (event, value) => {
+  const handlePaging = (value) => {
     setCurrentPage(value === undefined ? 1 : value);
     loadAllBooking(value, DEFAULT_LIMIT, status, fromDate, toDate);
   };
@@ -349,7 +349,7 @@ export default function BookingTable() {
                 label="Từ ngày"
                 value={dayjs(fromDate)}
                 onChange={handleStartDateChange}
-              // maxDate={currentDate}
+                maxDate={toDate}
               />
             </Grid>
 
@@ -358,11 +358,12 @@ export default function BookingTable() {
                 label="Đến ngày"
                 value={dayjs(toDate)}
                 onChange={handleEndDateChange}
+                maxDate={dayjs().add(1, 'day')}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
               <ButtonCustomize
-                onClick={() => handlePaging()}
+                onClick={() => handlePaging(1)}
                 nameButton="Lọc"
                 variant="contained"
                 sx={{ marginTop: "8px" }}

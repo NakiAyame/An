@@ -345,7 +345,7 @@ export default function BasicTable() {
                 label="Từ ngày"
                 value={dayjs(fromDate)}
                 onChange={handleStartDateChange}
-              // maxDate={currentDate}
+                maxDate={toDate}
               />
             </Grid>
 
@@ -354,6 +354,7 @@ export default function BasicTable() {
                 label="Đến ngày"
                 value={dayjs(toDate)}
                 onChange={handleEndDateChange}
+                maxDate={dayjs().add(1, 'day')}
               />
             </Grid>
             <Grid item xs={12} sm={4}>

@@ -55,7 +55,7 @@ const bull = (
 export default function ServicePurchase() {
     const DEFAULT_PAGE = 1;
     const DEFAULT_LIMIT = 5;
-    const DEFAULT_STATUS = "Chờ thanh toán"
+    const DEFAULT_STATUS = "Chờ xác nhận"
 
     const [data, setData] = useState([]);
     const [quantity, setQuantity] = useState(0)
