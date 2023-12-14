@@ -82,7 +82,7 @@ export default function ServicePurchase() {
             try {
                 setStatus(option)
                 const loadData = await axios.get(
-                    `http://localhost:3500/booking/${context.auth.id}`,
+                    `http://localhost:3500/booking/get-all-booking-by-uid/${context.auth.id}`,
                     {
                         headers: { 'Authorization': context.auth.token },
                         withCredentials: true
@@ -163,9 +163,7 @@ export default function ServicePurchase() {
         cursor: 'pointer',
     }
 
-    const statusList = [
-        'Chờ thanh toán', 'Thanh toán sau', 'Chờ xử lý dịch vụ', 'Hoàn thành', 'Huỷ'
-    ]
+    const statusList = ['Chờ xác nhận', 'Đang xử lý', 'Hoàn thành', 'Huỷ']
 
     const numberToVND = (number) => {
         return number.toLocaleString("vi-VN", {

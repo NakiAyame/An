@@ -8,36 +8,22 @@ import {
   TableRow,
   Paper,
   Box,
-  Button,
-  Typography,
   Modal,
   DialogTitle,
   DialogContent,
-  DialogActions,
   IconButton,
-  TextField,
   Grid,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  ButtonGroup,
   Stack,
   Pagination,
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
-import { styled } from "@mui/material/styles";
 
 import ButtonCustomize from "../../../components/Button/Button";
 import DateFormat from "../../../components/DateFormat";
 
 //React
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 // Axios
 import axios from "axios";
@@ -45,11 +31,7 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 
 import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { async } from "q";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -68,8 +50,8 @@ export default function BasicTable() {
   const DEFAULT_PAGE = 1;
   const DEFAULT_LIMIT = 10;
   const DEFAULT_STATUS = "Chờ xác nhận";
-  const DEFAULT_FROMDATE = "";
-  const DEFAULT_TODATE = "";
+  // const DEFAULT_FROMDATE = "";
+  // const DEFAULT_TODATE = "";
 
   const [fromDate, setFromDate] = React.useState(dayjs());
   const [toDate, setToDate] = React.useState(dayjs());
@@ -84,9 +66,12 @@ export default function BasicTable() {
   const [option, setOption] = useState("");
 
   const [data, setData] = useState([]);
-  const [id, setId] = useState("");
   const [orderDetail, setOrderDetail] = useState([]);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState(DEFAULT_STATUS);
+
+  const [recipientName, setRecipientName] = useState(' ')
+  const [recipientPhoneNumber, setRecipientPhoneNumber] = useState(' ')
+  const [deliveryAddress, setDeliveryAddress] = useState(' ')
 
   // --------------------- MODAL HANDLE -----------------------------
 
@@ -114,13 +99,20 @@ export default function BasicTable() {
   // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
   const handleViewOrderDetail = async (id, option) => {
     try {
-      console.log(id);
-      const data = await axios.get(`http://localhost:3500/orderDetail/${id}`);
-      if (data.error) {
-        toast.error(data.error);
+      const dataOrderDetail = await axios.get(`http://localhost:3500/orderDetail/${id}`);
+      if (dataOrderDetail.error) {
+        toast.error(dataOrderDetail.error);
       } else {
-        console.log(data.data);
-        setOrderDetail(data.data);
+        console.log(dataOrderDetail.data)
+        setOrderDetail(dataOrderDetail.data);
+        data.map((value) => {
+          if (value._id === id) {
+            console.log(value._id)
+            setRecipientName(value.recipientName)
+            setRecipientPhoneNumber(value.recipientPhoneNumber)
+            setDeliveryAddress(value.deliveryAddress)
+          }
+        })
       }
     } catch (err) {
       console.log(err);
@@ -150,20 +142,40 @@ export default function BasicTable() {
   };
 
   // --------------------- HANDLE DELETE -----------------------------
-  const handleDelete = async (id) => {
+  // const handleDelete = async (id) => {
+  //   try {
+  //     console.log(id);
+  //     const data = await axios.delete(`http://localhost:3500/order/${id}`);
+  //     if (data.error) {
+  //       toast.error(data.error);
+  //     } else {
+  //       console.log(data);
+  //       toast.success("Delete successfully");
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  async function loadOrder() {
     try {
-      console.log(id);
-      const data = await axios.delete(`http://localhost:3500/order/${id}`);
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        console.log(data);
-        toast.success("Delete successfully");
-      }
+      await axios.get(`http://localhost:3500/order/all`)
+        .then((data) => {
+          console.log(data.data);
+          const filterData = [];
+          for (let i = 0; i < data.data.length; i++) {
+            if (data.data[i].status === DEFAULT_STATUS) {
+              filterData.push(data.data[i]);
+            }
+          }
+          setData(filterData);
+          setPages(filterData.length / DEFAULT_LIMIT);
+        });
     } catch (err) {
       console.log(err);
     }
-  };
+
+  }
 
   // ----------------------------------- API GET ALL USER --------------------------------
   async function loadAllOrder(page, limit, option, startDate, endDate) {
@@ -180,12 +192,10 @@ export default function BasicTable() {
         setStatus(option);
         const loadData = await axios
           .get(
-            `http://localhost:3500/order?page=${page}&limit=${limit}&startDate=${
-              convertDate(startDate) !== "NaN-aN-aN"
-                ? convertDate(startDate)
-                : ""
-            }&endDate=${
-              convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
+            `http://localhost:3500/order?page=${page}&limit=${limit}&startDate=${convertDate(startDate) !== "NaN-aN-aN"
+              ? convertDate(startDate)
+              : ""
+            }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
             }`
           )
           .then((data) => {
@@ -193,7 +203,7 @@ export default function BasicTable() {
             console.log(data.data.docs);
             const filterData = [];
             for (let i = 0; i < data.data.docs.length; i++) {
-              if (data.data.docs[i].status === option) {
+              if (data.data.docs[i].status === status) {
                 filterData.push(data.data.docs[i]);
               }
             }
@@ -207,41 +217,41 @@ export default function BasicTable() {
   }
 
   useEffect(() => {
-    loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS);
+    loadOrder();
   }, []);
 
   // ----------------------------------- HANDLE GET ORDER OF USER --------------------------------
 
-  const [userId, setUserId] = useState("");
+  // const [userId, setUserId] = useState("");
 
-  const hanldeSearch = (e) => {
-    setUserId(e.target.value);
-  };
+  // const hanldeSearch = (e) => {
+  //   setUserId(e.target.value);
+  // };
 
-  const handleGetOrderByUserId = async () => {
-    if (!userId == "") {
-      getAllOrderByUserId();
-    } else {
-      loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS);
-    }
-  };
+  // const handleGetOrderByUserId = async () => {
+  //   if (!userId == "") {
+  //     getAllOrderByUserId();
+  //   } else {
+  //     loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS);
+  //   }
+  // };
 
   // ----------------------------------- GET ALL ORDER BY USER ID --------------------------------
 
-  const getAllOrderByUserId = async () => {
-    try {
-      const loadData = await axios.get(`http://localhost:3500/order/${userId}`);
-      if (loadData.error) {
-        toast.error(loadData.error);
-      } else {
-        setData(loadData.data);
-        // toast.success("Login successful");
-        console.log(loadData.data);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const getAllOrderByUserId = async () => {
+  //   try {
+  //     const loadData = await axios.get(`http://localhost:3500/order/${userId}`);
+  //     if (loadData.error) {
+  //       toast.error(loadData.error);
+  //     } else {
+  //       setData(loadData.data);
+  //       // toast.success("Login successful");
+  //       console.log(loadData.data);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   // ---------------------------------------------------------------
 
@@ -252,14 +262,14 @@ export default function BasicTable() {
 
   // ---------------------------------------------------------------
 
-  const errorStyle = {
-    color: "red",
-    // backgroundColor: "DodgerBlue",
-    paddingLeft: "15px",
-    fontSize: "12px",
-  };
+  // const errorStyle = {
+  //   color: "red",
+  //   // backgroundColor: "DodgerBlue",
+  //   paddingLeft: "15px",
+  //   fontSize: "12px",
+  // };
 
-  const statusList = ["Chờ xác nhận", "Đang giao hàng", "Đã nhận hàng"];
+  const statusList = ["Chờ xác nhận", "Đang giao hàng", "Đã nhận hàng", "Huỷ"];
 
   const hanldeClickChangeStatus = async (status, id) => {
     if (
@@ -335,7 +345,7 @@ export default function BasicTable() {
                 label="Từ ngày"
                 value={dayjs(fromDate)}
                 onChange={handleStartDateChange}
-                // maxDate={currentDate}
+              // maxDate={currentDate}
               />
             </Grid>
 
@@ -394,7 +404,7 @@ export default function BasicTable() {
                         {index + 1}
                       </TableCell>
                       <TableCell align="left">
-                        {value.userId !== null ? value.userId.fullname : ""}
+                        {value.userId !== null ? value.recipientName : ""}
                       </TableCell>
                       <TableCell align="left">
                         <DateFormat date={value.createdAt} />
@@ -444,26 +454,17 @@ export default function BasicTable() {
           <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
             {option === "view" ? "Chi tiết đơn hàng" : "Đang cập nhật ......"}
           </DialogTitle>
-          {/* <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
-                        <InputLabel id="demo-select-small-label">Trạng thái</InputLabel>
-                        <Select
-                            label="Loại dịch vụ"
-                        // value={selectedCategory}
-                        // onChange={handleChangeCate}
-                        >
-                            {statusList.map((value, index) => {
-                                return (
-                                    <MenuItem
-                                        key={index}
-                                        value={'dsadsadsa'}
-                                        onClick={(e) => hanldeClickChangeStatus(value, orderDetail[0].orderId)}
-                                    >
-                                        {value}
-                                    </MenuItem>
-                                );
-                            })}
-                        </Select>
-                    </FormControl> */}
+          <Grid container spacing={3} style={{ marginBottom: '20px' }}>
+            <Grid item xs={12} sm={6}>
+              <span>Tên người nhận: {recipientName}</span>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <span>Số điện thoại: {recipientPhoneNumber}</span>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <span>Địa chị nhận hàng: {deliveryAddress}</span>
+            </Grid>
+          </Grid>
           <select
             style={{
               padding: "10px 15px",
@@ -531,26 +532,22 @@ export default function BasicTable() {
                               ? value.productId.price
                               : ""}
                           </TableCell>
-                          <TableCell align="left">
-                            {status === "Chờ xác nhận" ? (
-                              <Button
-                                variant="contained"
-                                margin="normal"
-                                color="primary"
-                                onClick={(e) =>
-                                  handleDeleteOrder(
-                                    value._id,
-                                    value.orderId,
-                                    OPTION_VIEW_ORDER_BY_ID
-                                  )
-                                }
-                              >
-                                Xoá
-                              </Button>
-                            ) : (
-                              ""
-                            )}
-                          </TableCell>
+                          {/* <TableCell align="left">
+                            <button
+                              variant="contained"
+                              margin="normal"
+                              color="primary"
+                              onClick={(e) =>
+                                handleDeleteOrder(
+                                  value._id,
+                                  value.orderId,
+                                  OPTION_VIEW_ORDER_BY_ID
+                                )
+                              }
+                            >
+                              Xoá
+                            </button>
+                          </TableCell> */}
                         </TableRow>
                       );
                     })}

@@ -60,7 +60,7 @@ export default function ProductCheckout() {
                         recipientName: recipientName,
                         recipientPhoneNumber: recipientPhoneNumber,
                         deliveryAddress: deliveryAddress,
-                        totalPrice: total
+                        // totalPrice: total
                     },
                     {
                         headers: { 'Authorization': context.auth.token },

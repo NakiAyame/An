@@ -65,7 +65,7 @@ export default function CartService() {
   // ----------------------------------------------------------------
 
   const handleCheckOut = async () => {
-    if (window.confirm('Bạn có muốn sử dụng dịch vụ này ?') == true) {
+    if (window.confirm('Bạn có muốn sử dụng dịch vụ này ?') === true) {
       if (data.length === 0) {
         alert('Bạn không có dịch vụ trong giỏ hàng')
       } else {

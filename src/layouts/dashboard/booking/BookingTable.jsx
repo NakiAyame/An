@@ -9,35 +9,22 @@ import {
   Paper,
   Box,
   Button,
-  Typography,
   Modal,
   DialogTitle,
   DialogContent,
-  DialogActions,
   IconButton,
-  TextField,
   Grid,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  ButtonGroup,
   Stack,
   Pagination,
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
-import { styled } from "@mui/material/styles";
 
 import ButtonCustomize from "../../../components/Button/Button";
 import DateFormat from "../../../components/DateFormat";
 
 //React
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 // Axios
 import axios from "axios";
@@ -45,11 +32,7 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 
 import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { async } from "q";
 
 // -------------------------------STYLE MODAL----------------------
 const style = {
@@ -68,8 +51,8 @@ export default function BookingTable() {
   const DEFAULT_PAGE = 1;
   const DEFAULT_LIMIT = 10;
   const DEFAULT_STATUS = "Chờ thanh toán";
-  const DEFAULT_FROMDATE = "";
-  const DEFAULT_TODATE = "";
+  // const DEFAULT_FROMDATE = "";
+  // const DEFAULT_TODATE = "";
 
   const [fromDate, setFromDate] = React.useState(dayjs());
   const [toDate, setToDate] = React.useState(dayjs());
@@ -84,10 +67,10 @@ export default function BookingTable() {
   const [option, setOption] = useState("");
 
   const [data, setData] = useState([]);
-  const [id, setId] = useState("");
+  // const [id, setId] = useState("");
   const [orderDetail, setOrderDetail] = useState([]);
-  const [status, setStatus] = useState("Chờ thanh toán");
-  const [total, setTotal] = useState(0);
+  const [status, setStatus] = useState(DEFAULT_STATUS);
+  // const [total, setTotal] = useState(0);
 
   // // --------------------- HANLDE CHANGE START DATE -----------------------------
   const handleStartDateChange = (date) => {
@@ -134,10 +117,10 @@ export default function BookingTable() {
 
   // --------------------- HANDLE UPDATE -----------------------------
 
-  const handleSortDate = async (date) => {
-    setFromDate(date);
-    alert(convertDate(fromDate));
-  };
+  // const handleSortDate = async (date) => {
+  //   setFromDate(date);
+  //   alert(convertDate(fromDate));
+  // };
 
   const convertDate = (date) => {
     // Chuỗi thời gian ban đầu
@@ -176,85 +159,106 @@ export default function BookingTable() {
     }
   };
 
+  async function loadBooking() {
+    try {
+      await axios.get(`http://localhost:3500/booking/get-booking`)
+        .then((data) => {
+          console.log(data.data);
+          const filterData = [];
+
+          for (let i = 0; i < data.data.length; i++) {
+            if (data.data[i].status === status) {
+              filterData.push(data.data[i]);
+            }
+          }
+          setData(filterData);
+          setPages(filterData / DEFAULT_LIMIT);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+    // }
+  }
+
   // ----------------------------------- API GET ALL USER --------------------------------
   async function loadAllBooking(page, limit, option, startDate, endDate) {
-    if (dayjs(endDate).isSame(dayjs(startDate))) {
-      toast.error(
-        "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
-      );
-    } else if (dayjs(endDate).isBefore(dayjs(startDate))) {
-      toast.error(
-        "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
-      );
-    } else {
-      console.log("Check ngày", startDate, endDate);
-      try {
-        setStatus(option);
-        const loadData = await axios
-          .get(
-            `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc&startDate=${
-              convertDate(startDate) !== "NaN-aN-aN"
-                ? convertDate(startDate)
-                : ""
-            }&endDate=${
-              convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
-            }`
-          )
-          .then((data) => {
-            console.log(data.data.docs);
-            const filterData = [];
+    // if (dayjs(endDate).isSame(dayjs(startDate))) {
+    //   toast.error(
+    //     "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
+    //   );
+    // } else if (dayjs(endDate).isBefore(dayjs(startDate))) {
+    //   toast.error(
+    //     "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
+    //   );
+    // } else {
+    console.log("Check ngày", startDate, endDate);
+    try {
+      setStatus(option);
+      const loadData = await axios
+        .get(
+          `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc&startDate=${convertDate(startDate) !== "NaN-aN-aN"
+            ? convertDate(startDate)
+            : ""
+          }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
+          }`
+        )
+        .then((data) => {
+          console.log(data.data.docs);
+          const filterData = [];
 
-            for (let i = 0; i < data.data.docs.length; i++) {
-              if (data.data.docs[i].status === option) {
-                filterData.push(data.data.docs[i]);
-              }
+          for (let i = 0; i < data.data.docs.length; i++) {
+            if (data.data.docs[i].status === option) {
+              filterData.push(data.data.docs[i]);
             }
-            console.log(filterData);
-            setData(filterData);
-            setPages(filterData / DEFAULT_LIMIT);
-          });
-      } catch (err) {
-        console.log(err);
-      }
+          }
+          console.log(filterData);
+          setData(filterData);
+          setPages(filterData / DEFAULT_LIMIT);
+        });
+    } catch (err) {
+      console.log(err);
     }
+    // }
   }
 
   useEffect(() => {
-    loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS);
+    // loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS);
+    loadBooking();
+
   }, []);
 
   // ----------------------------------- HANDLE GET ORDER OF USER --------------------------------
 
-  const [userId, setUserId] = useState("");
+  // const [userId, setUserId] = useState("");
 
-  const hanldeSearch = (e) => {
-    setUserId(e.target.value);
-  };
+  // const hanldeSearch = (e) => {
+  //   setUserId(e.target.value);
+  // };
 
-  const handleGetOrderByUserId = async () => {
-    if (!userId == "") {
-      getAllOrderByUserId();
-    } else {
-      loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT);
-    }
-  };
+  // const handleGetOrderByUserId = async () => {
+  //   if (!userId == "") {
+  //     getAllOrderByUserId();
+  //   } else {
+  //     loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT);
+  //   }
+  // };
 
   // ----------------------------------- GET ALL ORDER BY USER ID --------------------------------
 
-  const getAllOrderByUserId = async () => {
-    try {
-      const loadData = await axios.get(`http://localhost:3500/order/${userId}`);
-      if (loadData.error) {
-        toast.error(loadData.error);
-      } else {
-        setData(loadData.data);
-        // toast.success("Login successful");
-        console.log(loadData.data);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const getAllOrderByUserId = async () => {
+  //   try {
+  //     const loadData = await axios.get(`http://localhost:3500/order/${userId}`);
+  //     if (loadData.error) {
+  //       toast.error(loadData.error);
+  //     } else {
+  //       setData(loadData.data);
+  //       // toast.success("Login successful");
+  //       console.log(loadData.data);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   // ---------------------------------------------------------------
 
@@ -265,20 +269,14 @@ export default function BookingTable() {
 
   // ----------------------------------------------------------------
 
-  const errorStyle = {
-    color: "red",
-    // backgroundColor: "DodgerBlue",
-    paddingLeft: "15px",
-    fontSize: "12px",
-  };
+  // const errorStyle = {
+  //   color: "red",
+  //   // backgroundColor: "DodgerBlue",
+  //   paddingLeft: "15px",
+  //   fontSize: "12px",
+  // };
 
-  const statusList = [
-    "Chờ thanh toán",
-    "Thanh toán sau",
-    "Chờ xử lý dịch vụ",
-    "Hoàn thành",
-    "Huỷ",
-  ];
+  const statusList = ['Chờ xác nhận', 'Đang xử lý', 'Hoàn thành', 'Huỷ'];
 
   const hanldeClickChangeStatus = async (status, id) => {
     if (
@@ -351,7 +349,7 @@ export default function BookingTable() {
                 label="Từ ngày"
                 value={dayjs(fromDate)}
                 onChange={handleStartDateChange}
-                // maxDate={currentDate}
+              // maxDate={currentDate}
               />
             </Grid>
 
@@ -417,24 +415,24 @@ export default function BookingTable() {
                       </TableCell>
                       <TableCell align="left">{value.status}</TableCell>
                       {/* <TableCell align="left">
-                                                <ButtonGroup variant="contained" fullWidth>
-                                                    <ButtonCustomize
-                                                        
-                                                        variant="contained"
-                                                        // component={RouterLink}
-                                                        nameButton="xem chi tiết"
-                                                        fullWidth
-                                                    />
-                                                    <ButtonCustomize
-                                                        onClick={(e) => handleDelete(value._id)}
-                                                        backgroundColor="red"
-                                                        variant="contained"
-                                                        // component={RouterLink}
-                                                        nameButton="Xoá"
-                                                        fullWidth
-                                                    />
-                                                </ButtonGroup>
-                                            </TableCell> */}
+                        <ButtonGroup variant="contained" fullWidth>
+                        <ButtonCustomize
+
+                          variant="contained"
+                          // component={RouterLink}
+                          nameButton="xem chi tiết"
+                          fullWidth
+                        />
+                        <ButtonCustomize
+                          onClick={(e) => handleDelete(value._id)}
+                          backgroundColor="red"
+                          variant="contained"
+                          // component={RouterLink}
+                          nameButton="Xoá"
+                          fullWidth
+                        />
+                        </ButtonGroup>
+                      </TableCell> */}
                     </TableRow>
                   );
                 })}
@@ -563,25 +561,25 @@ export default function BookingTable() {
                               : ""}
                           </TableCell>
                           <TableCell align="left">
-                            {status === "Chờ thanh toán" ? (
-                              <Button
-                                variant="contained"
-                                margin="normal"
-                                color="primary"
-                                onClick={(e) =>
-                                  handleDeleteOrder(
-                                    value._id,
-                                    value.bookingId,
-                                    OPTION_VIEW_ORDER_BY_ID,
-                                    status
-                                  )
-                                }
-                              >
-                                Xoá
-                              </Button>
-                            ) : (
+                            {/* {status === "Chờ thanh toán" ? ( */}
+                            <Button
+                              variant="contained"
+                              margin="normal"
+                              color="primary"
+                              onClick={(e) =>
+                                handleDeleteOrder(
+                                  value._id,
+                                  value.bookingId,
+                                  OPTION_VIEW_ORDER_BY_ID,
+                                  status
+                                )
+                              }
+                            >
+                              Xoá
+                            </Button>
+                            {/* ) : (
                               ""
-                            )}
+                            )} */}
                           </TableCell>
                         </TableRow>
                       );
