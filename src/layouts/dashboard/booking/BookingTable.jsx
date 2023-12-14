@@ -60,7 +60,7 @@ export default function BookingTable() {
   const [pages, setPages] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const context = useAuth();
+  // const context = useAuth();
 
   const OPTION_VIEW_ORDER_BY_ID = "view";
 
@@ -302,21 +302,21 @@ export default function BookingTable() {
     }
   };
 
-  const handleDeleteOrder = async (id, bookingId, option, status) => {
-    try {
-      const loadData = await axios
-        .delete(`http://localhost:3500/bookingDetail/${id}`, {
-          headers: { Authorization: context.auth.token },
-          withCredentials: true,
-        })
-        .then((data) => {
-          console.log(data);
-          handleViewOrderDetail(bookingId, option);
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleDeleteOrder = async (id, bookingId, option, status) => {
+  //   try {
+  //     const loadData = await axios
+  //       .delete(`http://localhost:3500/bookingDetail/${id}`, {
+  //         headers: { Authorization: context.auth.token },
+  //         withCredentials: true,
+  //       })
+  //       .then((data) => {
+  //         console.log(data);
+  //         handleViewOrderDetail(bookingId, option);
+  //       });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <>
@@ -561,8 +561,8 @@ export default function BookingTable() {
                               ? value.serviceId.price
                               : ""}
                           </TableCell>
-                          <TableCell align="left">
-                            {/* {status === "Chờ thanh toán" ? ( */}
+                          {/* <TableCell align="left">
+                            {status === "Chờ thanh toán" ? (
                             <Button
                               variant="contained"
                               margin="normal"
@@ -578,10 +578,10 @@ export default function BookingTable() {
                             >
                               Xoá
                             </Button>
-                            {/* ) : (
+                            ) : (
                               ""
-                            )} */}
-                          </TableCell>
+                            )}
+                          </TableCell> */}
                         </TableRow>
                       );
                     })}

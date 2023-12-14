@@ -59,7 +59,7 @@ export default function BasicTable() {
   const [pages, setPages] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const context = useAuth();
+  // const context = useAuth();
 
   const OPTION_VIEW_ORDER_BY_ID = "view";
 
@@ -255,7 +255,7 @@ export default function BasicTable() {
 
   // ---------------------------------------------------------------
 
-  const handlePaging = (event, value) => {
+  const handlePaging = (value) => {
     setCurrentPage(value === undefined ? 1 : value);
     loadAllOrder(value, DEFAULT_LIMIT, status, fromDate, toDate);
   };
@@ -295,21 +295,21 @@ export default function BasicTable() {
     }
   };
 
-  const handleDeleteOrder = async (id, orderId, option) => {
-    try {
-      const loadData = await axios
-        .delete(`http://localhost:3500/orderDetail/${id}`, {
-          headers: { Authorization: context.auth.token },
-          withCredentials: true,
-        })
-        .then((data) => {
-          console.log(data);
-          handleViewOrderDetail(orderId, option);
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleDeleteOrder = async (id, orderId, option) => {
+  //   try {
+  //     const loadData = await axios
+  //       .delete(`http://localhost:3500/orderDetail/${id}`, {
+  //         headers: { Authorization: context.auth.token },
+  //         withCredentials: true,
+  //       })
+  //       .then((data) => {
+  //         console.log(data);
+  //         handleViewOrderDetail(orderId, option);
+  //       });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <>
@@ -359,7 +359,7 @@ export default function BasicTable() {
             </Grid>
             <Grid item xs={12} sm={4}>
               <ButtonCustomize
-                onClick={() => handlePaging()}
+                onClick={() => handlePaging(1)}
                 nameButton="Lọc"
                 variant="contained"
                 sx={{ marginTop: "8px" }}
