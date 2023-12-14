@@ -24,7 +24,6 @@ export default function CartProduct() {
   const [total, setTotal] = useState(0)
 
   const context = useAuth();
-  console.log(context.auth)
 
   const handleDeleteOrder = async (id) => {
     try {
@@ -86,6 +85,9 @@ export default function CartProduct() {
   // ----------------------------------------------------------------
 
   const handleCheckOut = async () => {
+    context.auth.fullname = data[0].userId.fullname
+    data[0].userId.address !== undefined ? context.auth.address = data[0].userId.address : context.auth.address = ""
+    data[0].userId.phone !== undefined ? context.auth.phone = data[0].userId.phone : context.auth.phone = ""
     navigate('/product-checkout');
   }
 
@@ -212,8 +214,7 @@ export default function CartProduct() {
                                   <Typography>
                                     {
                                       value.productId === null ? ""
-                                        : value.productId.discount === 0 ? ""
-                                          : numberToVND(value.productId.price)
+                                        : numberToVND(value.productId.price)
                                     }
                                   </Typography>
 
@@ -254,7 +255,7 @@ export default function CartProduct() {
                 style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
                 disabled
               >
-                CHECK OUT
+                Không có sản phẩm trong giỏ hàng
               </button>
               :
               <button
@@ -262,7 +263,7 @@ export default function CartProduct() {
                 onClick={() => handleCheckOut()}
                 style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
               >
-                CHECK OUT
+                Thanh toán
               </button>
           }
         </Grid>

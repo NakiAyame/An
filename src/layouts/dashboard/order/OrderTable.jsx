@@ -157,14 +157,14 @@ export default function BasicTable() {
   //   }
   // };
 
-  async function loadOrder() {
+  async function loadOrder(status) {
     try {
       await axios.get(`http://localhost:3500/order/all`)
         .then((data) => {
           console.log(data.data);
           const filterData = [];
           for (let i = 0; i < data.data.length; i++) {
-            if (data.data[i].status === DEFAULT_STATUS) {
+            if (data.data[i].status === status) {
               filterData.push(data.data[i]);
             }
           }
@@ -222,7 +222,7 @@ export default function BasicTable() {
   }
 
   useEffect(() => {
-    loadOrder();
+    loadOrder(DEFAULT_STATUS);
   }, []);
 
   // ----------------------------------- HANDLE GET ORDER OF USER --------------------------------
@@ -291,7 +291,7 @@ export default function BasicTable() {
           toast.error(loadData.error);
         } else {
           console.log(loadData.data);
-          loadAllOrder(DEFAULT_PAGE, DEFAULT_LIMIT, status);
+          loadOrder(status);
           handleClose();
         }
       } catch (err) {

@@ -10,33 +10,60 @@ import {
 } from "recharts";
 import { Typography } from "@mui/material";
 import Title from "./TittleDashboard";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 // Generate Sales Data
 function createData(time, amount) {
   return { time, amount };
 }
 
-const data = [
-  createData("00:00", 0),
-  createData("03:00", 300),
-  createData("06:00", 600),
-  createData("09:00", 800),
-  createData("12:00", 1500),
-  createData("15:00", 2000),
-  createData("18:00", 2400),
-  createData("21:00", 2400),
-  createData("24:00", undefined),
-];
+// const dataRevenue = [
+//   createData(1, 1),
+//   createData(2, 2),
+//   createData(3, 3),
+//   createData(4, 4),
+//   createData(5, 5),
+//   createData(6, 6),
+//   createData(7, 7),
+//   createData(8, 8),
+//   createData(9, 9),
+//   createData(10, 10),
+//   createData(11, 11),
+//   createData(12, 1600800),
+// ];
 
 export default function ChartDashBroad() {
+
+  const [revenue, setRevenue] = useState()
+
+  async function revenueStatistics() {
+    try {
+      let dataRevenue = []
+      await axios.get(`http://localhost:3500/dashboard/revenue-statistics`)
+        .then((data) => {
+          data.data.revenueByMonth.map((value)=>{
+            dataRevenue.push(createData(value.month, value.total))
+          })
+          setRevenue(dataRevenue)
+        })
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    revenueStatistics();
+  }, []);
+
   const theme = useTheme();
 
   return (
     <React.Fragment>
-      <Title>Today</Title>
+      <Title>BIỂU ĐỒ DOANH THU CÁC THÁNG</Title>
       <ResponsiveContainer>
         <LineChart
-          data={data}
+          data={revenue}
           margin={{
             top: 16,
             right: 16,
@@ -62,7 +89,6 @@ export default function ChartDashBroad() {
                 ...theme.typography.body1,
               }}
             >
-              Sales ($)
             </Label>
           </YAxis>
           <Line
