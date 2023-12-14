@@ -61,7 +61,7 @@ function ResponsiveDrawer(props) {
             component="div"
             sx={{ color: "black" }}
           >
-            Dashboard
+            Bảng điều khiển
           </Typography>
           <AccountMenu />
         </Toolbar>
