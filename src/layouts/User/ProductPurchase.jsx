@@ -15,6 +15,7 @@ import {
   DialogContent,
   IconButton,
   Grid,
+  DialogActions
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -32,11 +33,13 @@ export default function ProductPurchase() {
   // const DEFAULT_PAGE = 1;
   // const DEFAULT_LIMIT = 5;
   const DEFAULT_STATUS = "Chờ xác nhận"
+  const CANCEL_STATUS = "Huỷ"
 
   const [data, setData] = useState([]);
   const [status, setStatus] = useState('');
 
   const [orderDetail, setOrderDetail] = useState([]);
+  const [id, setId] = useState();
 
   // --------------------- MODAL HANDLE -----------------------------
 
@@ -91,12 +94,12 @@ export default function ProductPurchase() {
 
   const handleViewOrderDetail = async (id, option) => {
     try {
-      console.log(id);
       const data = await axios.get(`http://localhost:3500/orderDetail/${id}`);
       if (data.error) {
         toast.error(data.error);
       } else {
         console.log(data.data);
+        setId(id);
         setOrderDetail(data.data)
       }
     } catch (err) {
@@ -104,6 +107,27 @@ export default function ProductPurchase() {
     }
     handleOpen();
   };
+
+  // ----------------------------------------------------------------
+
+  const handleRemoveOrder = async (id) => {
+    if (window.confirm("Bạn có muốn cập nhật trạng thái đơn hàng không ?") == true) {
+      try {
+        await axios.put(`http://localhost:3500/order/update-status/${id}`, { orderStatus: CANCEL_STATUS })
+          .then((data) => {
+            handleLoadCartProductById(CANCEL_STATUS)
+            handleClose();
+          })
+          .catch((error) => {
+
+          })
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  // ----------------------------------------------------------------
 
   const style = {
     position: "absolute",
@@ -296,17 +320,21 @@ export default function ProductPurchase() {
 
             </Grid>
           </DialogContent>
-          {/* 
-                    <DialogActions>
-                        <Button
-                            variant="contained"
-                            margin="normal"
-                            color="primary"
-                        // onClick={handleUpdate}
-                        >
-                            Cập nhật thông tin
-                        </Button>
-                    </DialogActions> */}
+          {
+            status === DEFAULT_STATUS ?
+              (
+                <DialogActions>
+                  <Button
+                    variant="contained"
+                    margin="normal"
+                    color="primary"
+                    onClick={() => handleRemoveOrder(id)}
+                  >
+                    Huỷ đặt hàng
+                  </Button>
+                </DialogActions>
+              ) : ""
+          }
         </Box>
       </Modal>
     </>

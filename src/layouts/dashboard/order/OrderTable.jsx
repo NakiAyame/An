@@ -59,7 +59,7 @@ export default function BasicTable() {
   const [pages, setPages] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const context = useAuth();
+  // const context = useAuth();
 
   const OPTION_VIEW_ORDER_BY_ID = "view";
 
@@ -179,7 +179,12 @@ export default function BasicTable() {
 
   // ----------------------------------- API GET ALL USER --------------------------------
   async function loadAllOrder(page, limit, option, startDate, endDate) {
-    if (dayjs(endDate).isSame(dayjs(startDate))) {
+    if(!dayjs(startDate).isValid()){
+      toast.error("Ngày bắt đầu không thể bỏ trống");
+    }else if(!dayjs(endDate).isValid()){
+      toast.error("Ngày kết thúc không thể bỏ trống");
+    }
+    else if (dayjs(endDate).isSame(dayjs(startDate))) {
       toast.error(
         "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
       );
@@ -255,7 +260,7 @@ export default function BasicTable() {
 
   // ---------------------------------------------------------------
 
-  const handlePaging = (event, value) => {
+  const handlePaging = (value) => {
     setCurrentPage(value === undefined ? 1 : value);
     loadAllOrder(value, DEFAULT_LIMIT, status, fromDate, toDate);
   };
@@ -295,21 +300,21 @@ export default function BasicTable() {
     }
   };
 
-  const handleDeleteOrder = async (id, orderId, option) => {
-    try {
-      const loadData = await axios
-        .delete(`http://localhost:3500/orderDetail/${id}`, {
-          headers: { Authorization: context.auth.token },
-          withCredentials: true,
-        })
-        .then((data) => {
-          console.log(data);
-          handleViewOrderDetail(orderId, option);
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleDeleteOrder = async (id, orderId, option) => {
+  //   try {
+  //     const loadData = await axios
+  //       .delete(`http://localhost:3500/orderDetail/${id}`, {
+  //         headers: { Authorization: context.auth.token },
+  //         withCredentials: true,
+  //       })
+  //       .then((data) => {
+  //         console.log(data);
+  //         handleViewOrderDetail(orderId, option);
+  //       });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <>
@@ -345,7 +350,7 @@ export default function BasicTable() {
                 label="Từ ngày"
                 value={dayjs(fromDate)}
                 onChange={handleStartDateChange}
-              // maxDate={currentDate}
+                maxDate={toDate}
               />
             </Grid>
 
@@ -354,11 +359,12 @@ export default function BasicTable() {
                 label="Đến ngày"
                 value={dayjs(toDate)}
                 onChange={handleEndDateChange}
+                maxDate={dayjs().add(1, 'day')}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
               <ButtonCustomize
-                onClick={() => handlePaging()}
+                onClick={() => handlePaging(1)}
                 nameButton="Lọc"
                 variant="contained"
                 sx={{ marginTop: "8px" }}

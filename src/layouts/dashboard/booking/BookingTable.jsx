@@ -50,7 +50,7 @@ const style = {
 export default function BookingTable() {
   const DEFAULT_PAGE = 1;
   const DEFAULT_LIMIT = 10;
-  const DEFAULT_STATUS = "Chờ thanh toán";
+  const DEFAULT_STATUS = "Chờ xác nhận";
   // const DEFAULT_FROMDATE = "";
   // const DEFAULT_TODATE = "";
 
@@ -60,7 +60,7 @@ export default function BookingTable() {
   const [pages, setPages] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const context = useAuth();
+  // const context = useAuth();
 
   const OPTION_VIEW_ORDER_BY_ID = "view";
 
@@ -141,23 +141,23 @@ export default function BookingTable() {
   };
 
   // --------------------- HANDLE DELETE -----------------------------
-  const handleDelete = async (id) => {
-    if (window.confirm("Bạn có muốn xoá Booking này không ?") == true) {
-      try {
-        console.log(id);
-        const data = await axios.delete(`http://localhost:3500/booking/${id}`);
-        if (data.error) {
-          toast.error(data.error);
-        } else {
-          console.log(data);
-          toast.success("Xoá Booking thành công");
-          loadAllBooking();
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   if (window.confirm("Bạn có muốn xoá Booking này không ?") == true) {
+  //     try {
+  //       console.log(id);
+  //       const data = await axios.delete(`http://localhost:3500/booking/${id}`);
+  //       if (data.error) {
+  //         toast.error(data.error);
+  //       } else {
+  //         console.log(data);
+  //         toast.success("Xoá Booking thành công");
+  //         loadAllBooking();
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // };
 
   async function loadBooking() {
     try {
@@ -172,7 +172,7 @@ export default function BookingTable() {
             }
           }
           setData(filterData);
-          setPages(filterData / DEFAULT_LIMIT);
+          setPages(filterData.length / DEFAULT_LIMIT);
         });
     } catch (err) {
       console.log(err);
@@ -182,43 +182,48 @@ export default function BookingTable() {
 
   // ----------------------------------- API GET ALL USER --------------------------------
   async function loadAllBooking(page, limit, option, startDate, endDate) {
-    // if (dayjs(endDate).isSame(dayjs(startDate))) {
-    //   toast.error(
-    //     "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
-    //   );
-    // } else if (dayjs(endDate).isBefore(dayjs(startDate))) {
-    //   toast.error(
-    //     "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
-    //   );
-    // } else {
-    console.log("Check ngày", startDate, endDate);
-    try {
-      setStatus(option);
-      const loadData = await axios
-        .get(
-          `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc&startDate=${convertDate(startDate) !== "NaN-aN-aN"
-            ? convertDate(startDate)
-            : ""
-          }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
-          }`
-        )
-        .then((data) => {
-          console.log(data.data.docs);
-          const filterData = [];
-
-          for (let i = 0; i < data.data.docs.length; i++) {
-            if (data.data.docs[i].status === option) {
-              filterData.push(data.data.docs[i]);
-            }
-          }
-          console.log(filterData);
-          setData(filterData);
-          setPages(filterData / DEFAULT_LIMIT);
-        });
-    } catch (err) {
-      console.log(err);
+    if(!dayjs(startDate).isValid()){
+      toast.error("Ngày bắt đầu không thể bỏ trống");
+    }else if(!dayjs(endDate).isValid()){
+      toast.error("Ngày kết thúc không thể bỏ trống");
     }
-    // }
+    else if (dayjs(endDate).isSame(dayjs(startDate))) {
+      toast.error(
+        "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
+      );
+    } else if (dayjs(endDate).isBefore(dayjs(startDate))) {
+      toast.error(
+        "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
+      );
+    } else{
+      console.log("Check ngày", startDate, endDate);
+      try {
+        setStatus(option);
+        const loadData = await axios
+          .get(
+            `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc&startDate=${convertDate(startDate) !== "NaN-aN-aN"
+              ? convertDate(startDate)
+              : ""
+            }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
+            }`
+          )
+          .then((data) => {
+            console.log(data.data.docs);
+            const filterData = [];
+
+            for (let i = 0; i < data.data.docs.length; i++) {
+              if (data.data.docs[i].status === option) {
+                filterData.push(data.data.docs[i]);
+              }
+            }
+            console.log(filterData);
+            setData(filterData);
+            setPages(filterData / DEFAULT_LIMIT);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    }
   }
 
   useEffect(() => {
@@ -262,7 +267,7 @@ export default function BookingTable() {
 
   // ---------------------------------------------------------------
 
-  const handlePaging = (event, value) => {
+  const handlePaging = (value) => {
     setCurrentPage(value === undefined ? 1 : value);
     loadAllBooking(value, DEFAULT_LIMIT, status, fromDate, toDate);
   };
@@ -302,21 +307,21 @@ export default function BookingTable() {
     }
   };
 
-  const handleDeleteOrder = async (id, bookingId, option, status) => {
-    try {
-      const loadData = await axios
-        .delete(`http://localhost:3500/bookingDetail/${id}`, {
-          headers: { Authorization: context.auth.token },
-          withCredentials: true,
-        })
-        .then((data) => {
-          console.log(data);
-          handleViewOrderDetail(bookingId, option);
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleDeleteOrder = async (id, bookingId, option, status) => {
+  //   try {
+  //     const loadData = await axios
+  //       .delete(`http://localhost:3500/bookingDetail/${id}`, {
+  //         headers: { Authorization: context.auth.token },
+  //         withCredentials: true,
+  //       })
+  //       .then((data) => {
+  //         console.log(data);
+  //         handleViewOrderDetail(bookingId, option);
+  //       });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <>
@@ -349,7 +354,7 @@ export default function BookingTable() {
                 label="Từ ngày"
                 value={dayjs(fromDate)}
                 onChange={handleStartDateChange}
-              // maxDate={currentDate}
+                maxDate={toDate}
               />
             </Grid>
 
@@ -358,11 +363,12 @@ export default function BookingTable() {
                 label="Đến ngày"
                 value={dayjs(toDate)}
                 onChange={handleEndDateChange}
+                maxDate={dayjs().add(1, 'day')}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
               <ButtonCustomize
-                onClick={() => handlePaging()}
+                onClick={() => handlePaging(1)}
                 nameButton="Lọc"
                 variant="contained"
                 sx={{ marginTop: "8px" }}
@@ -560,8 +566,8 @@ export default function BookingTable() {
                               ? value.serviceId.price
                               : ""}
                           </TableCell>
-                          <TableCell align="left">
-                            {/* {status === "Chờ thanh toán" ? ( */}
+                          {/* <TableCell align="left">
+                            {status === "Chờ thanh toán" ? (
                             <Button
                               variant="contained"
                               margin="normal"
@@ -577,10 +583,10 @@ export default function BookingTable() {
                             >
                               Xoá
                             </Button>
-                            {/* ) : (
+                            ) : (
                               ""
-                            )} */}
-                          </TableCell>
+                            )}
+                          </TableCell> */}
                         </TableRow>
                       );
                     })}
