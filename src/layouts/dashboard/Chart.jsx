@@ -34,19 +34,19 @@ function createData(time, amount) {
 // ];
 
 export default function ChartDashBroad() {
-
-  const [revenue, setRevenue] = useState()
+  const [revenue, setRevenue] = useState();
 
   async function revenueStatistics() {
     try {
-      let dataRevenue = []
-      await axios.get(`http://localhost:3500/dashboard/revenue-statistics`)
+      let dataRevenue = [];
+      await axios
+        .get(`http://localhost:3500/dashboard/revenue-statistics`)
         .then((data) => {
-          data.data.revenueByMonth.map((value)=>{
-            dataRevenue.push(createData(value.month, value.total))
-          })
-          setRevenue(dataRevenue)
-        })
+          data.data.revenueByMonth.map((value) => {
+            dataRevenue.push(createData(value.month, value.total));
+          });
+          setRevenue(dataRevenue);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -60,7 +60,7 @@ export default function ChartDashBroad() {
 
   return (
     <React.Fragment>
-      <Title>BIỂU ĐỒ DOANH THU CÁC THÁNG</Title>
+      <Title>BIỂU ĐỒ DOANH THU DỊCH VỤ CÁC THÁNG</Title>
       <ResponsiveContainer>
         <LineChart
           data={revenue}
@@ -88,8 +88,7 @@ export default function ChartDashBroad() {
                 fill: theme.palette.text.primary,
                 ...theme.typography.body1,
               }}
-            >
-            </Label>
+            ></Label>
           </YAxis>
           <Line
             isAnimationActive={false}
