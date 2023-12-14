@@ -50,7 +50,7 @@ export default function DepositsDashboard(props) {
 
       {props.staff !== undefined ? (
         <>
-          <Title>Số lượng người dùng</Title>
+          <Title>Số lượng nhân viên</Title>
           <Typography component="p" variant="h4">
             {props.staff !== undefined ? Number(props.staff) : ''}
           </Typography>

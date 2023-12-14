@@ -38,9 +38,9 @@ export default function ProductCheckout() {
     const [loged, setLoged] = useState(false)
     const [total, setTotal] = useState(0)
 
-    const [recipientName, setRecipientName] = useState(' ')
-    const [recipientPhoneNumber, setRecipientPhoneNumber] = useState(' ')
-    const [deliveryAddress, setDeliveryAddress] = useState(' ')
+    const [recipientName, setRecipientName] = useState(context.auth.fullname)
+    const [recipientPhoneNumber, setRecipientPhoneNumber] = useState(context.auth.address)
+    const [deliveryAddress, setDeliveryAddress] = useState(context.auth.phone)
 
 
     const checkoutProduct = async () => {
@@ -99,6 +99,9 @@ export default function ProductCheckout() {
                     toast.error(loadData.error);
                 } else {
                     setData(loadData.data)
+                    setRecipientName(loadData.data[0].userId.fullname)
+                    setRecipientPhoneNumber(loadData.data[0].userId.phone === undefined ? "" : loadData.data[0].userId.phone)
+                    setDeliveryAddress(loadData.data[0].userId.address === undefined ? "" : loadData.data[0].userId.address)
                     console.log(loadData.data);
                     let totalPrice = 0;
                     for (let i = 0; i < loadData.data.length; i++) {
@@ -141,6 +144,7 @@ export default function ProductCheckout() {
                         placeholder='Họ và tên'
                         style={inputStyle}
                         onChange={(e) => setRecipientName(e.target.value)}
+                        defaultValue={recipientName}
                     ></input>
 
                     <p style={tagPStyle}>Địa chỉ *</p>
@@ -149,6 +153,7 @@ export default function ProductCheckout() {
                         placeholder="Địa chỉ"
                         style={inputStyle}
                         onChange={(e) => setDeliveryAddress(e.target.value)}
+                        defaultValue={deliveryAddress}
                     ></input>
 
                     {/* <p style={ tagPStyle }>Tỉnh / Thành phố *</p>
@@ -160,6 +165,7 @@ export default function ProductCheckout() {
                         placeholder="Số điện thoại"
                         style={inputStyle}
                         onChange={(e) => setRecipientPhoneNumber(e.target.value)}
+                        defaultValue={recipientPhoneNumber}
                     ></input>
                 </Grid>
                 <Grid item xs={5}>

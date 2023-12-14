@@ -159,7 +159,7 @@ export default function BookingTable() {
   //   }
   // };
 
-  async function loadBooking() {
+  async function loadBooking(status) {
     try {
       await axios.get(`http://localhost:3500/booking/get-booking`)
         .then((data) => {
@@ -228,7 +228,7 @@ export default function BookingTable() {
 
   useEffect(() => {
     // loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_STATUS);
-    loadBooking();
+    loadBooking(DEFAULT_STATUS);
 
   }, []);
 
@@ -285,7 +285,7 @@ export default function BookingTable() {
 
   const hanldeClickChangeStatus = async (status, id) => {
     if (
-      window.confirm("Bạn có muốn cập nhật trạng thái đơn hàng không ?") == true
+      window.confirm("Bạn có muốn cập nhật trạng thái đơn hàng không ?") === true
     ) {
       try {
         const loadData = await axios.put(
@@ -298,7 +298,7 @@ export default function BookingTable() {
           toast.error(loadData.error);
         } else {
           console.log(loadData.data);
-          loadAllBooking(DEFAULT_PAGE, DEFAULT_LIMIT, status);
+          loadBooking(status);
           handleClose();
         }
       } catch (err) {
