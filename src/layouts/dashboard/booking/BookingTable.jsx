@@ -141,23 +141,23 @@ export default function BookingTable() {
   };
 
   // --------------------- HANDLE DELETE -----------------------------
-  const handleDelete = async (id) => {
-    if (window.confirm("Bạn có muốn xoá Booking này không ?") == true) {
-      try {
-        console.log(id);
-        const data = await axios.delete(`http://localhost:3500/booking/${id}`);
-        if (data.error) {
-          toast.error(data.error);
-        } else {
-          console.log(data);
-          toast.success("Xoá Booking thành công");
-          loadAllBooking();
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   if (window.confirm("Bạn có muốn xoá Booking này không ?") == true) {
+  //     try {
+  //       console.log(id);
+  //       const data = await axios.delete(`http://localhost:3500/booking/${id}`);
+  //       if (data.error) {
+  //         toast.error(data.error);
+  //       } else {
+  //         console.log(data);
+  //         toast.success("Xoá Booking thành công");
+  //         loadAllBooking();
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // };
 
   async function loadBooking() {
     try {
@@ -182,7 +182,12 @@ export default function BookingTable() {
 
   // ----------------------------------- API GET ALL USER --------------------------------
   async function loadAllBooking(page, limit, option, startDate, endDate) {
-    if (dayjs(endDate).isSame(dayjs(startDate))) {
+    if(!dayjs(startDate).isValid()){
+      toast.error("Ngày bắt đầu không thể bỏ trống");
+    }else if(!dayjs(endDate).isValid()){
+      toast.error("Ngày kết thúc không thể bỏ trống");
+    }
+    else if (dayjs(endDate).isSame(dayjs(startDate))) {
       toast.error(
         "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
       );
@@ -190,7 +195,7 @@ export default function BookingTable() {
       toast.error(
         "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
       );
-    } else {
+    } else{
       console.log("Check ngày", startDate, endDate);
       try {
         setStatus(option);

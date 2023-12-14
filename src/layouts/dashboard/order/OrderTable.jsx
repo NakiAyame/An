@@ -179,7 +179,12 @@ export default function BasicTable() {
 
   // ----------------------------------- API GET ALL USER --------------------------------
   async function loadAllOrder(page, limit, option, startDate, endDate) {
-    if (dayjs(endDate).isSame(dayjs(startDate))) {
+    if(!dayjs(startDate).isValid()){
+      toast.error("Ngày bắt đầu không thể bỏ trống");
+    }else if(!dayjs(endDate).isValid()){
+      toast.error("Ngày kết thúc không thể bỏ trống");
+    }
+    else if (dayjs(endDate).isSame(dayjs(startDate))) {
       toast.error(
         "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
       );
