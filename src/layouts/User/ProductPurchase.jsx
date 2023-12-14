@@ -52,7 +52,7 @@ export default function ProductPurchase() {
       try {
         setStatus(option)
         const loadData = await axios.get(
-          `http://localhost:3500/order/${context.auth.id}`,
+          `http://localhost:3500/order/get-all-order-by-uid/${context.auth.id}`,
           {
             headers: { 'Authorization': context.auth.token },
             withCredentials: true
@@ -135,19 +135,19 @@ export default function ProductPurchase() {
     });
   };
 
+  const statusList = ['Chờ xác nhận', 'Đang giao hàng', 'Đã nhận hàng', 'Huỷ']
+
   return (
     <>
       <h1 style={{ textAlign: 'center', marginTop: '100px' }}>SẢN PHẨM ĐÃ MUA</h1>
       <Grid container>
-        <Grid item xs={4}>
-          <button className="button-status" style={buttonStyle} onClick={(e) => handleLoadCartProductById('Chờ xác nhận')}>Chờ xác nhận</button>
-        </Grid>
-        <Grid item xs={4}>
-          <button className="button-status" style={buttonStyle} onClick={(e) => handleLoadCartProductById('Đang giao hàng')}>Đang giao hàng</button>
-        </Grid>
-        <Grid item xs={4}>
-          <button className="button-status" style={buttonStyle} onClick={(e) => handleLoadCartProductById('Đã nhận hàng')}>Đã nhận hàng</button>
-        </Grid>
+        {statusList.map((value) => {
+          return (
+            <Grid item xs={12 / statusList.length}>
+              <button className="button-status" style={buttonStyle} onClick={(e) => handleLoadCartProductById(value)}>{value}</button>
+            </Grid>
+          )
+        })}
       </Grid>
 
       <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
