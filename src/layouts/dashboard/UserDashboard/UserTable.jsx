@@ -116,6 +116,7 @@ const BasicTable = () => {
                 setAddress(data.data.address)
                 setPassWord(password)
                 setStatus(data.data.status)
+                setRole(data.data.role)
             }
         } catch (err) {
             console.log(err);
@@ -284,10 +285,9 @@ const BasicTable = () => {
                                     <TableCell children>STT</TableCell>
                                     <TableCell align="right">Họ và tên</TableCell>
                                     <TableCell align="right">Số điện thoại</TableCell>
-                                    <TableCell align="right">Giới tính</TableCell>
+                                    <TableCell align="right">Loại tài khoản</TableCell>
                                     <TableCell align="right">Email</TableCell>
                                     <TableCell align="right">Trạng thái</TableCell>
-                                    <TableCell align="right">Veify Code</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -305,11 +305,13 @@ const BasicTable = () => {
                                                 <TableCell align="right">{value.fullname}</TableCell>
                                                 <TableCell align="right">{value.phone}</TableCell>
                                                 <TableCell align="right">
-                                                    {(value.gender === true ? "Nam" : "Nữ")}
+                                                    {(value.role === 'admin' ? "Quản lý"
+                                                        : value.role === 'staff' ? 'Nhân viên'
+                                                            : 'Khách hàng'
+                                                    )}
                                                 </TableCell>
                                                 <TableCell align="right">{value.email}</TableCell>
                                                 <TableCell align="right">{value.status}</TableCell>
-                                                <TableCell align="right">{value.verifyCode}</TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -446,9 +448,8 @@ const BasicTable = () => {
                                             label="Role"
                                             onChange={handleRoleChange}
                                         >
-                                            <MenuItem value="admin">Admin</MenuItem>
-                                            <MenuItem value="customer">Customer</MenuItem>
-                                            <MenuItem value="staff">Staff</MenuItem>
+                                            <MenuItem value="admin">Quản lý</MenuItem>
+                                            <MenuItem value="staff">Nhân viên</MenuItem>
                                             {/* <MenuItem value={30}>Thirty</MenuItem> */}
                                         </Select>
                                     </FormControl>

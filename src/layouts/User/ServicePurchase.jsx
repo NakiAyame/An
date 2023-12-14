@@ -78,7 +78,6 @@ export default function ServicePurchase() {
 
     const handleLoadCartServiceById = async (option) => {
         if (context.auth.token !== undefined) {
-            setLoged(true)
             try {
                 setStatus(option)
                 const loadData = await axios.get(
@@ -90,13 +89,14 @@ export default function ServicePurchase() {
                 )
                     .then((data) => {
                         const filterData = []
-                        console.log(data.data)
+                        console.log(option)
 
                         for (let i = 0; i < data.data.docs.length; i++) {
                             if (data.data.docs[i].status === option) {
                                 filterData.push(data.data.docs[i])
                             }
                         }
+                        console.log(filterData)
                         setData(filterData)
                     })
             } catch (err) {
