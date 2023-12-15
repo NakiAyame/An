@@ -28,6 +28,7 @@ import useAuth from '../../hooks/useAuth';
 import DateFormat from '../../components/DateFormat';
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import ButtonCustomize from "../../components/Button/Button";
 
 export default function ProductPurchase() {
   // const DEFAULT_PAGE = 1;
@@ -300,14 +301,13 @@ export default function ProductPurchase() {
                             {
                               status === 'Đã nhận hàng'
                                 ? (
-                                  <Button
-                                    variant="contained"
-                                    margin="normal"
-                                    color="primary"
-                                    onClick={() => handleFeedBack(value.productId._id)}
-                                  >
-                                    Đánh giá
-                                  </Button>
+                                  <ButtonCustomize
+                                  onClick={() => handleFeedBack(value.productId._id)}
+nameButton="Đánh giá"
+variant="contained"
+sx={{ marginTop: "8px" }}
+/>
+                                  
                                 ) : ''
                             }
 
