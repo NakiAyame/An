@@ -10,6 +10,7 @@ import useAuth from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from 'bootstrap';
 import dayjs from "dayjs";
+import { Typography } from '@mui/material';
 
 const inputStyle = {
     width: '100%',
@@ -208,8 +209,9 @@ export default function ProductCheckout() {
                         </Grid>
                     </Grid>
                     <hr />
-                    <input type="checkbox" />
-                    <label style={{ fontWeight: 'bolder' }}>Trả tiền mặt khi nhận hàng</label><br />
+                    {/* <input type="checkbox" /> */}
+                    {/* <label style={{ fontWeight: 'bolder' }}>Trả tiền mặt khi nhận hàng</label><br /> */}
+                    <Typography> <strong>* Lưu ý:</strong> Sau khi điền đầy đủ thông tin chính xác, ấn đặt hàng, đơn hàng của bạn sẽ được chúng tôi chuẩn bị và giao hàng. Tùy vào địa chỉ, bạn sẽ nhận hàng vào từ 2-4 ngày tới. Hãy chú ý điện thoại để nhận hàng, sau đó kiểm tra kỹ đơn hàng sau đó mới thanh toán, nếu có vấn đề gì về đơn hàng hãy liên lạc cho chúng tôi để giải quyết.</Typography>
                     <button style={{
                         cursor: 'pointer',
                         height: '40px',

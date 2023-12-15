@@ -263,7 +263,7 @@ export default function CartProduct() {
                 onClick={() => handleCheckOut()}
                 style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
               >
-                Thanh toán
+                Đặt hàng
               </button>
           }
         </Grid>

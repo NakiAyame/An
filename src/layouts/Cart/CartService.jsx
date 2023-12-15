@@ -297,7 +297,7 @@ export default function CartService() {
                 style={{ color: 'pink', backgroundColor: 'black', width: '100%', padding: '15px 0' }}
                 disabled
               >
-                CHECK OUT
+                ĐẶT DỊCH VỤ
               </button>
               :
               <button
