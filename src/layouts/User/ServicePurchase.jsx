@@ -324,14 +324,13 @@ export default function ServicePurchase() {
                                                         {
                                                             status === 'Hoàn thành'
                                                                 ? (
-                                                                    <Button
-                                                                        variant="contained"
-                                                                        margin="normal"
-                                                                        color="primary"
-                                                                        onClick={() => handleFeedBack(value.serviceId._id)}
-                                                                    >
-                                                                        Đánh giá
-                                                                    </Button>
+                                                                    <ButtonCustomize
+                                                                    onClick={() => handleFeedBack(value.serviceId._id)}
+            nameButton="Đánh giá"
+            variant="contained"
+            sx={{ marginTop: "8px" }}
+          />
+                                                                    
                                                                 ) : ''
                                                         }
                                                     </TableCell>

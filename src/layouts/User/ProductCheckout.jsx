@@ -39,8 +39,8 @@ export default function ProductCheckout() {
     const [total, setTotal] = useState(0)
 
     const [recipientName, setRecipientName] = useState(context.auth.fullname)
-    const [recipientPhoneNumber, setRecipientPhoneNumber] = useState(context.auth.address)
-    const [deliveryAddress, setDeliveryAddress] = useState(context.auth.phone)
+    const [recipientPhoneNumber, setRecipientPhoneNumber] = useState(context.auth.phone)
+    const [deliveryAddress, setDeliveryAddress] = useState(context.auth.address)
 
 
     const checkoutProduct = async () => {
