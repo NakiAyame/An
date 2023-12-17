@@ -154,11 +154,10 @@ export default function ProductPurchase() {
   }
 
   const numberToVND = (number) => {
-    return 1
-    // number.toLocaleString("vi-VN", {
-    //   style: "currency",
-    //   currency: "VND",
-    // });
+    return number.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
   };
 
   const statusList = ['Chờ xác nhận', 'Đang giao hàng', 'Đã nhận hàng', 'Huỷ']
@@ -262,60 +261,9 @@ export default function ProductPurchase() {
                           {index + 1}
                         </TableCell>
                         <TableCell align="left">{value.orderId}</TableCell>
-                        <TableCell align="left">{value.productId !== null ? value.productId.productName : ''}</TableCell>
+                        <TableCell align="left">{value.productId !== null ? value.product.productName : ''}</TableCell>
                         <TableCell align="left">{value.quantity}</TableCell>
-                        <TableCell align="left">
-                          {
-                            value.productId.discount !== 0
-                              &&
-                              dayjs().isBetween(dayjs(value.productId.saleStartTime), dayjs(value.productId.saleEndTime))
-                              ?
-                              (
-                                <>
-                                  <Typography style={{ textDecoration: "line-through" }}>
-                                    {
-                                      value.productId === null ? ""
-                                        : value.productId.discount === 0 ? ""
-                                          : numberToVND(value.productId.price)
-                                    }
-                                  </Typography>
-                                  <Typography style={{ color: 'red' }}>
-                                    {
-                                      value.productId === null ? ""
-                                        :
-                                        numberToVND((value.quantity * (value.productId.price - (value.productId.price * value.productId.discount / 100))))
-                                    }
-                                  </Typography>
-                                </>
-                              )
-                              :
-                              (
-                                <Typography>
-                                  {
-                                    value.productId === null ? ""
-                                      : value.productId.discount === 0 ? ""
-                                        : numberToVND(value.productId.price)
-                                  }
-                                </Typography>
-
-                              )
-                          }
-                        </TableCell>
-                        <TableCell align="left">
-                          {
-                            status === 'Đã nhận hàng'
-                              ? (
-                                <ButtonCustomize
-                                  onClick={() => handleFeedBack(value.productId._id)}
-                                  nameButton="Đánh giá"
-                                  variant="contained"
-                                  sx={{ marginTop: "8px" }}
-                                />
-
-                              ) : ''
-                          }
-
-                        </TableCell>
+                        <TableCell align="left">{numberToVND(value.price)}</TableCell>
                       </TableRow>
                     );
                   })}
