@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import dayjs from "dayjs";
 
@@ -197,7 +197,7 @@ export default function CartProduct() {
                                       {
                                         value.productId === null ? ""
                                           : value.productId.discount === 0 ? ""
-                                            : numberToVND(value.productId.price)
+                                            : numberToVND((value.quantity * value.productId.price))
                                       }
                                     </Typography>
                                     <Typography style={{ color: 'red' }}>

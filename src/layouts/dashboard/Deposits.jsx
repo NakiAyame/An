@@ -1,21 +1,20 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Title from './TittleDashboard';
 
-import axios from "axios";
+// import axios from "axios";
 
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
 
-function preventDefault(event) {
-  event.preventDefault();
-}
+// function preventDefault(event) {
+//   event.preventDefault();
+// }
 
 
 
 export default function DepositsDashboard(props) {
-  console.log(props)
   return (
     <React.Fragment>
       {props.props !== undefined ? (

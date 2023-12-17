@@ -8,9 +8,6 @@ import {
   AppBar,
   CircularProgress,
   Backdrop,
-  Paper,
-  Avatar,
-  Divider,
 } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -24,8 +21,8 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Description } from "@mui/icons-material";
-import TypographyCus from "../Typography/DescriptionCus";
+// import { Description } from "@mui/icons-material";
+// import TypographyCus from "../Typography/DescriptionCus";
 import ChoosePet from "./ModalChoosePet";
 import useAuth from "../../hooks/useAuth";
 import CommentService from "../Comments/CommentsService";
@@ -87,7 +84,7 @@ const ServiceDetail = ({ open, onClose, service }) => {
     description,
     price,
     rating,
-    reviews,
+    // reviews,
     _id,
     serviceImage,
   } = service;
