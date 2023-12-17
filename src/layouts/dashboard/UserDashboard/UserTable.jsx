@@ -85,13 +85,11 @@ const BasicTable = () => {
     // --------------------- HANDLE ROLE -----------------------------
     const handleRoleChange = (event) => {
         setRole(event.target.value);
-        console.log(role);
     };
 
     // --------------------- HANDLE GENDER -----------------------------
     const handleGenderChange = (event) => {
         setGender(event.target.value);
-        console.log(gender);
     };
 
     // --------------------- HANDLE OPEN MODAL CREATE -----------------------------
@@ -341,7 +339,7 @@ const BasicTable = () => {
                                                 <TableCell align="right">
                                                     {(value.role === 'admin' ? "Quản lý"
                                                         : value.role === 'staff' ? 'Nhân viên'
-                                                            : 'Khách hàng'
+                                                            : value.role === 'customer' ? 'Khách hàng' : ""
                                                     )}
                                                 </TableCell>
                                                 <TableCell align="right">{value.email}</TableCell>
@@ -488,9 +486,12 @@ const BasicTable = () => {
                                             label="Role"
                                             onChange={handleRoleChange}
                                         >
+                                            {/* {
+                                                role === "customter" ? console.log(role) : ''
+                                            } */}
                                             <MenuItem value="admin">Quản lý</MenuItem>
                                             <MenuItem value="staff">Nhân viên</MenuItem>
-                                            {/* <MenuItem value={30}>Thirty</MenuItem> */}
+                                            <MenuItem value={"customer"} disabled>Khách hàng</MenuItem>
                                         </Select>
                                     </FormControl>
                                     {role === "" ? <span style={errorStyle}>Vui lòng chọn role</span> : ""}
