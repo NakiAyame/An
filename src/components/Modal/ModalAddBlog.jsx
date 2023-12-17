@@ -129,7 +129,7 @@ const ModalAddBlog = (props) => {
           toast.success("Thêm mới dịch vụ thành công!");
           setTitle("");
           setContent("");
-          setImage("");
+          setImage(null);
           handUpdateTable(page);
           onClose();
         }

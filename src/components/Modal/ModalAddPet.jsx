@@ -23,7 +23,7 @@ import { Grid, Input } from "@mui/material";
 import ButtonCustomize from "../Button/Button";
 
 const PET_NAME_REGEX =
-  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ0-9\s]{2,}$/;
+  /^[ A-Za-zÀ-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]{2,}$/;
 // /^[ A-Za-z0-9À-Ỹà-ỹĂ-Ắă-ằẤ-Ứấ-ứÂ-Ấâ-ấĨ-Ỹĩ-ỹĐđÊ-Ểê-ểÔ-Ốô-ốơ-ởƠ-Ớơ-ớƯ-Ứư-ứỲ-Ỵỳ-ỵ\s]+$/;
 const PET_HEIH_REGEX = /^\d*(\.\d+)?$/;
 const ModalAddPet = (props) => {
@@ -146,12 +146,16 @@ const ModalAddPet = (props) => {
       toast.error("Tên thú cưng không được để trống");
     } else if (!valid) {
       toast.error(
-        "Tên thú cưng không được nhập kí tự đặc biệt và phải có ít nhất 2 kí tự"
+        "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
       );
     } else if (!validHeight) {
-      toast.error("Chiều cao thú cưng phải là số nguyên hoặc số thập phân");
+      toast.error(
+        "Chiều cao thú cưng phải là số nguyên hoặc số thập phân (VD: 0.2)"
+      );
     } else if (!validWeight) {
-      toast.error("Cân nặng thú cưng phải là số nguyên hoặc số thập phân");
+      toast.error(
+        "Cân nặng thú cưng phải là số nguyên hoặc số thập phân (VD: 0.2)"
+      );
     } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại thú cưng mình muốn");
     } else {
@@ -180,6 +184,7 @@ const ModalAddPet = (props) => {
           setColor("");
           setHeight(0);
           setWeight(0);
+          setImage(null);
           handUpdateTable();
           onClose();
         }

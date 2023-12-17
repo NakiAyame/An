@@ -238,7 +238,7 @@ const ServiceDetail = () => {
             <StyledBreadcrumb label="Thông tin chi tiết dịch vụ" />
           </Breadcrumbs>
         </Container>
-        <Grid container spacing={3} sx={{ flexGrow: 2 }}>
+        <Grid container spacing={1} sx={{ flexGrow: 2 }}>
           <Grid item xs={12} sm={8}>
             <Container maxWidth="false" sx={{ pb: 3 }}>
               <Paper
