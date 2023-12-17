@@ -9,27 +9,18 @@ import {
     Paper,
     Box,
     Button,
-    Typography,
     Modal,
     DialogTitle,
     DialogContent,
     DialogActions,
     IconButton,
-    TextField,
     Grid,
-    InputLabel,
-    MenuItem,
-    FormControl,
-    Select,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
-    ButtonGroup,
     Stack,
-    Pagination
+    Pagination,
+    Typography
 } from "@mui/material";
 
-import { styled } from "@mui/material/styles";
+// import { styled } from "@mui/material/styles";
 
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -40,30 +31,23 @@ import { toast } from "react-toastify";
 import useAuth from '../../hooks/useAuth';
 import DateFormat from '../../components/DateFormat';
 import ButtonCustomize from "../../components/Button/Button";
-import { NavLink, useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
-
-const bull = (
-    <Box
-        component="span"
-        sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-    >
-        •
-    </Box>
-);
+import { useNavigate } from "react-router-dom";
+// import dayjs from "dayjs";
 
 export default function ServicePurchase() {
-    const DEFAULT_PAGE = 1;
-    const DEFAULT_LIMIT = 5;
+    // const DEFAULT_PAGE = 1;
+    // const DEFAULT_LIMIT = 5;
     const DEFAULT_STATUS = "Chờ xác nhận"
+    const CANCEL_STATUS = "Huỷ"
 
     const [data, setData] = useState([]);
-    const [quantity, setQuantity] = useState(0)
-    const [loged, setLoged] = useState(false)
-    const [total, setTotal] = useState(0)
+    // const [quantity, setQuantity] = useState(0)
+    // const [loged, setLoged] = useState(false)
+    // const [total, setTotal] = useState(0)
     const [pages, setPages] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [status, setStatus] = useState('');
+    const [id, setId] = useState();
 
     const [orderDetail, setOrderDetail] = useState([]);
 
@@ -80,8 +64,7 @@ export default function ServicePurchase() {
         if (context.auth.token !== undefined) {
             try {
                 setStatus(option)
-                const loadData = await axios.get(
-                    `http://localhost:3500/booking/get-all-booking-by-uid/${context.auth.id}`,
+                await axios.get(`http://localhost:3500/booking/get-all-booking-by-uid/${context.auth.id}`,
                     {
                         headers: { 'Authorization': context.auth.token },
                         withCredentials: true
@@ -120,12 +103,12 @@ export default function ServicePurchase() {
 
     const handleViewBookingDetail = async (id, option) => {
         try {
-            console.log(id);
             const data = await axios.get(`http://localhost:3500/bookingDetail/${id}`);
             if (data.error) {
                 toast.error(data.error);
             } else {
                 console.log(data.data);
+                setId(id);
                 setOrderDetail(data.data)
             }
         } catch (err) {
@@ -133,6 +116,27 @@ export default function ServicePurchase() {
         }
         handleOpen();
     };
+
+    // ----------------------------------------------------------------
+
+    const handleRemoveOrder = async (id) => {
+        if (window.confirm("Bạn có muốn huỷ dịch vụ không ?") === true) {
+            try {
+                await axios.put(`http://localhost:3500/booking/update-status/${id}`, { bookingStatus: CANCEL_STATUS })
+                    .then((data) => {
+                        handleLoadCartServiceById(CANCEL_STATUS)
+                        handleClose();
+                    })
+                    .catch((error) => {
+
+                    })
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+
+    // ----------------------------------------------------------------
 
     const handleFeedBack = (id) => {
         context.auth.feedback = true
@@ -198,8 +202,11 @@ export default function ServicePurchase() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data &&
-                                data.map((value, index) => {
+                            {data.length === 0
+                                ? (<TableCell colSpan={5} style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                                    KHÔNG CÓ SẢN PHẨM TRONG MỤC NÀY
+                                </TableCell>)
+                                : data.map((value, index) => {
                                     return (
                                         <TableRow
                                             key={index}
@@ -281,56 +288,23 @@ export default function ServicePurchase() {
                                                     <TableCell component="th" scope="row">
                                                         {index + 1}
                                                     </TableCell>
-                                                    <TableCell align="left">{value.petId !== null ? value.petId.petName : ''}</TableCell>
-                                                    <TableCell align="left">{value.serviceId !== null ? value.serviceId.serviceName : ''}</TableCell>
+                                                    <TableCell align="left">{value.petId !== null ? value.pet.petName : ''}</TableCell>
+                                                    <TableCell align="left">{value.serviceId !== null ? value.service.serviceName : ''}</TableCell>
                                                     <TableCell align="left">{value.quantity}</TableCell>
                                                     <TableCell align="left">
-                                                        {
-                                                            value.serviceId.discount !== 0
-                                                                &&
-                                                                dayjs().isBetween(dayjs(value.serviceId.saleStartTime), dayjs(value.serviceId.saleEndTime))
-                                                                ?
-                                                                (
-                                                                    <>
-                                                                        <Typography style={{ textDecoration: "line-through" }}>
-                                                                            {
-                                                                                value.serviceId === null ? ""
-                                                                                    : value.serviceId.discount === 0 ? ""
-                                                                                        : numberToVND(value.serviceId.price)
-                                                                            }
-                                                                        </Typography>
-                                                                        <Typography style={{ color: 'red' }}>
-                                                                            {
-                                                                                value.serviceId === null ? ""
-                                                                                    :
-                                                                                    numberToVND((value.quantity * (value.serviceId.price - (value.serviceId.price * value.serviceId.discount / 100))))
-                                                                            }
-                                                                        </Typography>
-                                                                    </>
-                                                                )
-                                                                :
-                                                                (
-                                                                    <Typography>
-                                                                        {
-                                                                            value.serviceId === null ? ""
-                                                                                : numberToVND(value.serviceId.price)
-                                                                        }
-                                                                    </Typography>
-
-                                                                )
-                                                        }
+                                                        {value.price}
                                                     </TableCell>
                                                     <TableCell align="left">
                                                         {
                                                             status === 'Hoàn thành'
                                                                 ? (
                                                                     <ButtonCustomize
-                                                                    onClick={() => handleFeedBack(value.serviceId._id)}
-            nameButton="Đánh giá"
-            variant="contained"
-            sx={{ marginTop: "8px" }}
-          />
-                                                                    
+                                                                        onClick={() => handleFeedBack(value.serviceId._id)}
+                                                                        nameButton="Đánh giá"
+                                                                        variant="contained"
+                                                                        sx={{ marginTop: "8px" }}
+                                                                    />
+
                                                                 ) : ''
                                                         }
                                                     </TableCell>
@@ -342,16 +316,21 @@ export default function ServicePurchase() {
 
                         </Grid>
                     </DialogContent>
-                    {/* <DialogActions>
-                        <Button
-                            variant="contained"
-                            margin="normal"
-                            color="primary"
-                        // onClick={handleUpdate}
-                        >
-                            Cập nhật thông tin
-                        </Button>
-                    </DialogActions> */}
+                    {
+                        status === DEFAULT_STATUS ?
+                            (
+                                <DialogActions>
+                                    <Button
+                                        variant="contained"
+                                        margin="normal"
+                                        color="primary"
+                                        onClick={() => handleRemoveOrder(id)}
+                                    >
+                                        Huỷ đặt hàng
+                                    </Button>
+                                </DialogActions>
+                            ) : ""
+                    }
                 </Box>
             </Modal>
         </>

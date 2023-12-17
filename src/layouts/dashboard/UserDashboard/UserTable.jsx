@@ -196,10 +196,11 @@ const BasicTable = () => {
         }
         else {
             try {
-                const data = await axios.post("http://localhost:3500/register", {
+                await axios.post("http://localhost:3500/register", {
                     fullname,
                     email,
                     password,
+                    passwordConfirm: confirmPass,
                     role,
                     address,
                     phone,
@@ -210,14 +211,14 @@ const BasicTable = () => {
                         if (data.data.error === 'Email was taken') {
                             alert('Email đã được sử dụng')
                         } else {
-                            toast.success("Register successful. Welcome!");
+                            toast.success("Đăng ký thành công!");
                             console.log(data)
                             handleClose();
                             loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
                         }
                     })
                     .catch((err) => {
-                        alert(err)
+                        console.log(err)
                     })
             } catch (err) {
                 console.log(err);
@@ -246,6 +247,39 @@ const BasicTable = () => {
     useEffect(() => {
         loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
     }, []);
+    // ----------------------------------------------------------------
+
+    const handleInactiveAccount = async (inActiveStatus) => {
+
+        if (window.confirm(
+            inActiveStatus === 'inactive'
+                ? "Bạn có muốn KHOÁ tài khoản này không ?"
+                : "Bạn có muốn KÍCH HOẠT tài khoản này không ?") === true) {
+            try {
+                console.log(fullname, email, role, inActiveStatus)
+                await axios.patch(`http://localhost:3500/user`, {
+                    fullname: fullname,
+                    email: email,
+                    role: role,
+                    address: address,
+                    phone: phone,
+                    gender: gender,
+                    status: inActiveStatus
+                })
+                    .then((data) => {
+                        handleClose()
+                        loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+
     // ----------------------------------------------------------------
 
     const errorStyle = {
@@ -311,7 +345,12 @@ const BasicTable = () => {
                                                     )}
                                                 </TableCell>
                                                 <TableCell align="right">{value.email}</TableCell>
-                                                <TableCell align="right">{value.status}</TableCell>
+                                                <TableCell align="right">
+                                                    {value.status === 'active' ? "Hoạt động"
+                                                        : value.status === 'inactive' ? "Khoá"
+                                                            : value.status === "verifying" ? "Đang xác nhận"
+                                                                : ""}
+                                                </TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -350,6 +389,7 @@ const BasicTable = () => {
                         >
                             <CloseIcon />
                         </IconButton>
+
                         <DialogContent dividers>
                             <Grid
                                 container
@@ -499,14 +539,25 @@ const BasicTable = () => {
                                     >
                                         Cập nhật thông tin
                                     </Button>
-                                    {/* <Button
-                                        variant="contained"
-                                        margin="normal"
-                                        style={{ backgroundColor: 'red', marginLeft: '20px' }}
-                                        onClick={(e) => handleDelete(id)}
-                                    >
-                                        Xoá
-                                    </Button> */}
+                                    {
+                                        status === "active" ?
+                                            (<Button
+                                                style={{ marginLeft: "10px" }}
+                                                variant="contained"
+                                                color="error"
+                                                onClick={() => handleInactiveAccount('inactive')}
+                                            >
+                                                Khoá tài khoản
+                                            </Button>)
+                                            : (<Button
+                                                style={{ marginLeft: "10px" }}
+                                                variant="contained"
+                                                color="success"
+                                                onClick={() => handleInactiveAccount('active')}
+                                            >
+                                                Kích hoạt tài khoản
+                                            </Button>)
+                                    }
                                 </div>
 
                             )}

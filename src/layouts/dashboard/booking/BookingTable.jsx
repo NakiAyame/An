@@ -182,9 +182,9 @@ export default function BookingTable() {
 
   // ----------------------------------- API GET ALL USER --------------------------------
   async function loadAllBooking(page, limit, option, startDate, endDate) {
-    if(!dayjs(startDate).isValid()){
+    if (!dayjs(startDate).isValid()) {
       toast.error("Ngày bắt đầu không thể bỏ trống");
-    }else if(!dayjs(endDate).isValid()){
+    } else if (!dayjs(endDate).isValid()) {
       toast.error("Ngày kết thúc không thể bỏ trống");
     }
     else if (dayjs(endDate).isSame(dayjs(startDate))) {
@@ -195,7 +195,7 @@ export default function BookingTable() {
       toast.error(
         "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
       );
-    } else{
+    } else {
       console.log("Check ngày", startDate, endDate);
       try {
         setStatus(option);
@@ -390,8 +390,11 @@ export default function BookingTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data &&
-                data.map((value, index) => {
+              {data.length === 0
+                ? (<TableCell colSpan={5} style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                  KHÔNG CÓ SẢN PHẨM TRONG MỤC NÀY
+                </TableCell>)
+                : data.map((value, index) => {
                   return (
                     <TableRow
                       key={index}
