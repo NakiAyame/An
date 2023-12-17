@@ -37,6 +37,7 @@ import ResetPassword from "./layouts/User/ResetPassword";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import DashboardList from "./layouts/dashboard/DashboardList";
+import Introduce from "./layouts/User/Introduce";
 
 // import AdminLayout from "./layouts/dashboard/layouts/Admin"
 
@@ -108,6 +109,7 @@ function App() {
               <Route path="service-purchase" element={<ServicePurchase />} />
               <Route path="product-checkout" element={<ProductCheckout />} />
               <Route path="reset-password" element={<ResetPassword />} />
+              <Route path="introduce-homepage" element={<Introduce />} />
             </Route>
           </Routes>
         </BrowserRouter>
