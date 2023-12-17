@@ -147,12 +147,12 @@ const BasicTable = () => {
                 toast.error(data.error);
             } else {
                 console.log(data);
-                toast.success("Update successfully");
+                toast.success("Cập nhật thành công");
                 handleClose()
                 loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
             }
         } catch (err) {
-            console.log(err);
+            toast.error("Vui lòng điền đầy đủ thông tin");
         }
     }
 
