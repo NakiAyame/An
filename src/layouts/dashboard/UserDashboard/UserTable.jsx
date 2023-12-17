@@ -94,6 +94,11 @@ const BasicTable = () => {
 
     // --------------------- HANDLE OPEN MODAL CREATE -----------------------------
     const handleCreate = (event) => {
+        setFullName(" ")
+        setEmail(" ")
+        setPhone(" ")
+        setAddress(" ")
+        setPassWord(" ")
         setOption("create");
         handleOpen();
     };
