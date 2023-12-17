@@ -112,7 +112,7 @@ export default function ProductPurchase() {
   // ----------------------------------------------------------------
 
   const handleRemoveOrder = async (id) => {
-    if (window.confirm("Bạn có muốn cập nhật trạng thái đơn hàng không ?") == true) {
+    if (window.confirm("Bạn có muốn cập nhật trạng thái đơn hàng không ?") === true) {
       try {
         await axios.put(`http://localhost:3500/order/update-status/${id}`, { orderStatus: CANCEL_STATUS })
           .then((data) => {
@@ -154,17 +154,18 @@ export default function ProductPurchase() {
   }
 
   const numberToVND = (number) => {
-    return number.toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    });
+    return 1
+    // number.toLocaleString("vi-VN", {
+    //   style: "currency",
+    //   currency: "VND",
+    // });
   };
 
   const statusList = ['Chờ xác nhận', 'Đang giao hàng', 'Đã nhận hàng', 'Huỷ']
 
   return (
     <>
-      <h1 style={{ textAlign: 'center', marginTop: '100px' }}>SẢN PHẨM ĐÃ MUA</h1>
+      <h1 style={{ textAlign: 'center', marginTop: '100px' }}>ĐƠN HÀNG</h1>
       <Grid container>
         {statusList.map((value) => {
           return (
@@ -188,22 +189,26 @@ export default function ProductPurchase() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((value, index) => (
-              <TableRow
-                key={index}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                onClick={(e) => handleViewOrderDetail(value._id)}
-              >
-                <TableCell component="th" scope="row">
-                  {index + 1}
-                </TableCell>
-                <TableCell align="right">{value.recipientName}</TableCell>
-                <TableCell align="right">{value.deliveryAddress}</TableCell>
-                <TableCell align="right"><DateFormat date={value.updatedAt} /></TableCell>
-                <TableCell align="right">{numberToVND(value.totalPrice)}</TableCell>
-                <TableCell align="right">{value.status}</TableCell>
-              </TableRow>
-            ))}
+            {data.length === 0
+              ? (<TableCell colSpan={6} style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                KHÔNG CÓ SẢN PHẨM TRONG MỤC NÀY
+              </TableCell>)
+              : data.map((value, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  onClick={(e) => handleViewOrderDetail(value._id)}
+                >
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell align="right">{value.recipientName}</TableCell>
+                  <TableCell align="right">{value.deliveryAddress}</TableCell>
+                  <TableCell align="right"><DateFormat date={value.updatedAt} /></TableCell>
+                  <TableCell align="right">{numberToVND(value.totalPrice)}</TableCell>
+                  <TableCell align="right">{value.status}</TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -247,74 +252,73 @@ export default function ProductPurchase() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {orderDetail &&
-                    orderDetail.map((value, index) => {
-                      return (
-                        <TableRow
-                          key={index}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {index + 1}
-                          </TableCell>
-                          <TableCell align="left">{value.orderId}</TableCell>
-                          <TableCell align="left">{value.productId !== null ? value.productId.productName : ''}</TableCell>
-                          <TableCell align="left">{value.quantity}</TableCell>
-                          <TableCell align="left">
-                            {
-                              value.productId.discount !== 0
-                                &&
-                                dayjs().isBetween(dayjs(value.productId.saleStartTime), dayjs(value.productId.saleEndTime))
-                                ?
-                                (
-                                  <>
-                                    <Typography style={{ textDecoration: "line-through" }}>
-                                      {
-                                        value.productId === null ? ""
-                                          : value.productId.discount === 0 ? ""
-                                            : numberToVND(value.productId.price)
-                                      }
-                                    </Typography>
-                                    <Typography style={{ color: 'red' }}>
-                                      {
-                                        value.productId === null ? ""
-                                          :
-                                          numberToVND((value.quantity * (value.productId.price - (value.productId.price * value.productId.discount / 100))))
-                                      }
-                                    </Typography>
-                                  </>
-                                )
-                                :
-                                (
-                                  <Typography>
+                  {orderDetail.map((value, index) => {
+                    return (
+                      <TableRow
+                        key={index}
+                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {index + 1}
+                        </TableCell>
+                        <TableCell align="left">{value.orderId}</TableCell>
+                        <TableCell align="left">{value.productId !== null ? value.productId.productName : ''}</TableCell>
+                        <TableCell align="left">{value.quantity}</TableCell>
+                        <TableCell align="left">
+                          {
+                            value.productId.discount !== 0
+                              &&
+                              dayjs().isBetween(dayjs(value.productId.saleStartTime), dayjs(value.productId.saleEndTime))
+                              ?
+                              (
+                                <>
+                                  <Typography style={{ textDecoration: "line-through" }}>
                                     {
                                       value.productId === null ? ""
                                         : value.productId.discount === 0 ? ""
                                           : numberToVND(value.productId.price)
                                     }
                                   </Typography>
+                                  <Typography style={{ color: 'red' }}>
+                                    {
+                                      value.productId === null ? ""
+                                        :
+                                        numberToVND((value.quantity * (value.productId.price - (value.productId.price * value.productId.discount / 100))))
+                                    }
+                                  </Typography>
+                                </>
+                              )
+                              :
+                              (
+                                <Typography>
+                                  {
+                                    value.productId === null ? ""
+                                      : value.productId.discount === 0 ? ""
+                                        : numberToVND(value.productId.price)
+                                  }
+                                </Typography>
 
-                                )
-                            }
-                          </TableCell>
-                          <TableCell align="left">
-                            {
-                              status === 'Đã nhận hàng'
-                                ? (
-                                  <ButtonCustomize
+                              )
+                          }
+                        </TableCell>
+                        <TableCell align="left">
+                          {
+                            status === 'Đã nhận hàng'
+                              ? (
+                                <ButtonCustomize
                                   onClick={() => handleFeedBack(value.productId._id)}
-nameButton="Đánh giá"
-variant="contained"
-sx={{ marginTop: "8px" }}
-/>
-                                  
-                                ) : ''
-                            }
+                                  nameButton="Đánh giá"
+                                  variant="contained"
+                                  sx={{ marginTop: "8px" }}
+                                />
 
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                              ) : ''
+                          }
+
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
 

@@ -139,13 +139,13 @@ export default function UserPRofile() {
     } else {
       try {
         const data = await axios.patch(`http://localhost:3500/user`, {
-          _id: userId,
+          // _id: userId,
           fullname: fullname,
           email: email,
-          password: password,
+          // password: password,
           role: role,
-          address: address,
-          phone: phone,
+          // address: address,
+          // phone: phone,
           gender: gender,
         });
         if (data.error) {

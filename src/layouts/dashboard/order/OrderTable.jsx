@@ -24,7 +24,7 @@ import DateFormat from "../../../components/DateFormat";
 
 //React
 import { useState } from "react";
-import useAuth from "../../../hooks/useAuth";
+// import useAuth from "../../../hooks/useAuth";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -47,7 +47,7 @@ const style = {
 };
 
 export default function BasicTable() {
-  const DEFAULT_PAGE = 1;
+  // const DEFAULT_PAGE = 1;
   const DEFAULT_LIMIT = 10;
   const DEFAULT_STATUS = "Chờ xác nhận";
   // const DEFAULT_FROMDATE = "";
@@ -107,7 +107,6 @@ export default function BasicTable() {
         setOrderDetail(dataOrderDetail.data);
         data.map((value) => {
           if (value._id === id) {
-            console.log(value._id)
             setRecipientName(value.recipientName)
             setRecipientPhoneNumber(value.recipientPhoneNumber)
             setDeliveryAddress(value.deliveryAddress)
@@ -179,9 +178,9 @@ export default function BasicTable() {
 
   // ----------------------------------- API GET ALL USER --------------------------------
   async function loadAllOrder(page, limit, option, startDate, endDate) {
-    if(!dayjs(startDate).isValid()){
+    if (!dayjs(startDate).isValid()) {
       toast.error("Ngày bắt đầu không thể bỏ trống");
-    }else if(!dayjs(endDate).isValid()){
+    } else if (!dayjs(endDate).isValid()) {
       toast.error("Ngày kết thúc không thể bỏ trống");
     }
     else if (dayjs(endDate).isSame(dayjs(startDate))) {
@@ -195,14 +194,13 @@ export default function BasicTable() {
     } else {
       try {
         setStatus(option);
-        const loadData = await axios
-          .get(
-            `http://localhost:3500/order?page=${page}&limit=${limit}&startDate=${convertDate(startDate) !== "NaN-aN-aN"
-              ? convertDate(startDate)
-              : ""
-            }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
-            }`
-          )
+        await axios.get(
+          `http://localhost:3500/order?page=${page}&limit=${limit}&startDate=${convertDate(startDate) !== "NaN-aN-aN"
+            ? convertDate(startDate)
+            : ""
+          }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
+          }`
+        )
           .then((data) => {
             setData(data.data.docs);
             console.log(data.data.docs);
@@ -278,7 +276,7 @@ export default function BasicTable() {
 
   const hanldeClickChangeStatus = async (status, id) => {
     if (
-      window.confirm("Bạn có muốn cập nhật trạng thái đơn hàng không ?") == true
+      window.confirm("Bạn có muốn cập nhật trạng thái đơn hàng không ?") === true
     ) {
       try {
         const loadData = await axios.put(
@@ -393,8 +391,11 @@ export default function BasicTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data &&
-                data.map((value, index) => {
+              {data.length === 0
+                ? (<TableCell colSpan={5} style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                  KHÔNG CÓ SẢN PHẨM TRONG MỤC NÀY
+                </TableCell>)
+                : data.map((value, index) => {
                   return (
                     <TableRow
                       key={index}
