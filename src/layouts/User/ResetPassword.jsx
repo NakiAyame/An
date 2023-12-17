@@ -56,11 +56,10 @@ const ResetPassword = () => {
       alert("Vui lòng nhập đúng định dạng Email !");
     } else {
       try {
-        const response = await axios
-          .post("http://localhost:3500/verify", {
-            email: email,
-            code: verifyCode,
-          })
+        await axios.post("http://localhost:3500/verify", {
+          email: email,
+          code: verifyCode,
+        })
           .then((data) => {
             if (data.data.error === "Fail") {
               alert("Mã xác nhận không chính xác");
@@ -73,7 +72,7 @@ const ResetPassword = () => {
             }
           });
       } catch (error) {
-        console.error("Error changing password:", error);
+        toast.error(error.response.data.error);
       }
     }
   };
@@ -93,17 +92,16 @@ const ResetPassword = () => {
       alert("Vui lòng nhập đúng định dạng email");
     } else {
       try {
-        const response = await axios
-          .post("http://localhost:3500/new-password", {
-            email: email,
-            password: password,
-          })
+        await axios.post("http://localhost:3500/new-password", {
+          email: email,
+          password: password,
+        })
           .then((data) => {
             toast.success("Đặt lại mật khẩu thành công, vui lòng đăng nhập");
             navigate("/sign-in");
           });
       } catch (error) {
-        console.error("Error changing password:", error);
+        toast.success(error.response.data.error);
       }
     }
   };
@@ -148,14 +146,32 @@ const ResetPassword = () => {
           </Typography>
           <Grid container spacing={3} style={{ marginTop: "15px" }}>
             <Grid item xs={9}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                label="Vui lòng nhập email"
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              {
+                checkVerifyCode === true ?
+                  (
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      label="Vui lòng nhập email"
+                      type="text"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled
+                    />
+                  )
+                  :
+                  (
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      label="Vui lòng nhập email"
+                      type="text"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  )
+              }
+
             </Grid>
             <Grid item xs={3}>
               <button

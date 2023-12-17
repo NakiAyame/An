@@ -15,8 +15,8 @@ import LandingPage from "./layouts/LandingPage/LandingPage";
 import Header from "./components/Header/Header";
 import ProductList from "./layouts/LandingPage/Product/ProductList";
 import BookingTable from "./layouts/dashboard/booking/BookingTable";
-import CartService from "./layouts/Cart/CartService";
-import CartProduct from "./layouts/Cart/CartProduct";
+import CartService from "./layouts/LandingPage/Cart/CartService";
+import CartProduct from "./layouts/LandingPage/Cart/CartProduct";
 
 import RequireAuth from "./components/RequireAuth";
 import ChangePassword from "./layouts/User/ChangePassword";

@@ -323,6 +323,13 @@ export default function BookingTable() {
   //   }
   // };
 
+  const numberToVND = (number) => {
+    return number.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
+
   return (
     <>
       <Grid
@@ -417,10 +424,7 @@ export default function BookingTable() {
                         <DateFormat date={value.createdAt} />
                       </TableCell>
                       <TableCell align="left">
-                        {value.totalPrice.toLocaleString("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
+                        {numberToVND(value.totalPrice)}
                       </TableCell>
                       <TableCell align="left">{value.status}</TableCell>
                       {/* <TableCell align="left">
@@ -556,19 +560,15 @@ export default function BookingTable() {
                             {index + 1}
                           </TableCell>
                           <TableCell align="left">
-                            {value.petId !== null ? value.petId.petName : ""}
+                            {value.petId !== null ? value.pet.petName : ""}
                           </TableCell>
                           <TableCell align="left">
                             {value.serviceId !== null
-                              ? value.serviceId.serviceName
+                              ? value.service.serviceName
                               : ""}
                           </TableCell>
                           <TableCell align="left">{value.quantity}</TableCell>
-                          <TableCell align="left">
-                            {value.serviceId !== null
-                              ? value.serviceId.price
-                              : ""}
-                          </TableCell>
+                          <TableCell align="left">{numberToVND(value.price)}</TableCell>
                           {/* <TableCell align="left">
                             {status === "Chờ thanh toán" ? (
                             <Button

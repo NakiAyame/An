@@ -192,6 +192,7 @@ const ProductDetail = () => {
           )
           .then((data) => {
             toast.success("Thêm sản phẩm vào giỏ hàng thành công");
+            context.handleLoadCartProduct();
           });
       } catch (err) {
         console.log(err);

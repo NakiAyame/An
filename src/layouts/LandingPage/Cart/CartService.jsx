@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../../../hooks/useAuth';
 import dayjs from "dayjs";
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +26,7 @@ export default function CartService() {
 
   const handleLoadCartService = async () => {
     if (context.auth.token != undefined) {
+      console.log(context.auth.token)
       setLoged(true)
       try {
         const loadData = await axios.get(

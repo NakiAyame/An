@@ -94,6 +94,11 @@ const BasicTable = () => {
 
     // --------------------- HANDLE OPEN MODAL CREATE -----------------------------
     const handleCreate = (event) => {
+        setFullName(" ")
+        setEmail(" ")
+        setPhone(" ")
+        setAddress(" ")
+        setPassWord(" ")
         setOption("create");
         handleOpen();
     };
@@ -477,6 +482,10 @@ const BasicTable = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
+                                    {/* {
+                                        role === "customter" 
+                                        ?  : ''
+                                    } */}
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">Chức vụ</InputLabel>
                                         <Select
@@ -486,9 +495,6 @@ const BasicTable = () => {
                                             label="Role"
                                             onChange={handleRoleChange}
                                         >
-                                            {/* {
-                                                role === "customter" ? console.log(role) : ''
-                                            } */}
                                             <MenuItem value="admin">Quản lý</MenuItem>
                                             <MenuItem value="staff">Nhân viên</MenuItem>
                                             <MenuItem value={"customer"} disabled>Khách hàng</MenuItem>

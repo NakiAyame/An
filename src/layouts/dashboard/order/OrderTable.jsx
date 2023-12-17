@@ -314,6 +314,13 @@ export default function BasicTable() {
   //   }
   // };
 
+  const numberToVND = (number) => {
+    return number.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
+
   return (
     <>
       <Grid
@@ -416,7 +423,7 @@ export default function BasicTable() {
                       <TableCell align="left">
                         <DateFormat date={value.createdAt} />
                       </TableCell>
-                      <TableCell align="left">{value.totalPrice}</TableCell>
+                      <TableCell align="left">{numberToVND(value.totalPrice)}</TableCell>
                       <TableCell align="left">{value.status}</TableCell>
                       {/* <TableCell align="right">
                                                 <ButtonGroup variant="contained" fullWidth>
@@ -530,15 +537,11 @@ export default function BasicTable() {
                           <TableCell align="left">{value.orderId}</TableCell>
                           <TableCell align="left">
                             {value.productId !== null
-                              ? value.productId.productName
+                              ? value.product.productName
                               : ""}
                           </TableCell>
                           <TableCell align="left">{value.quantity}</TableCell>
-                          <TableCell align="left">
-                            {value.productId !== null
-                              ? value.productId.price
-                              : ""}
-                          </TableCell>
+                          <TableCell align="left">{numberToVND(value.price)}</TableCell>
                           {/* <TableCell align="left">
                             <button
                               variant="contained"
