@@ -51,6 +51,8 @@ export default function ProductCheckout() {
             toast.error("Vui lòng điền người nhận")
         } else if (deliveryAddress.trim() === '') {
             toast.error("Vui lòng nhập địa chỉ")
+        }else if (recipientPhoneNumber.trim() === '') {
+            toast.error("Vui lòng nhập số điện thoại")
         } else if (!recipientPhoneNumber.match(PHONE_NUMBER_REGEX)) {
             toast.error("Số điện thoại không chính xác")
         } else {
