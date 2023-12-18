@@ -171,6 +171,8 @@ export default function BookingTable() {
               filterData.push(data.data[i]);
             }
           }
+          filterData.sort((a, b) => new Date(convertDate(b.createdAt)) - new Date(convertDate(a.createdAt)));
+          console.log(filterData)
           setData(filterData);
           setPages(filterData.length / DEFAULT_LIMIT);
         });
