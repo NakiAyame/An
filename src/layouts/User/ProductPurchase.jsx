@@ -66,9 +66,9 @@ export default function ProductPurchase() {
             const filterData = []
             console.log(data.data)
 
-            for (let i = 0; i < data.data.docs.length; i++) {
-              if (data.data.docs[i].status === option) {
-                filterData.push(data.data.docs[i])
+            for (let i = 0; i < data.data.length; i++) {
+              if (data.data[i].status === option) {
+                filterData.push(data.data[i])
               }
             }
             setData(filterData)
@@ -264,6 +264,20 @@ export default function ProductPurchase() {
                         <TableCell align="left">{value.productId !== null ? value.product.productName : ''}</TableCell>
                         <TableCell align="left">{value.quantity}</TableCell>
                         <TableCell align="left">{numberToVND(value.price)}</TableCell>
+                        <TableCell align="left">
+                          {
+                            status === 'Đã nhận hàng'
+                              ? (
+                                <ButtonCustomize
+                                  onClick={() => handleFeedBack(value.product._id)}
+                                  nameButton="Đánh giá"
+                                  variant="contained"
+                                  sx={{ marginTop: "8px" }}
+                                />
+
+                              ) : ''
+                          }
+                        </TableCell>
                       </TableRow>
                     );
                   })}

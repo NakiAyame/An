@@ -74,9 +74,9 @@ export default function ServicePurchase() {
                         const filterData = []
                         console.log(option)
 
-                        for (let i = 0; i < data.data.docs.length; i++) {
-                            if (data.data.docs[i].status === option) {
-                                filterData.push(data.data.docs[i])
+                        for (let i = 0; i < data.data.length; i++) {
+                            if (data.data[i].status === option) {
+                                filterData.push(data.data[i])
                             }
                         }
                         console.log(filterData)
