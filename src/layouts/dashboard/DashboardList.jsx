@@ -39,6 +39,8 @@ export default function DashboardList() {
   const [customer, setCustomer] = useState(0);
   const [staff, setStaff] = useState(0);
   const [pet, setPet] = useState(0);
+  const [revenue, setRevenue] = useState();
+  const [revenueRaw, setRevenueRaw] = useState();
 
   async function loadAllOrder() {
     try {
@@ -51,11 +53,24 @@ export default function DashboardList() {
           })
           setTotalPrice(price)
           setData(data.data.totalOrders)
-          console.log(data.data);
-
         })
     } catch (err) {
-      console.log(err);
+    }
+  }
+
+  async function revenueStatistics() {
+    try {
+      let totalRevenue = 0;
+      await axios
+        .get(`http://localhost:3500/dashboard/revenue-statistics`)
+        .then((data) => {
+          data.data.revenueByMonth.map((value) => {
+            totalRevenue += value.total
+          })
+          setRevenueRaw(data.data)
+          setRevenue(totalRevenue);
+        });
+    } catch (err) {
     }
   }
 
@@ -75,11 +90,9 @@ export default function DashboardList() {
           })
           setCustomer(customer)
           setStaff(staff)
-          console.log(data.data);
 
         })
     } catch (err) {
-      console.log(err);
     }
   }
 
@@ -87,11 +100,9 @@ export default function DashboardList() {
     try {
       await axios.get(`http://localhost:3500/pet`)
         .then((data) => {
-          console.log(data)
           setPet(data.data.total)
         })
     } catch (err) {
-      console.log(err);
     }
   }
 
@@ -99,6 +110,7 @@ export default function DashboardList() {
     loadAllOrder();
     loadAllCustomer()
     loadAllPet()
+    revenueStatistics()
   }, []);
 
 
@@ -156,7 +168,7 @@ export default function DashboardList() {
                   height: 240,
                 }}
               >
-                <DepositsDashboard customer={customer} />
+                <DepositsDashboard raw={revenueRaw} />
               </Paper>
             </Grid>
 
@@ -179,8 +191,8 @@ export default function DashboardList() {
                   series={[
                     {
                       data: [
-                        { id: 0, value: customer, label: 'Khách hàng' },
-                        { id: 1, value: pet, label: 'Thú cưng' },
+                        { id: 0, value: totalPrice, label: 'DT sản phẩm' },
+                        { id: 1, value: revenue, label: 'DT dịch vụ' },
                         // { id: 2, value: 20, label: 'series C' },
                       ],
                     },
@@ -190,7 +202,7 @@ export default function DashboardList() {
                 />
               </Grid>
               <Grid item xs={6}>
-                <PieChart
+                {/* <PieChart
                   series={[
                     {
                       data: [
@@ -202,7 +214,7 @@ export default function DashboardList() {
                   ]}
                   width={400}
                   height={200}
-                />
+                /> */}
               </Grid>
             </Grid>
 

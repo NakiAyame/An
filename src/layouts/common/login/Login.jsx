@@ -165,10 +165,10 @@ const Login = () => {
                 value={data.password}
                 onChange={(e) => setData({ ...data, password: e.target.value })}
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+              /> */}
               <Button
                 type="submit"
                 fullWidth

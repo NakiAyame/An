@@ -2,6 +2,12 @@ import * as React from 'react';
 // import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Title from './TittleDashboard';
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 // import axios from "axios";
 
@@ -14,14 +20,40 @@ import Title from './TittleDashboard';
 
 
 
-export default function DepositsDashboard(props) {
+function DepositsDashboard(props) {
+
+  const [selectedValue, setSelectedValue] = React.useState(null);
+  const [previousValue, setPreviousValue] = React.useState(null);
+
+  const handleSelectChange = (event) => {
+    const currentValue = parseInt(event.target.value, 10);
+
+    // Lưu giá trị trước đó vào previousValue
+    setPreviousValue(selectedValue);
+
+    // Cập nhật giá trị hiện tại
+    setSelectedValue(currentValue);
+  };
+
+  const selectStyle = {
+    width: '100%',
+    padding: '16px 8px'
+  }
+
+  const numberToVND = (number) => {
+    return number.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
+
   return (
     <React.Fragment>
       {props.props !== undefined ? (
         <>
           <Title>Doanh thu sản phẩm</Title>
           <Typography component="p" variant="h4">
-            {props.props !== undefined ? Number(props.props).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : ''}
+            {props.props !== undefined ? numberToVND(Number(props.props)) : ''}
           </Typography>
         </>
       ) : ''
@@ -37,12 +69,20 @@ export default function DepositsDashboard(props) {
       ) : ''
       }
 
-      {props.customer !== undefined ? (
+      {props.raw !== undefined ? (
         <>
-          <Title>Số lượng người dùng</Title>
-          <Typography component="p" variant="h4">
-            {props.customer !== undefined ? Number(props.customer) : ''}
-          </Typography>
+          <Title>Doanh thu theo tháng</Title>
+          <div>
+            <select style={selectStyle} onChange={handleSelectChange} value={selectedValue !== null ? selectedValue : ''}>
+              <option value={0} disabled>Tháng 1</option>
+              {props.raw.revenueByMonth.map((value) => (
+                <option key={value.month} value={value.total}>
+                  Tháng {value.month}
+                </option>
+              ))}
+            </select>
+            <p>Doanh thu: {numberToVND(selectedValue)}</p>
+          </div>
         </>
       ) : ''
       }
@@ -67,3 +107,5 @@ export default function DepositsDashboard(props) {
     </React.Fragment>
   );
 }
+
+export default DepositsDashboard
