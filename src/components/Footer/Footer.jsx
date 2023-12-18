@@ -4,6 +4,8 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
+import { Button } from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 const FooterContainer = styled("footer")(({ theme }) => ({
   background: "linear-gradient(to right, #86CBE8, #DFDC9F, #E0A9E9, #CBC0EC)",
@@ -33,7 +35,7 @@ const Footer = () => {
               Dịch vụ chăm sóc thú cưng
             </Typography>
             <Typography variant="body2" component="p">
-              Địa chỉ: Hà Nội
+              Địa chỉ: Hoà lạc - Thạch thất - Hà Nội
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
@@ -52,11 +54,13 @@ const Footer = () => {
             <Typography variant="h6" gutterBottom>
               Về chúng tôi
             </Typography>
-            <LinkWrapper>
-              <li>
-                <FooterLink to="#">Giới thiệu</FooterLink>
-              </li>
-            </LinkWrapper>
+            <Button
+              component={NavLink}
+              to="/introduce-homepage"
+              sx={{ my: 2, color: "white", display: "block", color: "black" }}
+            >
+              Giới thiệu
+            </Button>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom>

@@ -81,7 +81,7 @@ function DepositsDashboard(props) {
                 </option>
               ))}
             </select>
-            <p>Doanh thu: {numberToVND(selectedValue)}</p>
+            <p>Doanh thu: {selectedValue === null ? numberToVND(0) : numberToVND(selectedValue)}</p>
           </div>
         </>
       ) : ''
