@@ -72,31 +72,37 @@ export default function CommentService({ value }) {
 
   // --------------------------------ADD COMMENT------------------------------
   const handleAddComment = async () => {
-    try {
-      const addComment = await axios
-        .post(
-          `http://localhost:3500/feedback/service`,
-          {
-            serviceId: id,
-            comment: comment,
-            star: star,
-          },
-          {
-            headers: { Authorization: context.auth.token },
-            withCredentials: true,
-          }
-        )
-        .then((data) => {
-          toast.success("Bình luận thành công");
-          setComment("");
-          setStar(0);
-          loadAllFeedbackById(currentPage);
-          console.log("Check dữ diệu đánh giá", data);
-          context.auth.feedback = false;
-        });
-    } catch (err) {
-      console.log(err);
-      toast.error(err.response.data.error);
+    if (star === 0) {
+      toast.error("Số sao không được để trống");
+    } else if (comment.trim() === "") {
+      toast.error("Bình luận không được để trống");
+    } else {
+      try {
+        const addComment = await axios
+          .post(
+            `http://localhost:3500/feedback/service`,
+            {
+              serviceId: id,
+              comment: comment,
+              star: star,
+            },
+            {
+              headers: { Authorization: context.auth.token },
+              withCredentials: true,
+            }
+          )
+          .then((data) => {
+            toast.success("Đánh giá thành công");
+            setComment("");
+            setStar(0);
+            loadAllFeedbackById(currentPage);
+            console.log("Check dữ diệu đánh giá", data);
+            context.auth.feedback = false;
+          });
+      } catch (err) {
+        console.log(err);
+        toast.error(err.response.data.error);
+      }
     }
   };
 
@@ -179,7 +185,7 @@ export default function CommentService({ value }) {
               <Rating
                 value={star}
                 onChange={(e) => setStar(e.target.value)}
-                precision={0.5}
+                precision={1}
                 emptyIcon={<StarBorderIcon sx={{ fontSize: "1.5rem" }} />}
                 halfIcon={<StarHalfIcon sx={{ fontSize: "1.5rem" }} />}
                 icon={<StarIcon sx={{ fontSize: "1.5rem" }} />}
