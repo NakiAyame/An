@@ -223,6 +223,8 @@ const ModalEditProduct = (props) => {
       toast.error("Vui lòng nhập tên sản phẩm");
     } else if (description.trim() === "") {
       toast.error("Vui lòng nhập thông tin của sản phẩm");
+    } else if (quantity === "") {
+      toast.error("Vui lòng nhập số lượng của sản phẩm");
     } else if (discount === "") {
       toast.error("% giảm giá không được để trống");
     } else if (!validProductName) {
@@ -262,8 +264,12 @@ const ModalEditProduct = (props) => {
       );
     } else if (dayjs().isAfter(dayjs(saleStartTime))) {
       toast.error("Ngày bắt đầu không thể ở quá khứ! Vui lòng nhập lại.");
+    } else if (quantity < 0) {
+      toast.error("Số lượng đang âm! Vui lòng nhập lại");
     } else if (!validQuantity) {
-      toast.error("Số lượng không được để trống");
+      toast.error(
+        "Số lượng chỉ được nhập số và ít nhất 1 chữ số! Vui lòng nhập lại"
+      );
     } else if (!validPrice) {
       toast.error("Giá tiền phải có ít nhất 4 chữ số và phải lớn hơn 0");
     } else if (!validDescription) {
