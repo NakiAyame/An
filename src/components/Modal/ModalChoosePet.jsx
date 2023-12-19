@@ -61,16 +61,16 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
         toast.error(loadDataPet.error);
       } else {
         setTotalPages(loadDataPet.data.pages);
-        console.log("Check totalPage", totalPages);
+        // console.log("Check totalPage", totalPages);
         // setData(loadDataPet.data.docs);
 
         setData(loadDataPet.data);
 
         setTotalPets(loadDataPet.data.limit);
-        console.log("Kiểm tra pet của người dùng", loadDataPet.data);
+        // console.log("Kiểm tra pet của người dùng", loadDataPet.data);
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       toast.error(err.response.data.error);
     }
   };
@@ -90,7 +90,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
         setDataCart(loadData.data);
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       toast.error(err.response.data.error);
     }
   };
@@ -111,7 +111,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
   };
 
   const handleUpdatePet = (pet) => {
-    console.log("Check data", pet);
+    // console.log("Check data", pet);
     setDataEditPet(pet);
     setOpenEditModal(true);
   };
@@ -133,10 +133,10 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
         toast.error(loadDataCategoryPet.error);
       } else {
         setCategory(loadDataCategoryPet.data.docs);
-        console.log(loadDataCategoryPet.data);
+        // console.log(loadDataCategoryPet.data);
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       toast.error(err.response.data.error);
     }
   }
@@ -167,11 +167,11 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
           .then((data) => {
             toast.success("Thêm dịch vụ vào giỏ hàng thành công");
             context.handleLoadCartService()
-            console.log(context)
+            // console.log(context)
             onClose();
           });
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         toast.error(err.response.data.error);
       }
     }

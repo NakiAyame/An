@@ -76,7 +76,7 @@ export default function PetTable() {
   };
 
   const handleUpdatePet = (pet) => {
-    console.log("Check data", pet);
+    // console.log("Check data", pet);
     setDataEditPet(pet);
     setOpenEditModal(true);
   };
@@ -99,10 +99,10 @@ export default function PetTable() {
         toast.error(loadData.error);
       } else {
         setTotalPages(loadData.data.pages);
-        console.log("Check totalPage", totalPages);
+        // console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
         setTotalPets(loadData.data.limit);
-        console.log(loadData.data.docs);
+        // console.log(loadData.data.docs);
       }
     } catch (err) {
       console.log(err);
@@ -161,7 +161,7 @@ export default function PetTable() {
         setData(loadData.data.docs);
         setTotalPets(loadData.data.limit);
         setTotalPages(loadData.data.pages);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);
@@ -179,7 +179,7 @@ export default function PetTable() {
         toast.error(loadDataCategoryPet.error);
       } else {
         setCategory(loadDataCategoryPet.data.docs);
-        console.log(loadDataCategoryPet.data);
+        // console.log(loadDataCategoryPet.data);
       }
     } catch (err) {
       console.log(err);
@@ -192,7 +192,7 @@ export default function PetTable() {
 
   // --------------------- GET ALL PRODUCT BY CATEGORY ID PRODUCT -----------------------------
   async function hanldeClickCategory(cateId) {
-    console.log("Check data cate ID", cateId);
+    // console.log("Check data cate ID", cateId);
     if (cateId == undefined || cateId == "") {
       loadAllPet(currentPage);
     } else {
@@ -203,7 +203,7 @@ export default function PetTable() {
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
-          console.log("Check loaddata", loadData.data);
+          // console.log("Check loaddata", loadData.data);
           setTotalPages(loadData.data.pages);
           // console.log("Check totalPage", totalPages);
           setData(loadData.data.docs);

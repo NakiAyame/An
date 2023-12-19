@@ -89,7 +89,7 @@ const BlogDetail = () => {
         toast.error(loadData.error);
       } else {
         setBlog(loadData.data);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);

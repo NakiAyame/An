@@ -14,7 +14,7 @@ export default function DropDownService(props) {
 
   const handleChangeCate = (event) => {
     const categoryId = event.target.value;
-    console.log(categoryId);
+    // console.log(categoryId);
     setSelectedCategory(categoryId);
     handUpdateEditTable(categoryId);
   };

@@ -57,7 +57,7 @@ const ChangePassword = () => {
   const navigate = useNavigate();
 
   const context = useAuth();
-  console.log(context);
+  // console.log(context);
 
   // Bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự
   const PWD_REGEX =
@@ -111,7 +111,7 @@ const ChangePassword = () => {
           console.error("Error changing password:", response.data.error);
           toast.error("Mật khẩu cũ không chính xác");
         } else {
-          console.log(response.data);
+          // console.log(response.data);
           toast.success("Đổi mật khẩu thành công");
           navigate("/sign-in");
           localStorage.removeItem("token");

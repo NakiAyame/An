@@ -163,7 +163,7 @@ const ModalEditProduct = (props) => {
   // --------------------- HANDLE CHANGE IMAGE -----------------------------
   const handleImageChange = (e) => {
     setProductImage(e.target.files[0]);
-    console.log("Kiểm tra image: ", e.target.files);
+    // console.log("Kiểm tra image: ", e.target.files);
   };
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PRODUCT -----------------------------
@@ -180,22 +180,22 @@ const ModalEditProduct = (props) => {
         if (productImage.size > maxSize) {
           toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
         } else {
-          console.log("Response data:", response.data.image);
+          // console.log("Response data:", response.data.image);
           const imagePath = response.data.image;
 
           if (imagePath) {
-            console.log("Đã tải ảnh lên:", imagePath);
+            // console.log("Đã tải ảnh lên:", imagePath);
             toast.success("Thêm ảnh thành công");
             setProductImage(
               productImage instanceof File ? imagePath : productImage
             );
           } else {
-            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            // console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
             toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
           }
         }
       } else {
-        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        // console.log("Vui lòng chọn ảnh trước khi tải lên.");
         toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
@@ -291,12 +291,12 @@ const ModalEditProduct = (props) => {
         if (res.data.error) {
           toast.error("Lỗi Err", res.data.error);
         } else {
-          console.log(
-            "kiểm tra dữ liệu chỉnh sửa",
-            discount,
-            saleStartTime,
-            saleEndTime
-          );
+          // console.log(
+          //   "kiểm tra dữ liệu chỉnh sửa",
+          //   discount,
+          //   saleStartTime,
+          //   saleEndTime
+          // );
           toast.success("Sửa thông tin sản phẩm thành công");
           handUpdateEditTable(page);
           onClose();
@@ -315,7 +315,7 @@ const ModalEditProduct = (props) => {
   // --------------------- HANDLE CHANGE CATEGORY PRODUCT -----------------------------
   const handleChange = (e) => {
     const selectedCategory = e.target.value;
-    console.log("Check ID cate add Product", selectedCategory);
+    // console.log("Check ID cate add Product", selectedCategory);
     setCategoryId(selectedCategory);
   };
 

@@ -105,7 +105,7 @@ export default function ProductCheckout() {
                     setRecipientName(loadData.data[0].userId.fullname)
                     setRecipientPhoneNumber(loadData.data[0].userId.phone === undefined ? "" : loadData.data[0].userId.phone)
                     setDeliveryAddress(loadData.data[0].userId.address === undefined ? "" : loadData.data[0].userId.address)
-                    console.log(loadData.data);
+                    // console.log(loadData.data);
                     let totalPrice = 0;
                     for (let i = 0; i < loadData.data.length; i++) {
                         if (loadData.data[i].productId.discount !== 0

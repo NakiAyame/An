@@ -103,7 +103,7 @@ export default function BasicTable() {
       if (dataOrderDetail.error) {
         toast.error(dataOrderDetail.error);
       } else {
-        console.log(dataOrderDetail.data)
+        // console.log(dataOrderDetail.data)
         setOrderDetail(dataOrderDetail.data);
         data.map((value) => {
           if (value._id === id) {
@@ -160,7 +160,7 @@ export default function BasicTable() {
     try {
       await axios.get(`http://localhost:3500/order/all`)
         .then((data) => {
-          console.log(data.data);
+          // console.log(data.data);
           const filterData = [];
           for (let i = 0; i < data.data.length; i++) {
             if (data.data[i].status === status) {
@@ -168,7 +168,7 @@ export default function BasicTable() {
             }
           }
           filterData.sort((a, b) => new Date(convertDate(b.createdAt)) - new Date(convertDate(a.createdAt)));
-          console.log(filterData)
+          // console.log(filterData)
           setData(filterData);
           setPages(filterData.length / DEFAULT_LIMIT);
         });
@@ -206,7 +206,7 @@ export default function BasicTable() {
         )
           .then((data) => {
             setData(data.data.docs);
-            console.log(data.data.docs);
+            // console.log(data.data.docs);
             const filterData = [];
             for (let i = 0; i < data.data.docs.length; i++) {
               if (data.data.docs[i].status === status) {
@@ -291,7 +291,7 @@ export default function BasicTable() {
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
-          console.log(loadData.data);
+          // console.log(loadData.data);
           loadOrder(status);
           handleClose();
         }

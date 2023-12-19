@@ -92,11 +92,11 @@ export default function UserPRofile() {
 
   const handleGenderChange = (event) => {
     setGender(event.target.value);
-    console.log(gender);
+    // console.log(gender);
   };
 
   const context = useAuth();
-  console.log(context);
+  // console.log(context);
 
   // --------------------- HANDLE GET USER BY ID -----------------------------
   const handleGetUserById = async () => {
@@ -107,7 +107,7 @@ export default function UserPRofile() {
       if (dataUser.error) {
         toast.error(dataUser.error);
       } else {
-        console.log(dataUser.data);
+        // console.log(dataUser.data);
         setFullName(dataUser.data.fullname);
         setEmail(dataUser.data.email);
         setPhone(dataUser.data.phone);
@@ -148,7 +148,7 @@ export default function UserPRofile() {
         if (data.error) {
           toast.error(data.error);
         } else {
-          console.log(data);
+          // console.log(data);
           handleGetUserById();
           toast.success("Cập nhật thông tin thành công");
           navigate("/");

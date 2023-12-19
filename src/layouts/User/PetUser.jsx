@@ -60,7 +60,7 @@ export default function PetUser() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const context = useAuth();
-  console.log(context);
+  // console.log(context);
 
   // ----------------------------------- API GET ALL PET BY USER ID--------------------------------
   useEffect(() => {
@@ -77,10 +77,10 @@ export default function PetUser() {
         toast.error(loadDataPet.error);
       } else {
         setTotalPages(loadDataPet.data.pages);
-        console.log("Check totalPage", totalPages);
+        // console.log("Check totalPage", totalPages);
         setData(loadDataPet.data.docs);
         setTotalPets(loadDataPet.data.limit);
-        console.log("Kiểm tra pet của người dùng", loadDataPet.data.docs);
+        // console.log("Kiểm tra pet của người dùng", loadDataPet.data.docs);
       }
     } catch (err) {
       console.log(err);
@@ -103,7 +103,7 @@ export default function PetUser() {
   };
 
   const handleUpdatePet = (pet) => {
-    console.log("Check data", pet);
+    // console.log("Check data", pet);
     setDataEditPet(pet);
     setOpenEditModal(true);
   };
@@ -125,7 +125,7 @@ export default function PetUser() {
         toast.error(loadDataCategoryPet.error);
       } else {
         setCategory(loadDataCategoryPet.data.docs);
-        console.log(loadDataCategoryPet.data);
+        // console.log(loadDataCategoryPet.data);
       }
     } catch (err) {
       console.log(err);

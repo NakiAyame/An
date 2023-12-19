@@ -64,7 +64,7 @@ export default function ProductPurchase() {
         )
           .then((data) => {
             const filterData = []
-            console.log(data.data)
+            // console.log(data.data)
 
             for (let i = 0; i < data.data.length; i++) {
               if (data.data[i].status === option) {
@@ -88,7 +88,7 @@ export default function ProductPurchase() {
   const handleFeedBack = (id) => {
     context.auth.feedback = true
     navigate(`/product-homepage/${id}`)
-    console.log(context.auth)
+    // console.log(context.auth)
   }
 
   // ----------------------------------------------------------------
@@ -99,7 +99,7 @@ export default function ProductPurchase() {
       if (data.error) {
         toast.error(data.error);
       } else {
-        console.log(data.data);
+        // console.log(data.data);
         setId(id);
         setOrderDetail(data.data)
       }

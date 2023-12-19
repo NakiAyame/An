@@ -74,7 +74,7 @@ export default function ProductTable() {
   };
 
   const handleUpdateProduct = (product) => {
-    console.log("Check data", product);
+    // console.log("Check data", product);
     setDataEditProduct(product);
     setOpenEditModal(true);
   };
@@ -116,10 +116,10 @@ export default function ProductTable() {
         toast.error(loadData.error);
       } else {
         setTotalPages(loadData.data.pages);
-        console.log("Check totalPage", totalPages);
+        // console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
         // setTotalProducts(loadData.data.limit);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);
@@ -143,7 +143,7 @@ export default function ProductTable() {
         toast.error(loadDataCategoryProduct.error);
       } else {
         setCategory(loadDataCategoryProduct.data.docs);
-        console.log(loadDataCategoryProduct.data);
+        // console.log(loadDataCategoryProduct.data);
       }
     } catch (err) {
       console.log(err);
@@ -156,7 +156,7 @@ export default function ProductTable() {
 
   // --------------------- GET ALL PRODUCT BY CATEGORY ID PRODUCT -----------------------------
   async function hanldeClickCategory(cateId) {
-    console.log("Check data cate ID", cateId);
+    // console.log("Check data cate ID", cateId);
     if (cateId === undefined || cateId === "") {
       loadAllProduct(currentPage);
     } else {
@@ -167,7 +167,7 @@ export default function ProductTable() {
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
-          console.log("Check loaddata", loadData.data);
+          // console.log("Check loaddata", loadData.data);
           setTotalPages(loadData.data.pages);
           // console.log("Check totalPage", totalPages);
           setData(loadData.data.docs);
@@ -218,7 +218,7 @@ export default function ProductTable() {
         setData(loadData.data.docs);
         // setTotalProducts(loadData.data.limit);
         setTotalPages(loadData.data.pages);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);

@@ -105,7 +105,7 @@ export default function BlogPage() {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataEditPet, setDataEditPet] = useState({});
   const context = useAuth();
-  console.log(context);
+  // console.log(context);
 
   // --------------------- HOVER -----------------------------
   const [isHovered, setIsHovered] = useState(null);
@@ -133,7 +133,7 @@ export default function BlogPage() {
   };
 
   const handleUpdatePet = (pet) => {
-    console.log("Check data", pet);
+    // console.log("Check data", pet);
     setDataEditPet(pet);
     setOpenEditModal(true);
   };
@@ -156,10 +156,10 @@ export default function BlogPage() {
         toast.error(loadData.error);
       } else {
         setTotalPages(loadData.data.pages);
-        console.log("Check totalPage", totalPages);
+        // console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
         setTotalBlogs(loadData.data.limit);
-        console.log(loadData.data.docs);
+        // console.log(loadData.data.docs);
       }
     } catch (err) {
       console.log(err);

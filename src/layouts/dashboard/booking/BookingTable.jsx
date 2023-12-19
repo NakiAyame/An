@@ -98,12 +98,12 @@ export default function BookingTable() {
   // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
   const handleViewOrderDetail = async (id, option, status) => {
     try {
-      console.log(id);
+      // console.log(id);
       const data = await axios.get(`http://localhost:3500/bookingDetail/${id}`);
       if (data.error) {
         toast.error(data.error);
       } else {
-        console.log(data.data);
+        // console.log(data.data);
         setOrderDetail(data.data);
         // setStatus(status)
       }
@@ -163,7 +163,7 @@ export default function BookingTable() {
     try {
       await axios.get(`http://localhost:3500/booking/get-booking`)
         .then((data) => {
-          console.log(data.data);
+          // console.log(data.data);
           const filterData = [];
 
           for (let i = 0; i < data.data.length; i++) {
@@ -172,7 +172,7 @@ export default function BookingTable() {
             }
           }
           filterData.sort((a, b) => new Date(convertDate(b.createdAt)) - new Date(convertDate(a.createdAt)));
-          console.log(filterData)
+          // console.log(filterData)
           setData(filterData);
           setPages(filterData.length / DEFAULT_LIMIT);
         });
@@ -198,7 +198,7 @@ export default function BookingTable() {
         "Ngày bắt đầu không thể sau ngày kết thúc! Vui lòng nhập lại."
       );
     } else {
-      console.log("Check ngày", startDate, endDate);
+      // console.log("Check ngày", startDate, endDate);
       try {
         setStatus(option);
         const loadData = await axios
@@ -210,7 +210,7 @@ export default function BookingTable() {
             }`
           )
           .then((data) => {
-            console.log(data.data.docs);
+            // console.log(data.data.docs);
             const filterData = [];
 
             for (let i = 0; i < data.data.docs.length; i++) {
@@ -218,7 +218,7 @@ export default function BookingTable() {
                 filterData.push(data.data.docs[i]);
               }
             }
-            console.log(filterData);
+            // console.log(filterData);
             setData(filterData);
             setPages(filterData / DEFAULT_LIMIT);
           });
@@ -299,7 +299,7 @@ export default function BookingTable() {
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
-          console.log(loadData.data);
+          // console.log(loadData.data);
           loadBooking(status);
           handleClose();
         }

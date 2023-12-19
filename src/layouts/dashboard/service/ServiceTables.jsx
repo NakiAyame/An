@@ -93,7 +93,7 @@ export default function ServiceTable() {
   };
 
   const handleEditService = (service) => {
-    console.log("Check data", service);
+    // console.log("Check data", service);
     setDataEditService(service);
     setOpenEditModal(true);
   };
@@ -101,7 +101,7 @@ export default function ServiceTable() {
   const handleDeleteService = (service) => {
     setOpenComfirmModal(true);
     setDataDeteleService(service);
-    console.log(service);
+    // console.log(service);
   };
   // --------------------- CLOSE MODAL  -----------------------------
   const handleCloseModal = () => {
@@ -122,7 +122,7 @@ export default function ServiceTable() {
         toast.error(loadData.error);
       } else {
         setCategory(loadData.data.docs);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);
@@ -135,7 +135,7 @@ export default function ServiceTable() {
 
   // --------------------- GET ALL SERVICE BY CATEGORY ID SERVICE -----------------------------
   async function hanldeClickCategory(cateId) {
-    console.log("Check data cate ID", cateId, order);
+    // console.log("Check data cate ID", cateId, order);
     if (cateId === null) {
       loadAllService();
     } else {
@@ -146,7 +146,7 @@ export default function ServiceTable() {
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
-          console.log("Check loaddata", loadData.data);
+          // console.log("Check loaddata", loadData.data);
           setTotalPages(loadData.data.pages);
           // console.log("Check totalPage", totalPages);
           setData(loadData.data.docs);
@@ -166,7 +166,7 @@ export default function ServiceTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState({});
   const handleShowDetail = (serviceId) => {
-    console.log("Check data", serviceId);
+    // console.log("Check data", serviceId);
     setSelectedService(serviceId);
     setIsModalOpen(true);
   };
@@ -222,7 +222,7 @@ export default function ServiceTable() {
         setData(loadData.data.docs);
         setTotalServices(loadData.data.limit);
         setTotalPages(loadData.data.pages);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);

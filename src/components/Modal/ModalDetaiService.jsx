@@ -56,7 +56,7 @@ const ServiceDetail = ({ open, onClose, service }) => {
     if (context.auth.token === undefined) {
       alert("Bạn chưa đăng nhập, vui lòng đăng nhập !");
     } else {
-      console.log("Check data", service);
+      // console.log("Check data", service);
       setSelectedService(service);
       setIsModalOpen(true);
     }

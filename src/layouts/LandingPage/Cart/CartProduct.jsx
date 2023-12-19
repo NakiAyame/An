@@ -59,7 +59,7 @@ export default function CartProduct() {
           toast.error(loadData.error);
         } else {
           setData(loadData.data)
-          console.log(loadData.data);
+          // console.log(loadData.data);
           let totalPrice = 0;
           for (let i = 0; i < loadData.data.length; i++) {
             if (loadData.data[i].productId.discount !== 0
