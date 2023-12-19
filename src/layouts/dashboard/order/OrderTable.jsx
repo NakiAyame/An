@@ -188,7 +188,7 @@ export default function BasicTable() {
     }
     else if (dayjs(endDate).isSame(dayjs(startDate))) {
       toast.error(
-        "Ngày bắt đầu không thể bằng ngày kết thúc! Vui lòng nhập lại."
+        "Vui lòng chọn 2 mốc thời gian khác nhau!"
       );
     } else if (dayjs(endDate).isBefore(dayjs(startDate))) {
       toast.error(
