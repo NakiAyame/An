@@ -138,12 +138,16 @@ const ModalAddProduct = (props) => {
       toast.error("Vui lòng nhập tên sản phẩm");
     } else if (description.trim() === "") {
       toast.error("Vui lòng nhập thông tin của sản phẩm");
+    } else if (quantity === "") {
+      toast.error("Vui lòng nhập số lượng của sản phẩm");
     } else if (!validProductName) {
       toast.error(
         "Tên sản phẩm phải có ít nhất 3 kí tự và chỉ được nhập kí tự đặc biệt là & hoặc - "
       );
     } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại sản phẩm mình muốn");
+    } else if (quantity < 0) {
+      toast.error("Số lượng đang âm! Vui lòng nhập lại");
     } else if (!validQuantity) {
       toast.error("Số lượng không được để trống và phải lớn hơn 0");
     } else if (!validPrice) {
