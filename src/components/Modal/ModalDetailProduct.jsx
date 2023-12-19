@@ -44,7 +44,7 @@ const ProductDetail = ({ open, onClose, product }) => {
 
   const handleIncreaseClick = () => {
     setQuantitySell(quantitySell + 1);
-    console.log(quantitySell);
+    // console.log(quantitySell);
   };
 
   const handleDecreaseClick = () => {
@@ -52,7 +52,7 @@ const ProductDetail = ({ open, onClose, product }) => {
   };
 
   const handleAddToCartClick = () => {
-    console.log(`Add ${quantitySell} '${product?.productName}' to cart`);
+    // console.log(`Add ${quantitySell} '${product?.productName}' to cart`);
   };
 
   const [expanded, setExpanded] = useState(false);
@@ -105,7 +105,7 @@ const ProductDetail = ({ open, onClose, product }) => {
             toast.success("Thêm sản phẩm vào giỏ hàng thành công");
           });
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         toast.error(err.response.data.error);
       }
     }

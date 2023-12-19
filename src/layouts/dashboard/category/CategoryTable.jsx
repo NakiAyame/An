@@ -72,7 +72,7 @@ export default function CategoryTable() {
   };
 
   const handleUpdatePet = (pet) => {
-    console.log("Check data", pet);
+    // console.log("Check data", pet);
     setDataEditPet(pet);
     setOpenEditModal(true);
   };
@@ -95,10 +95,10 @@ export default function CategoryTable() {
         toast.error(loadData.error);
       } else {
         setTotalPages(loadData.data.pages);
-        console.log("Check totalPage", totalPages);
+        // console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
         setTotalCategorys(loadData.data.limit);
-        console.log(loadData.data.docs);
+        // console.log(loadData.data.docs);
       }
     } catch (err) {
       console.log(err);

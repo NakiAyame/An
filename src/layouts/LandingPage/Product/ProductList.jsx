@@ -122,10 +122,10 @@ export default function ProductList() {
         toast.error(loadData.error);
       } else {
         setTotalPages(loadData.data.pages);
-        console.log("Check totalPage", totalPages);
+        // console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
         setTotalProducts(loadData.data.limit);
-        console.log(loadData.data.docs);
+        // console.log(loadData.data.docs);
       }
     } catch (err) {
       console.log(err);
@@ -158,7 +158,7 @@ export default function ProductList() {
           .then((data) => {
             toast.success("Thêm sản phẩm vào giỏ hàng thành công");
             context.handleLoadCartProduct();
-            console.log(context.auth);
+            // console.log(context.auth);
           });
       } catch (err) {
         console.log(err);
@@ -177,7 +177,7 @@ export default function ProductList() {
         toast.error(loadDataCategoryProduct.error);
       } else {
         setCategory(loadDataCategoryProduct.data.docs);
-        console.log(loadDataCategoryProduct.data);
+        // console.log(loadDataCategoryProduct.data);
       }
     } catch (err) {
       console.log(err);
@@ -190,7 +190,7 @@ export default function ProductList() {
 
   // --------------------- GET ALL PRODUCT BY CATEGORY ID PRODUCT -----------------------------
   async function hanldeClickCategory(cateId) {
-    console.log("Check data cate ID", cateId);
+    // console.log("Check data cate ID", cateId);
     if (cateId == undefined || cateId == "") {
       loadAllProduct(currentPage);
     } else {
@@ -201,7 +201,7 @@ export default function ProductList() {
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
-          console.log("Check loaddata", loadData.data);
+          // console.log("Check loaddata", loadData.data);
           setTotalPages(loadData.data.pages);
           // console.log("Check totalPage", totalPages);
           setData(loadData.data.docs);
@@ -252,7 +252,7 @@ export default function ProductList() {
         setData(loadData.data.docs);
         setTotalProducts(loadData.data.limit);
         setTotalPages(loadData.data.pages);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);

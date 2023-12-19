@@ -106,12 +106,12 @@ const BasicTable = () => {
     // --------------------- HANDLE OPEN MODAL UPDATE -----------------------------
     const handleLoadUserbId = async (id, password) => {
         try {
-            console.log(id);
+            // console.log(id);
             const data = await axios.get(`http://localhost:3500/user/${id}`);
             if (data.error) {
                 toast.error(data.error);
             } else {
-                console.log(data.data);
+                // console.log(data.data);
                 setId(data.data._id)
                 setFullName(data.data.fullname)
                 setEmail(data.data.email)
@@ -134,7 +134,7 @@ const BasicTable = () => {
     // --------------------- HANDLE UPDATE -----------------------------
 
     const handleUpdate = async () => {
-        console.log(gender)
+        // console.log(gender)
         try {
             const data = await axios.patch(`http://localhost:3500/user`, {
                 fullname: fullname,
@@ -149,7 +149,7 @@ const BasicTable = () => {
             if (data.error) {
                 toast.error(data.error);
             } else {
-                console.log(data);
+                // console.log(data);
                 toast.success("Cập nhật thành công");
                 handleClose()
                 loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
@@ -215,7 +215,7 @@ const BasicTable = () => {
                             alert('Email đã được sử dụng')
                         } else {
                             toast.success("Đăng ký thành công!");
-                            console.log(data)
+                            // console.log(data)
                             handleClose();
                             loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
                         }
@@ -240,7 +240,7 @@ const BasicTable = () => {
                 .then((data) => {
                     setData(data.data.docs);
                     setPages(data.data.pages);
-                    console.log(data.data);
+                    // console.log(data.data);
                 })
         } catch (err) {
             console.log(err);
@@ -259,7 +259,7 @@ const BasicTable = () => {
                 ? "Bạn có muốn KHOÁ tài khoản này không ?"
                 : "Bạn có muốn KÍCH HOẠT tài khoản này không ?") === true) {
             try {
-                console.log(fullname, email, role, inActiveStatus)
+                // console.log(fullname, email, role, inActiveStatus)
                 await axios.patch(`http://localhost:3500/user`, {
                     fullname: fullname,
                     email: email,

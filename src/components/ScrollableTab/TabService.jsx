@@ -12,7 +12,7 @@ export default function ScrollableTabService(props) {
   const [value, setValue] = useState();
 
   const handleChange = (event, newValue) => {
-    console.log("Kiểm tra Id cate", newValue);
+    // console.log("Kiểm tra Id cate", newValue);
     setValue(newValue);
     handUpdateEditTable(newValue);
   };

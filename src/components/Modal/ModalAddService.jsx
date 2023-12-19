@@ -38,7 +38,7 @@ const ModalAddSerivce = (props) => {
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
-    console.log(status);
+    // console.log(status);
   };
 
   // --------------------- VALIDATION -----------------------------
@@ -76,7 +76,7 @@ const ModalAddSerivce = (props) => {
   // --------------------- HANDLE HANLDE CHANGE IMAGE SERVICE -----------------------------
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
-    console.log("Kiểm tra image: ", e.target.files);
+    // console.log("Kiểm tra image: ", e.target.files);
   };
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE SERVICE -----------------------------
@@ -93,19 +93,19 @@ const ModalAddSerivce = (props) => {
         if (image.size > maxSize) {
           toast.error("Ảnh có dung lượng lớn hơn 1MB. Vui lòng chọn ảnh khác!");
         } else {
-          console.log("Response data:", response.data.image);
+          // console.log("Response data:", response.data.image);
           const imagePath = response.data.image;
 
           if (imagePath) {
-            console.log("Đã tải ảnh lên:", imagePath);
+            // console.log("Đã tải ảnh lên:", imagePath);
             handleCreateService(imagePath);
           } else {
-            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            // console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
             toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
           }
         }
       } else {
-        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        // console.log("Vui lòng chọn ảnh trước khi tải lên.");
         toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
@@ -115,15 +115,15 @@ const ModalAddSerivce = (props) => {
 
   // --------------------- HANDLE CREATE SERVICE -----------------------------
   const handleCreateService = async (serviceImage) => {
-    console.log(
-      "Check data truyền vào",
-      serviceName,
-      categoryId,
-      description,
-      price,
-      status,
-      serviceImage
-    );
+    // console.log(
+    //   "Check data truyền vào",
+    //   serviceName,
+    //   categoryId,
+    //   description,
+    //   price,
+    //   status,
+    //   serviceImage
+    // );
     if (serviceName.trim() === "") {
       toast.error("Vui lòng nhập tên dịch vụ");
     } else if (description.trim() === "") {
@@ -153,7 +153,7 @@ const ModalAddSerivce = (props) => {
         if (response.error) {
           toast.error(response.error);
         } else {
-          console.log("Thành công!!", response);
+          // console.log("Thành công!!", response);
           toast.success("Thêm mới dịch vụ thành công!");
           setServiceName("");
           setCategoryId("");
@@ -164,7 +164,7 @@ const ModalAddSerivce = (props) => {
           onClose();
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         toast.error(error.response.data.error);
       }
     }
@@ -173,7 +173,7 @@ const ModalAddSerivce = (props) => {
   // --------------------- HANDLE CHANGE CATEGORY SERVICE -----------------------------
   const handleChange = (e) => {
     const selectedCategory = e.target.value;
-    console.log("Check ID cate add Service", selectedCategory);
+    // console.log("Check ID cate add Service", selectedCategory);
     setCategoryId(selectedCategory);
   };
 

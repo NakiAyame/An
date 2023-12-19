@@ -45,7 +45,7 @@ export default function Comments({ value }) {
   }, [currentPage]);
 
   const loadAllFeedbackById = async (page) => {
-    console.log("Check id", id);
+    // console.log("Check id", id);
     try {
       const loadDataFeedback = await axios.get(
         `http://localhost:3500/feedback/product?productId=${id}&limit=3&page=${page}`
@@ -56,7 +56,7 @@ export default function Comments({ value }) {
         setTotalPages(loadDataFeedback.data.pages);
         setData(loadDataFeedback.data.docs);
         setTotalProducts(loadDataFeedback.data.limit);
-        console.log(loadDataFeedback.data);
+        // console.log(loadDataFeedback.data);
       }
     } catch (err) {
       console.log(err);
@@ -94,11 +94,11 @@ export default function Comments({ value }) {
             setComment("");
             setStar(0);
             loadAllFeedbackById(currentPage);
-            console.log("Check dữ diệu đánh giá", data);
+            // console.log("Check dữ diệu đánh giá", data);
             context.auth.feedback = false;
           });
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         toast.error(err.response.data.error);
       }
     }

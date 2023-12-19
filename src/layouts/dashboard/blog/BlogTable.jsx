@@ -68,7 +68,7 @@ export default function BlogTable() {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataEditBlog, setDataEditBlog] = useState({});
   const context = useAuth();
-  console.log(context);
+  // console.log(context);
 
   // --------------------- OPEN MODAL  -----------------------------
   const handleCreateModal = () => {
@@ -76,7 +76,7 @@ export default function BlogTable() {
   };
 
   const handleUpdatePet = (pet) => {
-    console.log("Check data", pet);
+    // console.log("Check data", pet);
     setDataEditBlog(pet);
     setOpenEditModal(true);
   };
@@ -99,10 +99,10 @@ export default function BlogTable() {
         toast.error(loadData.error);
       } else {
         setTotalPages(loadData.data.pages);
-        console.log("Check totalPage", totalPages);
+        // console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
         setTotalBlogs(loadData.data.limit);
-        console.log(loadData.data.docs);
+        // console.log(loadData.data.docs);
       }
     } catch (err) {
       console.log(err);

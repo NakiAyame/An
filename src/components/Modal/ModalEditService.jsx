@@ -54,7 +54,7 @@ const ModalEditSerivce = (props) => {
   // --------------------- HANLDE CHANGE STATUS -----------------------------
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
-    console.log(status);
+    // console.log(status);
   };
 
   // // --------------------- HANLDE CHANGE DISCOUNT -----------------------------
@@ -124,7 +124,7 @@ const ModalEditSerivce = (props) => {
   // --------------------- HANDLE CHANGE IMAGE -----------------------------
   const handleImageChange = (e) => {
     setServiceImage(e.target.files[0]);
-    console.log("Kiểm tra image: ", e.target.files);
+    // console.log("Kiểm tra image: ", e.target.files);
   };
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE SERVICE -----------------------------
@@ -141,22 +141,22 @@ const ModalEditSerivce = (props) => {
         if (serviceImage.size > maxSize) {
           toast.error("Ảnh có dung lượng lớn hơn 1MB. Vui lòng chọn ảnh khác!");
         } else {
-          console.log("Response data:", response.data.image);
+          // console.log("Response data:", response.data.image);
           const imagePath = response.data.image;
 
           if (imagePath) {
-            console.log("Đã tải ảnh lên:", imagePath);
+            // console.log("Đã tải ảnh lên:", imagePath);
             toast.success("Thêm ảnh thành công");
             setServiceImage(
               serviceImage instanceof File ? imagePath : serviceImage
             );
           } else {
-            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            // console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
             toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
           }
         }
       } else {
-        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        // console.log("Vui lòng chọn ảnh trước khi tải lên.");
         toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
@@ -252,7 +252,7 @@ const ModalEditSerivce = (props) => {
           serviceImage: serviceImage,
         });
         if (res.data.error) {
-          console.log(res.data.error);
+          // console.log(res.data.error);
           toast.error("Bạn chưa tải ảnh lên. Hãy nhấn tải ảnh");
         } else {
           toast.success("Sửa dịch vụ thành công");
@@ -272,7 +272,7 @@ const ModalEditSerivce = (props) => {
   // --------------------- HANDLE CHANGE CATEGORY SERVICE -----------------------------
   const handleChange = (e) => {
     const selectedCategory = e.target.value;
-    console.log("Check ID cate add Service", selectedCategory);
+    // console.log("Check ID cate add Service", selectedCategory);
     setCategoryId(selectedCategory);
   };
 

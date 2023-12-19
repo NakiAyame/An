@@ -26,7 +26,7 @@ export default function CartService() {
 
   const handleLoadCartService = async () => {
     if (context.auth.token != undefined) {
-      console.log(context.auth.token)
+      // console.log(context.auth.token)
       setLoged(true)
       try {
         const loadData = await axios.get(
@@ -40,7 +40,7 @@ export default function CartService() {
           toast.error(loadData.error);
         } else {
           setData(loadData.data)
-          console.log(loadData.data);
+          // console.log(loadData.data);
           let totalPrice = 0;
           for (let i = 0; i < loadData.data.length; i++) {
             if (loadData.data[i].serviceId.discount !== 0

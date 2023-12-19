@@ -48,7 +48,7 @@ export default function BlogSlider({ loadBlogById }) {
         toast.error(loadData.error);
       } else {
         setData(loadData.data.docs);
-        console.log(loadData.data.docs);
+        // console.log(loadData.data.docs);
       }
     } catch (err) {
       console.log(err);
@@ -56,7 +56,7 @@ export default function BlogSlider({ loadBlogById }) {
   };
 
   const hanldeClickProductName = (id) => {
-    console.log(id);
+    // console.log(id);
     navigate(`/blog-homepage/${id}`);
     loadBlogById();
   };

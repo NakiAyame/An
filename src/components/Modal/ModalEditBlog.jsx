@@ -62,7 +62,7 @@ const ModalEditBlog = (props) => {
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
-    console.log("Kiểm tra image: ", e.target.files);
+    // console.log("Kiểm tra image: ", e.target.files);
   };
 
   // --------------------- HANDLE HANLDE UPLOAD IMAGE BLOG -----------------------------
@@ -79,20 +79,20 @@ const ModalEditBlog = (props) => {
         if (image.size > maxSize) {
           toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
         } else {
-          console.log("Hình ảnh:", response.data.docs.image);
+          // console.log("Hình ảnh:", response.data.docs.image);
           const imagePath = response.data.docs.image;
 
           if (imagePath) {
-            console.log("Đã tải ảnh lên:", imagePath);
+            // console.log("Đã tải ảnh lên:", imagePath);
             toast.success("Thêm ảnh thành công");
             setImage(image instanceof File ? imagePath : image);
           } else {
-            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            // console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
             toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
           }
         }
       } else {
-        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        // console.log("Vui lòng chọn ảnh trước khi tải lên.");
         toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
@@ -111,7 +111,7 @@ const ModalEditBlog = (props) => {
   }, [dataEditBlog]);
 
   const handleEditBlog = async (blogId) => {
-    console.log("Check data truyền vào blog", title, content, userId, image);
+    // console.log("Check data truyền vào blog", title, content, userId, image);
     if (title.trim() === "") {
       toast.error("Tiêu dề không được để trống");
     } else if (!validTitle) {
@@ -129,7 +129,7 @@ const ModalEditBlog = (props) => {
           image: image,
         });
         if (res.data.error) {
-          console.log(res.data.error);
+          // console.log(res.data.error);
           toast.error("Bạn chưa tải ảnh lên. Hãy nhấn tải ảnh");
         } else {
           toast.success("Sửa thông tin thành công");
@@ -139,7 +139,7 @@ const ModalEditBlog = (props) => {
       } catch (err) {
         // toast.error(err.message);
         toast.error(err.message);
-        console.log(err.message);
+        // console.log(err.message);
       }
     }
   };

@@ -50,7 +50,7 @@ const ModalEditPet = (props) => {
   // --------------------- HANLDE CHANGE STATUS -----------------------------
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
-    console.log(status);
+    // console.log(status);
   };
 
   // --------------------- VALIDATION -----------------------------
@@ -106,20 +106,20 @@ const ModalEditPet = (props) => {
         if (petImage.size > maxSize) {
           toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
         } else {
-          console.log("Response data:", response.data.image);
+          // console.log("Response data:", response.data.image);
           const imagePath = response.data.image;
 
           if (imagePath) {
-            console.log("Đã tải ảnh lên:", imagePath);
+            // console.log("Đã tải ảnh lên:", imagePath);
             toast.success("Thêm ảnh thành công");
             setPetImage(petImage instanceof File ? imagePath : petImage);
           } else {
-            console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+            // console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
             toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
           }
         }
       } else {
-        console.log("Vui lòng chọn ảnh trước khi tải lên.");
+        // console.log("Vui lòng chọn ảnh trước khi tải lên.");
         toast.error("Vui lòng chọn ảnh trước khi tải lên.");
       }
     } catch (error) {
@@ -143,18 +143,18 @@ const ModalEditPet = (props) => {
   }, [dataEditPet]);
 
   const handleEditPet = async (petID) => {
-    console.log(
-      "Check data truyền vào của thú cưng",
-      petName,
-      userId._id,
-      categoryId,
-      rank,
-      status,
-      height,
-      weight,
-      color,
-      petImage
-    );
+    // console.log(
+    //   "Check data truyền vào của thú cưng",
+    //   petName,
+    //   userId._id,
+    //   categoryId,
+    //   rank,
+    //   status,
+    //   height,
+    //   weight,
+    //   color,
+    //   petImage
+    // );
     if (petName === "") {
       toast.error("Tên thú cưng không được để trống");
     } else if (height < 0) {
@@ -186,7 +186,7 @@ const ModalEditPet = (props) => {
           petImage: petImage,
         });
         if (res.data.error) {
-          console.log(res.data.error);
+          // console.log(res.data.error);
           toast.error("Bạn chưa tải ảnh lên. Hãy nhấn tải ảnh");
         } else {
           toast.success("Sửa thông tin thú cưng thành công");
@@ -207,7 +207,7 @@ const ModalEditPet = (props) => {
   // --------------------- HANDLE CHANGE CATEGORY PET -----------------------------
   const handleChangePet = (e) => {
     const selectedCategory = e.target.value;
-    console.log("Check ID cate add Product", selectedCategory);
+    // console.log("Check ID cate add Product", selectedCategory);
     setCategoryId(selectedCategory);
   };
 

@@ -138,7 +138,7 @@ const ServiceDetail = () => {
         toast.error(loadData.error);
       } else {
         setService(loadData.data);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);
@@ -195,7 +195,7 @@ const ServiceDetail = () => {
           setIsModalOpen(true);
           setSelectedService(serviceId);
 
-          console.log("Kiểm tra pet của người dùng", loadDataPet.data);
+          // console.log("Kiểm tra pet của người dùng", loadDataPet.data);
         }
       } catch (err) {
         console.log(err);

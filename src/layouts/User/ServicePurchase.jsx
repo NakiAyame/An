@@ -72,14 +72,14 @@ export default function ServicePurchase() {
                 )
                     .then((data) => {
                         const filterData = []
-                        console.log(option)
+                        // console.log(option)
 
                         for (let i = 0; i < data.data.length; i++) {
                             if (data.data[i].status === option) {
                                 filterData.push(data.data[i])
                             }
                         }
-                        console.log(filterData)
+                        // console.log(filterData)
                         setData(filterData)
                     })
             } catch (err) {
@@ -107,7 +107,7 @@ export default function ServicePurchase() {
             if (data.error) {
                 toast.error(data.error);
             } else {
-                console.log(data.data);
+                // console.log(data.data);
                 setId(id);
                 setOrderDetail(data.data)
             }
@@ -141,7 +141,7 @@ export default function ServicePurchase() {
     const handleFeedBack = (id) => {
         context.auth.feedback = true
         navigate(`/service-homepage/${id}`)
-        console.log(context.auth)
+        // console.log(context.auth)
     }
 
     const style = {

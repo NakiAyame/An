@@ -62,7 +62,7 @@ const Login = () => {
             localStorage.setItem("verify-email", email);
             navigate('/verify', { replace: true });
           } else {
-            console.log(data)
+            // console.log(data)
             const dataDecode = jwtDecode(data.data.token);
 
             localStorage.setItem("token", data.data.token);
@@ -89,10 +89,10 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    // console.log({
+    //   email: data.get("email"),
+    //   password: data.get("password"),
+    // });
   };
 
   return (

@@ -134,7 +134,7 @@ const ProductDetail = () => {
         toast.error(loadData.error);
       } else {
         setProduct(loadData.data);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);
@@ -164,7 +164,7 @@ const ProductDetail = () => {
   };
 
   const handleAddToCartClick = () => {
-    console.log(`Add ${quantitySell} '${product?.productName}' to cart`);
+    // console.log(`Add ${quantitySell} '${product?.productName}' to cart`);
   };
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -195,7 +195,7 @@ const ProductDetail = () => {
             context.handleLoadCartProduct();
           });
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         toast.error(err.response.data.error);
       }
     }

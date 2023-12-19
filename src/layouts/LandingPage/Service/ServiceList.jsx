@@ -135,7 +135,7 @@ export default function ServiceList() {
       if (loadData.error) {
         toast.error(loadData.error);
       } else {
-        console.log("check data", loadData.data.docs);
+        // console.log("check data", loadData.data.docs);
         setTotalPages(loadData.data.pages);
         // console.log("Check totalPage", totalPages);
         setData(loadData.data.docs);
@@ -158,7 +158,7 @@ export default function ServiceList() {
         toast.error(loadData.error);
       } else {
         setCategory(loadData.data.data);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);
@@ -171,7 +171,7 @@ export default function ServiceList() {
 
   // --------------------- GET ALL SERVICE BY CATEGORY ID SERVICE -----------------------------
   async function hanldeClickCategory(cateId) {
-    console.log("Check data cate ID", cateId);
+    // console.log("Check data cate ID", cateId);
     if (cateId === null) {
       loadAllService();
     } else {
@@ -182,7 +182,7 @@ export default function ServiceList() {
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
-          console.log("Check loaddata", loadData.data);
+          // console.log("Check loaddata", loadData.data);
           setTotalPages(loadData.data.pages);
           // console.log("Check totalPage", totalPages);
           setData(loadData.data.docs);
@@ -203,7 +203,7 @@ export default function ServiceList() {
   const [isModalChoosePetOpen, setIsModalChoosePetOpen] = useState(false);
   const [selectedService, setSelectedService] = useState({});
   const handleShowDetail = (serviceId) => {
-    console.log("Check data", serviceId);
+    // console.log("Check data", serviceId);
     setSelectedService(serviceId);
     setIsModalOpen(true);
   };
@@ -238,14 +238,14 @@ export default function ServiceList() {
           toast.error(loadDataPet.error);
         } else {
           setTotalPages(loadDataPet.data.pages);
-          console.log("Check totalPage", totalPages);
+          // console.log("Check totalPage", totalPages);
           // setData(loadDataPet.data.docs);
 
           setDataPet(loadDataPet.data);
           setIsModalChoosePetOpen(true);
           setSelectedService(serviceId);
 
-          console.log("Kiểm tra pet của người dùng", loadDataPet.data);
+          // console.log("Kiểm tra pet của người dùng", loadDataPet.data);
         }
       } catch (err) {
         console.log(err);
@@ -301,7 +301,7 @@ export default function ServiceList() {
         setData(loadData.data.docs);
         setTotalServices(loadData.data.limit);
         setTotalPages(loadData.data.pages);
-        console.log(loadData.data);
+        // console.log(loadData.data);
       }
     } catch (err) {
       console.log(err);
