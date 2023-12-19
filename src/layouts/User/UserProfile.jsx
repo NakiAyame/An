@@ -74,7 +74,7 @@ export default function UserPRofile() {
   const [validFullName, setValidFullName] = useState("");
   const [validPhone, setValidPhone] = useState();
   useEffect(() => {
-    setValidFullName(FULL_NAME_REGEX.test(fullname));
+    setValidFullName(FULL_NAME_REGEX.test(fullname) && fullname.trim());
   }, [fullname]);
 
   const handleValidationFullName = (e) => {
@@ -126,9 +126,9 @@ export default function UserPRofile() {
   // --------------------- HANDLE UPDATE -----------------------------
 
   const handleUpdate = async (userId) => {
-    console.log("Check userID", userId);
-    console.log(gender);
-    if (!validFullName) {
+    if (fullname.trim() === "") {
+      toast.error("Tên không được bỏ trống. Vui lòng nhập lại.");
+    } else if (!validFullName) {
       toast.error(
         "Tên không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
@@ -144,8 +144,8 @@ export default function UserPRofile() {
           email: email,
           // password: password,
           role: role,
-          // address: address,
-          // phone: phone,
+          address: address,
+          phone: phone,
           gender: gender,
         });
         if (data.error) {
@@ -311,7 +311,6 @@ export default function UserPRofile() {
                   fullWidth
                   autoComplete="shipping phone"
                   variant="standard"
-                  error={!validPhone}
                 />
               </Grid>
             </Grid>
