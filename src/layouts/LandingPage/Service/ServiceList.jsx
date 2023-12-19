@@ -270,7 +270,7 @@ export default function ServiceList() {
   };
 
   const handleKeywordChange = (e) => {
-    setKeyword(e.target.value.trim());
+    setKeyword(e.target.value);
   };
 
   const handleSearchClick = async () => {
