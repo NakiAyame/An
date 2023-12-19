@@ -74,8 +74,6 @@ export default function Comments({ value }) {
   const handleAddComment = async () => {
     if (star === 0) {
       toast.error("Số sao không được để trống");
-    } else if (comment.trim() === "") {
-      toast.error("Bình luận không được để trống");
     } else {
       try {
         const addComment = await axios

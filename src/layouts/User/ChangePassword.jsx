@@ -21,6 +21,7 @@ import { NavLink } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import HomeIcon from "@mui/icons-material/Home";
 import { emphasize } from "@mui/material/styles";
+import ButtonCustomize from "../../components/Button/Button";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -195,14 +196,12 @@ const ChangePassword = () => {
               </Grid>
             </Grid>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button
-                type="button"
-                sx={{ mt: 3, ml: 1 }}
-                variant="contained"
+              <ButtonCustomize
                 onClick={handleChangePassword}
-              >
-                Đổi mật khẩu
-              </Button>
+                nameButton="Đổi mật khẩu"
+                variant="contained"
+                sx={{ marginTop: "8px" }}
+              />
             </Box>
           </Paper>
         </Container>
