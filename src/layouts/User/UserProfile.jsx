@@ -29,6 +29,7 @@ import { NavLink } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import HomeIcon from "@mui/icons-material/Home";
 import { emphasize } from "@mui/material/styles";
+import ButtonCustomize from "../../components/Button/Button";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -132,10 +133,6 @@ export default function UserPRofile() {
       toast.error(
         "Tên không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-    } else if (!validPhone) {
-      toast.error(
-        "Số điện thoại phải có 10 chữ số và 2 đầu số phải là 0(3,5,7,8,9)"
-      );
     } else {
       try {
         const data = await axios.patch(`http://localhost:3500/user`, {
@@ -158,6 +155,7 @@ export default function UserPRofile() {
         }
       } catch (err) {
         console.log(err);
+        toast.error(err.response.data.error);
       }
     }
   };
@@ -315,13 +313,12 @@ export default function UserPRofile() {
               </Grid>
             </Grid>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button
+              <ButtonCustomize
                 onClick={() => handleUpdate(context.auth.id)}
-                sx={{ mt: 3, ml: 1 }}
+                nameButton="Cập nhật"
                 variant="contained"
-              >
-                Cập nhật
-              </Button>
+                sx={{ marginTop: "8px" }}
+              />
             </Box>
           </Paper>
         </Container>
