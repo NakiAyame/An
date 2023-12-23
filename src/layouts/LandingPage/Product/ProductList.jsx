@@ -31,6 +31,7 @@ import { CardActionArea, IconButton, TextField, Tooltip } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import dayjs from "dayjs";
 import DropDownService from "../../../components/DropDown/DropDownService";
+import ProductNameCus from "../../../components/Typography/ProductNameCus";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -442,7 +443,7 @@ export default function ProductList() {
                               onMouseOver={() => handleMouseOverName(index)}
                               onMouseOut={handleMouseOutName}
                             >
-                              {value.productName}
+                              <ProductNameCus value={value} />
                             </NavLink>
                           </Typography>
 
