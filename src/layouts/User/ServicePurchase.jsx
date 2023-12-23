@@ -194,7 +194,7 @@ export default function ServicePurchase() {
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <TableCell children>ID</TableCell>
+                                <TableCell children>STT</TableCell>
                                 <TableCell align="left">Tên người dùng</TableCell>
                                 <TableCell align="left">Ngày đặt dịch vụ</TableCell>
                                 <TableCell align="left">Tổng giá trị</TableCell>
