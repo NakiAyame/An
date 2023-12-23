@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-const MAX_LENGTH = 50;
+const MAX_LENGTH = 40;
 
 const ContentCus = ({ value }) => {
   let content = value.content;

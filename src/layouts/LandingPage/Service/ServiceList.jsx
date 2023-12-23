@@ -43,6 +43,7 @@ import DropDownService from "../../../components/DropDown/DropDownService";
 import ChoosePet from "../../../components/Modal/ModalChoosePet";
 import useAuth from "../../../hooks/useAuth";
 import dayjs from "dayjs";
+import ServiceNameCus from "../../../components/Typography/ServiceNameCus";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -495,7 +496,7 @@ export default function ServiceList() {
                               onMouseOver={() => handleMouseOverName(index)}
                               onMouseOut={handleMouseOutName}
                             >
-                              {value.serviceName}
+                              <ServiceNameCus value={value} />
                             </NavLink>
                           </Typography>
 
