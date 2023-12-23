@@ -46,7 +46,7 @@ function FeaturedPost(props) {
         </CardActionArea>
       </Grid>
       <Grid item xs={12} md={8}>
-        <CardActionArea component={NavLink} to="service-homepage">
+        <CardActionArea component={NavLink} to="product-homepage">
           <Card sx={{ display: "flex" }}>
             <CardContent
               sx={{ flex: 1, textAlign: "center", justifyContent: "center" }}
@@ -78,7 +78,7 @@ function FeaturedPost(props) {
         </CardActionArea>
       </Grid>
       <Grid item xs={12} md={8}>
-        <CardActionArea component={NavLink} to="service-homepage">
+        <CardActionArea component={NavLink} to="blog-homepage">
           <Card sx={{ display: "flex" }}>
             <CardMedia
               component="img"

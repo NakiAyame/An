@@ -192,7 +192,7 @@ export default function ProductCheckout() {
                             <p style={{ color: '#cc2121', textAlign: 'right' }}>{numberToVND(total)}</p>
                         </Grid>
                     </Grid>
-                    <hr />
+                    {/* <hr />
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <p style={{ fontWeight: 'bolder' }}>Giao hàng</p>
@@ -200,7 +200,7 @@ export default function ProductCheckout() {
                         <Grid item xs={6}>
                             <p style={{ textAlign: 'right' }}>Giao hàng miễn phí</p>
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                     <hr />
                     <Grid container spacing={2}>
                         <Grid item xs={6}>

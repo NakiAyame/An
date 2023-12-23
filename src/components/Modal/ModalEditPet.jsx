@@ -157,9 +157,9 @@ const ModalEditPet = (props) => {
     // );
     if (petName === "") {
       toast.error("Tên thú cưng không được để trống");
-    } else if (height == 0) {
+    } else if (height === "0") {
       toast.error("Chiều cao thú cưng phải khác 0");
-    } else if (weight == 0) {
+    } else if (weight === "0") {
       toast.error("Cân nặng thú cưng phải khác 0");
     } else if (height < 0) {
       toast.error("Chiều cao thú cưng không được âm");
