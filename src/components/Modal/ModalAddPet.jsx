@@ -35,8 +35,8 @@ const ModalAddPet = (props) => {
   const [rank, setRank] = useState(0);
   const [status, setStatus] = useState(true);
   const [color, setColor] = useState("");
-  const [weight, setWeight] = useState(0);
-  const [height, setHeight] = useState(0);
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
   const [image, setImage] = useState(null);
 
   // --------------------- HANLDE CHANGE STATUS -----------------------------
@@ -144,6 +144,14 @@ const ModalAddPet = (props) => {
     // );
     if (petName.trim() === "") {
       toast.error("Tên thú cưng không được để trống");
+    } else if (height == 0) {
+      toast.error("Chiều cao thú cưng phải khác 0");
+    } else if (weight == 0) {
+      toast.error("Cân nặng thú cưng phải khác 0");
+    } else if (height < 0) {
+      toast.error("Chiều cao thú cưng không được âm");
+    } else if (weight < 0) {
+      toast.error("Cân nặng thú cưng không được âm");
     } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
@@ -182,8 +190,8 @@ const ModalAddPet = (props) => {
           setRank(0);
           setStatus(true);
           setColor("");
-          setHeight(0);
-          setWeight(0);
+          setHeight("");
+          setWeight("");
           setImage(null);
           handUpdateTable();
           onClose();
