@@ -35,8 +35,8 @@ const ModalAddPet = (props) => {
   const [rank, setRank] = useState(0);
   const [status, setStatus] = useState(true);
   const [color, setColor] = useState("");
-  const [weight, setWeight] = useState("");
-  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState(null);
+  const [height, setHeight] = useState(null);
   const [image, setImage] = useState(null);
 
   // --------------------- HANLDE CHANGE STATUS -----------------------------
@@ -144,25 +144,9 @@ const ModalAddPet = (props) => {
     // );
     if (petName.trim() === "") {
       toast.error("Tên thú cưng không được để trống");
-    } else if (height === "0") {
-      toast.error("Chiều cao thú cưng phải khác 0");
-    } else if (weight === "0") {
-      toast.error("Cân nặng thú cưng phải khác 0");
-    } else if (height < 0) {
-      toast.error("Chiều cao thú cưng không được âm");
-    } else if (weight < 0) {
-      toast.error("Cân nặng thú cưng không được âm");
     } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
-      );
-    } else if (!validHeight) {
-      toast.error(
-        "Chiều cao thú cưng phải là số nguyên hoặc số thập phân (VD: 0.2)"
-      );
-    } else if (!validWeight) {
-      toast.error(
-        "Cân nặng thú cưng phải là số nguyên hoặc số thập phân (VD: 0.2)"
       );
     } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại thú cưng mình muốn");
@@ -332,7 +316,7 @@ const ModalAddPet = (props) => {
               <img
                 src={URL.createObjectURL(image)}
                 alt="Ảnh sản phẩm"
-                style={{ maxWidth: "100%" }}
+                style={{ maxWidth: "300px" }}
               />
             )}
 

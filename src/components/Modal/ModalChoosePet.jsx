@@ -32,16 +32,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import ModalAddPet from "./ModalAddPet";
 
-const ChoosePet = ({ open, onClose, service, pet }) => {
-  // console.log(service);
+const ChoosePet = ({ open, onClose, service, pet, loadData }) => {
   const [data, setData] = useState([]);
   const [dataCart, setDataCart] = useState([]);
 
   const [totalPets, setTotalPets] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedService, setSelectedService] = useState({});
 
   const context = useAuth();
+  console.log(context.auth.serviceId);
+
+  useEffect(() => {
+    setSelectedService(service);
+  }, [service]);
 
   // ----------------------------------- API GET ALL PET BY USER ID--------------------------------
   useEffect(() => {
@@ -54,7 +59,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
         `http://localhost:3500/pet/booking`,
         {
           userId: context.auth.id,
-          serviceId: service,
+          serviceId: context.auth.serviceId,
         }
       );
       if (loadDataPet.error) {
@@ -103,17 +108,11 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
   // --------------------- MODAL HANDLE -----------------------------
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [dataEditPet, setDataEditPet] = useState({});
 
   // --------------------- OPEN MODAL  -----------------------------
   const handleCreateModal = () => {
     setOpenCreateModal(true);
-  };
-
-  const handleUpdatePet = (pet) => {
-    // console.log("Check data", pet);
-    setDataEditPet(pet);
-    setOpenEditModal(true);
+    setSelectedService(service);
   };
 
   // --------------------- CLOSE MODAL  -----------------------------
@@ -156,7 +155,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
           .post(
             `http://localhost:3500/cartService/add-to-cart`,
             {
-              serviceId: service,
+              serviceId: context.auth.serviceId,
               petId: id,
             },
             {
@@ -166,12 +165,12 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
           )
           .then((data) => {
             toast.success("Thêm dịch vụ vào giỏ hàng thành công");
-            context.handleLoadCartService()
-            // console.log(context)
+            context.handleLoadCartService();
+            console.log(context.auth.serviceId);
             onClose();
           });
       } catch (err) {
-        // console.log(err);
+        console.log(err);
         toast.error(err.response.data.error);
       }
     }
@@ -215,7 +214,7 @@ const ChoosePet = ({ open, onClose, service, pet }) => {
       <ModalAddPet
         open={openCreateModal}
         onClose={handleCloseModal}
-        handUpdateTable={loadAllPetByUserId}
+        handUpdateTable={loadData}
         page={currentPage}
         data={context.auth.id}
         category={category}

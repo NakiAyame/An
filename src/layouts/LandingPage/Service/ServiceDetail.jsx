@@ -194,6 +194,9 @@ const ServiceDetail = () => {
           setDataPet(loadDataPet.data);
           setIsModalOpen(true);
           setSelectedService(serviceId);
+          if (serviceId !== undefined) {
+            context.auth.serviceId = serviceId;
+          }
 
           // console.log("Kiểm tra pet của người dùng", loadDataPet.data);
         }
@@ -400,6 +403,7 @@ const ServiceDetail = () => {
         onClose={handleCloseEditModal}
         service={selectedService}
         pet={dataPet}
+        loadData={handleAddToCartClick}
       />
 
       {/* End footer */}

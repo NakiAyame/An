@@ -245,8 +245,11 @@ export default function ServiceList() {
           setDataPet(loadDataPet.data);
           setIsModalChoosePetOpen(true);
           setSelectedService(serviceId);
+          if (serviceId !== undefined) {
+            context.auth.serviceId = serviceId;
+          }
 
-          // console.log("Kiểm tra pet của người dùng", loadDataPet.data);
+          console.log("Kiểm tra pet của người dùng", loadDataPet.data);
         }
       } catch (err) {
         console.log(err);
@@ -605,6 +608,7 @@ export default function ServiceList() {
         onClose={handleCloseEditModal}
         service={selectedService}
         pet={dataPet}
+        loadData={handleAddToCartClick}
       />
       {/* End footer */}
       <Footer />
