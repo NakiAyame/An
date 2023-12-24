@@ -158,19 +158,19 @@ export default function BasicTable() {
 
   async function loadOrder(status) {
     try {
-      await axios.get(`http://localhost:3500/order/all`)
+      await axios.get(`http://localhost:3500/order`)
         .then((data) => {
           // console.log(data.data);
-          const filterData = [];
-          for (let i = 0; i < data.data.length; i++) {
-            if (data.data[i].status === status) {
-              filterData.push(data.data[i]);
-            }
-          }
-          filterData.sort((a, b) => new Date(convertDate(b.createdAt)) - new Date(convertDate(a.createdAt)));
-          // console.log(filterData)
-          setData(filterData);
-          setPages(filterData.length / DEFAULT_LIMIT);
+          // const filterData = [];
+          // for (let i = 0; i < data.data.length; i++) {
+          //   if (data.data[i].status === status) {
+          //     filterData.push(data.data[i]);
+          //   }
+          // }
+          // filterData.sort((a, b) => new Date(convertDate(b.createdAt)) - new Date(convertDate(a.createdAt)));
+          // // console.log(filterData)
+          setData(data.data.docs);
+          setPages(data.data.pages);
         });
     } catch (err) {
       console.log(err);
@@ -197,24 +197,25 @@ export default function BasicTable() {
     } else {
       try {
         setStatus(option);
+        setCurrentPage(page)
         await axios.get(
-          `http://localhost:3500/order?page=${page}&limit=${limit}&startDate=${convertDate(startDate) !== "NaN-aN-aN"
+          `http://localhost:3500/order?status=${option}&page=${page}&limit=${limit}&startDate=${convertDate(startDate) !== "NaN-aN-aN"
             ? convertDate(startDate)
             : ""
           }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
           }`
         )
           .then((data) => {
-            setData(data.data.docs);
+            // setData(data.data.docs);
             // console.log(data.data.docs);
-            const filterData = [];
-            for (let i = 0; i < data.data.docs.length; i++) {
-              if (data.data.docs[i].status === status) {
-                filterData.push(data.data.docs[i]);
-              }
-            }
-            setData(filterData);
-            setPages(filterData.length / DEFAULT_LIMIT);
+            // const filterData = [];
+            // for (let i = 0; i < data.data.docs.length; i++) {
+            //   if (data.data.docs[i].status === status) {
+            //     filterData.push(data.data.docs[i]);
+            //   }
+            // }
+            setData(data.data.docs);
+            setPages(data.data.pages);
           });
       } catch (err) {
         console.log(err);
@@ -261,8 +262,7 @@ export default function BasicTable() {
 
   // ---------------------------------------------------------------
 
-  const handlePaging = (value) => {
-    setCurrentPage(value === undefined ? 1 : value);
+  const handlePaging = (event, value) => {
     loadAllOrder(value, DEFAULT_LIMIT, status, fromDate, toDate);
   };
 
@@ -418,7 +418,7 @@ export default function BasicTable() {
                       }
                     >
                       <TableCell component="th" scope="row">
-                        {index + 1}
+                        {(currentPage - 1) * 10 + index + 1}
                       </TableCell>
                       <TableCell align="left">
                         {value.userId !== null ? value.recipientName : ""}
