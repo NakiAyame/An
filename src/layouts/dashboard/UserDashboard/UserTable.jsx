@@ -27,6 +27,8 @@ import {
     Pagination
 } from "@mui/material";
 
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+
 import CloseIcon from "@mui/icons-material/Close";
 
 import ButtonCustomize from "../../../components/Button/Button";
@@ -312,6 +314,7 @@ const BasicTable = () => {
                     // component={RouterLink}
                     nameButton="Thêm mới"
                     width="15%"
+                    startIcon={<AddCircleOutlineIcon />}
                 />
 
                 <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "20px" }}>
