@@ -184,50 +184,33 @@ const BasicTable = () => {
     // --------------------- HANDLE CREATE USER -----------------------------
     // useEffect(() => {
     const handleCreateUser = async (event) => {
-        if (fullname.trim() === "") {
-            toast.error("Vui lòng điền tên người dùng")
-        } else if (email.trim() === "") {
-            toast.error("Vui lòng điền Email người dùng")
-        } else if (!email.match(validRegex)) {
-            toast.error("Email không chính xác")
-        } else if (!password.match(PWD_REGEX)) {
-            toast.error(
-                "Mật khẩu bao gồm cả chữ hoa, chữ thường, số, ký tự đặc biệt và ít nhất 8 ký tự "
-            );
-        } else if (password.trim() === "") {
-            toast.error("Vui lòng điền Mật khẩu người dùng")
-        } else if (confirmPass.trim() !== password.trim()) {
-            toast.error("Mật khẩu thứ 2 không đúng")
-        }
-        else {
-            try {
-                await axios.post("http://localhost:3500/register", {
-                    fullname,
-                    email,
-                    password,
-                    passwordConfirm: confirmPass,
-                    role,
-                    address,
-                    phone,
-                    gender,
-                    status: 'verifying'
+        try {
+            await axios.post("http://localhost:3500/user", {
+                fullname,
+                email,
+                password,
+                passwordConfirm: confirmPass,
+                role,
+                address,
+                phone,
+                gender,
+                status: 'verifying'
+            })
+                .then((data) => {
+                    if (data.data.error === 'Email was taken') {
+                        alert('Email đã được sử dụng')
+                    } else {
+                        toast.success("Đăng ký thành công!");
+                        // console.log(data)
+                        handleClose();
+                        loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
+                    }
                 })
-                    .then((data) => {
-                        if (data.data.error === 'Email was taken') {
-                            alert('Email đã được sử dụng')
-                        } else {
-                            toast.success("Đăng ký thành công!");
-                            // console.log(data)
-                            handleClose();
-                            loadAllUser(DEFAULT_PAGE, DEFAULT_LIMIT);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            } catch (err) {
-                console.log(err);
-            }
+                .catch((err) => {
+                    console.log(err)
+                })
+        } catch (err) {
+            console.log(err);
         }
     };
     // })
@@ -485,10 +468,6 @@ const BasicTable = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    {/* {
-                                        role === "customter" 
-                                        ?  : ''
-                                    } */}
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">Chức vụ</InputLabel>
                                         <Select

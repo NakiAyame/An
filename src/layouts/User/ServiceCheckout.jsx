@@ -70,7 +70,7 @@ export default function ServiceCheckout() {
                         if (data.data.message === 'Checkout successful') {
                             toast.success("Đặt dịch vụ thành công");
                             context.handleLoadCartService()
-                            navigate('/product-purchase')
+                            navigate('/service-purchase')
                         }
                     })
                     .catch((err) => {
