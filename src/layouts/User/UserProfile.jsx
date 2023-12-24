@@ -61,7 +61,7 @@ const defaultTheme = createTheme();
 export default function UserPRofile() {
   const [fullname, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(null);
   const [address, setAddress] = useState("");
   const [password, setPassWord] = useState("");
   const [gender, setGender] = useState(false);
@@ -127,41 +127,41 @@ export default function UserPRofile() {
   // --------------------- HANDLE UPDATE -----------------------------
 
   const handleUpdate = async (userId) => {
-    // if (fullname.trim() === "") {
-    //   toast.error("Tên không được bỏ trống. Vui lòng nhập lại.");
-    // } else if (!validFullName) {
-    //   toast.error(
-    //     "Tên không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
-    //   );
-    // } else {
-    try {
-      const data = await axios.patch(
-        `http://localhost:3500/user/updateProfile`,
-        {
-          // _id: userId,
-          fullname: fullname,
-          email: email,
-          // password: password,
-          role: role,
-          address: address,
-          phone: phone,
-          gender: gender,
-          status: "active",
-        }
+    if (fullname.trim() === "") {
+      toast.error("Tên không được bỏ trống. Vui lòng nhập lại.");
+    } else if (!validFullName) {
+      toast.error(
+        "Tên không được nhập kí tự đặc biệt và phải có ít nhất 3 kí tự"
       );
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        // console.log(data);
-        handleGetUserById();
-        toast.success("Cập nhật thông tin thành công");
-        navigate("/");
+    } else {
+      try {
+        const data = await axios.patch(
+          `http://localhost:3500/user/updateProfile`,
+          {
+            // _id: userId,
+            fullname: fullname,
+            email: email,
+            // password: password,
+            role: role,
+            address: address,
+            phone: phone,
+            gender: gender,
+            status: "active",
+          }
+        );
+        if (data.error) {
+          toast.error(data.error);
+        } else {
+          // console.log(data);
+          handleGetUserById();
+          toast.success("Cập nhật thông tin thành công");
+          navigate("/");
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error(err.response.data.error);
       }
-    } catch (err) {
-      console.log(err);
-      toast.error(err.response.data.error);
     }
-    // }
   };
 
   useEffect(() => {
