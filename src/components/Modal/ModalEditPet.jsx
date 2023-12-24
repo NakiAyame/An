@@ -42,8 +42,8 @@ const ModalEditPet = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
   const [color, setColor] = useState("");
-  const [weight, setWeight] = useState("");
-  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState(null);
+  const [height, setHeight] = useState(null);
   const [status, setStatus] = useState(false);
   const [petImage, setPetImage] = useState(null);
 
@@ -95,33 +95,33 @@ const ModalEditPet = (props) => {
   // --------------------- HANDLE HANLDE UPLOAD IMAGE PET -----------------------------
   const handleUpload = async () => {
     try {
-      if (petImage) {
-        const formData = new FormData();
-        formData.append("image", petImage);
-        const response = await axios.post(
-          `http://localhost:3500/pet/upload`,
-          formData
-        );
-        const maxSize = 1024 * 1024;
-        if (petImage.size > maxSize) {
-          toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
-        } else {
-          // console.log("Response data:", response.data.image);
-          const imagePath = response.data.image;
-
-          if (imagePath) {
-            // console.log("Đã tải ảnh lên:", imagePath);
-            toast.success("Thêm ảnh thành công");
-            setPetImage(petImage instanceof File ? imagePath : petImage);
-          } else {
-            // console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
-            toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
-          }
-        }
+      // if (petImage) {
+      const formData = new FormData();
+      formData.append("image", petImage);
+      const response = await axios.post(
+        `http://localhost:3500/pet/upload`,
+        formData
+      );
+      const maxSize = 1024 * 1024;
+      if (petImage.size > maxSize) {
+        toast.error("Ảnh có dung lượng nhỏ hơn 1MB");
       } else {
-        // console.log("Vui lòng chọn ảnh trước khi tải lên.");
-        toast.error("Vui lòng chọn ảnh trước khi tải lên.");
+        // console.log("Response data:", response.data.image);
+        const imagePath = response.data.image;
+
+        if (imagePath) {
+          // console.log("Đã tải ảnh lên:", imagePath);
+          toast.success("Thêm ảnh thành công");
+          setPetImage(petImage instanceof File ? imagePath : petImage);
+        } else {
+          // console.log("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+          toast.error("Lỗi: Không có đường dẫn ảnh sau khi tải lên.");
+        }
       }
+      // } else {
+      //   // console.log("Vui lòng chọn ảnh trước khi tải lên.");
+      //   toast.error("Vui lòng chọn ảnh trước khi tải lên.");
+      // }
     } catch (error) {
       console.error("Lỗi khi tải ảnh lên:", error);
     }
@@ -157,22 +157,10 @@ const ModalEditPet = (props) => {
     // );
     if (petName === "") {
       toast.error("Tên thú cưng không được để trống");
-    } else if (height === "0") {
-      toast.error("Chiều cao thú cưng phải khác 0");
-    } else if (weight === "0") {
-      toast.error("Cân nặng thú cưng phải khác 0");
-    } else if (height < 0) {
-      toast.error("Chiều cao thú cưng không được âm");
-    } else if (weight < 0) {
-      toast.error("Cân nặng thú cưng không được âm");
     } else if (!valid) {
       toast.error(
         "Tên thú cưng không được nhập số, kí tự đặc biệt và phải có ít nhất 2 kí tự"
       );
-    } else if (!validHeight) {
-      toast.error("Chiều cao thú cưng phải là số nguyên hoặc số thập phân");
-    } else if (!validWeight) {
-      toast.error("Cân nặng thú cưng phải là số nguyên hoặc số thập phân");
     } else if (categoryId === "") {
       toast.error("Bạn phải chọn loại thú cưng mình muốn");
     } else {
