@@ -146,6 +146,10 @@ export default function CartService() {
   }
 
   const handleDeleteOrder = async (id) => {
+    if (
+      window.confirm("Bạn có chắc muốn xoá dịch vụ này không ?") ===
+      true
+    ) {
     try {
       await axios.delete(
         `http://localhost:3500/cartService/remove-from-cart/${id}`,
@@ -157,11 +161,13 @@ export default function CartService() {
         .then((data) => {
           handleLoadCartService()
           context.handleLoadCartService()
+          toast.success("Xoá dịch vụ thành công")
         })
 
     } catch (err) {
       console.log(err);
     }
+  }
   }
 
   const numberToVND = (number) => {

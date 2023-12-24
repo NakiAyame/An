@@ -42,8 +42,8 @@ const ModalEditPet = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [rank, setRank] = useState(0);
   const [color, setColor] = useState("");
-  const [weight, setWeight] = useState(0);
-  const [height, setHeight] = useState(0);
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
   const [status, setStatus] = useState(false);
   const [petImage, setPetImage] = useState(null);
 
@@ -58,7 +58,7 @@ const ModalEditPet = (props) => {
   const [validHeight, setValidHeight] = useState("");
   const [validWeight, setValidWeight] = useState("");
   useEffect(() => {
-    setValid(PET_NAME_REGEX.test(petName) && petName.trim());
+    setValid(PET_NAME_REGEX.test(petName.trim()));
   }, [petName]);
 
   const handleValidationPetName = (e) => {
@@ -157,6 +157,10 @@ const ModalEditPet = (props) => {
     // );
     if (petName === "") {
       toast.error("Tên thú cưng không được để trống");
+    } else if (height === "0") {
+      toast.error("Chiều cao thú cưng phải khác 0");
+    } else if (weight === "0") {
+      toast.error("Cân nặng thú cưng phải khác 0");
     } else if (height < 0) {
       toast.error("Chiều cao thú cưng không được âm");
     } else if (weight < 0) {
@@ -374,14 +378,12 @@ const ModalEditPet = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="contained"
-            margin="normal"
-            color="primary"
+          <ButtonCustomize
             onClick={() => handleEditPet(dataEditPet._id)}
-          >
-            Sửa
-          </Button>
+            nameButton="Sửa"
+            variant="contained"
+            sx={{ marginTop: "8px" }}
+          />
         </DialogActions>
       </Box>
     </Dialog>

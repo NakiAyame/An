@@ -26,6 +26,10 @@ export default function CartProduct() {
   const context = useAuth();
 
   const handleDeleteOrder = async (id) => {
+    if (
+      window.confirm("Bạn có chắc muốn xoá sản phẩm này không ?") ===
+      true
+    ) {
     try {
       await axios.delete(
         `http://localhost:3500/cartProduct/remove-from-cart/${id}`,
@@ -37,11 +41,13 @@ export default function CartProduct() {
         .then((data) => {
           handleLoadCartProduct()
           context.handleLoadCartProduct()
+          toast.success("Xoá sản phẩm thành công")
         })
 
     } catch (err) {
       console.log(err);
     }
+  }
   }
 
   const handleLoadCartProduct = async () => {
