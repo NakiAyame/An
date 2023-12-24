@@ -50,7 +50,7 @@ const Register = () => {
       })
         .then((data) => {
           toast.success("Tạo tài khoản thành công");
-          navigate("/sign-in");
+          navigate("/verify");
         })
         .catch((error) => {
           toast.error(error.response.data.error);

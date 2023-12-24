@@ -26,6 +26,7 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import axios from "axios";
 
 import { useEffect, useState } from "react";
+import { set } from "date-fns";
 
 export default function DashboardList() {
   // const context = useAuth()
@@ -35,12 +36,15 @@ export default function DashboardList() {
   // const drawerWidth = 240;
 
   const [data, setData] = useState([]);
+  const [dataBooking, setDataBooking] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [customer, setCustomer] = useState(0);
   const [staff, setStaff] = useState(0);
   const [pet, setPet] = useState(0);
   const [revenue, setRevenue] = useState();
+  const [revenueService, setRevenueService] = useState();
   const [revenueRaw, setRevenueRaw] = useState();
+  const [serviceRaw, setServiceRaw] = useState();
 
   async function loadAllOrder() {
     try {
@@ -53,6 +57,16 @@ export default function DashboardList() {
           })
           setTotalPrice(price)
           setData(data.data.totalOrders)
+        })
+    } catch (err) {
+    }
+  }
+
+  async function loadAllBooking() {
+    try {
+      await axios.get(`http://localhost:3500/serviceDashboard/booking`)
+        .then((data) => {
+          setDataBooking(data.data.totalBookings)
         })
     } catch (err) {
     }
@@ -73,6 +87,17 @@ export default function DashboardList() {
     } catch (err) {
     }
   }
+  
+  async function revenueServiceStatistics() {
+    try {
+      await axios
+        .get(`http://localhost:3500/serviceDashboard/revenue-statistics`)
+        .then((data) => {
+          setServiceRaw(data.data)
+        });
+    } catch (err) {
+    }
+  }
 
   async function loadAllCustomer() {
     try {
@@ -80,7 +105,6 @@ export default function DashboardList() {
         .then((data) => {
           let customer = 0;
           let staff = 0;
-
           data.data.map((value) => {
             if (value.role === 'customer') {
               customer++
@@ -106,11 +130,24 @@ export default function DashboardList() {
     }
   }
 
+  async function loadRevenueService() {
+    try {
+      await axios.get(`http://localhost:3500/serviceDashboard/revenue`)
+        .then((data) => {
+          setRevenueService(data.data[0].total)
+        })
+    } catch (err) {
+    }
+  }
+
   useEffect(() => {
     loadAllOrder();
+    loadAllBooking()
     loadAllCustomer()
     loadAllPet()
     revenueStatistics()
+    loadRevenueService()
+    revenueServiceStatistics()
   }, []);
 
 
@@ -119,20 +156,6 @@ export default function DashboardList() {
       <React.Fragment>
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           <Grid container spacing={3}>
-            {/* Chart */}
-            {/* <Grid item xs={12} md={8} lg={9}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: 240,
-                }}
-              >
-                <ChartDashBroad />
-              </Paper>
-            </Grid> */}
-            {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
               <Paper
                 sx={{
@@ -142,20 +165,7 @@ export default function DashboardList() {
                   height: 240,
                 }}
               >
-                <DepositsDashboard props={totalPrice} />
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: 240,
-                }}
-              >
-                <DepositsDashboard total={data.length} />
+                <DepositsDashboard props={{ totalPrice, revenueService }} />
               </Paper>
             </Grid>
 
@@ -181,11 +191,24 @@ export default function DashboardList() {
                   height: 240,
                 }}
               >
-                <DepositsDashboard staff={staff} />
+                <DepositsDashboard dataRaw={serviceRaw} />
               </Paper>
             </Grid>
 
-            <Grid container spacing={1} style={{ margin: '20px 0' }}>
+            <Grid item xs={12} md={4} lg={3}>
+              <Paper
+                sx={{
+                  p: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  height: 240,
+                }}
+              >
+                <DepositsDashboard sold={{serviceSold: dataBooking.length, productSold: data.length}} />
+              </Paper>
+            </Grid>
+
+            {/* <Grid container spacing={1} style={{ margin: '20px 0' }}>
               <Grid item xs={6}>
                 <PieChart
                   series={[
@@ -202,7 +225,7 @@ export default function DashboardList() {
                 />
               </Grid>
               <Grid item xs={6}>
-                {/* <PieChart
+                <PieChart
                   series={[
                     {
                       data: [
@@ -214,23 +237,15 @@ export default function DashboardList() {
                   ]}
                   width={400}
                   height={200}
-                /> */}
+                />
               </Grid>
-            </Grid>
+            </Grid> */}
 
             {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: 240,
-                }}
-              >
-                <ChartDashBroad />
-              </Paper>
-            </Grid>
+
+
+            <ChartDashBroad />
+
           </Grid>
         </Container>
       </React.Fragment>

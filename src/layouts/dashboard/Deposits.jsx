@@ -25,14 +25,27 @@ function DepositsDashboard(props) {
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [previousValue, setPreviousValue] = React.useState(null);
 
+  const [selectedMonth, setSelectedMonth] = React.useState(null);
+  const [previousMonth, setPreviousMonth] = React.useState(null);
+
   const handleSelectChange = (event) => {
     const currentValue = parseInt(event.target.value, 10);
-
+  
     // Lưu giá trị trước đó vào previousValue
     setPreviousValue(selectedValue);
 
     // Cập nhật giá trị hiện tại
     setSelectedValue(currentValue);
+  };
+
+  const handleSelectServiceMonthChange = (event) => {
+    const currentValue = parseInt(event.target.value, 10);
+  
+    // Lưu giá trị trước đó vào previousValue
+    setPreviousMonth(selectedMonth);
+
+    // Cập nhật giá trị hiện tại
+    setSelectedMonth(currentValue);
   };
 
   const selectStyle = {
@@ -53,17 +66,27 @@ function DepositsDashboard(props) {
         <>
           <Title>Doanh thu sản phẩm</Title>
           <Typography component="p" variant="h4">
-            {props.props !== undefined ? numberToVND(Number(props.props)) : ''}
+            {props.props !== undefined ? numberToVND(Number(props.props.totalPrice)) : ''}
+          </Typography>
+          <hr />
+          <Title>Doanh thu dịch vụ</Title>
+          <Typography component="p" variant="h4">
+            {props.props !== undefined ? numberToVND(Number(props.props.revenueService)) : ''}
           </Typography>
         </>
       ) : ''
       }
 
-      {props.total !== undefined ? (
+      {props.sold !== undefined ? (
         <>
           <Title>Sản phẩm đã bán</Title>
           <Typography component="p" variant="h4">
-            {props.total !== undefined ? Number(props.total) : ''}
+            {props.sold !== undefined ? Number(props.sold.productSold) : ''}
+          </Typography>
+          <hr />
+          <Title>Dịch vụ được sử dụng</Title>
+          <Typography component="p" variant="h4">
+            {props.sold !== undefined ? Number(props.sold.serviceSold) : ''}
           </Typography>
         </>
       ) : ''
@@ -71,7 +94,7 @@ function DepositsDashboard(props) {
 
       {props.raw !== undefined ? (
         <>
-          <Title>Doanh thu theo tháng</Title>
+          <Title>Doanh thu sản phẩm theo tháng</Title>
           <div>
             <select style={selectStyle} onChange={handleSelectChange} value={selectedValue !== null ? selectedValue : ''}>
               <option value={0} disabled>Tháng 1</option>
@@ -87,14 +110,35 @@ function DepositsDashboard(props) {
       ) : ''
       }
 
-      {props.staff !== undefined ? (
+      {props.dataRaw !== undefined ? (
         <>
-          <Title>Số lượng nhân viên</Title>
-          <Typography component="p" variant="h4">
-            {props.staff !== undefined ? Number(props.staff) : ''}
-          </Typography>
+        {console.log(props.dataRaw)}
+          <Title>Doanh thu dịch vụ theo tháng</Title>
+          <div>
+            <select style={selectStyle} onChange={handleSelectServiceMonthChange} value={selectedMonth !== null ? selectedMonth : ''}>
+              <option value={0} disabled>Tháng 1</option>
+              {props.dataRaw.revenueByMonth.map((value) => (
+                <option key={value.month} value={value.total}>
+                  Tháng {value.month}
+                </option>
+              ))}
+            </select>
+            <p>Doanh thu: {selectedMonth === null ? numberToVND(0) : numberToVND(selectedMonth)}</p>
+          </div>
         </>
       ) : ''
+      }
+
+      {props.dataBooking !== undefined ? 
+      (
+        <>
+          <Title>Dịch vụ được sử dụng</Title>
+          <Typography component="p" variant="h4">
+            {props.dataBooking !== undefined ? Number(props.dataBooking) : ''}
+          </Typography>
+        </>
+      ) 
+      : ''
       }
 
       <Typography color="text.secondary" sx={{ flex: 1 }}>
