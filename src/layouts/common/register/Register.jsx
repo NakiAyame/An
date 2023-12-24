@@ -51,9 +51,10 @@ const Register = () => {
         .then((data) => {
           toast.success("Tạo tài khoản thành công");
           localStorage.setItem("verify-email", email);
-          navigate("/verify");
+          // navigate("/verify");
         })
         .catch((error) => {
+          console.log(error)
           toast.error(error.response.data.error);
         });
     } catch (err) {
