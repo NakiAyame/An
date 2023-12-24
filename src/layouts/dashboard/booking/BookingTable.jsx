@@ -161,20 +161,20 @@ export default function BookingTable() {
 
   async function loadBooking(status) {
     try {
-      await axios.get(`http://localhost:3500/booking/get-booking`)
+      await axios.get(`http://localhost:3500/booking`)
         .then((data) => {
           // console.log(data.data);
-          const filterData = [];
+          // const filterData = [];
 
-          for (let i = 0; i < data.data.length; i++) {
-            if (data.data[i].status === status) {
-              filterData.push(data.data[i]);
-            }
-          }
-          filterData.sort((a, b) => new Date(convertDate(b.createdAt)) - new Date(convertDate(a.createdAt)));
+          // for (let i = 0; i < data.data.length; i++) {
+          //   if (data.data[i].status === status) {
+          //     filterData.push(data.data[i]);
+          //   }
+          // }
+          // filterData.sort((a, b) => new Date(convertDate(b.createdAt)) - new Date(convertDate(a.createdAt)));
           // console.log(filterData)
-          setData(filterData);
-          setPages(filterData.length / DEFAULT_LIMIT);
+          setData(data.data.docs);
+          setPages(data.data.pages);
         });
     } catch (err) {
       console.log(err);
@@ -201,9 +201,9 @@ export default function BookingTable() {
       // console.log("Check ngày", startDate, endDate);
       try {
         setStatus(option);
-        const loadData = await axios
-          .get(
-            `http://localhost:3500/booking?page=${page}&limit=${limit}&sort=asc&startDate=${convertDate(startDate) !== "NaN-aN-aN"
+        setCurrentPage(page);
+        await axios.get(
+            `http://localhost:3500/booking?status=${option}&page=${page}&limit=${limit}&sort=asc&startDate=${convertDate(startDate) !== "NaN-aN-aN"
               ? convertDate(startDate)
               : ""
             }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
@@ -211,16 +211,16 @@ export default function BookingTable() {
           )
           .then((data) => {
             // console.log(data.data.docs);
-            const filterData = [];
+            // const filterData = [];
 
-            for (let i = 0; i < data.data.docs.length; i++) {
-              if (data.data.docs[i].status === option) {
-                filterData.push(data.data.docs[i]);
-              }
-            }
+            // for (let i = 0; i < data.data.docs.length; i++) {
+            //   if (data.data.docs[i].status === option) {
+            //     filterData.push(data.data.docs[i]);
+            //   }
+            // }
             // console.log(filterData);
-            setData(filterData);
-            setPages(filterData / DEFAULT_LIMIT);
+            setData(data.data.docs);
+            setPages(data.data.pages);
           });
       } catch (err) {
         console.log(err);
@@ -269,8 +269,8 @@ export default function BookingTable() {
 
   // ---------------------------------------------------------------
 
-  const handlePaging = (value) => {
-    setCurrentPage(value === undefined ? 1 : value);
+  const handlePaging = (event, value) => {
+    console.log(value)
     loadAllBooking(value, DEFAULT_LIMIT, status, fromDate, toDate);
   };
 
@@ -417,7 +417,7 @@ export default function BookingTable() {
                       }
                     >
                       <TableCell component="th" scope="row">
-                        {index + 1}
+                      {(currentPage - 1) * 10 + index + 1}
                       </TableCell>
                       <TableCell align="left">
                         {value.userId !== null ? value.userId.fullname : ""}
@@ -559,7 +559,7 @@ export default function BookingTable() {
                           }}
                         >
                           <TableCell component="th" scope="row">
-                            {index + 1}
+                          {index + 1}
                           </TableCell>
                           <TableCell align="left">
                             {value.petId !== null ? value.pet.petName : ""}
