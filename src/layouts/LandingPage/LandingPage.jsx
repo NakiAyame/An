@@ -49,31 +49,33 @@ function Home() {
   ];
 
   const post1 = {
-    title: "Chăm sóc - Làm đẹp",
-    description: "Tắm gội, cắt tỉa lông móng, ",
-    description2: "vệ sinh răng miệng",
-    description3: "vệ sinh tai mũi, massage,...",
+    title: "Dịch vụ chăm sóc - Khám chữa bệnh",
+    description: "Pet Care cung cấp các dịch vụ chăm sóc sức khoẻ,  ",
+    description2: "làm đẹp thẩm mỹ và lưu chuồng ",
+    description3: "và bạn có thể nhanh chóng đặt lịch dễ dàng",
     image:
       "https://www.adventuresofyoo.com/wp-content/uploads/2016/07/4-Herman-After.jpg",
     imageLabel: "Image Text",
   };
 
   const post2 = {
-    title: "Ký gửi thú cưng",
+    title: "Sản Phẩm Chăm Sóc Thú Cưng",
     description:
-      "Homestay cho thú cưng - các chuồng với đa dạng kiểu dáng, được trang bị ",
-    description2: "đầy đủ các tính năng cùng với ",
-    description3: "chế độ chăm sóc đạt chuẩn.",
+      "Bạn có thể đặt mua đa dạng các sản phẩm cho thú cưng của bạn tại đây với cam kết nguồn hàng 100% chính hãng,nói không với những sản phẩm không rõ nguồn gốc, kém chất lượng. ",
+    description2: "",
+    description3:
+      "Đặc biệt giá cả ở mức thấp và có nhiều chương trình ưu đãi đặc biệt.",
     image:
-      "https://vethospital.vnua.edu.vn/wp-content/uploads/2019/12/61c4036d5df6a4a8fde7-1024x768.jpg",
+      "https://baoninhbinh.org.vn/DATA/ARTICLES/2021/6/16/da-dang-san-pham-phuc-vu-thu-cung-0a10e.jpg",
     imageLabel: "Image Text",
   };
 
   const post3 = {
-    title: "Khám - Chữa bệnh",
-    description: "Cung cấp nhiều dịch vụ khám chữa bệnh",
-    description2: "với trang thiết bị y tế hiện đại,",
-    description3: "đội ngũ nhân viên y tế tận tình.",
+    title: "Tin tức ",
+    description: "Chia Sẻ Những Kinh Nghiệm Chăm Sóc Thú Cưng.",
+    description2:
+      "những bài viết được chọn lọc, tổng hợp giúp các Sen trau dồi thêm kinh nghiệm quý giá để có thể chăm các bé thú cưng thật tốt.",
+    description3: "",
     image:
       "https://dreampet.com.vn/wp-content/uploads/2021/02/phong-kham-thu-y.jpg",
     imageLabel: "Image Text",
