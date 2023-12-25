@@ -197,7 +197,7 @@ export default function ProductList() {
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/product?page=1&categoryId=${cateId}`
+          `http://localhost:3500/product?page=1&categoryId=${cateId}&limit=9`
         );
         if (loadData.error) {
           toast.error(loadData.error);
@@ -488,7 +488,6 @@ export default function ProductList() {
                                       (value.price * value.discount) / 100
                                   )}
                                 </Typography>
-                                
                               </Box>
                             ) : (
                               <Typography

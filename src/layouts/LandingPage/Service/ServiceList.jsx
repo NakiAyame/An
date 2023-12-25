@@ -173,8 +173,8 @@ export default function ServiceList() {
   // --------------------- GET ALL SERVICE BY CATEGORY ID SERVICE -----------------------------
   async function hanldeClickCategory(cateId) {
     // console.log("Check data cate ID", cateId);
-    if (cateId === null) {
-      loadAllService();
+    if (cateId === undefined || cateId == "") {
+      loadAllService(currentPage);
     } else {
       try {
         const loadData = await axios.get(
