@@ -67,7 +67,7 @@ const BasicTable = () => {
     const context = useAuth();
 
     const [data, setData] = useState([]);
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState(" ");
     const [gender, setGender] = useState(true);
     const [fullname, setFullName] = useState("");
     const [password, setPassWord] = useState("");
@@ -101,6 +101,7 @@ const BasicTable = () => {
         setPhone(" ")
         setAddress(" ")
         setPassWord(" ")
+        setRole("admin")
         setOption("create");
         handleOpen();
     };
@@ -207,7 +208,7 @@ const BasicTable = () => {
                     }
                 })
                 .catch((err) => {
-                    console.log(err)
+                    toast.error(err.response.data.error);
                 })
         } catch (err) {
             console.log(err);
@@ -425,6 +426,7 @@ const BasicTable = () => {
                                     <>
                                         <Grid item xs={6}>
                                             <TextField
+                                                type="password"
                                                 required
                                                 fullWidth
                                                 label="Mật khẩu"
@@ -435,6 +437,7 @@ const BasicTable = () => {
                                         </Grid>
                                         <Grid item xs={6}>
                                             <TextField
+                                                type="password"
                                                 required
                                                 fullWidth
                                                 label="Nhập lại mật khẩu"
@@ -468,20 +471,36 @@ const BasicTable = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Chức vụ</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select-required"
-                                            value={role}
-                                            label="Role"
-                                            onChange={handleRoleChange}
-                                        >
-                                            <MenuItem value="admin">Quản lý</MenuItem>
-                                            <MenuItem value="staff">Nhân viên</MenuItem>
-                                            <MenuItem value={"customer"} disabled>Khách hàng</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                                    {
+                                        role === 'customer' ?
+                                            (
+                                                <TextField
+                                                    fullWidth
+                                                    label="Chức vụ"
+                                                    margin="normal"
+                                                    value={"Khách hàng"}
+                                                    onChange={(e) => setPhone(e.target.value)}
+                                                    disabled
+                                                />
+                                            ) :
+                                            (
+                                                <FormControl fullWidth>
+                                                    <InputLabel id="demo-simple-select-label">Chức vụ</InputLabel>
+                                                    <Select
+                                                        labelId="demo-simple-select-label"
+                                                        id="demo-simple-select-required"
+                                                        value={role}
+                                                        label="Role"
+                                                        onChange={handleRoleChange}
+                                                    >
+                                                        <MenuItem value="admin">Quản lý</MenuItem>
+                                                        <MenuItem value="staff">Nhân viên</MenuItem>
+                                                        {/* <MenuItem value={"customer"} disabled>Khách hàng</MenuItem> */}
+                                                    </Select>
+                                                </FormControl>
+                                            )
+                                    }
+
                                     {role === "" ? <span style={errorStyle}>Vui lòng chọn role</span> : ""}
                                 </Grid>
                                 <Grid paddingLeft="50px" item xs={6}>

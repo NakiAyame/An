@@ -25,7 +25,7 @@ import DateFormat from "../../../components/DateFormat";
 
 //React
 import { useState } from "react";
-import useAuth from "../../../hooks/useAuth";
+// import useAuth from "../../../hooks/useAuth";
 // Axios
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -233,7 +233,8 @@ export default function BookingTable() {
             setPages(data.data.pages);
           });
       } catch (err) {
-        console.log(err);
+        toast.error("Không có sản phẩm.")
+        loadBooking()
       }
     }
   }
@@ -491,7 +492,7 @@ export default function BookingTable() {
       >
         <Box sx={style}>
           <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-            {option === "view" ? "Chi tiết đơn hàng" : "Đang cập nhật ......"}
+            {option === "view" ? "Chi tiết dịch vụ" : "Đang cập nhật ......"}
           </DialogTitle>
           <Grid container spacing={3} style={{ marginBottom: '20px' }}>
             <Grid item xs={12} sm={6}>
