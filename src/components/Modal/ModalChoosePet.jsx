@@ -42,7 +42,7 @@ const ChoosePet = ({ open, onClose, service, pet, loadData }) => {
   const [selectedService, setSelectedService] = useState({});
 
   const context = useAuth();
-  console.log(context.auth.serviceId);
+  // console.log(context.auth.serviceId);
 
   useEffect(() => {
     setSelectedService(service);
@@ -166,7 +166,7 @@ const ChoosePet = ({ open, onClose, service, pet, loadData }) => {
           .then((data) => {
             toast.success("Thêm dịch vụ vào giỏ hàng thành công");
             context.handleLoadCartService();
-            console.log(context.auth.serviceId);
+            // console.log(context.auth.serviceId);
             onClose();
           });
       } catch (err) {
