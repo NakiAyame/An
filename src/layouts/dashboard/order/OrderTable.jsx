@@ -105,6 +105,7 @@ export default function BasicTable() {
       } else {
         // console.log(dataOrderDetail.data)
         setOrderDetail(dataOrderDetail.data);
+        console.log(data)
         data.map((value) => {
           if (value._id === id) {
             setRecipientName(value.recipientName)
@@ -197,23 +198,23 @@ export default function BasicTable() {
     } else {
       try {
         setStatus(option);
-        setCurrentPage(page)
         await axios.get(
           `http://localhost:3500/order?status=${option}&page=${page}&limit=${limit}&startDate=${convertDate(startDate) !== "NaN-aN-aN"
-            ? convertDate(startDate)
-            : ""
-          }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
-          }`
-        )
-          .then((data) => {
-            // setData(data.data.docs);
-            // console.log(data.data.docs);
-            // const filterData = [];
-            // for (let i = 0; i < data.data.docs.length; i++) {
-            //   if (data.data.docs[i].status === status) {
+          ? convertDate(startDate)
+          : ""
+        }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
+      }`
+      )
+      .then((data) => {
+        // setData(data.data.docs);
+        // console.log(data.data.docs);
+        // const filterData = [];
+        // for (let i = 0; i < data.data.docs.length; i++) {
+          //   if (data.data.docs[i].status === status) {
             //     filterData.push(data.data.docs[i]);
             //   }
             // }
+            setCurrentPage(data.data.page)
             setData(data.data.docs);
             setPages(data.data.pages);
           });
@@ -393,7 +394,7 @@ export default function BasicTable() {
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell children>ID</TableCell>
+                <TableCell children>STT</TableCell>
                 <TableCell align="left">Tên người dùng</TableCell>
                 <TableCell align="left">Ngày đặt hàng</TableCell>
                 <TableCell align="left">Tổng giá trị</TableCell>

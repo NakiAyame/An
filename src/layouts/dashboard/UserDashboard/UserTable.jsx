@@ -67,16 +67,16 @@ const BasicTable = () => {
     const context = useAuth();
 
     const [data, setData] = useState([]);
-    const [role, setRole] = useState(" ");
+    const [role, setRole] = useState("");
     const [gender, setGender] = useState(true);
-    const [fullname, setFullName] = useState(" ");
-    const [password, setPassWord] = useState(" ");
-    const [confirmPass, setConfirmPass] = useState(" ");
-    const [email, setEmail] = useState(" ");
-    const [phone, setPhone] = useState(" ");
-    const [address, setAddress] = useState(" ");
-    const [id, setId] = useState(" ");
-    const [status, setStatus] = useState(" ");
+    const [fullname, setFullName] = useState("");
+    const [password, setPassWord] = useState("");
+    const [confirmPass, setConfirmPass] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState(null);
+    const [address, setAddress] = useState(null);
+    const [id, setId] = useState("");
+    const [status, setStatus] = useState("");
 
     // --------------------- MODAL HANDLE -----------------------------
 

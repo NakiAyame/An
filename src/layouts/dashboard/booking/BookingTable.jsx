@@ -72,6 +72,9 @@ export default function BookingTable() {
   const [status, setStatus] = useState(DEFAULT_STATUS);
   // const [total, setTotal] = useState(0);
 
+  const [recipientName, setRecipientName] = useState(' ')
+  const [recipientPhoneNumber, setRecipientPhoneNumber] = useState(' ')
+
   // // --------------------- HANLDE CHANGE START DATE -----------------------------
   const handleStartDateChange = (date) => {
     if (date === null) {
@@ -99,12 +102,19 @@ export default function BookingTable() {
   const handleViewOrderDetail = async (id, option, status) => {
     try {
       // console.log(id);
-      const data = await axios.get(`http://localhost:3500/bookingDetail/${id}`);
+      const bookingDetail = await axios.get(`http://localhost:3500/bookingDetail/${id}`);
       if (data.error) {
         toast.error(data.error);
       } else {
         // console.log(data.data);
-        setOrderDetail(data.data);
+        setOrderDetail(bookingDetail.data);
+        console.log(data)
+        data.map((value) => {
+          if (value._id === id) {
+            setRecipientName(value.recipientName)
+            setRecipientPhoneNumber(value.recipientPhoneNumber)
+          }
+        })
         // setStatus(status)
       }
     } catch (err) {
@@ -201,14 +211,13 @@ export default function BookingTable() {
       // console.log("Check ngày", startDate, endDate);
       try {
         setStatus(option);
-        setCurrentPage(page);
         await axios.get(
-            `http://localhost:3500/booking?status=${option}&page=${page}&limit=${limit}&sort=asc&startDate=${convertDate(startDate) !== "NaN-aN-aN"
-              ? convertDate(startDate)
-              : ""
-            }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
-            }`
-          )
+          `http://localhost:3500/booking?status=${option}&page=${page}&limit=${limit}&sort=asc&startDate=${convertDate(startDate) !== "NaN-aN-aN"
+            ? convertDate(startDate)
+            : ""
+          }&endDate=${convertDate(endDate) !== "NaN-aN-aN" ? convertDate(endDate) : ""
+          }`
+        )
           .then((data) => {
             // console.log(data.data.docs);
             // const filterData = [];
@@ -219,6 +228,7 @@ export default function BookingTable() {
             //   }
             // }
             // console.log(filterData);
+            setCurrentPage(data.data.page);
             setData(data.data.docs);
             setPages(data.data.pages);
           });
@@ -391,8 +401,9 @@ export default function BookingTable() {
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell children>ID</TableCell>
+                <TableCell children>STT</TableCell>
                 <TableCell align="left">Tên người dùng</TableCell>
+                <TableCell align="left">Số điện thoại</TableCell>
                 <TableCell align="left">Ngày đặt dịch vụ</TableCell>
                 <TableCell align="left">Tổng giá trị</TableCell>
                 <TableCell align="left">Trạng thái</TableCell>
@@ -417,10 +428,13 @@ export default function BookingTable() {
                       }
                     >
                       <TableCell component="th" scope="row">
-                      {(currentPage - 1) * 10 + index + 1}
+                        {(currentPage - 1) * 10 + index + 1}
                       </TableCell>
                       <TableCell align="left">
                         {value.userId !== null ? value.userId.fullname : ""}
+                      </TableCell>
+                      <TableCell align="left">
+                        {value.recipientPhoneNumber !== null ? value.recipientPhoneNumber : ""}
                       </TableCell>
                       <TableCell align="left">
                         <DateFormat date={value.createdAt} />
@@ -479,6 +493,14 @@ export default function BookingTable() {
           <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
             {option === "view" ? "Chi tiết đơn hàng" : "Đang cập nhật ......"}
           </DialogTitle>
+          <Grid container spacing={3} style={{ marginBottom: '20px' }}>
+            <Grid item xs={12} sm={6}>
+              <span>Tên người nhận: {recipientName}</span>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <span>Số điện thoại: {recipientPhoneNumber}</span>
+            </Grid>
+          </Grid>
           {/* <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
                         <InputLabel id="demo-select-small-label">Trạng thái</InputLabel>
                         <Select
@@ -559,7 +581,7 @@ export default function BookingTable() {
                           }}
                         >
                           <TableCell component="th" scope="row">
-                          {index + 1}
+                            {index + 1}
                           </TableCell>
                           <TableCell align="left">
                             {value.petId !== null ? value.pet.petName : ""}
