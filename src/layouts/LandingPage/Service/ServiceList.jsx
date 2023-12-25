@@ -178,7 +178,7 @@ export default function ServiceList() {
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/service?page=1&categoryId=${cateId}&status=true`
+          `http://localhost:3500/service?page=1&categoryId=${cateId}&status=true&limit=9`
         );
         if (loadData.error) {
           toast.error(loadData.error);
