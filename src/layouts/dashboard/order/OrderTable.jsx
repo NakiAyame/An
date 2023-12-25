@@ -219,7 +219,8 @@ export default function BasicTable() {
             setPages(data.data.pages);
           });
       } catch (err) {
-        console.log(err);
+        toast.error("Không có sản phẩm.")
+        loadOrder()
       }
     }
   }
