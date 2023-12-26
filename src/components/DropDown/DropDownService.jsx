@@ -9,14 +9,15 @@ import { toast } from "react-toastify";
 import { NavLink } from "react-router-dom";
 
 export default function DropDownService(props) {
-  const { category, handUpdateEditTable, cateName } = props;
+  const { category, handUpdateEditTable, cateName, page, setCategoryId } =
+    props;
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const handleChangeCate = (event) => {
     const categoryId = event.target.value;
     // console.log(categoryId);
     setSelectedCategory(categoryId);
-    handUpdateEditTable(categoryId);
+    handUpdateEditTable(page, categoryId);
   };
 
   return (

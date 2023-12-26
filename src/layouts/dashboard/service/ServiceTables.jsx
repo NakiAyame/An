@@ -58,7 +58,7 @@ export default function ServiceTable() {
   // ----------------------------------- API GET ALL SERVICE --------------------------------
   useEffect(() => {
     loadAllService(currentPage);
-  }, [currentPage]);
+  }, []);
 
   const loadAllService = async (page, order) => {
     try {
@@ -73,6 +73,7 @@ export default function ServiceTable() {
         setData(loadData.data.docs);
         setTotalServices(loadData.data.limit);
         // console.log(loadData.data);
+        setCurrentPage(loadData.data.page);
       }
     } catch (err) {
       console.log(err);
@@ -134,14 +135,15 @@ export default function ServiceTable() {
   }, []);
 
   // --------------------- GET ALL SERVICE BY CATEGORY ID SERVICE -----------------------------
-  async function hanldeClickCategory(cateId) {
+  async function hanldeClickCategory(page, cateId) {
     // console.log("Check data cate ID", cateId, order);
+    setCategoryId(cateId);
     if (cateId === null) {
       loadAllService();
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/service/manage?page=1&categoryId=${cateId}`
+          `http://localhost:3500/service/manage?page=${page}&categoryId=${cateId}`
         );
         if (loadData.error) {
           toast.error(loadData.error);
@@ -151,6 +153,7 @@ export default function ServiceTable() {
           // console.log("Check totalPage", totalPages);
           setData(loadData.data.docs);
           setTotalServices(loadData.data.limit);
+          setCurrentPage(loadData.data.page);
         }
       } catch (err) {
         console.log(err);
@@ -180,14 +183,18 @@ export default function ServiceTable() {
   const [keyword, setKeyword] = useState("");
 
   // --------------------- Click paging -----------------------------
+  const [categoryId, setCategoryId] = useState("");
   const handlePageClick = (event, value) => {
     setCurrentPage(value);
-    if (!keyword) {
-      loadAllService(value);
+    if (categoryId) {
+      // console.log(categoryId);
+      hanldeClickCategory(value, categoryId);
+    } else if (keyword.trim()) {
+      searchServiceByName(value);
     } else {
-      searchServiceByName();
+      // console.log(categoryId);
+      loadAllService(value);
     }
-    // loadAllService(+event.selected + 1);
   };
 
   const handleKeywordChange = (e) => {
@@ -204,10 +211,10 @@ export default function ServiceTable() {
   };
 
   // ----------------------------------- GET ALL SERVICE BY SERVICE NAME --------------------------------
-  const searchServiceByName = async () => {
+  const searchServiceByName = async (page) => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/service/manage?service=${keyword.trim()}&page=1`
+        `${BASE_URL}/service/manage?service=${keyword.trim()}&page=${page}`
       );
       if (loadData.data.error) {
         toast.warning(
@@ -223,6 +230,7 @@ export default function ServiceTable() {
         setTotalServices(loadData.data.limit);
         setTotalPages(loadData.data.pages);
         // console.log(loadData.data);
+        setCurrentPage(loadData.data.page);
       }
     } catch (err) {
       console.log(err);
@@ -269,6 +277,7 @@ export default function ServiceTable() {
             category={category}
             cateName="Loại dịch vụ"
             handUpdateEditTable={hanldeClickCategory}
+            page={1}
           />
         </Grid>
 
