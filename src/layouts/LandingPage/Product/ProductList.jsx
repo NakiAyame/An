@@ -112,7 +112,7 @@ export default function ProductList() {
   // ----------------------------------- API GET ALL PRODUCT --------------------------------
   useEffect(() => {
     loadAllProduct(currentPage);
-  }, [currentPage]);
+  }, []);
 
   const loadAllProduct = async (page) => {
     try {
@@ -127,6 +127,7 @@ export default function ProductList() {
         setData(loadData.data.docs);
         setTotalProducts(loadData.data.limit);
         // console.log(loadData.data.docs);
+        setCurrentPage(loadData.data.page);
       }
     } catch (err) {
       console.log(err);
@@ -134,8 +135,18 @@ export default function ProductList() {
   };
 
   // --------------------- Click paging -----------------------------
+  const [categoryId, setCategoryId] = useState("");
   const handlePageClick = (event, value) => {
     setCurrentPage(value);
+    if (categoryId) {
+      // console.log(categoryId);
+      hanldeClickCategory(value, categoryId);
+    } else if (keyword.trim()) {
+      searchProductByName(value);
+    } else {
+      // console.log(categoryId);
+      loadAllProduct(value);
+    }
   };
   // ----------------------------------------------------------------
 
@@ -190,14 +201,15 @@ export default function ProductList() {
   }, []);
 
   // --------------------- GET ALL PRODUCT BY CATEGORY ID PRODUCT -----------------------------
-  async function hanldeClickCategory(cateId) {
+  async function hanldeClickCategory(page, cateId) {
     // console.log("Check data cate ID", cateId);
+    setCategoryId(cateId);
     if (cateId == undefined || cateId == "") {
       loadAllProduct(currentPage);
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/product?page=1&categoryId=${cateId}&limit=9`
+          `http://localhost:3500/product?page=${page}&categoryId=${cateId}&limit=9`
         );
         if (loadData.error) {
           toast.error(loadData.error);
@@ -207,6 +219,7 @@ export default function ProductList() {
           // console.log("Check totalPage", totalPages);
           setData(loadData.data.docs);
           setTotalProducts(loadData.data.limit);
+          setCurrentPage(loadData.data.page);
         }
       } catch (err) {
         console.log(err);
@@ -235,10 +248,10 @@ export default function ProductList() {
   };
 
   // ----------------------------------- GET ALL PRODUCTS BY PRODUCT NAME --------------------------------
-  const searchProductByName = async () => {
+  const searchProductByName = async (page) => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/product?product=${keyword.trim()}&page=1`
+        `${BASE_URL}/product?product=${keyword.trim()}&page=${page}&limit=9`
       );
       if (loadData.data.error) {
         toast.warning(
@@ -254,6 +267,7 @@ export default function ProductList() {
         setTotalProducts(loadData.data.limit);
         setTotalPages(loadData.data.pages);
         // console.log(loadData.data);
+        setCurrentPage(loadData.data.page);
       }
     } catch (err) {
       console.log(err);
@@ -326,6 +340,7 @@ export default function ProductList() {
               category={category}
               cateName="Loại sản phẩm"
               handUpdateEditTable={hanldeClickCategory}
+              page={1}
             />
           </Box>
         </Container>

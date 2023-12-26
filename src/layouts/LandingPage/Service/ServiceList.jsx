@@ -126,7 +126,7 @@ export default function ServiceList() {
   // ----------------------------------- API GET ALL SERVICE --------------------------------
   useEffect(() => {
     loadAllService(currentPage);
-  }, [currentPage]);
+  }, []);
 
   const loadAllService = async (page) => {
     try {
@@ -142,6 +142,7 @@ export default function ServiceList() {
         setData(loadData.data.docs);
         setTotalServices(loadData.data.limit);
         // console.log(loadData.data);
+        setCurrentPage(loadData.data.page);
       }
     } catch (err) {
       console.log(err);
@@ -171,14 +172,15 @@ export default function ServiceList() {
   }, []);
 
   // --------------------- GET ALL SERVICE BY CATEGORY ID SERVICE -----------------------------
-  async function hanldeClickCategory(cateId) {
+  async function hanldeClickCategory(page, cateId) {
     // console.log("Check data cate ID", cateId);
+    setCategoryId(cateId);
     if (cateId === undefined || cateId == "") {
       loadAllService(currentPage);
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/service?page=1&categoryId=${cateId}&status=true&limit=9`
+          `http://localhost:3500/service?page=${page}&categoryId=${cateId}&status=true&limit=9`
         );
         if (loadData.error) {
           toast.error(loadData.error);
@@ -188,6 +190,7 @@ export default function ServiceList() {
           // console.log("Check totalPage", totalPages);
           setData(loadData.data.docs);
           setTotalServices(loadData.data.limit);
+          setCurrentPage(loadData.data.page);
         }
       } catch (err) {
         console.log(err);
@@ -263,14 +266,18 @@ export default function ServiceList() {
   const [keyword, setKeyword] = useState("");
 
   // --------------------- Click paging -----------------------------
+  const [categoryId, setCategoryId] = useState("");
   const handlePageClick = (event, value) => {
     setCurrentPage(value);
-    if (!keyword) {
-      loadAllService(value);
+    if (categoryId) {
+      // console.log(categoryId);
+      hanldeClickCategory(value, categoryId);
+    } else if (keyword.trim()) {
+      searchServiceByName(value);
     } else {
-      searchServiceByName();
+      // console.log(categoryId);
+      loadAllService(value);
     }
-    // loadAllService(+event.selected + 1);
   };
 
   const handleKeywordChange = (e) => {
@@ -287,10 +294,10 @@ export default function ServiceList() {
   };
 
   // ----------------------------------- GET ALL SERVICE BY SERVICE NAME --------------------------------
-  const searchServiceByName = async () => {
+  const searchServiceByName = async (page) => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/service?service=${keyword.trim()}&page=1`
+        `${BASE_URL}/service?service=${keyword.trim()}&page=${page}&limit=9`
       );
       if (loadData.data.error) {
         toast.warning(
@@ -306,6 +313,7 @@ export default function ServiceList() {
         setTotalServices(loadData.data.limit);
         setTotalPages(loadData.data.pages);
         // console.log(loadData.data);
+        setCurrentPage(loadData.data.page);
       }
     } catch (err) {
       console.log(err);
@@ -374,6 +382,7 @@ export default function ServiceList() {
               category={category}
               cateName="Loại dịch vụ"
               handUpdateEditTable={hanldeClickCategory}
+              page={1}
             />
           </Box>
         </Box>

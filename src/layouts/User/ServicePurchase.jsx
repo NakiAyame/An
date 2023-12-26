@@ -299,7 +299,7 @@ export default function ServicePurchase() {
                                                             status === 'Hoàn thành'
                                                                 ? (
                                                                     <ButtonCustomize
-                                                                        onClick={() => handleFeedBack(value.serviceId._id)}
+                                                                        onClick={() => handleFeedBack(value.service._id)}
                                                                         nameButton="Đánh giá"
                                                                         variant="contained"
                                                                         sx={{ marginTop: "8px" }}

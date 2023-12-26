@@ -90,7 +90,7 @@ export default function PetTable() {
   // ----------------------------------- API GET ALL PET --------------------------------
   useEffect(() => {
     loadAllPet(currentPage);
-  }, [currentPage]);
+  }, []);
 
   const loadAllPet = async (page) => {
     try {
@@ -103,6 +103,7 @@ export default function PetTable() {
         setData(loadData.data.docs);
         setTotalPets(loadData.data.limit);
         // console.log(loadData.data.docs);
+        setCurrentPage(loadData.data.page);
       }
     } catch (err) {
       console.log(err);
@@ -116,18 +117,20 @@ export default function PetTable() {
 
   // --------------------- Hanlde Search -----------------------------
   const [keyword, setKeyword] = useState("");
+  const [categoryId, setCategoryId] = useState("");
 
-  const handlePageClick = useCallback(
-    (event, page) => {
-      setCurrentPage(page);
-      if (!keyword) {
-        loadAllPet(page);
-      } else {
-        searchPetById();
-      }
-    },
-    [keyword, setCurrentPage]
-  );
+  const handlePageClick = (event, value) => {
+    setCurrentPage(value);
+    if (categoryId) {
+      console.log(categoryId);
+      hanldeClickCategory(value, categoryId);
+    } else if (keyword.trim()) {
+      searchPetById(value);
+    } else {
+      console.log(categoryId);
+      loadAllPet(value);
+    }
+  };
 
   const handleKeywordChange = (e) => {
     setKeyword(e.target.value);
@@ -143,10 +146,10 @@ export default function PetTable() {
   };
 
   // ----------------------------------- GET ALL PET BY USER NAME --------------------------------
-  const searchPetById = async () => {
+  const searchPetById = async (page) => {
     try {
       const loadData = await axios.get(
-        `${BASE_URL}/pet/username?name=${keyword.trim()}&page=1`
+        `${BASE_URL}/pet/username?name=${keyword.trim()}&page=${page}`
       );
       if (loadData.data.error) {
         toast.warning(
@@ -161,6 +164,7 @@ export default function PetTable() {
         setData(loadData.data.docs);
         setTotalPets(loadData.data.limit);
         setTotalPages(loadData.data.pages);
+        setCurrentPage(loadData.data.page);
         // console.log(loadData.data);
       }
     } catch (err) {
@@ -191,23 +195,27 @@ export default function PetTable() {
   }, []);
 
   // --------------------- GET ALL PRODUCT BY CATEGORY ID PRODUCT -----------------------------
-  async function hanldeClickCategory(cateId) {
-    // console.log("Check data cate ID", cateId);
+
+  async function hanldeClickCategory(page, cateId) {
+    // console.log("Check data cate ID", page, cateId);
+    setCategoryId(cateId);
+    // console.log(categoryId);
     if (cateId == undefined || cateId == "") {
       loadAllPet(currentPage);
     } else {
       try {
         const loadData = await axios.get(
-          `http://localhost:3500/pet?page=1&categoryId=${cateId}`
+          `http://localhost:3500/pet?page=${page}&categoryId=${cateId}`
         );
         if (loadData.error) {
           toast.error(loadData.error);
         } else {
-          // console.log("Check loaddata", loadData.data);
+          console.log("Check loaddata", loadData.data);
           setTotalPages(loadData.data.pages);
           // console.log("Check totalPage", totalPages);
           setData(loadData.data.docs);
           setTotalPets(loadData.data.limit);
+          setCurrentPage(loadData.data.page);
         }
       } catch (err) {
         console.log(err);
@@ -253,6 +261,7 @@ export default function PetTable() {
               category={category}
               cateName="Loại thú cưng"
               handUpdateEditTable={hanldeClickCategory}
+              page={1}
             />
           </Grid>
 
