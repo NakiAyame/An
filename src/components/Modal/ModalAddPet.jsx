@@ -159,8 +159,8 @@ const ModalAddPet = (props) => {
           rank,
           status,
           color,
-          height,
-          weight,
+          height: height === "" ? null : height,
+          weight: weight === "" ? null : weight,
           petImage,
         });
         if (response.error) {
@@ -174,8 +174,8 @@ const ModalAddPet = (props) => {
           setRank(0);
           setStatus(true);
           setColor("");
-          setHeight("");
-          setWeight("");
+          setHeight(null);
+          setWeight(null);
           setImage(null);
           handUpdateTable();
           onClose();

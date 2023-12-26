@@ -172,8 +172,8 @@ const ModalEditPet = (props) => {
           categoryId: categoryId,
           rank: rank,
           status: status,
-          height: height,
-          weight: weight,
+          height: height === "" ? null : height,
+          weight: weight === "" ? null : weight,
           color: color,
           petImage: petImage,
         });
