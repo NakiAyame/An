@@ -233,7 +233,7 @@ export default function BookingTable() {
             setPages(data.data.pages);
           });
       } catch (err) {
-        toast.error("Không có sản phẩm.")
+        toast.error("Không có đơn hàng nào ở trạng thái này")
         loadBooking()
       }
     }

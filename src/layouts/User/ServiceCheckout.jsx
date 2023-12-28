@@ -152,12 +152,12 @@ export default function ServiceCheckout() {
                     ></input>
                 </Grid>
                 <Grid item xs={5}>
-                    <h6 style={{ marginTop: '30px', fontWeight: 'bolder', fontSize: '18px' }}>ĐƠN HÀNG CỦA BẠN</h6>
+                    <h6 style={{ marginTop: '30px', fontWeight: 'bolder', fontSize: '18px' }}>ĐƠN ĐĂNG KÍ CỦA BẠN</h6>
                     {/* <p>Mã giỏ hàng: <span></span></p> */}
 
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
-                            <p style={{ marginTop: '10px', fontWeight: 'bolder', fontSize: '15px' }}>SẢN PHẨM</p>
+                            <p style={{ marginTop: '10px', fontWeight: 'bolder', fontSize: '15px' }}>DỊCH VỤ</p>
                         </Grid>
                         <Grid item xs={6}>
                             <p style={{ textAlign: 'right' }}>TỔNG</p>
@@ -197,7 +197,7 @@ export default function ServiceCheckout() {
                     }}
                         onClick={checkoutProduct}
                     >
-                        ĐẶT HÀNG
+                        ĐẶT DỊCH VỤ
                     </button>
                 </Grid>
             </Grid>

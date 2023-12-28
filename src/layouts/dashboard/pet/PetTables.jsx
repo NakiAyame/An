@@ -289,6 +289,7 @@ export default function PetTable() {
               <TableRow>
                 <TableCell children>ID</TableCell>
                 <TableCell align="left">Chủ thú cưng</TableCell>
+                <TableCell align="left">SĐT</TableCell>
                 <TableCell align="left">Tên thú cưng</TableCell>
                 <TableCell align="left">Cân nặng</TableCell>
                 <TableCell align="left">Chiều cao</TableCell>
@@ -313,6 +314,9 @@ export default function PetTable() {
                       </TableCell>
                       <TableCell align="left">
                         {value.userId !== null ? value.userId.fullname : ""}
+                      </TableCell>
+                      <TableCell align="left">
+                        {value.userId !== null ? value.userId.phone : ""}
                       </TableCell>
                       <TableCell align="left">{value.petName}</TableCell>
                       <TableCell align="left">{value.weight}kg</TableCell>
